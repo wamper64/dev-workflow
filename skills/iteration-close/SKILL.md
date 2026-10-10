@@ -37,4 +37,4 @@ description: 本轮implement-spec已完成TDD、必要联通验证与内置code-
 | 项目经理签收当前模块 | 保持开发中或受阻 |
 | 所有模块已验收 | 进入下一轮，不得跳转总验收 |
 
-参考 [检查标准](references/execution-gate.md)、[收口模板](assets/output-template.md) 和 [报价项目示例](examples/报价项目场景示例.md)。
+参考 [检查标准](references/execution-gate.md)、[收口模板](assets/output-template.md)。

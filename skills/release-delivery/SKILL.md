@@ -36,7 +36,6 @@ description: 经上线审批与预演通过后执行目标服务器部署、数�
 
 - [独立检查门禁](references/execution-gate.md)
 - [交付模板](assets/output-template.md)
-- [报价系统示例](examples/报价项目场景示例.md)
 
 ## 生产部署的真实执行链
 

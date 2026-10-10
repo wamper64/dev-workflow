@@ -36,7 +36,6 @@ description: 以工程基线已确认的CPU/内存/磁盘预算、负载P95、�
 
 - [独立检查门禁](references/execution-gate.md)
 - [交付模板](assets/output-template.md)
-- [报价系统示例](examples/报价项目场景示例.md)
 
 ## 非功能指标：目标、实测与放行
 

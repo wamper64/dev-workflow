@@ -36,7 +36,6 @@ description: 正式发布前核对目标机实际资源及权限，演练数据�
 
 - [独立检查门禁](references/execution-gate.md)
 - [交付模板](assets/output-template.md)
-- [报价系统示例](examples/报价项目场景示例.md)
 
 ## 发布前的确定性预演
 

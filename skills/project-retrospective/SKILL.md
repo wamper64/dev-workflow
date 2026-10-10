@@ -36,7 +36,6 @@ description: 复盘首次项目建设从基线、Grill、架构、模块、开�
 
 - [独立检查门禁](references/execution-gate.md)
 - [交付模板](assets/output-template.md)
-- [报价系统示例](examples/报价项目场景示例.md)
 
 ## 跨阶段返工复盘（不同于Matt retro）
 
