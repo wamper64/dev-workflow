@@ -178,3 +178,16 @@
 
 /* 清晰展示Grill、双轴审查、人工测试与返工链 */
 .phase-route{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:12px 0 16px;line-height:1.6}.route-chip{padding:5px 9px;border:1px solid #cbd5df;border-radius:9px;font-size:12px}.route-chip b{font-weight:750}.route-arrow{font-size:12px;opacity:.65}.source-adaptation{margin-top:16px;padding-top:14px;border-top:1px solid #d9dfe7;line-height:1.8}
+
+/* 右侧开发环境信息填写表：保留项目导航的三栏结构 */
+.env-form-section{padding:14px 0}
+.env-form-section h3{margin-bottom:8px}
+.env-table{border-collapse:collapse;width:100%;margin:10px 0 14px;font-size:12px}
+.env-table th,.env-table td{border:1px solid #e1e9f1;padding:8px;vertical-align:top}
+.env-table th{width:37%;background:#f6f9fd;color:#4c6481;font-weight:600;text-align:left}
+.env-table td{width:63%}
+.env-table textarea{box-sizing:border-box;width:100%;min-height:51px;padding:7px 9px;font:inherit;font-size:12px;color:#294968;border:1px solid #d6e2f2;border-radius:6px;resize:vertical;background:#fff}
+.env-table textarea:focus{outline:2px solid #b3d4fa;outline-offset:1px}
+.env-form-actions{display:flex;gap:8px;flex-wrap:wrap}
+.env-form-actions button{cursor:pointer;border:1px solid #92b5df;background:#e9f3ff;border-radius:8px;color:#2a649b;font-size:12px;font-weight:650;padding:9px 12px}
+.env-form-actions button:hover{background:#d9edff}
