@@ -75,3 +75,7 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 - `docs/examples/报价项目/`：仅供网页演示，非安装Skill组成部分。
 - 读取/检查输入：S01 只有提示词和会话核对结论，没有专用Skill。
 - S12 实现完成后自动生成待执行人工测试单，S14H 不调用Skill，由人工执行并在同一文件回填结果。
+
+## 调研参考：pstack 与 Addy Osmani
+
+借鉴了 pstack 的真实用户路径验证、视觉基线、模块设计草图与按需对抗式审查，以及 Addy Osmani 的纵向切片、真实浏览器运行验证和可执行质量阈值。**不增加重复Skill**，研究细节见 `docs/research/skill-sources.md`；正式Skill安装包不包含案例及研究报告。

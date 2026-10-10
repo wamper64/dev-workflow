@@ -170,3 +170,18 @@
 - Matt原版 `implement-spec` 已处理TDD和内部code-review，因此不再有单独的review或重复自动联调步骤；此前的 `module-integration-acceptance` 冗余Skill从仓库中清理。
 - `human-acceptance` 只生成“待执行”人工测试用例，再由开发人员在同一张表填结果/证据；不可由AI代填通过。
 - `diagnosing-bugs` 依官方原版六阶段，绝不是通用“定位→修复”的自编步骤。
+
+
+## 新增深入学习：pstack 与 Addy Osmani（2026-10-10）
+
+| 项目 | 源Skill或文件 | 学到的可执行机制 | 在本导航实际落地位置 |
+|---|---|---|---|
+| pstack | [create-verification-skill](https://github.com/backnotprop/pstack/blob/main/skills/create-verification-skill/SKILL.md) | 真实项目启动/健康检查/用户路径/证据/清理的五项契约；不独立新增验证步骤 | S12实现时真实用户路径验证；S16系统验收证据 |
+| pstack | [visual-parity playbook](https://github.com/backnotprop/pstack/blob/main/skills/poteto-mode/playbooks/visual-parity.md) | 固定原型视觉基线、同状态同视口截图差异；不允许修改基线消除差异 | S12已有前端原型时应用，环境不足转人工测试 |
+| pstack | [architect](https://github.com/backnotprop/pstack/blob/main/skills/architect/SKILL.md) | 模块级接缝追踪、草图及关键边界确认、实现过程中可证据驱动改设计 | S09本轮模块详细设计，不替代S04全局架构 |
+| pstack | [interrogate](https://github.com/backnotprop/pstack/blob/main/skills/interrogate/SKILL.md) | 独立审查者对相同差异和意图做对抗式评审再由主审整合证据 | 仅在有多模型/代理基础设施的高风险变更中选择，当前不强制执行或新增Skill |
+| Addy Osmani Agent Skills | [incremental-implementation](https://github.com/addyosmani/agent-skills/blob/main/skills/incremental-implementation/SKILL.md) | 小批次纵向切片、一次实现/验证/提交，必要时契约先行和风险先行 | S07模块拆分、S08迭代规划；保持现有Matt Tickets |
+| Addy Osmani Agent Skills | [browser-testing-with-devtools](https://github.com/addyosmani/agent-skills/blob/main/skills/browser-testing-with-devtools/SKILL.md) | 真实浏览器DOM/console/network/截图作为运行证据，与只看源码区分 | S12/ S16；不可用时登记人工场景，不伪造通过 |
+| Addy Osmani Agent Skills | [constraint-driven-development](https://github.com/addyosmani/agent-skills/blob/main/skills/constraint-driven-development/SKILL.md) | 把已批准性能/安全/覆盖阈值绑定可运行命令，禁止为通过而降低质量门槛 | S17上线非功能验证，继承S03项目基线 |
+
+**引入原则**：优先吸收机制，不复制另一套完整研发框架。Matt官方 `implement-spec` 原文不修改；pstack/Osmani 的运行证据、视觉基线和可验证切片作为工作流调用约束，无法实际运行时交人工测试而不冒充通过。

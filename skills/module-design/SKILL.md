@@ -28,7 +28,7 @@ description: 继承总体已批准组件、交互、数据域与工程基线，�
 - `docs/output/06-模块迭代/<模块>/迁移设计草案.md`（开发阶段才形成`database/migrations/`版本化SQL）
 - 必要新ADR沿用 `docs/adr/` 编号。
 
-使用 [模板](assets/module-design-template.md)；示范内容看 [需求解析模块设计示例](examples/报价需求核对模块设计示例.md)。模块详细设计是整个项目最深一级设计，**只深化本轮模块**。
+使用 [模板](assets/module-design-template.md)。模块详细设计是整个项目最深一级设计，**只深化本轮模块**。
 
 ## 从设计到真正可执行的迁移脚本
 

@@ -566,6 +566,11 @@
         "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md",
         "learned": "由业务闭环与跨模块责任识别真实模块，让界面/数据库职责与架构协调，避免人为预设模块数量",
         "name": "BMAD Method — bmad-architecture"
+      },
+      {
+        "name": "Addy Osmani Agent Skills — incremental-implementation",
+        "url": "https://github.com/addyosmani/agent-skills/blob/main/skills/incremental-implementation/SKILL.md",
+        "learned": "学习纵向可验证切片（UI/API/DB）、契约先行与风险优先分解；只决定模块交付顺序与依赖，不产生全模块Spec。"
       }
     ],
     "maturity": "已补充执行图、失败路径和验收证据",
@@ -718,6 +723,11 @@
         "name": "Matt Pocock Skills — grill-with-docs",
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md",
         "learned": "将Grill嵌入模块设计内部，只对本轮未决的接口、业务状态和模块边界提问；跨全局变更返回整体架构审核。"
+      },
+      {
+        "name": "pstack — architect",
+        "url": "https://github.com/backnotprop/pstack/blob/main/skills/architect/SKILL.md",
+        "learned": "学习先追踪既有系统的真实调用与状态责任，再对模块接口/类型/模块边界作有代价的设计草图，并在实现中发现错误时重新设计；用于模块级设计，不替代整体组件及交互架构。"
       }
     ],
     "maturity": "已补充执行图、失败路径和验收证据",
@@ -938,6 +948,21 @@
         "name": "Matt Pocock Skills — implement-spec",
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md",
         "learned": "由implement-spec内部完成TDD与code-review并返回真实代码及通过证据，后续只衔接人工未覆盖场景。"
+      },
+      {
+        "name": "pstack — create-verification-skill",
+        "url": "https://github.com/backnotprop/pstack/blob/main/skills/create-verification-skill/SKILL.md",
+        "learned": "学习先识别真实系统启动、健康、用户操作路径、证据和退出/清理，再用能真实运行的浏览器/API脚本验证用户可观察结果；这里只借鉴验证标准，不强制生成额外Skill。"
+      },
+      {
+        "name": "pstack — visual-parity playbook",
+        "url": "https://github.com/backnotprop/pstack/blob/main/skills/poteto-mode/playbooks/visual-parity.md",
+        "learned": "学习把现有页面当视觉基线，在可运行的浏览器上固定相同状态、尺寸并做截图差异，禁止修改原始基线以让比较通过；有截图/真实浏览器环境才声称视觉校验完成。"
+      },
+      {
+        "name": "Addy Osmani Agent Skills — browser-testing-with-devtools",
+        "url": "https://github.com/addyosmani/agent-skills/blob/main/skills/browser-testing-with-devtools/SKILL.md",
+        "learned": "学习真实浏览器DOM、console、Network、截图与页面互动测试，不用源码静态推断冒充用户可见行为；工具不可用则将场景留入待人工测试单。"
       }
     ],
     "maturity": "官方原版，未改动",
@@ -1111,6 +1136,16 @@
         "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
         "learned": "验证系统业务链的角色场景和既有回归，区分测试生成、真实执行与最终业务签收",
         "name": "BMAD Method — build"
+      },
+      {
+        "name": "pstack — create-verification-skill",
+        "url": "https://github.com/backnotprop/pstack/blob/main/skills/create-verification-skill/SKILL.md",
+        "learned": "学习使用真实用户触发路径证明业务结果，并保留接口、页面与持久化状态的证据；不能只运行mock或内部setter便宣布端到端通过。"
+      },
+      {
+        "name": "Addy Osmani Agent Skills — browser-testing-with-devtools",
+        "url": "https://github.com/addyosmani/agent-skills/blob/main/skills/browser-testing-with-devtools/SKILL.md",
+        "learned": "学习用实际浏览器状态和网络请求证实页面行为；当工具/现场系统不可用时标人工待测试或受阻，不冒充实际通过。"
       }
     ],
     "maturity": "已补充执行图、失败路径和验收证据",
@@ -1163,6 +1198,11 @@
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
         "learned": "目标和实测分离，逐项查证性能、安全及回滚是否达到已批准基线",
         "name": "Superpowers — verification-before-completion"
+      },
+      {
+        "name": "Addy Osmani Agent Skills — constraint-driven-development",
+        "url": "https://github.com/addyosmani/agent-skills/blob/main/skills/constraint-driven-development/SKILL.md",
+        "learned": "学习把已确认项目基线中的质量阈值变成可执行检查契约；未达标不得通过削弱阈值或跳过测试获得假绿灯。"
       }
     ],
     "maturity": "已补充执行图、失败路径和验收证据",
