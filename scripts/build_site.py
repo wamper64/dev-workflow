@@ -26,8 +26,8 @@ assert len(data["phases"]) == 5
 assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})
 assert len(data["phases"][1]["steps"]) == 7
 assert len(data["modules"]) == 13
-assert len(catalog) == 24
-assert len({x["id"] for x in catalog}) == 24
+assert len(catalog) == 23
+assert len({x["id"] for x in catalog}) == 23
 known = {x["id"] for x in catalog}
 for p in data["phases"][1:]:
     for step in p["steps"]:
@@ -62,7 +62,7 @@ for s in payload["skills"]:
             "examples/工程基线示例.md"
         ):
             assert required in s["files"], required
-assert custom_count == 16
+assert custom_count == 15
 assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 33
 assert len(workspace) == 6
 assert all(x["source"]["url"].startswith("https://github.com/mattpocock/skills/") for x in workspace)
