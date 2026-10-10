@@ -25,7 +25,7 @@
 
 左栏为工作阶段，中栏为步骤，右栏为所用Skill、输入、输出、审核和可复制中文提示词。点击Skill可以选择按其特点设计的快速理解、报价项目示例、完整目录文件以及**逐文件开源研究来源与实际借鉴机制**。
 
-左侧「工作阶段」下方独立展示「通用 Skills」入口（随时使用，不计入主研发阶段）；中间可选handoff、grilling、domain-modeling、research等，右侧查看调用时机、执行方式和提示词。点击Skill可预览完整文件。右上角提供全部Skills ZIP下载；研究说明不进入SKILL.md正文。
+左侧「工作阶段」下方独立展示「通用 Skills」入口（共7项，含handoff、grilling、research、domain-modeling、wizard、pr和to-questionnaire）；右侧可查看用途、执行方式与官方全部文件。右上角新增「项目目录树」：按当前四阶段、每个步骤的预期产物绘制完整树并加中文注释，支持复制；另可下载全部Skills ZIP。
 
 ## 当前流程
 
@@ -33,11 +33,10 @@
 |---|---|
 | 0 准备工作 | 展示已确认docs/input/资料与既有code/，不调用Skill |
 | 1 项目准备与设计 | 输入确认→Matt初始化→项目基线→整体架构（内部Grill）→数据库总体→开发环境→模块拆分 |
-| 2 模块迭代开发 | 选择模块→模块详细设计（内置Grill）→Spec→Tickets→implement-spec（TDD、代码审查、生成待人工测试单）→人工执行并回填（无Skill）→按需Bug诊断修复→收口 |
+| 2 模块迭代开发 | 选择模块→模块详细设计（内置Grill）→Spec→Tickets→dev-implement-spec（调用Matt原版实现/TDD/代码审查后追加人工用例）→人工执行回填（无Skill）→按需Bug诊断修复→本轮收口（内部retro）→下一轮 |
 | 3 全项目验收与部署 | 系统业务验收→非功能上线评审→生产预演与回滚→正式部署交接 |
-| 4 复盘与沉淀 | Matt编码会话retro→项目级流程与Skill改进 |
 
-共**5个阶段、23个导航步骤（包括第0阶段2项输入展示）**，21个执行步骤中，输入检查和人工执行回填不调用Skill；其余步骤使用21个主Skill（部分如code-review由内部调用）。另外有6个通用工具Skill及3个必要官方依赖，共**30份SKILL.md**。实际模块数量须从PRD识别；报价项目的案例单独放在 `docs/examples/报价项目/`。
+共**4个阶段、21个导航步骤（包括第0阶段2项输入展示）**，21个执行步骤中，输入检查和人工执行回填不调用Skill；其余步骤使用21个主Skill（部分如code-review由内部调用）。另外有7个通用工具Skill及3个必要官方依赖，共**31份SKILL.md**。实际模块数量须从PRD识别；报价项目的案例单独放在 `docs/examples/报价项目/`。
 
 ## Skill质量与采用原则
 
@@ -56,7 +55,7 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 ## 2026-10-10：对抗式审计与来源学习
 - 项目基线Skill与Matt原版正文未改；其余14个主流程定制Skill完善执行图/失败处理/证据机制。
 - S04整体架构设计内部调用Grill，S09模块详细设计内部按需调用Grill，保持项目准备与设计7步不额外加独立节点；Matt to-spec只综合已确认内容。
-- Matt code-review仅**Standards + Spec**；S12实现阶段内置TDD/必要集成验证与Standards/Spec双轴代码审查；S14H由AI生成待执行测试单、人工回填，S14B以官方六阶段诊断Bug。
+- Matt code-review仅**Standards + Spec**；S12调用自建dev-implement-spec，其中完整调用Matt原版implement-spec执行TDD与Standards/Spec双轴代码审查；完成后生成待执行人工测试单，S14H只由人工执行和回填，S14B以官方六阶段诊断Bug。
 - 整体架构需要全部四类docs/input、基线及既有代码；数据总体与模块详细设计也必须读取项目基线。
 - 环境部署不要求固定的个人电脑目录。模块详细设计只输出SQL迁移设计草案，TDD编码阶段才产生正式版本化迁移。
 - 详细来源见 `skills/REFERENCES.md` 和 `docs/research/skill-sources.md`：标明具体项目及Skill名称、学习机制和项目采用/改造，不进入可安装Skill正文。
@@ -65,7 +64,7 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 - 首次进入S08时按已审核模块清单初始化 `docs/output/项目总控/项目实施状态.md`，后续轮次只更新，不覆盖历史已验收记录。
 - 完整逐步输入输出核对见 `docs/输入输出契约与对抗性审查.md`。
 
-- 现行流程S12负责将内置TDD/集成验证与code-review分别归档为 `实现与自动验证记录.md`、`代码审查记录.md`，S14H复用证据，不重复一轮AI自动测试。
+- 现行流程S12通过dev-implement-spec将Matt原版TDD/集成验证与code-review分别归档为 `实现与自动验证记录.md`、`代码审查记录.md`，S14H复用证据，不重复一轮AI自动测试。
 - 开发环境统一输出 `docs/output/04-开发环境/部署步骤与执行记录.md`；人工测试唯一主记录是 `docs/output/06-模块迭代/<模块>/人工测试用例与结果.md`，后续模块收口与系统验收共用该文件。
 
 ## 标准项目与案例分离
@@ -79,3 +78,10 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 ## 调研参考：pstack 与 Addy Osmani
 
 借鉴了 pstack 的真实用户路径验证、视觉基线、模块设计草图与按需对抗式审查，以及 Addy Osmani 的纵向切片、真实浏览器运行验证和可执行质量阈值。**不增加重复Skill**，研究细节见 `docs/research/skill-sources.md`；正式Skill安装包不包含案例及研究报告。
+
+## 2026-10-10：每轮retro、扩展实现Skill与通用工具筛选
+
+- `skills/dev-implement-spec/SKILL.md`：先调用未修改的官方`implement-spec`，再新增需求基线角色×场景与真实自动化覆盖对比，生成`人工测试用例与结果.md`供下一步人工回填；不新增重复Review。
+- `skills/iteration-close/SKILL.md`：本轮完成实际人工验收后**明确调用官方retro**，复盘AI编码会话及自动检查、Agent导航、规范等问题；审核通过的改进可供下一轮使用，取消项目末尾强制复盘阶段。
+- 通用Skill筛选后保留`handoff`、`grilling`、`domain-modeling`、`research`、`wizard`，增加官方`pr`与`to-questionnaire`；删除仅转调grilling的重复`grill-me`入口。
+- 右上角「项目目录树」来自`docs/data/project-directory-tree.txt`：按阶段步骤显示已存在输入、预期输出、模块循环和按需目录，配有中文注释。**这是结构设计，不是已自动生成全部文件。**
