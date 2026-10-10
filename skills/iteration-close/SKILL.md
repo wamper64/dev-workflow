@@ -29,7 +29,7 @@ description: 人工场景验收已完成后收口本轮，关联合并的Tickets
 
 ## 4. 交付文件
 
-- `项目实施状态.md`
+- `docs/output/项目总控/项目实施状态.md`
 - `docs/output/06-模块迭代/本轮收口记录.md`
 
 ## 5. 支持文件
@@ -37,3 +37,20 @@ description: 人工场景验收已完成后收口本轮，关联合并的Tickets
 - [专属审核标准](references/execution-gate.md)
 - [交付模板](assets/output-template.md)
 - [报价系统场景示例](examples/报价项目场景示例.md)
+
+## 收口强制证据链
+
+```mermaid
+flowchart TD
+  A[本轮计划和已解锁Tickets] --> B[逐模块定位Spec及固定基准Review]
+  B --> C[自动联调/原型比对]
+  C --> D[人工场景验收及Bug复测]
+  D --> E{每个模块真实签收?}
+  E -- 否 --> F[退回diagnosing-bugs→实现→复审→联调→人工复测]
+  E -- 是 --> G[更新项目状态与依赖]
+  G --> H{还有模块未验收?}
+  H -- 是 --> I[返回选择本轮模块]
+  H -- 否 --> J[进入全系统验收]
+```
+
+更新唯一状态文件 `docs/output/项目总控/项目实施状态.md`，且每一模块记录 `Spec | Tickets | Git变更 | Review | 自动联调 | 人工验收 | Bug关闭 | 本次状态`。缺少任何证明则维持开发中/阻塞，不能仅因“代码已经合并”就完成。本轮收口记录使用 `docs/output/06-模块迭代/本轮收口记录.md`。
