@@ -34,3 +34,10 @@ https://wamper64.github.io/dev-workflow/
 - 网站的21个执行步骤严格对应21个主Skill（6个Matt原版，15个改造或自建）。
 - 全部Skill导出包另附 Matt 原版 tdd、implement、writing-for-agents 依赖，共24份SKILL.md，并保留MIT许可。
 - 参考来源请看 skills/REFERENCES.md；已将自建的主要参考指向具体的上游SKILL.md，不将普通README冒充Skill。
+
+## 本轮研发导航更新
+
+- 专注报价系统首次建设；已有PRD、前端原型和若依框架，暂不扩展标准项目模式。
+- 5个大阶段，27个工作步骤（含2项可选Grill或Bug诊断），24个主Skill；通用工具箱提供6个Matt官方Skill。
+- 两处显式Grill关键决策；Matt代码双轴审查→AI实际自动联调/原型核查→人工测试→有Bug才诊断修复→审查和复测。
+- 逐技能参考了什么详见 `docs/research/skill-sources.md`。类型/研究来源只在网站说明，不在安装用SKILL.md里。
