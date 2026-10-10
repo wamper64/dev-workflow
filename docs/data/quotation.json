@@ -1369,51 +1369,27 @@
       "optional": false
     },
     {
-      "id": "S08Q",
-      "title": "本轮模块疑点 Grill（有疑点时）",
-      "skills": [
-        "grill-with-docs"
-      ],
-      "inputs": [
-        "docs/output/06-模块迭代/本轮模块计划.md",
-        "docs/output/06-模块迭代/前置依赖检查.md",
-        "docs/output/01-项目基线/项目基线.md",
-        "docs/output/02-整体架构/整体架构设计.md",
-        "docs/output/03-数据库总体/数据库总体设计.md",
-        "docs/input/需求资料/（已确认PRD）",
-        "code/fld/原型",
-        "GLOSSARY.md、docs/adr/（如有）"
-      ],
-      "outputs": [
-        "docs/output/06-模块迭代/<模块>/已确认模块决策.md（有疑点时）",
-        "GLOSSARY.md、docs/adr/（需要时更新）"
-      ],
-      "review": "项目经理确认业务疑点，技术总监确认跨模块取舍；Grill只问真正未决问题，无疑点记录跳过原因。",
-      "optional": true
-    },
-    {
       "id": "S09",
       "title": "完成本轮模块详细设计",
       "skills": [
         "module-design"
       ],
       "inputs": [
-        "docs/output/06-模块迭代/本轮模块计划.md",
-        "docs/output/06-模块迭代/前置依赖检查.md",
+        "docs/input/（全量读取与本轮模块相关的需求、工程、环境、对接资料）",
         "docs/output/01-项目基线/项目基线.md",
-        "docs/output/02-整体架构/整体架构设计.md",
+        "docs/output/02-整体架构/整体架构设计.md（已审定组件与交互骨架）",
         "docs/output/03-数据库总体/数据库总体设计.md",
-        "docs/input/需求资料/（已确认PRD）",
-        "code/fld/",
-        "code/guiwu_ruoyi/",
-        "Grill结果及ADR（如有）"
+        "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
+        "docs/output/06-模块迭代/本轮模块计划.md、前置依赖检查.md",
+        "code/fld/、code/guiwu_ruoyi/（本轮相关现有代码）",
+        "GLOSSARY.md、docs/adr/（有则继承；内置Grill按需更新）"
       ],
       "outputs": [
         "docs/output/06-模块迭代/<模块>/模块详细设计.md",
         "docs/output/06-模块迭代/<模块>/迁移设计草案.md",
         "docs/adr/（符合条件时）"
       ],
-      "review": "依据工程基线、原型和总体设计完成状态、字段、API、权限；草案并非已执行SQL，开发改变时回写设计。",
+      "review": "先遵循整体架构骨架，仅在本轮模块内细化业务状态、数据库表字段、接口及原型动作；真正未决且阻塞设计的问题由module-design内部调用Grill逐轮澄清。越过已批准组件与通信边界时返回整体架构技术总监审核。",
       "optional": false
     },
     {
