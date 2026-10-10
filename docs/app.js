@@ -28,7 +28,8 @@ function renderDetails(){
   html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">✓</span> 审核要求</h3><div class="review-box">'+esc(s.review)+'</div><p class="owner">审核及参与角色：'+esc(p.owner)+'</p></section>';
-  if(p.id==="P03"){
+  html+='<section class="detail-section prompt-section"><div class="prompt-heading"><h3><span class="section-icon">✎</span> 执行提示词</h3><button type="button" class="copy-prompt" data-copy-prompt aria-label="复制当前步骤提示词">复制提示词</button></div><div class="prompt-text">'+esc(s.prompt||"本步骤尚未配置执行提示词。")+'</div><p class="detail-hint">提示词为启动本步骤的初稿；实施时应先读取实际资料，缺少确认信息不得猜测。</p></section>';
+  if(p.id==="P05"){
     html+='<details class="extra-disclosure"><summary>查看本项目13个候选模块与菜单映射</summary>';
     html+=ui.data.modules.map(m=>'<div class="module-record"><b>'+esc(m.id+" · "+m.title)+'</b><p>'+esc([...m.menus,...(m.additional?[m.additional]:[])].join("、"))+'</p></div>').join("");
     html+='</details>';
@@ -46,6 +47,29 @@ function setSelection(phaseId,stepId,moveFocus=false){
   renderStages();renderSteps();renderDetails();
   if(moveFocus&&innerWidth<781){$("steps-pane").scrollIntoView({behavior:"smooth",block:"start"});}
 }
+document.addEventListener("click",async event=>{
+  const button=event.target.closest("[data-copy-prompt]");
+  if(!button||!ui.data)return;
+  const content=step().prompt||"";
+  if(!content)return;
+  const original=button.textContent;
+  try{
+    if(navigator.clipboard?.writeText){
+      await navigator.clipboard.writeText(content);
+    }else{
+      const area=document.createElement("textarea");
+      area.value=content;area.style.position="fixed";area.style.opacity="0";
+      document.body.appendChild(area);area.select();
+      if(!document.execCommand("copy"))throw Error("复制未成功");
+      area.remove();
+    }
+    button.textContent="✓ 已复制";
+  }catch(error){
+    button.textContent="复制失败，请手动选中文本";
+    console.warn("复制提示词失败",error);
+  }
+  setTimeout(()=>{if(button.isConnected)button.textContent=original},1800);
+});
 document.addEventListener("click",event=>{
   const target=event.target.closest("button[data-phase],button[data-step]");
   if(!target)return;
