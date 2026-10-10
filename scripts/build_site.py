@@ -62,6 +62,7 @@ for s in payload["skills"]:
 assert custom_count == 16
 assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 33
 assert len(workspace) == 6
+assert all(x["source"]["url"].startswith("https://github.com/mattpocock/skills/") for x in workspace)
 assert set(x["id"] for x in workspace).isdisjoint(known)
 assert set(x["id"] for x in workspace) == set(data["workspaceSkills"])
 
@@ -73,7 +74,7 @@ for utility in workspace:
         if file.is_file():
             files[file.relative_to(folder).as_posix()] = file.read_text(encoding="utf-8")
     assert "SKILL.md" in files
-    payload["skills"].append({**utility, "files": files})
+    payload["skills"].append({**utility, "category": "workspace", "files": files})
 
 # 交付检查覆盖全部技能与官方依赖。
 for needed in ("grill-with-docs", "grilling", "domain-modeling", "handoff",
