@@ -282,10 +282,11 @@
           ],
           "outputs": [
             "docs/output/06-模块迭代/本轮模块计划.md",
-            "docs/output/06-模块迭代/前置依赖检查.md"
+            "docs/output/06-模块迭代/前置依赖检查.md",
+            "docs/output/项目总控/项目实施状态.md（首次迭代时初始化，后续轮次仅更新）"
           ],
           "review": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。",
-          "prompt": "请调用 Skill：iteration-planning（skills/iteration-planning/SKILL.md），执行「选择本轮模块并校验依赖」。\n\n【必须读取的输入】\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/05-模块拆分/模块依赖关系.md\n- docs/output/项目总控/项目实施状态.md（首次不存在则初始化）\n- docs/output/04-开发环境/开发环境部署与验收.md\n- docs/output/01-项目基线/项目基线.md\n\n【具体执行方式】\n核查上游模块、字典权限、基础数据、真实第三方和测试条件；只选已解锁纵向切片。\n\n【真实输出】\n- docs/output/06-模块迭代/本轮模块计划.md\n- docs/output/06-模块迭代/前置依赖检查.md\n\n【审核/不通过路径】\n开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "请调用 Skill：iteration-planning（skills/iteration-planning/SKILL.md），执行「选择本轮模块并校验依赖」。\n\n【必须读取的输入】\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/05-模块拆分/模块依赖关系.md\n- docs/output/项目总控/项目实施状态.md（首次不存在则初始化）\n- docs/output/04-开发环境/开发环境部署与验收.md\n- docs/output/01-项目基线/项目基线.md\n\n【具体执行方式】\n核查上游模块、字典权限、基础数据、真实第三方和测试条件；只选已解锁纵向切片。\n\n【真实输出】\n- docs/output/项目总控/项目实施状态.md（首次迭代时初始化，后续轮次仅更新）\n- docs/output/06-模块迭代/本轮模块计划.md\n- docs/output/06-模块迭代/前置依赖检查.md\n\n【审核/不通过路径】\n开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
           "skillId": "iteration-planning",
           "skillOrigin": "自建"
         },
@@ -1363,7 +1364,8 @@
       ],
       "outputs": [
         "docs/output/06-模块迭代/本轮模块计划.md",
-        "docs/output/06-模块迭代/前置依赖检查.md"
+        "docs/output/06-模块迭代/前置依赖检查.md",
+        "docs/output/项目总控/项目实施状态.md（首次迭代时初始化，后续轮次仅更新）"
       ],
       "review": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。",
       "optional": false
