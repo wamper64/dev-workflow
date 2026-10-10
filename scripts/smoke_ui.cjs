@@ -59,7 +59,7 @@ async function main(){
  click('[data-skill-file="examples/报价系统-工程基线输出示例.md"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/第一性原则/);
  click('[data-skill-file="references/checklist.md"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/工程基线内容检查清单/);
+ assert.match(doc.getElementById("skill-dialog-content").textContent,/项目基线生成覆盖检查/);
  click('[data-skill-file="scripts/check_inputs.py"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/argparse/);
  click("[data-skill-close]");
