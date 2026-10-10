@@ -51,7 +51,7 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/保存时长|保存年限/);
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/CPU预算|内存预算|磁盘预算/);
  click('[data-sample="consultation"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/最多3项/);
+ assert.match(doc.getElementById("skill-dialog-content").textContent,/3组最高影响/);
  click('[data-sample="final"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/版本可追溯/);
  click('[data-skill-tab="files"]');
