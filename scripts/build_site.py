@@ -23,7 +23,8 @@ workspace = json.loads((ROOT / "skills/workspace.json").read_text(encoding="utf-
 subprocess.run(["python3", str(ROOT / "scripts" / "audit_contracts.py")], check=True)
 
 assert len(data["phases"]) == 5
-assert sum(len(p["steps"]) for p in data["phases"]) == 27
+assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})
+assert len(data["phases"][1]["steps"]) == 7
 assert len(data["modules"]) == 13
 assert len(catalog) == 24
 assert len({x["id"] for x in catalog}) == 24
