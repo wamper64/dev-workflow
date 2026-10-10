@@ -1,0 +1,33 @@
+name: 发布研发导航
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'docs/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+      - name: 配置 GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: 上传静态网站
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+      - name: 发布GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
