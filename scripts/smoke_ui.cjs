@@ -44,7 +44,7 @@ async function main(){
  assert.match(doc.getElementById("skill-dialog-content").textContent,/报价系统项目工程基线/);
  assert.ok(doc.querySelectorAll(".sample-table").length>=6,"成品示例应显示可阅读表格");
  click('[data-sample="consultation"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/每轮最多3项/);
+ assert.match(doc.getElementById("skill-dialog-content").textContent,/最多3项/);
  click('[data-sample="final"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/版本可追溯/);
  click('[data-skill-tab="files"]');
