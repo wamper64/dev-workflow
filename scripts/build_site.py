@@ -20,6 +20,8 @@ data = json.loads((DOCS / "data/quotation.json").read_text(encoding="utf-8"))
 catalog = json.loads((ROOT / "skills/catalog.json").read_text(encoding="utf-8"))
 workspace = json.loads((ROOT / "skills/workspace.json").read_text(encoding="utf-8"))
 
+subprocess.run(["python3", str(ROOT / "scripts" / "audit_contracts.py")], check=True)
+
 assert len(data["phases"]) == 5
 assert sum(len(p["steps"]) for p in data["phases"]) == 27
 assert len(data["modules"]) == 13
