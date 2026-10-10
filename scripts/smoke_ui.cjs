@@ -80,6 +80,13 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/实际采用与定制化改造/);
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/architecture spine|组件清单|交互/);
  click("[data-skill-close]");
+ click('[data-step="S06"]');
+ assert.equal(doc.querySelectorAll("[data-dev-field]").length,10,"右侧开发环境必须为可填写表格");
+ const area=doc.querySelector('[data-dev-field="os"]');
+ area.value="Windows 11 开发";
+ area.dispatchEvent(new dom.window.Event("input",{bubbles:true}));
+ assert.match(dom.window.localStorage.getItem("dev-workflow:environment-form:v1"),/Windows 11/);
+ assert.ok(doc.querySelector("[data-dev-download]"),"填写后应能导出Markdown");
  click('[data-step="S05"]');
  click('[data-skill="data-architecture"]');
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/数据域/);
@@ -97,9 +104,11 @@ async function main(){
  assert.match(doc.querySelector("#step-detail").textContent,/TDD/);
  assert.match(doc.querySelector("#step-detail").textContent,/code-review/,"implement-spec内部应执行双轴代码审查");
  assert.match(doc.querySelector("#step-detail").textContent,/自动验证|集成验证/);
- assert.match(doc.querySelector("#step-detail").textContent,/代码审查记录.md/,"审查结果须有真实文件");
+ assert.match(doc.querySelector("#step-detail").textContent,/内置 code-review|code-review/,"实现阶段内部必须执行审查");
  click('[data-step="S14H"]');
  assert.match(doc.querySelector("#step-detail").textContent,/人工测试/);
+ assert.match(doc.querySelector("#step-detail").textContent,/回填/);
+ assert.match(doc.querySelector("#step-detail").textContent,/人工测试用例与结果.md/);
  click('[data-skill="human-acceptance"]');
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/测试/);
  click('[data-skill-tab="source"]');
@@ -108,7 +117,10 @@ async function main(){
  click("[data-skill-close]");
  click('[data-step="S14B"]');
  click('[data-skill="diagnosing-bugs"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/原始症状/);
+ assert.equal(doc.querySelectorAll(".skill-topic-card").length,6,"官方diagnosing-bugs必须六个阶段");
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/Phase 1/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/Phase 6/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/原始症状|红灯/);
  click("[data-skill-close]");
  click('[data-phase="P01"]');
  click('[data-step="S04"]');
