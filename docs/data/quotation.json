@@ -1,8 +1,8 @@
 {
   "title": "报价系统首次项目建设研发导航",
-  "version": "方案草案",
+  "version": "流程讨论稿：8阶段",
   "updated": "2026-10-10",
-  "overview": "基于现有input资料、前端原型及若依后端框架，先识别模块，再按依赖选模块迭代开发，最后全项目验收上线。",
+  "overview": "从已有input/与code/出发，依次完成项目基线、整体架构、数据库总体设计、开发环境部署、模块拆分，再按模块迭代研发，最终全系统验收上线并通过retro复盘。",
   "inputs": [
     {
       "name": "需求资料",
@@ -38,16 +38,17 @@
   "phases": [
     {
       "id": "P01",
-      "title": "确认项目原始输入",
+      "title": "项目基线",
       "kind": "once",
       "owner": "开发人员、项目经理",
-      "description": "接收已确认的PRD、可选工程/环境/对接资料和原型/框架，不重做需求调研。",
+      "description": "确定项目输入、交付范围和已有代码边界。已确认的PRD与原型直接复用，不重复开展需求调研。",
       "steps": [
         {
           "id": "S01",
-          "title": "核对 input 四类资料",
+          "title": "梳理原始资料和交付范围",
           "skills": [
-            "dev-project-init"
+            "dev-project-baseline",
+            "grill-with-docs"
           ],
           "inputs": [
             "input/需求资料/PRD",
@@ -56,552 +57,685 @@
             "input/对接资料/"
           ],
           "outputs": [
-            "doc/output/项目总控/输入核对.md",
-            "doc/output/项目总控/待确认问题.md"
+            "doc/output/01-项目基线/项目基线.md",
+            "doc/output/01-项目基线/待确认事项.md"
           ],
-          "review": "项目经理核实资料完整性，缺失的可选资料不强制补齐"
+          "review": "项目经理确认项目范围、资料版本和未决问题；缺少可选资料不能虚构。",
+          "prompt": "请执行首次项目建设的「项目基线」整理。\n项目根目录的 input/需求资料 存放已确认PRD；input/工程资料、环境资料、对接资料为已有资料，可为空；code/fld 是必须沿用样式和组件的前端原型；code/guiwu_ruoyi 为已有若依后端框架。不得重建前端，不得替换后端框架。\n读取 input/ 下实际存在的资料，先索引PRD中的用户角色、核心业务、交付范围与硬性约束；区分确认内容、互相冲突内容及确实会阻塞实施的问题。\n输出 doc/output/01-项目基线/项目基线.md 和 待确认事项.md。只询问阻塞性问题，列出有依据的默认建议供项目经理确认；不得重做PRD、原型或凭空补全接口。"
         },
         {
           "id": "S02",
-          "title": "初始化 Agent 与 Matt 工作约定",
-          "skills": [
-            "setup-matt-pocock-skills",
-            "dev-project-control"
-          ],
-          "inputs": [
-            "code/",
-            "input/工程资料/",
-            "现有 AGENTS.md 或 CLAUDE.md"
-          ],
-          "outputs": [
-            "AGENTS.md（复用或更新）",
-            "docs/agents/issue-tracker.md",
-            "docs/agents/domain.md"
-          ],
-          "review": "确认Git提交用中文、前端保持原型设计，配置本地Markdown任务跟踪"
-        }
-      ],
-      "artifacts": [
-        "doc/output/项目总控/输入核对.md",
-        "doc/output/项目总控/待确认问题.md",
-        "AGENTS.md（复用或更新）"
-      ]
-    },
-    {
-      "id": "P02",
-      "title": "扫描现有前后端",
-      "kind": "once",
-      "owner": "开发人员",
-      "description": "扫描原型页面和若依现有能力，找到真实代码位置及可复用能力。",
-      "steps": [
-        {
-          "id": "S03",
-          "title": "扫描前端原型与页面",
-          "skills": [
-            "dev-engine-baseline",
-            "dev-ui-guard"
-          ],
-          "inputs": [
-            "code/fld/",
-            "input/需求资料/"
-          ],
-          "outputs": [
-            "doc/output/项目总控/原型页面映射.md",
-            "doc/output/项目总控/原型复用约束.md"
-          ],
-          "review": "覆盖登录与17个菜单；已有样式和组件优先复用，不另建重复UI"
-        },
-        {
-          "id": "S04",
-          "title": "扫描若依后端复用能力",
+          "title": "扫描已有前端原型和后端框架",
           "skills": [
             "dev-engine-baseline",
             "codebase-design"
           ],
           "inputs": [
+            "code/fld/",
             "code/guiwu_ruoyi/",
             "input/工程资料/"
           ],
           "outputs": [
-            "doc/output/项目总控/后端框架复用清单.md"
+            "doc/output/01-项目基线/工程现状与复用清单.md",
+            "doc/output/01-项目基线/原型页面映射.md"
           ],
-          "review": "明确哪些认证、角色、菜单、日志、数据能力可直接复用"
+          "review": "开发人员核对登录与全部17个菜单的真实页面位置、可复用后端能力和不能改变的前端结构。",
+          "prompt": "扫描 code/fld 和 code/guiwu_ruoyi，不编写新功能代码。\n把登录和截图中的17个菜单映射到真实路由、页面、组件、样式文件；将若依中的用户、角色、权限、菜单、日志、基础服务分为「直接复用 / 扩展 / 新建」。特别说明在既有原型上接API的位置，禁止另造UI。\n输出 doc/output/01-项目基线/工程现状与复用清单.md、原型页面映射.md。对扫描不到的内容标「待核实」，不能猜文件路径。"
         },
         {
-          "id": "S05",
-          "title": "验证本地可运行基线",
+          "id": "S03",
+          "title": "固化工程和AI开发约束",
           "skills": [
-            "dev-environment-check",
-            "diagnosing-bugs"
+            "dev-project-baseline",
+            "setup-matt-pocock-skills",
+            "dev-ui-guard"
           ],
           "inputs": [
-            "code/",
-            "本地已有开发依赖",
-            "input/环境资料/"
+            "doc/output/01-项目基线/项目基线.md",
+            "工程现状与复用清单.md",
+            "现有AGENTS.md或CLAUDE.md"
           ],
           "outputs": [
-            "doc/output/项目总控/本地环境验证.md"
+            "AGENTS.md（更新已有文件）",
+            "docs/agents/issue-tracker.md",
+            "doc/output/01-项目基线/项目基线审核.md"
           ],
-          "review": "能启动前后端并连接本地依赖，失败项有定位证据"
+          "review": "项目经理审核业务范围，开发人员确认样式原型不可重做、Git中文提交、任务跟踪规则。",
+          "prompt": "根据已确认的项目基线和扫描结果建立研发工作约束。\n优先扩展已有 AGENTS.md/CLAUDE.md；明确 code/fld 必须在原型基础上开发：已有样式及组件必须延用，新增页面延用既有视觉体系，不得新建第二套UI；后端延用若依；Git提交信息使用中文；配置Matt本地Markdown Spec/Ticket跟踪。\n生成或更新 AGENTS.md、docs/agents/issue-tracker.md 及项目基线审核记录。只保留关键可执行规则，避免重复PRD长文本。"
         }
       ],
       "artifacts": [
-        "doc/output/项目总控/原型页面映射.md",
-        "doc/output/项目总控/原型复用约束.md",
-        "doc/output/项目总控/后端框架复用清单.md"
+        "doc/output/01-项目基线/项目基线.md",
+        "doc/output/01-项目基线/待确认事项.md",
+        "doc/output/01-项目基线/工程现状与复用清单.md",
+        "doc/output/01-项目基线/原型页面映射.md",
+        "AGENTS.md（更新已有文件）"
+      ]
+    },
+    {
+      "id": "P02",
+      "title": "整体架构设计",
+      "kind": "once",
+      "owner": "技术总监、开发人员",
+      "description": "决定全项目的系统分层、核心组件、技术架构、权限和对接关系。模块内部实现细节暂不展开。",
+      "steps": [
+        {
+          "id": "S04",
+          "title": "设计系统结构与部署拓扑",
+          "skills": [
+            "dev-architecture",
+            "codebase-design",
+            "research"
+          ],
+          "inputs": [
+            "doc/output/01-项目基线/项目基线.md",
+            "工程现状与复用清单.md",
+            "input/工程资料/",
+            "input/环境资料/"
+          ],
+          "outputs": [
+            "doc/output/02-整体架构/整体架构设计.md",
+            "docs/adr/系统架构决策.md"
+          ],
+          "review": "技术总监审核技术选型、现有工程复用、运行单元边界和资源约束。",
+          "prompt": "站在整个报价系统角度给出可执行的整体架构设计。\n输入：项目基线、已有前端原型和若依框架、已确定技术方案及环境约束。\n设计前后端交互、文件存储、解析服务、计算单匹配、审批/工作流、数据库与缓存、部署拓扑，并明确已有与新建运行单元。只在现有代码上扩展，不重新搭建前后端。\n输出 doc/output/02-整体架构/整体架构设计.md 及必要ADR。优先沿用工程资料中的决策；尚未确认的技术选型列出方案和取舍，提交技术总监审核。暂不设计每张业务表、Controller与页面。"
+        },
+        {
+          "id": "S05",
+          "title": "确定跨系统集成、权限和公共契约",
+          "skills": [
+            "dev-architecture",
+            "domain-modeling",
+            "research"
+          ],
+          "inputs": [
+            "input/对接资料/",
+            "doc/output/02-整体架构/整体架构设计.md",
+            "项目基线.md"
+          ],
+          "outputs": [
+            "doc/output/02-整体架构/系统集成与权限设计.md",
+            "doc/output/02-整体架构/公共契约约束.md"
+          ],
+          "review": "技术总监核对认证授权、数据隔离、文件与第三方调用边界；不虚构第三方接口。",
+          "prompt": "基于整体架构，梳理全项目共用而非模块私有的技术约定。\n必须覆盖：若依认证授权复用、业务数据权限边界、项目标识与版本标识、公共API约定、文件上传与存储、第三方解析/设备接口、异常与重试、超时和审计。仅根据 input/对接资料 中真实协议设计，资料缺失时写出待确认项。\n产出 系统集成与权限设计.md 和 公共契约约束.md；模块特有接口和SQL字段留到模块开发时再做。"
+        },
+        {
+          "id": "S06",
+          "title": "审核整体架构并处理阻塞决策",
+          "skills": [
+            "dev-architecture",
+            "wayfinder",
+            "grill-with-docs"
+          ],
+          "inputs": [
+            "整体架构设计.md",
+            "系统集成与权限设计.md",
+            "项目基线.md"
+          ],
+          "outputs": [
+            "doc/output/02-整体架构/架构评审记录.md",
+            "docs/adr/关键技术决策.md"
+          ],
+          "review": "技术总监确认方案可落地；重大未决决策不得假定已通过，未通过返回架构设计。",
+          "prompt": "请对报价系统整体架构进行正式评审。\n从PRD符合性、前后端原有工程复用、模块通信、全局权限、资源和服务器约束、第三方依赖、故障恢复、可测试性逐项检查。\n将问题分为：阻塞实施、允许模块设计阶段补充、可选优化；提出可执行修正方案。\n输出 架构评审记录.md 与必要ADR。由技术总监确认后才通过此关卡，不能在无人确认时写「审核通过」。"
+        }
+      ],
+      "artifacts": [
+        "doc/output/02-整体架构/整体架构设计.md",
+        "docs/adr/系统架构决策.md",
+        "doc/output/02-整体架构/系统集成与权限设计.md",
+        "doc/output/02-整体架构/公共契约约束.md",
+        "doc/output/02-整体架构/架构评审记录.md"
       ]
     },
     {
       "id": "P03",
-      "title": "识别并审核项目模块",
+      "title": "数据库设计（总体）",
       "kind": "once",
-      "owner": "项目经理、技术总监、开发人员",
-      "description": "正式进行模块划分，13个候选模块不代表已审定，不能预设8个Spec。",
+      "owner": "技术总监、开发人员",
+      "description": "只设计数据域、存储选型、数据库边界、数据增长和分库分表策略。不设计具体业务表、字段和DDL。",
       "steps": [
         {
-          "id": "S06",
-          "title": "提取 PRD 与原型业务能力",
+          "id": "S07",
+          "title": "划分数据域和存储边界",
           "skills": [
-            "dev-module-map",
+            "dev-data-architecture",
             "domain-modeling"
           ],
           "inputs": [
             "input/需求资料/PRD",
-            "原型页面映射.md"
+            "doc/output/02-整体架构/整体架构设计.md",
+            "公共契约约束.md"
           ],
           "outputs": [
-            "doc/output/项目总控/候选能力清单.md",
-            "GLOSSARY.md"
+            "doc/output/03-数据库总体/数据库总体设计.md"
           ],
-          "review": "功能覆盖无遗漏；跨页面业务不被拆成互不关联的孤岛"
-        },
-        {
-          "id": "S07",
-          "title": "按业务职责划分候选模块",
-          "skills": [
-            "dev-module-map",
-            "codebase-design"
-          ],
-          "inputs": [
-            "候选能力清单.md",
-            "code/fld/",
-            "code/guiwu_ruoyi/"
-          ],
-          "outputs": [
-            "doc/output/项目总控/候选模块清单.md",
-            "doc/output/项目总控/模块页面映射.md"
-          ],
-          "review": "模块按职责、数据和业务闭环划分，而非一个菜单等于一个Spec"
+          "review": "技术总监确认领域数据归属和数据库关系，不提前评审不存在的表字段。",
+          "prompt": "基于报价PRD与整体架构，完成「数据库总体设计」中的数据域划分。\n按项目/需求参数/历史计算单/匹配/成本/报价审批/归档/系统管理等业务职责识别数据域，说明每个域的数据责任、与其他域的关系、事务一致性与存储要求。\n输出 doc/output/03-数据库总体/数据库总体设计.md。本阶段仅确定域与存储边界，不产生业务表名、字段清单、索引或CREATE TABLE语句。"
         },
         {
           "id": "S08",
-          "title": "梳理模块之间的前置依赖",
+          "title": "确定单库、分库分表及增长策略",
           "skills": [
-            "dev-module-map",
+            "dev-data-architecture",
+            "research"
+          ],
+          "inputs": [
+            "数据库总体设计.md",
+            "项目基线.md",
+            "整体架构设计.md",
+            "input/环境资料/"
+          ],
+          "outputs": [
+            "doc/output/03-数据库总体/数据库容量与分库分表决策.md",
+            "doc/output/03-数据库总体/数据库设计审核.md"
+          ],
+          "review": "技术总监确认实际容量假设与分库分表依据；缺少数据量时标假设，不盲目引入复杂方案。",
+          "prompt": "为报价系统确定数据库部署与扩展策略。\n评估数据量、增长速度、并发访问、历史留存、读写比例、灾备需求，结合预计服务器资源，给出单库/多库/分库分表的推荐及触发条件。说明RuoYi既有库的复用边界、迁移和备份原则。\n输出 数据库容量与分库分表决策.md、数据库设计审核.md。仅做项目级总体决策，具体业务字段和SQL在进入对应模块开发时完成。"
+        }
+      ],
+      "artifacts": [
+        "doc/output/03-数据库总体/数据库总体设计.md",
+        "doc/output/03-数据库总体/数据库容量与分库分表决策.md",
+        "doc/output/03-数据库总体/数据库设计审核.md"
+      ]
+    },
+    {
+      "id": "P04",
+      "title": "开发环境部署",
+      "kind": "once",
+      "owner": "开发人员、技术总监",
+      "description": "模块拆分前先准备可运行的开发基础设施，包括数据库、缓存及项目确实需要的中间件。与最后的生产上线不同。",
+      "steps": [
+        {
+          "id": "S09",
+          "title": "确定开发环境与依赖清单",
+          "skills": [
+            "dev-environment-deploy",
+            "research"
+          ],
+          "inputs": [
+            "doc/output/02-整体架构/整体架构设计.md",
+            "doc/output/03-数据库总体/数据库总体设计.md",
+            "input/环境资料/",
+            "D:/company/environment/（已有时）"
+          ],
+          "outputs": [
+            "doc/output/04-开发环境/环境部署清单.md",
+            "doc/output/04-开发环境/端口与资源规划.md"
+          ],
+          "review": "开发人员确认版本、端口和依赖真实需要；避免强制引入不需要的Redis或MQ。",
+          "prompt": "根据已确认的总体架构、数据库总体方案以及本机 D:/company/environment 下已有资源，制定开发环境部署清单。\n明确MySQL、Redis、RabbitMQ、文件存储、解析服务或其他真正需要的依赖，逐项列出版本、容器/原生部署方式、端口、持久化路径、启动顺序和本地访问方式。\n输出 环境部署清单.md、端口与资源规划.md。不新增架构没要求的基础设施；已有可用服务优先复用，避免端口与数据库冲突。"
+        },
+        {
+          "id": "S10",
+          "title": "部署数据库及所需基础中间件",
+          "skills": [
+            "dev-environment-deploy",
+            "wizard"
+          ],
+          "inputs": [
+            "环境部署清单.md",
+            "数据库容量与分库分表决策.md",
+            "code/guiwu_ruoyi/",
+            "本地可用Docker与数据库服务"
+          ],
+          "outputs": [
+            "deploy/dev/docker-compose.yml（按需）",
+            "deploy/dev/.env.example",
+            "doc/output/04-开发环境/基础设施部署记录.md"
+          ],
+          "review": "实际启动并验证数据库/缓存/中间件；可复用的已有环境不重复安装；不得写入真实密钥。",
+          "prompt": "实施本项目的开发环境部署，而不是正式生产上线。\n先核实当前机器已运行的MySQL、Redis及相关服务，按 环境部署清单.md 逐项复用或补齐；若需要新容器，在 deploy/dev/ 中维护Compose和无真实密钥的.env.example。\n验证数据库连接、持久化、服务健康状态、日志和端口；仅初始化若依框架必要的基础库结构，业务模块的表与DDL暂不创建。\n在 基础设施部署记录.md 填写实际执行命令与验证证据，未执行项目不得标记成功。"
+        },
+        {
+          "id": "S11",
+          "title": "联通前后端并验收开发环境",
+          "skills": [
+            "dev-environment-deploy",
+            "diagnosing-bugs",
+            "dev-ui-guard"
+          ],
+          "inputs": [
+            "code/fld/",
+            "code/guiwu_ruoyi/",
+            "deploy/dev/",
+            "基础设施部署记录.md"
+          ],
+          "outputs": [
+            "doc/output/04-开发环境/开发环境验收记录.md",
+            "按需：code/现有工程配置文件（修改）"
+          ],
+          "review": "开发人员实测前端、后端、数据库的连接；原型样式不变，环境不达标不能进入模块实现。",
+          "prompt": "检查项目现有前后端能够基于刚部署的环境运行。\n在 code/guiwu_ruoyi 配置开发数据库、必要缓存与服务连接，启动若依；在 code/fld 配置API代理后启动前端原型，验证登录、静态资源和一个受控的后端请求。\n记录版本、启动指令、连接验证结果、未解决的问题及修复方式到 开发环境验收记录.md。严禁为了使页面能打开而另写新前端；真实连接未通过不得宣称联调完成。"
+        }
+      ],
+      "artifacts": [
+        "doc/output/04-开发环境/环境部署清单.md",
+        "doc/output/04-开发环境/端口与资源规划.md",
+        "deploy/dev/docker-compose.yml（按需）",
+        "deploy/dev/.env.example",
+        "doc/output/04-开发环境/基础设施部署记录.md"
+      ]
+    },
+    {
+      "id": "P05",
+      "title": "模块拆分",
+      "kind": "once",
+      "owner": "项目经理、技术总监、开发人员",
+      "description": "建立全项目模块清单、页面映射和依赖关系，决定本轮可开发模块；不预设固定8个Spec。",
+      "steps": [
+        {
+          "id": "S12",
+          "title": "根据PRD和原型提取业务能力",
+          "skills": [
+            "dev-module-split",
             "domain-modeling"
           ],
           "inputs": [
-            "候选模块清单.md",
-            "相关PRD场景"
+            "input/需求资料/PRD",
+            "doc/output/01-项目基线/原型页面映射.md",
+            "doc/output/04-开发环境/开发环境验收记录.md"
           ],
           "outputs": [
-            "doc/output/项目总控/模块依赖关系.md"
+            "doc/output/05-模块拆分/业务能力清单.md",
+            "GLOSSARY.md"
           ],
-          "review": "识别项目主数据、模板、参数版本、匹配、审批等跨模块依赖"
+          "review": "项目经理确认登录和17个菜单的业务场景均可追溯，没有遗漏或重复。",
+          "prompt": "请以报价系统PRD、现有前端原型及项目基线为唯一业务依据，提取全项目业务能力。\n覆盖登录与17个菜单，按用户角色、核心场景、业务对象、页面/操作划分能力；把报价主流程、审批、待办与统计之间的跨页面联动单独记录。\n输出 业务能力清单.md 与需要新增的 GLOSSARY.md 术语。不要直接按菜单名机械定模块，也不要提前生成8个Spec。"
         },
         {
-          "id": "S09",
-          "title": "审核模块划分并确定范围",
+          "id": "S13",
+          "title": "划分模块并建立跨模块依赖",
+          "skills": [
+            "dev-module-split",
+            "codebase-design",
+            "domain-modeling"
+          ],
+          "inputs": [
+            "业务能力清单.md",
+            "整体架构设计.md",
+            "数据库总体设计.md",
+            "工程现状与复用清单.md"
+          ],
+          "outputs": [
+            "doc/output/05-模块拆分/候选模块清单.md",
+            "doc/output/05-模块拆分/模块页面映射.md",
+            "doc/output/05-模块拆分/模块依赖关系.md"
+          ],
+          "review": "技术总监审核模块职责、共享数据边界及开发依赖；13个模块只是候选，不是最终数量。",
+          "prompt": "基于已确认系统架构和数据域，对报价系统业务能力进行模块划分。\n以业务职责、数据一致性、可独立测试和既有代码边界为判断依据，说明每个模块覆盖的菜单/页面、共用能力、前置契约、可复用的若依和原型代码。\n输出 候选模块清单.md、模块页面映射.md、模块依赖关系.md。请将现有13个模块方案视为参考，可以合并、拆分或调整，必须给出调整依据。"
+        },
+        {
+          "id": "S14",
+          "title": "审核模块清单和迭代先后关系",
           "skills": [
             "dev-project-control",
+            "dev-module-split",
             "grill-with-docs"
           ],
           "inputs": [
             "候选模块清单.md",
             "模块依赖关系.md",
-            "项目PRD"
+            "项目PRD",
+            "开发环境验收记录.md"
           ],
           "outputs": [
-            "doc/output/项目总控/项目模块清单.md",
-            "doc/output/项目总控/模块划分审核.md"
+            "doc/output/05-模块拆分/项目模块清单.md",
+            "doc/output/05-模块拆分/模块拆分审核.md",
+            "doc/output/项目总控/项目实施状态.md"
           ],
-          "review": "项目经理确认范围，技术总监确认边界；批准后确定本项目实际模块数"
+          "review": "项目经理确认业务覆盖，技术总监确认模块边界；允许修改总体架构或数据库域后重新审核。",
+          "prompt": "组织模块划分审核。将候选模块逐一与PRD、17个菜单、业务链和已确定的技术架构/数据域对照。\n检查模块是否重复、遗漏、耦合过高、存在先后矛盾，并标注「已确认/待确认/被依赖阻塞」。建议第一轮优先开发已具备前置条件的模块，但不把迭代批次写死。\n输出 项目模块清单.md、模块拆分审核.md 和更新后的项目实施状态。项目经理与技术总监均确认后才冻结模块清单。"
         }
       ],
       "artifacts": [
-        "doc/output/项目总控/候选能力清单.md",
+        "doc/output/05-模块拆分/业务能力清单.md",
         "GLOSSARY.md",
-        "doc/output/项目总控/候选模块清单.md"
+        "doc/output/05-模块拆分/候选模块清单.md",
+        "doc/output/05-模块拆分/模块页面映射.md",
+        "doc/output/05-模块拆分/模块依赖关系.md"
       ]
     },
     {
-      "id": "P04",
-      "title": "建立共享工程基线",
-      "kind": "once",
-      "owner": "技术总监、开发人员",
-      "description": "只统一跨模块技术规则；模块内部详细设计延后到本轮开发。",
-      "steps": [
-        {
-          "id": "S10",
-          "title": "确定项目级架构与工程约束",
-          "skills": [
-            "dev-architecture",
-            "codebase-design"
-          ],
-          "inputs": [
-            "input/工程资料/",
-            "后端复用清单.md",
-            "已确认模块清单.md"
-          ],
-          "outputs": [
-            "doc/output/工程基线/工程基线.md",
-            "docs/adr/架构决策.md"
-          ],
-          "review": "不重建前端，不替换若依；技术总监审核核心架构与边界"
-        },
-        {
-          "id": "S11",
-          "title": "确定核心数据与跨模块契约",
-          "skills": [
-            "dev-architecture",
-            "domain-modeling"
-          ],
-          "inputs": [
-            "项目模块清单.md",
-            "模块依赖关系.md",
-            "项目PRD"
-          ],
-          "outputs": [
-            "doc/output/工程基线/核心数据模型.md",
-            "doc/output/工程基线/公共接口约定.md"
-          ],
-          "review": "统一项目ID、计算单、参数版本、报价状态、权限等公共约定"
-        }
-      ],
-      "artifacts": [
-        "doc/output/工程基线/工程基线.md",
-        "docs/adr/架构决策.md",
-        "doc/output/工程基线/核心数据模型.md"
-      ]
-    },
-    {
-      "id": "P05",
-      "title": "选择本轮开发模块",
+      "id": "P06",
+      "title": "模块迭代开发",
       "kind": "repeat",
-      "owner": "开发人员、项目经理",
-      "description": "按依赖和当前实际进展选若干模块，只为本轮已确定内容详细设计。",
+      "owner": "开发人员、项目经理、技术总监（涉及设计变更时）",
+      "description": "确定几个模块就先开发几个；本轮模块逐个进行详细设计、Spec、Tickets、TDD、评审和集成，验收后进入下一轮。",
       "steps": [
         {
-          "id": "S12",
-          "title": "根据模块清单选择本轮范围",
+          "id": "S15",
+          "title": "选择本轮模块并校验依赖",
           "skills": [
             "dev-iteration-plan",
             "dev-project-control"
           ],
           "inputs": [
-            "项目模块清单.md",
+            "doc/output/05-模块拆分/项目模块清单.md",
             "模块依赖关系.md",
-            "项目实施状态.md"
+            "项目实施状态.md",
+            "开发环境验收记录.md"
           ],
           "outputs": [
-            "doc/output/迭代/本轮开发计划.md"
+            "doc/output/06-模块迭代/本轮模块计划.md",
+            "doc/output/06-模块迭代/前置依赖检查.md"
           ],
-          "review": "项目经理确认本轮业务目标，开发人员判断并行和前后顺序"
+          "review": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。",
+          "prompt": "从已确认的 项目模块清单.md 中选择本轮可开发模块（可以1个或多个）。\n逐模块检查已有代码、基础数据、前置模块、字典规则、第三方真实接口和开发环境状态。对可并行工作建立依赖清单，对受阻功能只补最小前置Ticket或暂缓。\n输出 本轮模块计划.md、前置依赖检查.md，列清每个模块的交付场景和负责人。不要为其他未确定模块生成完整Spec。"
         },
         {
-          "id": "S13",
-          "title": "核查前置契约和第三方条件",
+          "id": "S16",
+          "title": "完成本轮模块详细设计",
           "skills": [
-            "dev-iteration-plan",
-            "research"
+            "dev-module-design",
+            "codebase-design",
+            "domain-modeling"
           ],
           "inputs": [
-            "本轮开发计划.md",
-            "input/对接资料/",
-            "工程基线.md"
+            "本轮模块计划.md",
+            "项目PRD",
+            "已有代码/页面",
+            "整体架构设计.md",
+            "数据库总体设计.md"
           ],
           "outputs": [
-            "doc/output/迭代/前置依赖检查.md"
+            "doc/output/06-模块迭代/<模块>/模块详细设计.md",
+            "database/migrations/<模块>*.sql（设计后形成）",
+            "按需：docs/adr/*.md"
           ],
-          "review": "缺少项目主数据、字典归一或第三方能力时，补最小前置任务或标明阻塞"
-        }
-      ],
-      "artifacts": [
-        "doc/output/迭代/本轮开发计划.md",
-        "doc/output/迭代/前置依赖检查.md"
-      ]
-    },
-    {
-      "id": "P06",
-      "title": "逐模块执行 Spec、Tickets 和开发",
-      "kind": "repeat",
-      "owner": "开发人员",
-      "description": "一个模块一份或按复杂度拆分Spec，每个Ticket要端到端可验证；允许同轮多个模块并行。",
-      "steps": [
-        {
-          "id": "S14",
-          "title": "核对本模块业务与现有实现",
-          "skills": [
-            "grill-with-docs",
-            "codebase-design"
-          ],
-          "inputs": [
-            "本模块PRD",
-            "对应原型页面",
-            "工程基线",
-            "当前业务代码"
-          ],
-          "outputs": [
-            "按需：docs/adr/模块决策.md"
-          ],
-          "review": "只确认原型与文档未覆盖的业务问题，不重复全项目调研"
+          "review": "开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。",
+          "prompt": "对本轮选中的每个报价业务模块完成可以直接进入编码的详细设计。\n以PRD、已有前端原型、若依源码、整体架构和数据库总体设计为边界，具体设计模块业务规则、操作/异常路径、状态、数据库表与字段/索引、API契约、权限和测试要点。\n输出 doc/output/06-模块迭代/<模块>/模块详细设计.md 和必要的增量SQL。**具体表字段只在本阶段设计**，不得重构原型UI；与共享基线冲突时先申请技术总监评审再实现。"
         },
         {
-          "id": "S15",
+          "id": "S17",
           "title": "生成当前模块 Spec",
           "skills": [
             "to-spec"
           ],
           "inputs": [
             "本模块PRD",
-            "模块设计决策",
-            "已有原型",
+            "模块详细设计.md",
+            "已有前端原型",
             "共享工程基线"
           ],
           "outputs": [
             " .scratch/<module>/spec.md"
           ],
-          "review": "用户故事、实现与测试决策完整，说明范围外事项"
+          "review": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
+          "prompt": "请使用 Matt Pocock 的 to-spec 为当前模块生成可实施规格。\n输入：已确认的模块详细设计、模块PRD、现有code/fld页面、code/guiwu_ruoyi约束、跨模块依赖。\n在 .scratch/<module>/spec.md 中明确交付范围、主要业务行为、实现决策、边界、错误处理、测试策略及明确不做的事情。不得将其他未启动的模块一起打包；若仍有关键不确定项，先提问再定稿。"
         },
         {
-          "id": "S16",
+          "id": "S18",
           "title": "拆分纵向 Tickets 和依赖",
           "skills": [
             "to-tickets"
           ],
           "inputs": [
             " .scratch/<module>/spec.md",
+            "本轮模块计划.md",
             "前置依赖检查.md"
           ],
           "outputs": [
             " .scratch/<module>/issues/NN-*.md"
           ],
-          "review": "每个任务跨数据库、接口、UI及测试，阻塞关系明确"
+          "review": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
+          "prompt": "请使用 to-tickets 把当前模块Spec拆为可独立验收的纵向开发任务。\n每张Ticket应尽量同时覆盖数据库迁移、后端API、现有原型页面接入和自动测试，明确阻塞关系、验收标准和涉及的文件位置。\n输出 .scratch/<module>/issues/NN-*.md。对于并行Ticket标出共享表/接口冲突；禁止把一个菜单一概当成一张大Ticket。"
         },
         {
-          "id": "S17",
-          "title": "按 Tickets 执行 TDD 和工程实现",
+          "id": "S19",
+          "title": "TDD 驱动实现及前后端联动",
           "skills": [
             "implement-spec",
             "implement",
-            "tdd"
+            "tdd",
+            "dev-ui-guard"
           ],
           "inputs": [
-            "相关Tickets",
+            "当前模块的Spec与Tickets",
             "code/fld/",
-            "code/guiwu_ruoyi/"
+            "code/guiwu_ruoyi/",
+            "database/migrations/"
           ],
           "outputs": [
-            "code/fld/实际前端代码",
-            "code/guiwu_ruoyi/后端代码",
-            "database/migrations/",
-            "自动测试代码"
+            "code/fld/原型页面增量代码",
+            "code/guiwu_ruoyi/后端实现",
+            "database/migrations/*.sql",
+            "自动化测试代码"
           ],
-          "review": "修改既有原型和若依框架，先测再实现，通过可运行反馈"
+          "review": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。",
+          "prompt": "请按当前已解锁Ticket执行 implement-spec（按依赖执行多Ticket）或 implement（单Ticket），并应用 tdd。\n先添加失败测试，再实现若依后端/数据库增量及 code/fld 原型页面的真实API接入；页面布局、样式类、组件优先沿用原型，新的交互也必须采用既有视觉风格。\n每个Ticket结束执行自动测试并记录证据，禁止用硬编码假数据代替已声明的真实接口成功。Git提交说明用中文。"
         },
         {
-          "id": "S18",
-          "title": "原型守护与代码评审",
+          "id": "S20",
+          "title": "代码审查与原型一致性审核",
           "skills": [
-            "dev-ui-guard",
             "code-review",
+            "dev-ui-guard",
             "pr"
           ],
           "inputs": [
-            "开发Diff",
-            "对应Spec",
-            "原型样式约束"
+            "代码Diff",
+            "当前Spec与Tickets",
+            "AGENTS.md",
+            "原型页面映射.md"
           ],
           "outputs": [
-            "代码审核结果",
-            "Git中文提交",
-            "Ticket状态"
+            "代码评审结果",
+            "样式一致性检查",
+            "通过的代码提交"
           ],
-          "review": "禁止未经确认的新样式体系、平行页面和偏离Spec的代码"
+          "review": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
+          "prompt": "对当前模块实现代码执行 code-review 和 dev-ui-guard。\n从Spec符合性、代码规范、TDD覆盖、数据库增量正确性、接口鉴权、跨模块共享约束、原型页面一致性审查差异。\n重点检测：是否创建与原型重复的页面/组件，是否未经允许引入新样式体系，是否改写原有导航/布局。输出可定位到文件的缺陷列表；修复后复测并用中文提交。"
+        },
+        {
+          "id": "S21",
+          "title": "完成模块集成联调与验收",
+          "skills": [
+            "dev-integration",
+            "dev-module-acceptance"
+          ],
+          "inputs": [
+            "本轮各模块代码与SQL",
+            "对应Spec",
+            "本轮模块计划.md",
+            "角色场景PRD"
+          ],
+          "outputs": [
+            "doc/output/06-模块迭代/本轮联调记录.md",
+            "doc/output/06-模块迭代/本轮验收记录.md",
+            "端到端回归测试"
+          ],
+          "review": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
+          "prompt": "把本轮已经通过代码审核的模块合入当前可运行系统，执行真实前后端接口、数据库迁移、模块之间状态和权限联调。\n以角色×业务场景验收：例如需求文件上传→手动点击解析→参数人工核对→确认版本；资产模板需可维护且后续模块能读取。检查其他已完成模块不退化。\n记录 本轮联调记录.md、本轮验收记录.md；失败项形成可复现的Ticket并返回开发；未经真实对接不能写「验收通过」。"
+        },
+        {
+          "id": "S22",
+          "title": "收口本轮并进入下一轮（可选 retro）",
+          "skills": [
+            "dev-project-control",
+            "triage",
+            "retro"
+          ],
+          "inputs": [
+            "本轮验收记录.md",
+            "缺陷任务",
+            "项目模块清单.md",
+            "项目实施状态.md"
+          ],
+          "outputs": [
+            "doc/output/项目总控/项目实施状态.md（更新）",
+            "doc/output/06-模块迭代/本轮总结.md",
+            "按需：研发环境改进项"
+          ],
+          "review": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
+          "prompt": "核对当前迭代已完成的模块Spec、Tickets、代码、数据库脚本和角色×场景验收证据。\n更新项目实施状态中的「未开始/依赖阻塞/开发中/已验收」及下一轮可解锁模块，形成 本轮总结.md。\n若本轮发生典型AI问题（例如反复修改原型样式、测试缺位或导航成本高），**按需调用Matt retro** 复盘会话并提出工具、CI、规范改进。未完成的模块不得标记已验收；还有模块则返回S15。"
         }
       ],
       "artifacts": [
-        "按需：docs/adr/模块决策.md",
-        " .scratch/<module>/spec.md",
-        " .scratch/<module>/issues/NN-*.md"
+        "doc/output/06-模块迭代/本轮模块计划.md",
+        "doc/output/06-模块迭代/前置依赖检查.md",
+        "doc/output/06-模块迭代/<模块>/模块详细设计.md",
+        "database/migrations/<模块>*.sql（设计后形成）",
+        "按需：docs/adr/*.md"
       ]
     },
     {
       "id": "P07",
-      "title": "本轮集成、验收和回退",
-      "kind": "repeat",
-      "owner": "开发人员、项目经理",
-      "description": "业务模块开发不能只做单独页面，要与当前系统整合后完成本轮场景验收。",
-      "steps": [
-        {
-          "id": "S19",
-          "title": "将本轮模块接入当前系统",
-          "skills": [
-            "dev-integration",
-            "dev-contract-check"
-          ],
-          "inputs": [
-            "本轮各模块代码",
-            "公共API契约",
-            "迁移SQL"
-          ],
-          "outputs": [
-            "doc/output/迭代/本轮联调记录.md",
-            "可运行的前后端集成版本"
-          ],
-          "review": "跨模块业务、登录权限、既有模块回归通过"
-        },
-        {
-          "id": "S20",
-          "title": "按角色和业务场景验收",
-          "skills": [
-            "dev-module-acceptance",
-            "dev-ui-guard"
-          ],
-          "inputs": [
-            "本轮PRD",
-            "原型",
-            "联调结果"
-          ],
-          "outputs": [
-            "doc/output/迭代/本轮验收记录.md",
-            "E2E测试"
-          ],
-          "review": "项目经理按业务场景验收，样式、权限、异常行为符合基线"
-        },
-        {
-          "id": "S21",
-          "title": "缺陷返工或本轮收口",
-          "skills": [
-            "triage",
-            "diagnosing-bugs",
-            "tdd",
-            "dev-project-control"
-          ],
-          "inputs": [
-            "本轮验收记录.md",
-            "失败测试"
-          ],
-          "outputs": [
-            " .scratch/defects/issues/*.md",
-            "项目实施状态.md（更新）"
-          ],
-          "review": "失败回到相关Ticket测试和修复；通过后返回P05选下一轮"
-        }
-      ],
-      "artifacts": [
-        "doc/output/迭代/本轮联调记录.md",
-        "可运行的前后端集成版本",
-        "doc/output/迭代/本轮验收记录.md"
-      ]
-    },
-    {
-      "id": "P08",
-      "title": "全项目系统验收",
+      "title": "全项目验收与部署上线",
       "kind": "final",
-      "owner": "项目经理、开发人员、技术总监",
-      "description": "范围内所有模块完成后验证完整业务链和全局一致性。",
+      "owner": "项目经理、技术总监、开发人员",
+      "description": "所有约定模块完成后实施整项目验收、上线预演和目标环境正式部署，与阶段P04的开发环境部署区分。",
       "steps": [
-        {
-          "id": "S22",
-          "title": "全项目业务链路与回归测试",
-          "skills": [
-            "dev-acceptance",
-            "dev-integration"
-          ],
-          "inputs": [
-            "项目模块清单.md",
-            "所有模块验收",
-            "可运行系统"
-          ],
-          "outputs": [
-            "doc/output/系统验收/全流程验收报告.md",
-            "缺陷回归测试"
-          ],
-          "review": "登录→项目→解析→匹配→成本→报价→审批→交付→归档及全部17菜单"
-        },
         {
           "id": "S23",
-          "title": "全项目交付审核",
+          "title": "全项目业务链路和权限回归",
           "skills": [
+            "dev-integration",
+            "dev-acceptance"
+          ],
+          "inputs": [
+            "已确认项目模块清单.md",
+            "所有模块验收记录",
+            "最终可运行代码",
+            "PRD"
+          ],
+          "outputs": [
+            "doc/output/07-系统验收/全流程验收报告.md",
+            "doc/output/07-系统验收/缺陷闭环记录.md"
+          ],
+          "review": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。",
+          "prompt": "对报价系统进行全项目验收，不只检查各模块单独通过。\n用同一真实测试项目走完登录→全部项目→需求解析与核对→计算单匹配→成本核定→报价编制→多级审批（含驳回与重新提交）→客户输出→成交归档，并核查待办、分析、审计、权限与17个菜单。\n按角色×场景记录结果及可复现证据，输出全流程验收报告.md和缺陷闭环记录.md。存在阻塞缺陷时退回对应模块修复。"
+        },
+        {
+          "id": "S24",
+          "title": "非功能指标及上线评审",
+          "skills": [
+            "dev-acceptance",
             "dev-project-control",
             "code-review"
           ],
           "inputs": [
-            "系统验收报告.md",
-            "项目实施状态.md"
+            "工程基线.md",
+            "架构设计.md",
+            "全流程验收报告.md",
+            "系统运行记录"
           ],
           "outputs": [
-            "doc/output/系统验收/交付评审结论.md"
+            "doc/output/07-系统验收/性能安全检查.md",
+            "doc/output/07-系统验收/上线评审结论.md"
           ],
-          "review": "关键场景必须通过，未关闭问题有明确结论，技术总监与项目经理确认"
-        }
-      ],
-      "artifacts": [
-        "doc/output/系统验收/全流程验收报告.md",
-        "缺陷回归测试",
-        "doc/output/系统验收/交付评审结论.md"
-      ]
-    },
-    {
-      "id": "P09",
-      "title": "部署上线与首次交付",
-      "kind": "final",
-      "owner": "开发人员、技术总监、项目经理",
-      "description": "目标服务器部署、实际业务冒烟及交付；正式上线前必须预演。",
-      "steps": [
+          "review": "技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。",
+          "prompt": "核对整个系统的非功能指标：目标并发、响应、权限与越权、日志和审计、错误处理、数据容量、备份恢复、第三方失败影响。\n依据项目基线中的实际指标执行可行的测试并标注环境限制。输出 性能安全检查.md、上线评审结论.md，由技术总监判断能否进入正式部署；未实测项不得写「已验证」。"
+        },
         {
-          "id": "S24",
-          "title": "环境核对与部署预演",
+          "id": "S25",
+          "title": "生产环境核验、部署预演与回滚准备",
           "skills": [
             "dev-release",
+            "research",
             "wizard"
           ],
           "inputs": [
             "input/环境资料/",
-            "代码与SQL",
-            "系统验收报告"
+            "上线评审结论.md",
+            "code/",
+            "database/migrations/"
           ],
           "outputs": [
-            "deploy/docker-compose.yml",
+            "deploy/docker-compose.yml（正式）",
             "deploy/nginx/",
-            "doc/output/上线交付/部署预演.md"
+            "doc/output/08-上线交付/部署预演.md",
+            "doc/output/08-上线交付/备份回滚方案.md"
           ],
-          "review": "验证配置、迁移、备份、回滚和关键接口；没有真实环境不声称已上线"
+          "review": "技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。",
+          "prompt": "进入正式发布准备：根据 input/环境资料 和实际服务器确认Docker、MySQL、Redis、磁盘、端口、域名/HTTPS及第三方网络可达性。\n准备生产配置样例、容器镜像、数据库增量迁移顺序、备份/回滚方案；在隔离环境预演启动、迁移及关键报价冒烟用例。\n输出部署预演.md、备份回滚方案.md与必要的deploy配置。敏感凭据只在安全环境配置，禁止上传仓库。"
         },
         {
-          "id": "S25",
-          "title": "发布、冒烟测试与交付复盘",
+          "id": "S26",
+          "title": "生产部署、验收与交付",
           "skills": [
             "dev-release",
-            "retro"
+            "dev-acceptance"
           ],
           "inputs": [
-            "部署预演结果",
+            "部署预演.md",
+            "备份回滚方案.md",
             "可发布代码",
-            "上线审核结论"
+            "上线评审结论.md"
           ],
           "outputs": [
-            "doc/output/上线交付/上线记录.md",
-            "doc/output/上线交付/交付清单.md"
+            "doc/output/08-上线交付/上线记录.md",
+            "doc/output/08-上线交付/交付清单.md"
           ],
-          "review": "实际部署验证并交付完整源码、文档、迁移和部署脚本"
+          "review": "开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。",
+          "prompt": "只有系统验收和发布预演通过后才实施生产部署。\n先完成备份并核查恢复条件，按发布步骤执行数据库迁移、前后端部署、健康检查和登录/报价/审批/输出的生产环境冒烟测试。\n记录真实环境、版本、时间、操作结果、异常与回退处理到 上线记录.md，输出代码/SQL/配置样例/验收与部署文档的交付清单。没有权限或环境时报告阻塞，不要宣称已上线。"
         }
       ],
       "artifacts": [
-        "deploy/docker-compose.yml",
-        "deploy/nginx/",
-        "doc/output/上线交付/部署预演.md"
+        "doc/output/07-系统验收/全流程验收报告.md",
+        "doc/output/07-系统验收/缺陷闭环记录.md",
+        "doc/output/07-系统验收/性能安全检查.md",
+        "doc/output/07-系统验收/上线评审结论.md",
+        "deploy/docker-compose.yml（正式）"
+      ]
+    },
+    {
+      "id": "P08",
+      "title": "复盘与沉淀",
+      "kind": "final",
+      "owner": "开发人员、技术总监",
+      "description": "项目完成后独立调用 Matt 的 retro，从AI编码与研发流程两层沉淀可复用改进；重大迭代也可提前按需使用 retro。",
+      "steps": [
+        {
+          "id": "S27",
+          "title": "调用 retro 复盘 AI 编码会话",
+          "skills": [
+            "retro",
+            "writing-for-agents"
+          ],
+          "inputs": [
+            "典型开发会话记录",
+            "代码提交与评审",
+            "测试和缺陷记录",
+            "AGENTS.md"
+          ],
+          "outputs": [
+            "doc/output/09-复盘/AI开发会话复盘.md",
+            "必要的AGENTS.md、CI检查或编码规范更新"
+          ],
+          "review": "开发人员核实每个改进都有对应证据，并优先落到自动化检查和清晰的Agent指令。",
+          "prompt": "请调用 Matt Pocock 官方 retro 对首次报价系统建设中的代表性AI编码会话进行复盘。\n关注AI是否难以定位原型文件、是否重复创建样式、自动化检查是否不足、Spec/Ticket上下文是否不清楚、工具调用是否浪费。逐项给出证据→根因→改进位置（AGENTS.md / CI / lint / 工具 / Skill）。\n形成 AI开发会话复盘.md，并优先建议可自动验证的守护检查，而不只是追加「以后注意」类说明。未经审核不要直接改动已上线业务代码。"
+        },
+        {
+          "id": "S28",
+          "title": "复盘完整研发流程并沉淀 Skill 改进",
+          "skills": [
+            "dev-project-retro",
+            "retro"
+          ],
+          "inputs": [
+            "各阶段审核记录",
+            "每轮模块计划与验收",
+            "AI开发会话复盘.md",
+            "上线交付记录"
+          ],
+          "outputs": [
+            "doc/output/09-复盘/研发流程复盘.md",
+            "doc/output/09-复盘/Skill优化清单.md",
+            "待确认的工作流变更建议"
+          ],
+          "review": "技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。",
+          "prompt": "请从「项目基线→整体架构→数据库总体→开发环境→模块拆分→模块迭代→系统上线」的全流程复盘首次项目建设。\n整理每个阶段是否提供了足够的输入、审核是否过早/过晚、哪些自建Skill可合并或删除、哪些Matt Skills应直接复用，以及需求澄清/返工/人工审核的真实成本。\n输出 研发流程复盘.md、Skill优化清单.md，按必须修改/可选优化区分。**retro 用于代码会话的工程环境复盘**；项目级工作流改进由 dev-project-retro 汇总提出，先审议后更新标准流程。"
+        }
+      ],
+      "artifacts": [
+        "doc/output/09-复盘/AI开发会话复盘.md",
+        "必要的AGENTS.md、CI检查或编码规范更新",
+        "doc/output/09-复盘/研发流程复盘.md",
+        "doc/output/09-复盘/Skill优化清单.md",
+        "待确认的工作流变更建议"
       ]
     }
   ],
@@ -957,14 +1091,19 @@
   ],
   "skills": [
     {
-      "id": "setup-matt-pocock-skills",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "id": "dev-project-baseline",
+      "origin": "拟自建",
+      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
       "usedAt": [
         {
           "phase": "P01",
-          "step": "S02",
-          "title": "初始化 Agent 与 Matt 工作约定"
+          "step": "S01",
+          "title": "梳理原始资料和交付范围"
+        },
+        {
+          "phase": "P01",
+          "step": "S03",
+          "title": "固化工程和AI开发约束"
         }
       ]
     },
@@ -974,36 +1113,31 @@
       "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
       "usedAt": [
         {
-          "phase": "P03",
-          "step": "S09",
-          "title": "审核模块划分并确定范围"
+          "phase": "P01",
+          "step": "S01",
+          "title": "梳理原始资料和交付范围"
         },
         {
-          "phase": "P06",
+          "phase": "P02",
+          "step": "S06",
+          "title": "审核整体架构并处理阻塞决策"
+        },
+        {
+          "phase": "P05",
           "step": "S14",
-          "title": "核对本模块业务与现有实现"
+          "title": "审核模块清单和迭代先后关系"
         }
       ]
     },
     {
-      "id": "domain-modeling",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "id": "dev-engine-baseline",
+      "origin": "拟自建",
+      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
       "usedAt": [
         {
-          "phase": "P03",
-          "step": "S06",
-          "title": "提取 PRD 与原型业务能力"
-        },
-        {
-          "phase": "P03",
-          "step": "S08",
-          "title": "梳理模块之间的前置依赖"
-        },
-        {
-          "phase": "P04",
-          "step": "S11",
-          "title": "确定核心数据与跨模块契约"
+          "phase": "P01",
+          "step": "S02",
+          "title": "扫描已有前端原型和后端框架"
         }
       ]
     },
@@ -1013,24 +1147,85 @@
       "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
       "usedAt": [
         {
+          "phase": "P01",
+          "step": "S02",
+          "title": "扫描已有前端原型和后端框架"
+        },
+        {
           "phase": "P02",
           "step": "S04",
-          "title": "扫描若依后端复用能力"
+          "title": "设计系统结构与部署拓扑"
         },
         {
-          "phase": "P03",
-          "step": "S07",
-          "title": "按业务职责划分候选模块"
-        },
-        {
-          "phase": "P04",
-          "step": "S10",
-          "title": "确定项目级架构与工程约束"
+          "phase": "P05",
+          "step": "S13",
+          "title": "划分模块并建立跨模块依赖"
         },
         {
           "phase": "P06",
-          "step": "S14",
-          "title": "核对本模块业务与现有实现"
+          "step": "S16",
+          "title": "完成本轮模块详细设计"
+        }
+      ]
+    },
+    {
+      "id": "setup-matt-pocock-skills",
+      "origin": "Matt",
+      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "usedAt": [
+        {
+          "phase": "P01",
+          "step": "S03",
+          "title": "固化工程和AI开发约束"
+        }
+      ]
+    },
+    {
+      "id": "dev-ui-guard",
+      "origin": "拟自建",
+      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
+      "usedAt": [
+        {
+          "phase": "P01",
+          "step": "S03",
+          "title": "固化工程和AI开发约束"
+        },
+        {
+          "phase": "P04",
+          "step": "S11",
+          "title": "联通前后端并验收开发环境"
+        },
+        {
+          "phase": "P06",
+          "step": "S19",
+          "title": "TDD 驱动实现及前后端联动"
+        },
+        {
+          "phase": "P06",
+          "step": "S20",
+          "title": "代码审查与原型一致性审核"
+        }
+      ]
+    },
+    {
+      "id": "dev-architecture",
+      "origin": "拟自建",
+      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
+      "usedAt": [
+        {
+          "phase": "P02",
+          "step": "S04",
+          "title": "设计系统结构与部署拓扑"
+        },
+        {
+          "phase": "P02",
+          "step": "S05",
+          "title": "确定跨系统集成、权限和公共契约"
+        },
+        {
+          "phase": "P02",
+          "step": "S06",
+          "title": "审核整体架构并处理阻塞决策"
         }
       ]
     },
@@ -1040,9 +1235,61 @@
       "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
       "usedAt": [
         {
+          "phase": "P02",
+          "step": "S04",
+          "title": "设计系统结构与部署拓扑"
+        },
+        {
+          "phase": "P02",
+          "step": "S05",
+          "title": "确定跨系统集成、权限和公共契约"
+        },
+        {
+          "phase": "P03",
+          "step": "S08",
+          "title": "确定单库、分库分表及增长策略"
+        },
+        {
+          "phase": "P04",
+          "step": "S09",
+          "title": "确定开发环境与依赖清单"
+        },
+        {
+          "phase": "P07",
+          "step": "S25",
+          "title": "生产环境核验、部署预演与回滚准备"
+        }
+      ]
+    },
+    {
+      "id": "domain-modeling",
+      "origin": "Matt",
+      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "usedAt": [
+        {
+          "phase": "P02",
+          "step": "S05",
+          "title": "确定跨系统集成、权限和公共契约"
+        },
+        {
+          "phase": "P03",
+          "step": "S07",
+          "title": "划分数据域和存储边界"
+        },
+        {
+          "phase": "P05",
+          "step": "S12",
+          "title": "根据PRD和原型提取业务能力"
+        },
+        {
           "phase": "P05",
           "step": "S13",
-          "title": "核查前置契约和第三方条件"
+          "title": "划分模块并建立跨模块依赖"
+        },
+        {
+          "phase": "P06",
+          "step": "S16",
+          "title": "完成本轮模块详细设计"
         }
       ]
     },
@@ -1050,7 +1297,154 @@
       "id": "wayfinder",
       "origin": "Matt",
       "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": []
+      "usedAt": [
+        {
+          "phase": "P02",
+          "step": "S06",
+          "title": "审核整体架构并处理阻塞决策"
+        }
+      ]
+    },
+    {
+      "id": "dev-data-architecture",
+      "origin": "拟自建",
+      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "usedAt": [
+        {
+          "phase": "P03",
+          "step": "S07",
+          "title": "划分数据域和存储边界"
+        },
+        {
+          "phase": "P03",
+          "step": "S08",
+          "title": "确定单库、分库分表及增长策略"
+        }
+      ]
+    },
+    {
+      "id": "dev-environment-deploy",
+      "origin": "拟自建",
+      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "usedAt": [
+        {
+          "phase": "P04",
+          "step": "S09",
+          "title": "确定开发环境与依赖清单"
+        },
+        {
+          "phase": "P04",
+          "step": "S10",
+          "title": "部署数据库及所需基础中间件"
+        },
+        {
+          "phase": "P04",
+          "step": "S11",
+          "title": "联通前后端并验收开发环境"
+        }
+      ]
+    },
+    {
+      "id": "wizard",
+      "origin": "Matt",
+      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "usedAt": [
+        {
+          "phase": "P04",
+          "step": "S10",
+          "title": "部署数据库及所需基础中间件"
+        },
+        {
+          "phase": "P07",
+          "step": "S25",
+          "title": "生产环境核验、部署预演与回滚准备"
+        }
+      ]
+    },
+    {
+      "id": "diagnosing-bugs",
+      "origin": "Matt",
+      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "usedAt": [
+        {
+          "phase": "P04",
+          "step": "S11",
+          "title": "联通前后端并验收开发环境"
+        }
+      ]
+    },
+    {
+      "id": "dev-module-split",
+      "origin": "拟自建",
+      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "usedAt": [
+        {
+          "phase": "P05",
+          "step": "S12",
+          "title": "根据PRD和原型提取业务能力"
+        },
+        {
+          "phase": "P05",
+          "step": "S13",
+          "title": "划分模块并建立跨模块依赖"
+        },
+        {
+          "phase": "P05",
+          "step": "S14",
+          "title": "审核模块清单和迭代先后关系"
+        }
+      ]
+    },
+    {
+      "id": "dev-project-control",
+      "origin": "拟自建",
+      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
+      "usedAt": [
+        {
+          "phase": "P05",
+          "step": "S14",
+          "title": "审核模块清单和迭代先后关系"
+        },
+        {
+          "phase": "P06",
+          "step": "S15",
+          "title": "选择本轮模块并校验依赖"
+        },
+        {
+          "phase": "P06",
+          "step": "S22",
+          "title": "收口本轮并进入下一轮（可选 retro）"
+        },
+        {
+          "phase": "P07",
+          "step": "S24",
+          "title": "非功能指标及上线评审"
+        }
+      ]
+    },
+    {
+      "id": "dev-iteration-plan",
+      "origin": "拟自建",
+      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
+      "usedAt": [
+        {
+          "phase": "P06",
+          "step": "S15",
+          "title": "选择本轮模块并校验依赖"
+        }
+      ]
+    },
+    {
+      "id": "dev-module-design",
+      "origin": "拟自建",
+      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "usedAt": [
+        {
+          "phase": "P06",
+          "step": "S16",
+          "title": "完成本轮模块详细设计"
+        }
+      ]
     },
     {
       "id": "to-spec",
@@ -1059,7 +1453,7 @@
       "usedAt": [
         {
           "phase": "P06",
-          "step": "S15",
+          "step": "S17",
           "title": "生成当前模块 Spec"
         }
       ]
@@ -1071,20 +1465,8 @@
       "usedAt": [
         {
           "phase": "P06",
-          "step": "S16",
+          "step": "S18",
           "title": "拆分纵向 Tickets 和依赖"
-        }
-      ]
-    },
-    {
-      "id": "implement",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P06",
-          "step": "S17",
-          "title": "按 Tickets 执行 TDD 和工程实现"
         }
       ]
     },
@@ -1095,8 +1477,20 @@
       "usedAt": [
         {
           "phase": "P06",
-          "step": "S17",
-          "title": "按 Tickets 执行 TDD 和工程实现"
+          "step": "S19",
+          "title": "TDD 驱动实现及前后端联动"
+        }
+      ]
+    },
+    {
+      "id": "implement",
+      "origin": "Matt",
+      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "usedAt": [
+        {
+          "phase": "P06",
+          "step": "S19",
+          "title": "TDD 驱动实现及前后端联动"
         }
       ]
     },
@@ -1107,13 +1501,8 @@
       "usedAt": [
         {
           "phase": "P06",
-          "step": "S17",
-          "title": "按 Tickets 执行 TDD 和工程实现"
-        },
-        {
-          "phase": "P07",
-          "step": "S21",
-          "title": "缺陷返工或本轮收口"
+          "step": "S19",
+          "title": "TDD 驱动实现及前后端联动"
         }
       ]
     },
@@ -1124,13 +1513,13 @@
       "usedAt": [
         {
           "phase": "P06",
-          "step": "S18",
-          "title": "原型守护与代码评审"
+          "step": "S20",
+          "title": "代码审查与原型一致性审核"
         },
         {
-          "phase": "P08",
-          "step": "S23",
-          "title": "全项目交付审核"
+          "phase": "P07",
+          "step": "S24",
+          "title": "非功能指标及上线评审"
         }
       ]
     },
@@ -1141,224 +1530,8 @@
       "usedAt": [
         {
           "phase": "P06",
-          "step": "S18",
-          "title": "原型守护与代码评审"
-        }
-      ]
-    },
-    {
-      "id": "diagnosing-bugs",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S05",
-          "title": "验证本地可运行基线"
-        },
-        {
-          "phase": "P07",
-          "step": "S21",
-          "title": "缺陷返工或本轮收口"
-        }
-      ]
-    },
-    {
-      "id": "triage",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P07",
-          "step": "S21",
-          "title": "缺陷返工或本轮收口"
-        }
-      ]
-    },
-    {
-      "id": "wizard",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P09",
-          "step": "S24",
-          "title": "环境核对与部署预演"
-        }
-      ]
-    },
-    {
-      "id": "retro",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P09",
-          "step": "S25",
-          "title": "发布、冒烟测试与交付复盘"
-        }
-      ]
-    },
-    {
-      "id": "dev-project-init",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P01",
-          "step": "S01",
-          "title": "核对 input 四类资料"
-        }
-      ]
-    },
-    {
-      "id": "dev-project-control",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P01",
-          "step": "S02",
-          "title": "初始化 Agent 与 Matt 工作约定"
-        },
-        {
-          "phase": "P03",
-          "step": "S09",
-          "title": "审核模块划分并确定范围"
-        },
-        {
-          "phase": "P05",
-          "step": "S12",
-          "title": "根据模块清单选择本轮范围"
-        },
-        {
-          "phase": "P07",
-          "step": "S21",
-          "title": "缺陷返工或本轮收口"
-        },
-        {
-          "phase": "P08",
-          "step": "S23",
-          "title": "全项目交付审核"
-        }
-      ]
-    },
-    {
-      "id": "dev-engine-baseline",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S03",
-          "title": "扫描前端原型与页面"
-        },
-        {
-          "phase": "P02",
-          "step": "S04",
-          "title": "扫描若依后端复用能力"
-        }
-      ]
-    },
-    {
-      "id": "dev-ui-guard",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S03",
-          "title": "扫描前端原型与页面"
-        },
-        {
-          "phase": "P06",
-          "step": "S18",
-          "title": "原型守护与代码评审"
-        },
-        {
-          "phase": "P07",
           "step": "S20",
-          "title": "按角色和业务场景验收"
-        }
-      ]
-    },
-    {
-      "id": "dev-environment-check",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S05",
-          "title": "验证本地可运行基线"
-        }
-      ]
-    },
-    {
-      "id": "dev-module-map",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P03",
-          "step": "S06",
-          "title": "提取 PRD 与原型业务能力"
-        },
-        {
-          "phase": "P03",
-          "step": "S07",
-          "title": "按业务职责划分候选模块"
-        },
-        {
-          "phase": "P03",
-          "step": "S08",
-          "title": "梳理模块之间的前置依赖"
-        }
-      ]
-    },
-    {
-      "id": "dev-architecture",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P04",
-          "step": "S10",
-          "title": "确定项目级架构与工程约束"
-        },
-        {
-          "phase": "P04",
-          "step": "S11",
-          "title": "确定核心数据与跨模块契约"
-        }
-      ]
-    },
-    {
-      "id": "dev-iteration-plan",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P05",
-          "step": "S12",
-          "title": "根据模块清单选择本轮范围"
-        },
-        {
-          "phase": "P05",
-          "step": "S13",
-          "title": "核查前置契约和第三方条件"
-        }
-      ]
-    },
-    {
-      "id": "dev-contract-check",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P07",
-          "step": "S19",
-          "title": "将本轮模块接入当前系统"
+          "title": "代码审查与原型一致性审核"
         }
       ]
     },
@@ -1368,14 +1541,14 @@
       "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
       "usedAt": [
         {
-          "phase": "P07",
-          "step": "S19",
-          "title": "将本轮模块接入当前系统"
+          "phase": "P06",
+          "step": "S21",
+          "title": "完成模块集成联调与验收"
         },
         {
-          "phase": "P08",
-          "step": "S22",
-          "title": "全项目业务链路与回归测试"
+          "phase": "P07",
+          "step": "S23",
+          "title": "全项目业务链路和权限回归"
         }
       ]
     },
@@ -1385,9 +1558,43 @@
       "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
       "usedAt": [
         {
-          "phase": "P07",
-          "step": "S20",
-          "title": "按角色和业务场景验收"
+          "phase": "P06",
+          "step": "S21",
+          "title": "完成模块集成联调与验收"
+        }
+      ]
+    },
+    {
+      "id": "triage",
+      "origin": "Matt",
+      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "usedAt": [
+        {
+          "phase": "P06",
+          "step": "S22",
+          "title": "收口本轮并进入下一轮（可选 retro）"
+        }
+      ]
+    },
+    {
+      "id": "retro",
+      "origin": "Matt",
+      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "usedAt": [
+        {
+          "phase": "P06",
+          "step": "S22",
+          "title": "收口本轮并进入下一轮（可选 retro）"
+        },
+        {
+          "phase": "P08",
+          "step": "S27",
+          "title": "调用 retro 复盘 AI 编码会话"
+        },
+        {
+          "phase": "P08",
+          "step": "S28",
+          "title": "复盘完整研发流程并沉淀 Skill 改进"
         }
       ]
     },
@@ -1397,9 +1604,19 @@
       "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
       "usedAt": [
         {
-          "phase": "P08",
-          "step": "S22",
-          "title": "全项目业务链路与回归测试"
+          "phase": "P07",
+          "step": "S23",
+          "title": "全项目业务链路和权限回归"
+        },
+        {
+          "phase": "P07",
+          "step": "S24",
+          "title": "非功能指标及上线评审"
+        },
+        {
+          "phase": "P07",
+          "step": "S26",
+          "title": "生产部署、验收与交付"
         }
       ]
     },
@@ -1409,14 +1626,38 @@
       "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
       "usedAt": [
         {
-          "phase": "P09",
-          "step": "S24",
-          "title": "环境核对与部署预演"
+          "phase": "P07",
+          "step": "S25",
+          "title": "生产环境核验、部署预演与回滚准备"
         },
         {
-          "phase": "P09",
-          "step": "S25",
-          "title": "发布、冒烟测试与交付复盘"
+          "phase": "P07",
+          "step": "S26",
+          "title": "生产部署、验收与交付"
+        }
+      ]
+    },
+    {
+      "id": "writing-for-agents",
+      "origin": "Matt",
+      "description": "Matt Pocock Skills中的研发执行能力。",
+      "usedAt": [
+        {
+          "phase": "P08",
+          "step": "S27",
+          "title": "调用 retro 复盘 AI 编码会话"
+        }
+      ]
+    },
+    {
+      "id": "dev-project-retro",
+      "origin": "拟自建",
+      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "usedAt": [
+        {
+          "phase": "P08",
+          "step": "S28",
+          "title": "复盘完整研发流程并沉淀 Skill 改进"
         }
       ]
     }
@@ -1424,134 +1665,170 @@
   "iterationFlow": [
     {
       "id": "I01",
-      "title": "选择已具备条件的模块",
+      "title": "选择本轮模块并校验依赖",
       "skills": [
         "dev-iteration-plan",
         "dev-project-control"
       ],
       "inputs": [
-        "项目模块清单.md"
+        "doc/output/05-模块拆分/项目模块清单.md",
+        "模块依赖关系.md",
+        "项目实施状态.md",
+        "开发环境验收记录.md"
       ],
       "outputs": [
-        "本轮开发计划.md"
+        "doc/output/06-模块迭代/本轮模块计划.md",
+        "doc/output/06-模块迭代/前置依赖检查.md"
       ],
-      "review": "检查模块依赖和业务优先级"
+      "review": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。",
+      "prompt": "从已确认的 项目模块清单.md 中选择本轮可开发模块（可以1个或多个）。\n逐模块检查已有代码、基础数据、前置模块、字典规则、第三方真实接口和开发环境状态。对可并行工作建立依赖清单，对受阻功能只补最小前置Ticket或暂缓。\n输出 本轮模块计划.md、前置依赖检查.md，列清每个模块的交付场景和负责人。不要为其他未确定模块生成完整Spec。"
     },
     {
       "id": "I02",
-      "title": "核对模块需求和工程现状",
+      "title": "完成本轮模块详细设计",
       "skills": [
-        "grill-with-docs",
-        "codebase-design"
+        "dev-module-design",
+        "codebase-design",
+        "domain-modeling"
       ],
       "inputs": [
-        "本模块PRD",
-        "已有原型和后端"
+        "本轮模块计划.md",
+        "项目PRD",
+        "已有代码/页面",
+        "整体架构设计.md",
+        "数据库总体设计.md"
       ],
       "outputs": [
-        "模块设计决策（必要时）"
+        "doc/output/06-模块迭代/<模块>/模块详细设计.md",
+        "database/migrations/<模块>*.sql（设计后形成）",
+        "按需：docs/adr/*.md"
       ],
-      "review": "只有有缺口才问用户"
+      "review": "开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。",
+      "prompt": "对本轮选中的每个报价业务模块完成可以直接进入编码的详细设计。\n以PRD、已有前端原型、若依源码、整体架构和数据库总体设计为边界，具体设计模块业务规则、操作/异常路径、状态、数据库表与字段/索引、API契约、权限和测试要点。\n输出 doc/output/06-模块迭代/<模块>/模块详细设计.md 和必要的增量SQL。**具体表字段只在本阶段设计**，不得重构原型UI；与共享基线冲突时先申请技术总监评审再实现。"
     },
     {
       "id": "I03",
-      "title": "生成模块实现Spec",
+      "title": "生成当前模块 Spec",
       "skills": [
         "to-spec"
       ],
       "inputs": [
         "本模块PRD",
+        "模块详细设计.md",
+        "已有前端原型",
         "共享工程基线"
       ],
       "outputs": [
         " .scratch/<module>/spec.md"
       ],
-      "review": "规格清楚，避免提前规划未确定模块"
+      "review": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
+      "prompt": "请使用 Matt Pocock 的 to-spec 为当前模块生成可实施规格。\n输入：已确认的模块详细设计、模块PRD、现有code/fld页面、code/guiwu_ruoyi约束、跨模块依赖。\n在 .scratch/<module>/spec.md 中明确交付范围、主要业务行为、实现决策、边界、错误处理、测试策略及明确不做的事情。不得将其他未启动的模块一起打包；若仍有关键不确定项，先提问再定稿。"
     },
     {
       "id": "I04",
-      "title": "拆分可验证开发Tickets",
+      "title": "拆分纵向 Tickets 和依赖",
       "skills": [
         "to-tickets"
       ],
       "inputs": [
-        "本模块Spec"
+        " .scratch/<module>/spec.md",
+        "本轮模块计划.md",
+        "前置依赖检查.md"
       ],
       "outputs": [
-        " .scratch/<module>/issues/*.md"
+        " .scratch/<module>/issues/NN-*.md"
       ],
-      "review": "按纵向业务切片，标注依赖"
+      "review": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
+      "prompt": "请使用 to-tickets 把当前模块Spec拆为可独立验收的纵向开发任务。\n每张Ticket应尽量同时覆盖数据库迁移、后端API、现有原型页面接入和自动测试，明确阻塞关系、验收标准和涉及的文件位置。\n输出 .scratch/<module>/issues/NN-*.md。对于并行Ticket标出共享表/接口冲突；禁止把一个菜单一概当成一张大Ticket。"
     },
     {
       "id": "I05",
-      "title": "执行TDD与前后端开发",
+      "title": "TDD 驱动实现及前后端联动",
       "skills": [
         "implement-spec",
         "implement",
-        "tdd"
-      ],
-      "inputs": [
-        "Tickets",
-        "已有前后端代码"
-      ],
-      "outputs": [
-        "源代码",
-        "SQL",
-        "自动测试"
-      ],
-      "review": "按依赖执行，严格沿用原型"
-    },
-    {
-      "id": "I06",
-      "title": "执行代码与原型评审",
-      "skills": [
-        "code-review",
+        "tdd",
         "dev-ui-guard"
       ],
       "inputs": [
-        "代码Diff",
-        "原型样式",
-        "Spec"
+        "当前模块的Spec与Tickets",
+        "code/fld/",
+        "code/guiwu_ruoyi/",
+        "database/migrations/"
       ],
       "outputs": [
-        "评审结论",
-        "修复代码"
+        "code/fld/原型页面增量代码",
+        "code/guiwu_ruoyi/后端实现",
+        "database/migrations/*.sql",
+        "自动化测试代码"
       ],
-      "review": "发现问题返回开发步骤"
+      "review": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。",
+      "prompt": "请按当前已解锁Ticket执行 implement-spec（按依赖执行多Ticket）或 implement（单Ticket），并应用 tdd。\n先添加失败测试，再实现若依后端/数据库增量及 code/fld 原型页面的真实API接入；页面布局、样式类、组件优先沿用原型，新的交互也必须采用既有视觉风格。\n每个Ticket结束执行自动测试并记录证据，禁止用硬编码假数据代替已声明的真实接口成功。Git提交说明用中文。"
+    },
+    {
+      "id": "I06",
+      "title": "代码审查与原型一致性审核",
+      "skills": [
+        "code-review",
+        "dev-ui-guard",
+        "pr"
+      ],
+      "inputs": [
+        "代码Diff",
+        "当前Spec与Tickets",
+        "AGENTS.md",
+        "原型页面映射.md"
+      ],
+      "outputs": [
+        "代码评审结果",
+        "样式一致性检查",
+        "通过的代码提交"
+      ],
+      "review": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
+      "prompt": "对当前模块实现代码执行 code-review 和 dev-ui-guard。\n从Spec符合性、代码规范、TDD覆盖、数据库增量正确性、接口鉴权、跨模块共享约束、原型页面一致性审查差异。\n重点检测：是否创建与原型重复的页面/组件，是否未经允许引入新样式体系，是否改写原有导航/布局。输出可定位到文件的缺陷列表；修复后复测并用中文提交。"
     },
     {
       "id": "I07",
-      "title": "集成并执行本轮验收",
+      "title": "完成模块集成联调与验收",
       "skills": [
         "dev-integration",
         "dev-module-acceptance"
       ],
       "inputs": [
-        "当前系统",
-        "本轮模块",
-        "PRD场景"
+        "本轮各模块代码与SQL",
+        "对应Spec",
+        "本轮模块计划.md",
+        "角色场景PRD"
       ],
       "outputs": [
-        "本轮联调记录.md",
-        "模块验收.md"
+        "doc/output/06-模块迭代/本轮联调记录.md",
+        "doc/output/06-模块迭代/本轮验收记录.md",
+        "端到端回归测试"
       ],
-      "review": "不通过返工，已有功能回归必测"
+      "review": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
+      "prompt": "把本轮已经通过代码审核的模块合入当前可运行系统，执行真实前后端接口、数据库迁移、模块之间状态和权限联调。\n以角色×业务场景验收：例如需求文件上传→手动点击解析→参数人工核对→确认版本；资产模板需可维护且后续模块能读取。检查其他已完成模块不退化。\n记录 本轮联调记录.md、本轮验收记录.md；失败项形成可复现的Ticket并返回开发；未经真实对接不能写「验收通过」。"
     },
     {
       "id": "I08",
-      "title": "更新项目状态并决定下一轮",
+      "title": "收口本轮并进入下一轮（可选 retro）",
       "skills": [
         "dev-project-control",
-        "triage"
+        "triage",
+        "retro"
       ],
       "inputs": [
-        "模块验收结论",
-        "模块清单"
-      ],
-      "outputs": [
+        "本轮验收记录.md",
+        "缺陷任务",
+        "项目模块清单.md",
         "项目实施状态.md"
       ],
-      "review": "存在待开发模块则返回迭代模块选择"
+      "outputs": [
+        "doc/output/项目总控/项目实施状态.md（更新）",
+        "doc/output/06-模块迭代/本轮总结.md",
+        "按需：研发环境改进项"
+      ],
+      "review": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
+      "prompt": "核对当前迭代已完成的模块Spec、Tickets、代码、数据库脚本和角色×场景验收证据。\n更新项目实施状态中的「未开始/依赖阻塞/开发中/已验收」及下一轮可解锁模块，形成 本轮总结.md。\n若本轮发生典型AI问题（例如反复修改原型样式、测试缺位或导航成本高），**按需调用Matt retro** 复盘会话并提出工具、CI、规范改进。未完成的模块不得标记已验收；还有模块则返回S15。"
     }
   ]
 }
