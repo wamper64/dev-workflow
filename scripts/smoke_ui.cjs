@@ -53,7 +53,7 @@ async function main(){
  click('[data-sample="consultation"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/3组最高影响/);
  click('[data-sample="final"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/版本可追溯/);
+ assert.match(doc.getElementById("skill-dialog-content").textContent,/版本与依据可追溯/);
  click('[data-skill-tab="files"]');
  assert.ok(doc.querySelectorAll("[data-skill-file]").length>=8,"技能目录文件未全部呈现");
  click('[data-skill-file="examples/报价系统-工程基线输出示例.md"]');
