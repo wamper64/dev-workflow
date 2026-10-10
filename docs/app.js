@@ -37,6 +37,8 @@ function renderStages(){
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
+  const route=p.id==="P01"?"输入就绪 → 工程基线 → <b>架构Grill</b> → 整体架构 → 数据总体 → 环境部署 → 模块拆分":p.id==="P02"?"模块选择 → <b>疑点Grill</b> → 详细设计 → Spec → Tickets → TDD → <b>双轴代码审查</b> → 自动联调/原型核对 → <b>人工测试</b> → Bug修复↩复测 → 收口":p.id==="P03"?"项目级验收 → 上线评审 → 部署预演及回滚 → 生产上线":p.id==="P04"?"Matt retro → 项目全程复盘 → Skill改进":"已确认PRD + 前端原型 + 若依工程";
+  const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
   $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
  $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
   $("step-list").innerHTML=p.steps.map((s,k)=>
@@ -68,7 +70,7 @@ function renderDetails(){
     html+=ui.data.modules.map(m=>'<div class="module-record"><b>'+esc(m.id+" · "+m.title)+'</b><p>'+esc([...m.menus,...(m.additional?[m.additional]:[])].join("、"))+'</p></div>').join("");
     html+='</details>';
   }
-  if(p.id==="P02"){html+='<details class="extra-disclosure"><summary>查看本轮8步模块开发循环</summary>'+ui.data.iterationFlow.map((it,i)=>'<div class="module-record"><b>'+(i+1)+'. '+esc(it.title)+'</b></div>').join("")+'</details>';}
+  if(p.id==="P02"){html+='<details class="extra-disclosure"><summary>查看本轮完整模块开发闭环</summary>'+ui.data.iterationFlow.map((it,i)=>'<div class="module-record"><b>'+(i+1)+'. '+esc(it.title)+'</b></div>').join("")+'</details>';}
   $("step-detail").innerHTML=html;
 }
 function setSelection(phaseId,stepId,moveFocus=false){
@@ -102,7 +104,7 @@ function logicDiagram(d){
 
 function renderCodeReviewAxes(skill){
  const parts=skill.reviewAxes||[];
- return '<div class="source-detail"><h3>Matt code-review 的审查范围</h3><p>它首先固定Git Diff与来源Spec，通过 Standards 与 Spec 两个相互独立的评审轴发现代码问题。**原型视觉和人工业务验收是后续关卡，不是把它们塞进code-review就已经自动完成。**</p>'
+ return '<div class="source-detail"><h3>Matt code-review 的审查范围</h3><p>它首先固定Git Diff与来源Spec，通过 Standards 与 Spec 两个相互独立的评审轴发现代码问题。原型结构/视觉和人工业务验收是后续关卡，不能仅因两轴代码审查通过就宣称完成。</p>'
  +'<div class="skill-topic-grid">'+parts.map((x,i)=>'<article class="skill-topic-card"><span class="skill-topic-index">'+String(i+1).padStart(2,"0")+'</span><h4>'+esc(x.title)+'</h4><p>'+esc(x.detail)+'</p></article>').join("")+'</div><p class="flow-note">流程：固定比较基准与Spec → Standards/Spec双轴审查 → 修复并复审 → 真实联调/原型与人工验证</p></div>';
 }
 
@@ -190,7 +192,8 @@ function renderSkillSources(skill){
  const rs=skill.referenceLearnings||[];
  return '<div class="source-detail"><h3>为什么参考这些Skill？</h3><p>这里只记录调研来源、实际借鉴的机制和本项目适配范围，绝不会插进用户下载安装的SKILL.md正文。</p>'
  +'<div class="research-type"><strong>采用方式：</strong>'+esc(skill.type||"Matt原版")+'</div>'
- +'<div class="research-rows">'+rs.map(x=>'<article class="research-row"><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">查看参考原文 ↗</a><p>'+esc(x.learned)+'</p></article>').join("")+'</div>'
+ +'<div class="research-rows">'+rs.map(x=>'<article class="research-row"><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">查看参考原文 ↗</a><p><strong>具体学习：</strong>'+esc(x.learned)+'</p></article>').join("")+'</div>'
+ +'<p class="source-adaptation"><strong>实际采用与定制化改造：</strong>'+esc(skill.adaptation||"Matt官方原版保持不变。")+'</p>'
  +(!rs.length?'<p>暂无足够的逐项研究笔记，需要继续核实原始Skill文件，不能只凭仓库名称声称已参考。</p>':"")
  +'<p class="research-boundary">Matt原版保持不改；自建/改造说明只在网站中展示。</p></div>';
 }
