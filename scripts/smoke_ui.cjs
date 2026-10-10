@@ -66,6 +66,8 @@ async function main(){
  click("[data-skill-close]");
  click('[data-phase="P02"]');
  assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,11,"模块开发步骤错误");
+ assert.match(doc.querySelector("#phase-route").textContent,/Grill/,"模块流程速览必须显示Grill");
+ assert.match(doc.querySelector("#phase-route").textContent,/人工测试/,"模块流程速览必须显示人工测试");
  click('[data-phase="P01"]');
  click('[data-step="S04"]');
  click('[data-skill="architecture-baseline"]');
@@ -91,7 +93,7 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/字段|状态机/);
  click("[data-skill-close]");
   click('[data-step="S13"]');
- assert.match(doc.querySelector("#step-detail").textContent,/规范 \+ Spec/);
+ assert.match(doc.querySelector("#step-detail").textContent,/Standards \+ Spec/);
  click('[data-skill="code-review"]');
  assert.equal(doc.querySelectorAll(".skill-topic-card").length,3,"code-review应该明确审查两个轴和后续原型/人工检查的区别");
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/Standards/);
@@ -105,6 +107,7 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/测试/);
  click('[data-skill-tab="source"]');
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/参考原文|借鉴|自动测试/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/实际采用与定制化改造/);
  click("[data-skill-close]");
  click('[data-step="S14B"]');
  click('[data-skill="diagnosing-bugs"]');
