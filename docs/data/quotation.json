@@ -1,8 +1,8 @@
 {
   "title": "报价系统首次项目建设研发导航",
-  "version": "Skill逐步骤评审稿",
+  "version": "待审查·Grill与人工验收闭环",
   "updated": "2026-10-10",
-  "overview": "第0阶段展示 docs/input/ 与 code/；每个执行步骤只有一个主Skill。优先直接使用Matt，无法覆盖则在Matt理念上改造或借鉴已核实的GitHub开源方案自建。",
+  "overview": "仅聚焦报价系统首次建设。Grill显式位于整体架构与本轮模块详细设计前；开发质量分为Matt双轴代码审查、真实自动联调、人工测试及可选Bug诊断回退；handoff等Matt通用Skill独立在工作区工具箱中，不机械增加主步骤。",
   "inputs": [
     {
       "name": "需求资料",
@@ -82,7 +82,7 @@
       "title": "1. 项目准备与设计",
       "kind": "once",
       "owner": "项目经理、开发人员、技术总监",
-      "description": "把准备工作后的项目级事项集中在一个阶段：审核输入、初始化、项目基线、整体架构、数据库总体、开发环境、模块拆分。详细模块设计留给迭代开发。",
+      "description": "项目输入就绪后初始化工作区、完成项目基线；架构关键问题通过Grill明确并记录必要ADR，再做整体架构、数据库总体、开发环境和模块划分。",
       "steps": [
         {
           "id": "S01",
@@ -148,6 +148,29 @@
           "prompt": "请调用 Skill：project-baseline（skills/project-baseline/SKILL.md），生成本报价系统工程基线。\n\n先完整读取 Skill 所有相关说明与配套文件，特别是 references/checklist.md、references/quantification-standard.md、assets/baseline-template.md。\n\n输入：docs/input/需求资料/ 已确认PRD、docs/input/工程资料/、docs/input/环境资料/、docs/input/对接资料/；按需核对既有前端 code/fld 与若依 code/guiwu_ruoyi 的真实框架与版本。不要重新整理PRD已包含的页面映射。\n\n本次输出必须落实到以下能够指导后续架构设计的定量要求：\n1. 实际技术栈的产品及版本、必须沿用和允许升级范围；\n2. CPU、内存、磁盘、OS、网络等目标服务器条件；\n3. CPU按服务核数分配，内存按运行单元GiB上限及余量，磁盘按数据库/附件/日志/临时/备份/系统GB划分并计算闭合；\n4. 数据库、报价版本、审批、计算单、附件等保存的具体年限及起算点；\n5. 用户在线量、HTTP请求并发、长任务执行并发、排队上限；\n6. 主要业务API的P95目标、数据量与负载口径、持续运行浸泡时间；\n7. 内存RSS、连接/线程/文件句柄、日志上限、RPO和RTO。\n\n如果输入缺少关键数值，先给出具体推荐值、适用前提、理由、备选和影响，每轮最多询问3组问题。推荐值未经同意不能变为正式约束。所有资源分配和保存/性能口径必须交叉一致，不能编造已具备的客户设备或第三方能力。\n\n输出：docs/output/01-项目基线/项目基线.md。正文不得成为模板空壳，且不能混入TDD、Tickets及代码评审等开发方式。关键量化约束未裁定前明确说明不能作为完整基线进入下游设计。",
           "skillId": "project-baseline",
           "skillOrigin": "自建"
+        },
+        {
+          "id": "S03Q",
+          "title": "架构关键决策 Grill",
+          "skills": [
+            "grill-with-docs"
+          ],
+          "skillId": "grill-with-docs",
+          "skillOrigin": "Matt原版",
+          "inputs": [
+            "docs/output/01-项目基线/项目基线.md",
+            "docs/input/需求资料/（已确认PRD）",
+            "docs/input/工程资料/",
+            "已有GLOSSARY.md与docs/adr/（如有）"
+          ],
+          "outputs": [
+            "GLOSSARY.md（必要术语）",
+            "docs/adr/（必要ADR）",
+            "项目整体架构需落实的已确认决策"
+          ],
+          "review": "技术总监确认会影响架构的技术取舍、第三方/权限/运行边界；不重新询问已在PRD和基线裁定的问题。",
+          "prompt": "请调用 /grill-with-docs（skills/grill-with-docs/SKILL.md），它要求依次调用官方 grilling 和 domain-modeling。读取已确认PRD及项目基线，仅对尚未裁决且影响多个运行单元的架构问题建立决策树。每轮向用户给出已解锁的问题与推荐，等待答复；不要把已经确认的内容再问一次。形成必要的GLOSSARY术语和符合条件的ADR，经技术总监确认后再调用整体架构设计。如果所有必要决策已确定，本步骤可直接标为无需新增决策，并列举证据。",
+          "optional": false
         },
         {
           "id": "S04",
@@ -254,7 +277,7 @@
       "title": "2. 模块迭代开发",
       "kind": "repeat",
       "owner": "开发人员、项目经理、技术总监（涉及设计变更时）",
-      "description": "确定几个模块就先开发几个；本轮模块逐个进行详细设计、Spec、Tickets、TDD、评审和集成，验收后进入下一轮。",
+      "description": "本轮模块采用“依赖就绪→Grill澄清→详细设计→Spec→Tickets→TDD实现→代码审查→自动联调与原型核对→人工测试→有Bug诊断/修复/复测→本轮收口”的闭环，完成一个模块或一组可独立验收的模块后继续下一轮。",
       "steps": [
         {
           "id": "S08",
@@ -276,6 +299,28 @@
           "prompt": "请调用 Skill：iteration-planning，完成「选择本轮模块并校验依赖」。\n\nSkill 说明文件：skills/iteration-planning/SKILL.md\n执行逻辑：读取模块池→检查阻塞关系→选择可交付模块→形成迭代计划\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/output/05-模块拆分/项目模块清单.md\n- 模块依赖关系.md\n- 项目实施状态.md\n- 开发环境验收记录.md\n\n实施要点：\n从已确认的 项目模块清单.md 中选择本轮可开发模块（可以1个或多个）。\n逐模块检查已有代码、基础数据、前置模块、字典规则、第三方真实接口和开发环境状态。对可并行工作建立依赖清单，对受阻功能只补最小前置Ticket或暂缓。\n输出 本轮模块计划.md、前置依赖检查.md，列清每个模块的交付场景和负责人。不要为其他未确定模块生成完整Spec。\n\n输出文件：\n- docs/output/06-模块迭代/本轮模块计划.md\n- docs/output/06-模块迭代/前置依赖检查.md\n\n审核关卡：开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
           "skillId": "iteration-planning",
           "skillOrigin": "自建"
+        },
+        {
+          "id": "S08Q",
+          "title": "本轮模块疑点 Grill（有疑点时）",
+          "skills": [
+            "grill-with-docs"
+          ],
+          "skillId": "grill-with-docs",
+          "skillOrigin": "Matt原版",
+          "inputs": [
+            "docs/output/06-模块迭代/本轮模块计划.md",
+            "对应模块PRD和现有原型",
+            "docs/output/02-整体架构/",
+            "GLOSSARY.md、已有ADR"
+          ],
+          "outputs": [
+            "必要的模块业务术语/ADR更新",
+            "确认的关键业务决策"
+          ],
+          "review": "项目经理确认场景含义、技术总监确认跨模块契约取舍；没有未决问题时记录跳过原因。",
+          "prompt": "请调用 /grill-with-docs（skills/grill-with-docs/SKILL.md）；依据本轮模块PRD、原型、技术基线与代码，集中澄清范围外的真实歧义（报价版本、审批驳回、人工确认、第三方参数等）。grilling逐轮问决策树前沿问题并推荐；domain-modeling在用户确认后更新GLOSSARY和必要ADR。项目PRD已明确内容不重问，没有未决问题可跳过。",
+          "optional": true
         },
         {
           "id": "S09",
@@ -364,7 +409,7 @@
         },
         {
           "id": "S13",
-          "title": "代码审查与原型一致性审核",
+          "title": "代码审查（规范 + Spec）",
           "skills": [
             "code-review"
           ],
@@ -379,36 +424,76 @@
             "样式一致性检查",
             "通过的代码提交"
           ],
-          "review": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
+          "review": "依据Matt code-review的Standards与Spec双轴检查固定Diff；检查代码规范、需求/边界与必要安全风险。原型视觉回归及真实业务操作另由模块自动联调与人工测试承担。",
           "prompt": "请调用 Skill：code-review，完成「代码审查与原型一致性审核」。\n\nSkill 说明文件：skills/code-review/SKILL.md\n执行逻辑：固定代码差异→读取Spec和原型守护标准→双轴评审→修复复审\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 代码Diff\n- 当前Spec与Tickets\n- AGENTS.md\n- 原型页面映射.md\n\n实施要点：\n对当前模块实现代码执行 code-review 和 dev-ui-guard。\n从Spec符合性、代码规范、TDD覆盖、数据库增量正确性、接口鉴权、跨模块共享约束、原型页面一致性审查差异。\n重点检测：是否创建与原型重复的页面/组件，是否未经允许引入新样式体系，是否改写原有导航/布局。输出可定位到文件的缺陷列表；修复后复测并用中文提交。\n\n输出文件：\n- 代码评审结果\n- 样式一致性检查\n- 通过的代码提交\n\n审核关卡：开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
           "skillId": "code-review",
           "skillOrigin": "Matt原版"
         },
         {
           "id": "S14",
-          "title": "完成模块集成联调与验收",
+          "title": "模块联调与AI自动测试",
           "skills": [
             "module-integration-acceptance"
           ],
           "inputs": [
-            "本轮各模块代码与SQL",
-            "对应Spec",
-            "本轮模块计划.md",
-            "角色场景PRD"
+            "本轮模块Spec与Tickets、代码审查结果",
+            "现有code/fld原型与code/guiwu_ruoyi工程",
+            "真实开发环境、SQL迁移及可用的第三方接口"
           ],
           "outputs": [
-            "docs/output/06-模块迭代/本轮联调记录.md",
-            "docs/output/06-模块迭代/本轮验收记录.md",
-            "端到端回归测试"
+            "docs/output/06-模块迭代/<模块>/自动联调与测试记录.md",
+            "需人工验证的场景清单"
           ],
-          "review": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
-          "prompt": "请调用 Skill：module-integration-acceptance，完成「完成模块集成联调与验收」。\n\nSkill 说明文件：skills/module-integration-acceptance/SKILL.md\n执行逻辑：模块合并→业务主/异常链联调→角色验收→失败返工\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本轮各模块代码与SQL\n- 对应Spec\n- 本轮模块计划.md\n- 角色场景PRD\n\n实施要点：\n把本轮已经通过代码审核的模块合入当前可运行系统，执行真实前后端接口、数据库迁移、模块之间状态和权限联调。\n以角色×业务场景验收：例如需求文件上传→手动点击解析→参数人工核对→确认版本；资产模板需可维护且后续模块能读取。检查其他已完成模块不退化。\n记录 本轮联调记录.md、本轮验收记录.md；失败项形成可复现的Ticket并返回开发；未经真实对接不能写「验收通过」。\n\n输出文件：\n- docs/output/06-模块迭代/本轮联调记录.md\n- docs/output/06-模块迭代/本轮验收记录.md\n- 端到端回归测试\n\n审核关卡：开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "review": "开发人员确认前端/后端/数据库API/E2E的真实执行证据，以及基于code/fld的组件与原型一致性；未覆盖场景明确交人工测试，不得直接验收通过。",
+          "prompt": "请调用 Skill：module-integration-acceptance（skills/module-integration-acceptance/SKILL.md）。这一步只做真实联调和AI可执行的API、DB、E2E、权限、原型对比验证：不得认为Matt的code-review等于完整UI/业务验收。记录真实执行命令、日志和截图，区别真接口和Mock。自动化验证通过后移交S14H人工测试；失败进入S14B并回退修复与重测。",
           "skillId": "module-integration-acceptance",
           "skillOrigin": "自建"
         },
         {
+          "id": "S14H",
+          "title": "人工测试与角色场景验收",
+          "skills": [
+            "human-acceptance"
+          ],
+          "skillId": "human-acceptance",
+          "skillOrigin": "Matt原版",
+          "inputs": [
+            "docs/output/06-模块迭代/<模块>/自动联调与测试记录.md",
+            "本轮模块Spec/PRD、现有原型",
+            "真实开发环境和已授权测试角色"
+          ],
+          "outputs": [
+            "docs/output/06-模块迭代/<模块>/人工测试与缺陷单.md",
+            "docs/output/06-模块迭代/<模块>/人工场景验收记录.md"
+          ],
+          "review": "开发人员真实操作、签证据；项目经理按角色×核心场景确认。失败不能进入迭代收口。",
+          "prompt": "请调用 Skill：human-acceptance（skills/human-acceptance/SKILL.md）。依据PRD角色×场景、自动测试未覆盖项及当前代码，生成默认全是“待执行”的人工测试单。请开发人员真实操作并填写结果；AI不得伪造通过。若发现Bug，进入S14B diagnosing-bugs；修复后重走implement-spec、code-review、自动联调并人工复测。真实第三方未到位要标记阻塞，而不是模拟通过。",
+          "optional": false
+        },
+        {
+          "id": "S14B",
+          "title": "缺陷定位修复（测试不通过时）",
+          "skills": [
+            "diagnosing-bugs"
+          ],
+          "skillId": "diagnosing-bugs",
+          "skillOrigin": "Matt原版",
+          "inputs": [
+            "人工测试发现的Bug与复现步骤/证据",
+            "对应Spec、日志和真实执行环境",
+            "相关变更Diff"
+          ],
+          "outputs": [
+            "Bug根因、复现命令及最小修复证据",
+            "新的回归测试与修复Commit"
+          ],
+          "review": "开发人员验证同一症状先红后绿；必须回到S12实现/代码审查/联调/人工复测。无缺陷则跳过此步骤。",
+          "prompt": "仅在人工测试/自动联调真实发现Bug时调用官方 /diagnosing-bugs（skills/diagnosing-bugs/SKILL.md）。先建立能稳定抓到原始症状的最小红灯反馈环，收集脱敏证据，再定位根因、用TDD补回归测试并修复。修复不是验收通过：回到implement-spec、code-review、模块自动联调和对应人工测试，全部复测通过后才进入迭代收口。没有Bug时跳过。",
+          "optional": true
+        },
+        {
           "id": "S15",
-          "title": "收口本轮并进入下一轮（可选 retro）",
+          "title": "本轮验收收口与选择下一轮",
           "skills": [
             "iteration-close"
           ],
@@ -423,7 +508,7 @@
             "docs/output/06-模块迭代/本轮总结.md",
             "按需：研发环境改进项"
           ],
-          "review": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
+          "review": "仅人工角色场景验收真实通过后更新模块状态；有未关闭Bug、重要人工用例受阻或真实第三方未验收不得标为已完成。",
           "prompt": "请调用 Skill：iteration-close，完成「收口本轮并进入下一轮（可选 retro）」。\n\nSkill 说明文件：skills/iteration-close/SKILL.md\n执行逻辑：核对验收证据→更新模块状态→检查剩余依赖→进入下一轮\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本轮验收记录.md\n- 缺陷任务\n- 项目模块清单.md\n- 项目实施状态.md\n\n实施要点：\n核对当前迭代已完成的模块Spec、Tickets、代码、数据库脚本和角色×场景验收证据。\n更新项目实施状态中的「未开始/依赖阻塞/开发中/已验收」及下一轮可解锁模块，形成 本轮总结.md。\n若本轮发生典型AI问题（例如反复修改原型样式、测试缺位或导航成本高），**按需调用Matt retro** 复盘会话并提出工具、CI、规范改进。未完成的模块不得标记已验收；还有模块则返回S15。\n\n输出文件：\n- docs/output/项目总控/项目实施状态.md（更新）\n- docs/output/06-模块迭代/本轮总结.md\n- 按需：研发环境改进项\n\n审核关卡：项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
           "skillId": "iteration-close",
           "skillOrigin": "自建"
@@ -1102,7 +1187,7 @@
         {
           "phase": "P02",
           "step": "S13",
-          "title": "代码审查与原型一致性审核"
+          "title": "代码审查（规范 + Spec）"
         }
       ]
     },
@@ -1114,7 +1199,7 @@
         {
           "phase": "P02",
           "step": "S14",
-          "title": "完成模块集成联调与验收"
+          "title": "模块联调与AI自动测试"
         }
       ]
     },
@@ -1126,7 +1211,7 @@
         {
           "phase": "P02",
           "step": "S15",
-          "title": "收口本轮并进入下一轮（可选 retro）"
+          "title": "本轮验收收口与选择下一轮"
         }
       ]
     },
@@ -1199,6 +1284,47 @@
           "phase": "P04",
           "step": "S21",
           "title": "复盘完整研发流程并沉淀 Skill 改进"
+        }
+      ]
+    },
+    {
+      "id": "grill-with-docs",
+      "origin": "Matt原版",
+      "description": "逐轮澄清本项目未决设计，不重问已确认PRD",
+      "usedAt": [
+        {
+          "phase": "P01",
+          "step": "S03Q",
+          "title": "架构关键决策 Grill"
+        },
+        {
+          "phase": "P02",
+          "step": "S08Q",
+          "title": "本轮模块疑点 Grill（有疑点时）"
+        }
+      ]
+    },
+    {
+      "id": "human-acceptance",
+      "origin": "自建",
+      "description": "只记录人工实际执行结果，bug闭环后签收",
+      "usedAt": [
+        {
+          "phase": "P02",
+          "step": "S14H",
+          "title": "人工测试与角色场景验收"
+        }
+      ]
+    },
+    {
+      "id": "diagnosing-bugs",
+      "origin": "Matt原版",
+      "description": "只有发现Bug才调用，根因先于修复",
+      "usedAt": [
+        {
+          "phase": "P02",
+          "step": "S14B",
+          "title": "缺陷定位修复（测试不通过时）"
         }
       ]
     }
@@ -1376,5 +1502,13 @@
       "skillId": "iteration-close",
       "skillOrigin": "自建"
     }
+  ],
+  "workspaceSkills": [
+    "handoff",
+    "grilling",
+    "grill-me",
+    "domain-modeling",
+    "research",
+    "wizard"
   ]
 }

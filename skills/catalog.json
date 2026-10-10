@@ -41,7 +41,13 @@
       "fail": "只提出需要项目经理确认的阻塞项；可选资料缺失不强制补",
       "pass": "确认具备项目启动条件",
       "output": "输入就绪核对 + 阻塞事项"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
+        "learned": "把目录存在、内容可用、版本已确认拆成可证实的事实；无证据不能宣布输入就绪"
+      }
+    ]
   },
   {
     "id": "setup-matt-pocock-skills",
@@ -91,8 +97,8 @@
     "type": "自建",
     "source": {
       "repo": "obra/superpowers",
-      "path": "skills/writing-plans/SKILL.md",
-      "url": "https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md"
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
     },
     "flow": [
       "读取已确认PRD",
@@ -200,16 +206,22 @@
       "approach": "资料确认→形成有数值推荐→最多3问/轮澄清→资源/保留/性能交叉闭合→输出具体约束→质量关卡"
     },
     "outputSampleFile": "examples/报价系统-工程基线输出示例.md",
-    "consultationFile": "examples/报价系统-澄清过程示例.md"
+    "consultationFile": "examples/报价系统-澄清过程示例.md",
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
+        "learned": "量化约束覆盖及资源预算闭合采用既有项目基线插件标准；另参考证据先于完成声明"
+      }
+    ]
   },
   {
     "id": "architecture-baseline",
     "name": "architecture-baseline",
     "type": "基于Matt改造",
     "source": {
-      "repo": "mattpocock/skills",
-      "path": "skills/engineering/codebase-design/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md"
+      "repo": "bmad-code-org/BMAD-METHOD",
+      "path": "skills/bmad-architecture/SKILL.md",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md"
     },
     "flow": [
       "确认系统边界",
@@ -245,7 +257,13 @@
       "fail": "比较候选、记录ADR并修正方案",
       "pass": "批准整体架构，可进入数据总体设计",
       "output": "整体架构设计 + 架构评审"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md",
+        "learned": "只固定跨模块必须一致且难逆的架构决策，已有代码的习惯需要先调查，再用架构约束协调各开发单元"
+      }
+    ]
   },
   {
     "id": "data-architecture",
@@ -287,7 +305,13 @@
       "fail": "不盲目拆库；待核实规模后重新裁决",
       "pass": "批准数据域与存储边界",
       "output": "数据库总体设计（无字段DDL）"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md",
+        "learned": "先识别业务领域与数据责任，不在总体数据域阶段提前做业务字段DDL"
+      }
+    ]
   },
   {
     "id": "development-environment",
@@ -333,16 +357,22 @@
       "fail": "保留失败日志，定位修复后重测",
       "pass": "允许进入模块拆分及后续实施",
       "output": "开发环境部署与验收记录"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
+        "learned": "以真实连接、版本、命令及健康输出而非主观描述验证开发环境"
+      }
+    ]
   },
   {
     "id": "module-discovery",
     "name": "module-discovery",
     "type": "自建",
     "source": {
-      "repo": "mattpocock/skills",
-      "path": "skills/engineering/domain-modeling/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md"
+      "repo": "bmad-code-org/BMAD-METHOD",
+      "path": "skills/bmad-architecture/SKILL.md",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md"
     },
     "flow": [
       "引用PRD模块能力",
@@ -378,7 +408,13 @@
       "fail": "缺页补模块、重叠则合并、耦合高则重划",
       "pass": "项目经理+技术总监确认模块清单",
       "output": "模块清单 + 依赖关系"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md",
+        "learned": "以边界与跨模块共享不变量划分模块，不按页面菜单或预设Spec数量切分"
+      }
+    ]
   },
   {
     "id": "iteration-planning",
@@ -421,7 +457,13 @@
       "fail": "补最小前置任务或标阻塞，暂不预生成全部Spec",
       "pass": "冻结本轮可实施目标",
       "output": "迭代计划 + 依赖检查"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md",
+        "learned": "按可执行小交付及依赖界定本轮边界，只承诺当前能验证的任务"
+      }
+    ]
   },
   {
     "id": "module-design",
@@ -466,7 +508,13 @@
       "fail": "提交技术总监调整基线后再设计",
       "pass": "形成可直接交给to-spec的材料",
       "output": "本模块详细设计 + SQL草稿"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md",
+        "learned": "基于已有代码结构考虑模块边界与接口设计，不推倒原型或若依现成能力"
+      }
+    ]
   },
   {
     "id": "to-spec",
@@ -594,7 +642,13 @@
       "fail": "退回相关实现，修正后复测",
       "pass": "推进下个可执行Ticket直至Spec完成",
       "output": "完整可集成代码与自动测试"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md",
+        "learned": "Spec→依赖图Tickets→可执行frontier→TDD实现→集成分支→内置code-review，再额外进行阶段质量关卡"
+      }
+    ]
   },
   {
     "id": "code-review",
@@ -638,16 +692,22 @@
       "fail": "给出文件级缺陷，修复后重新审查",
       "pass": "允许合入模块集成",
       "output": "双轴代码评审结果"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/code-review/SKILL.md",
+        "learned": "Matt原版明确只有Standards和Spec双轴并行评审，并非完整原型视觉验收；最终UI交互由后续联调/人工测试负责"
+      }
+    ]
   },
   {
     "id": "module-integration-acceptance",
     "name": "module-integration-acceptance",
     "type": "自建",
     "source": {
-      "repo": "obra/superpowers",
-      "path": "skills/verification-before-completion/SKILL.md",
-      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
+      "repo": "bmad-code-org/BMAD-METHOD",
+      "path": "skills/bmad-qa-generate-e2e-tests/SKILL.md",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-qa-generate-e2e-tests/SKILL.md"
     },
     "flow": [
       "模块合并",
@@ -682,7 +742,13 @@
       "fail": "回退Ticket补修；没有真实对接则标受限",
       "pass": "更新模块为已验收",
       "output": "模块联调记录 + 场景验收记录"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-qa-generate-e2e-tests/SKILL.md",
+        "learned": "先检测已有测试框架，再为已实现功能补API/E2E自动测试并真实执行；自动测试不是代码审查也不是人工验收"
+      }
+    ]
   },
   {
     "id": "iteration-close",
@@ -726,16 +792,22 @@
       "fail": "未完成→选择下一轮；重复失误→按需retro",
       "pass": "全部完成→系统验收",
       "output": "项目实施状态 + 本轮总结"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
+        "learned": "以真实验收、缺陷和已运行证据决定能否关闭本轮，而不是看代码已提交"
+      }
+    ]
   },
   {
     "id": "system-acceptance",
     "name": "system-acceptance",
     "type": "自建",
     "source": {
-      "repo": "obra/superpowers",
-      "path": "skills/verification-before-completion/SKILL.md",
-      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
+      "repo": "bmad-code-org/BMAD-METHOD",
+      "path": "docs/build/test-completed-work.md",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md"
     },
     "flow": [
       "覆盖矩阵",
@@ -769,7 +841,13 @@
       "fail": "缺陷归因到模块并返工，重新跑全链",
       "pass": "形成系统业务验收结论",
       "output": "系统级验收与缺陷闭环"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
+        "learned": "验证系统业务链的角色场景和既有回归，区分测试生成、真实执行与最终业务签收"
+      }
+    ]
   },
   {
     "id": "release-readiness",
@@ -812,7 +890,13 @@
       "fail": "补测或修复阻塞项，不把承诺当实测",
       "pass": "允许生产预演",
       "output": "上线评审结论"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
+        "learned": "目标和实测分离，逐项查证性能、安全及回滚是否达到已批准基线"
+      }
+    ]
   },
   {
     "id": "release-preflight",
@@ -857,7 +941,13 @@
       "fail": "停止发布，修正脚本/备份/环境再预演",
       "pass": "提交正式发布许可",
       "output": "部署预演 + 回滚记录"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
+        "learned": "发布前必须实测备份可恢复、迁移可预演和回滚可执行，不拿脚本代替验证"
+      }
+    ]
   },
   {
     "id": "release-delivery",
@@ -900,7 +990,13 @@
       "fail": "执行批准的回滚路径，保留故障证据",
       "pass": "正式交付项目",
       "output": "上线记录 + 交付资料"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
+        "learned": "上线成功须有部署日志、版本、冒烟结果和真实服务可用的证据"
+      }
+    ]
   },
   {
     "id": "retro",
@@ -987,6 +1083,167 @@
       "fail": "保留争议作为提案，不能改动已审批基线",
       "pass": "批准改进后更新统一研发流程",
       "output": "项目复盘与Skill改进计划"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md",
+        "learned": "保留真实会话问题与可测试的Agent环境改进，并在项目级复盘中分析阶段和返工原因"
+      }
+    ]
+  },
+  {
+    "id": "grill-with-docs",
+    "name": "grill-with-docs",
+    "type": "Matt原版",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/grill-with-docs/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md"
+    },
+    "flow": [
+      "识别未决设计决策",
+      "调用grilling分轮询问推荐",
+      "调用domain-modeling记录术语与ADR",
+      "确认后进入设计"
+    ],
+    "stepId": "S03Q",
+    "stepTitle": "架构关键决策Grill",
+    "summary": "逐轮澄清本项目未决设计，不重问已确认PRD",
+    "inputs": [
+      "docs/output/01-项目基线/项目基线.md",
+      "docs/input/需求资料/（已确认PRD）",
+      "docs/input/工程资料/",
+      "已有GLOSSARY.md与docs/adr/（如有）"
+    ],
+    "outputs": [
+      "GLOSSARY.md（必要术语）",
+      "docs/adr/（必要ADR）",
+      "项目整体架构需落实的已确认决策"
+    ],
+    "verification": "技术总监确认会影响架构的技术取舍、第三方/权限/运行边界；不重新询问已在PRD和基线裁定的问题。",
+    "diagram": {
+      "outcome": "所有影响总体架构的真实分歧，在架构设计前得到裁决",
+      "input": "项目基线、已确认PRD和待决架构问题",
+      "work": [
+        "创建含依赖的决策树并识别当前前沿",
+        "逐轮给出问题与推荐，等待用户答复",
+        "同步处理术语歧义与必要ADR"
+      ],
+      "gate": "关键分歧已裁定且用户确认理解一致？",
+      "fail": "未决问题保持开放；后续依赖不能假设答案",
+      "pass": "更新GLOSSARY或ADR，允许进行详细架构设计",
+      "output": "已确认决策而非漫长问答记录"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md",
+        "learned": "问题按决策依赖树的前沿分轮提出、每项给推荐，事实由Agent调查，用户裁定后再行动"
+      },
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md",
+        "learned": "随讨论澄清术语，仅真实高代价取舍记录ADR"
+      }
+    ]
+  },
+  {
+    "id": "human-acceptance",
+    "name": "human-acceptance",
+    "type": "自建",
+    "source": {
+      "repo": "bmad-code-org/BMAD-METHOD",
+      "path": "docs/build/test-completed-work.md",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md"
+    },
+    "flow": [
+      "AI准备待执行用例",
+      "开发人员实际操作记录",
+      "失败提交可复现Bug",
+      "复测并按角色×场景签收"
+    ],
+    "stepId": "S14H",
+    "stepTitle": "人工测试与角色场景验收",
+    "summary": "只记录人工实际执行结果，bug闭环后签收",
+    "inputs": [
+      "docs/output/06-模块迭代/<模块>/自动联调与测试记录.md",
+      "本轮模块Spec/PRD、现有原型",
+      "真实开发环境和已授权测试角色"
+    ],
+    "outputs": [
+      "docs/output/06-模块迭代/<模块>/人工测试与缺陷单.md",
+      "docs/output/06-模块迭代/<模块>/人工场景验收记录.md"
+    ],
+    "verification": "开发人员真实操作、签证据；项目经理按角色×核心场景确认。失败不能进入迭代收口。",
+    "diagram": {
+      "outcome": "AI测试盲区得到真实人员验证，签收证据可信",
+      "input": "自动测试证据、真实页面、角色场景与可用测试环境",
+      "work": [
+        "AI准备待执行用例（无预填通过）",
+        "开发人员手工操作并截图/记录业务结果",
+        "项目经理根据真实角色场景验收"
+      ],
+      "gate": "实际执行且所有关键场景均通过？",
+      "fail": "生成缺陷单→diagnosing-bugs→修改→review/联调/复测",
+      "pass": "项目经理签收模块并进入迭代收口",
+      "output": "人工测试记录、Bug证据、业务签收"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
+        "learned": "明确自动测试与人工观察互不替代；测试结果只来自实际执行"
+      },
+      {
+        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
+        "learned": "不能没有新鲜证据就宣布通过；所有完成声明有真实可复核依据"
+      }
+    ]
+  },
+  {
+    "id": "diagnosing-bugs",
+    "name": "diagnosing-bugs",
+    "type": "Matt原版",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/diagnosing-bugs/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md"
+    },
+    "flow": [
+      "建立原始症状红灯信号",
+      "可复现并缩小范围",
+      "单一假设与实验",
+      "TDD修复重测"
+    ],
+    "stepId": "S14B",
+    "stepTitle": "缺陷诊断与修复",
+    "summary": "只有发现Bug才调用，根因先于修复",
+    "inputs": [
+      "人工测试发现的Bug与复现步骤/证据",
+      "对应Spec、日志和真实执行环境",
+      "相关变更Diff"
+    ],
+    "outputs": [
+      "Bug根因、复现命令及最小修复证据",
+      "新的回归测试与修复Commit"
+    ],
+    "verification": "开发人员验证同一症状先红后绿；必须回到S12实现/代码审查/联调/人工复测。无缺陷则跳过此步骤。",
+    "diagram": {
+      "outcome": "不是修复表象，而是先建立真正能抓到原始症状的反馈环",
+      "input": "人工用例失败步骤、截图、日志、环境",
+      "work": [
+        "首先建立能红能绿的最小复现命令",
+        "复现并最小化症状",
+        "逐一验证假设和根因",
+        "TDD回归用例与最小修复"
+      ],
+      "gate": "原症状能被复现且修复后测试真实通过？",
+      "fail": "重采证据/缩小失败路径，不能凭猜测宣称修复",
+      "pass": "回到实现审查、自动联调和人工复测",
+      "output": "Bug根因+失败/修复证据+回归测试"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md",
+        "learned": "先构造能抓到用户原始症状的快速red-capable反馈环，再定位根因，不允许靠观察代码猜故障"
+      }
+    ]
   }
 ]

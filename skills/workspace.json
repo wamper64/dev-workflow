@@ -1,0 +1,38 @@
+[
+  {
+    "id": "handoff",
+    "name": "会话交接",
+    "summary": "跨Harness/目录/协作者切换时保存去敏的上下文接力；同会话一般不必调用",
+    "source": "skills/productivity/handoff/SKILL.md"
+  },
+  {
+    "id": "grilling",
+    "name": "决策树逐轮追问",
+    "summary": "按依赖树决定当前可问的问题，给推荐；事实由Agent查，决策由用户确认",
+    "source": "skills/productivity/grilling/SKILL.md"
+  },
+  {
+    "id": "grill-me",
+    "name": "轻量Grill入口",
+    "summary": "官方轻量入口，内部调用grilling",
+    "source": "skills/productivity/grill-me/SKILL.md"
+  },
+  {
+    "id": "domain-modeling",
+    "name": "术语与ADR",
+    "summary": "术语冲突现场澄清；仅不可逆、非显然、真实取舍时记录ADR",
+    "source": "skills/engineering/domain-modeling/SKILL.md"
+  },
+  {
+    "id": "research",
+    "name": "原始资料技术调研",
+    "summary": "使用官方/一手来源调查技术事实并沉淀带来源的Markdown文件",
+    "source": "skills/engineering/research/SKILL.md"
+  },
+  {
+    "id": "wizard",
+    "name": "人工环境操作指引",
+    "summary": "只对AI无法自动完成的环境配置逐步引导人操作",
+    "source": "skills/engineering/wizard/SKILL.md"
+  }
+]
