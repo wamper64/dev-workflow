@@ -64,37 +64,6 @@
     ]
   },
   {
-    "id": "grill-me",
-    "name": "轻量Grill入口",
-    "summary": "官方轻量入口，内部调用grilling",
-    "source": {
-      "repo": "mattpocock/skills",
-      "path": "skills/productivity/grill-me/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md"
-    },
-    "type": "Matt原版",
-    "stepTitle": "工作区通用 · 轻量Grill入口",
-    "diagram": {
-      "outcome": "轻量启动官方Grilling",
-      "input": "由当前任务或用户直接发起",
-      "work": [
-        "用户明确发起Grill",
-        "转交官方grilling",
-        "完成决策前沿直到用户确认"
-      ],
-      "gate": "是否已达到共同理解？",
-      "fail": "继续grilling",
-      "pass": "交回主研发流程",
-      "output": "交回主研发流程"
-    },
-    "referenceLearnings": [
-      {
-        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md",
-        "learned": "它只是调用grilling的薄入口，不承载独立的规格生产"
-      }
-    ]
-  },
-  {
     "id": "domain-modeling",
     "name": "术语与ADR",
     "summary": "术语冲突现场澄清；仅不可逆、非显然、真实取舍时记录ADR",
@@ -187,6 +156,70 @@
       {
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/SKILL.md",
         "learned": "面向无法自动完成的人工环境配置，而不是绕过权限或假称已执行"
+      }
+    ]
+  },
+  {
+    "id": "pr",
+    "name": "PR交付说明",
+    "summary": "把代码变更以最小图示/文件树说明，给出前后验证证据及合并风险；仅在需要PR或变更审核时调用",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/pr/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/pr/SKILL.md"
+    },
+    "type": "Matt原版",
+    "stepTitle": "通用工具 · PR交付说明",
+    "diagram": {
+      "outcome": "让审核人迅速了解实际修改、验证证据和合并风险",
+      "input": "当前实际Git Diff、测试截图/命令或提交",
+      "work": [
+        "选最能说明改动的图示、diff或文件树",
+        "整理修改前后的真实测试证据",
+        "评估可回滚性与影响范围",
+        "生成简洁PR说明"
+      ],
+      "gate": "是否有真实Diff和验证证据？",
+      "fail": "缺失证据时标注受阻，不伪造通过",
+      "pass": "提交有证据和风险提示的PR正文",
+      "output": "PR Summary / Evidence / Merge Danger"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/pr/SKILL.md",
+        "learned": "以Summary、Evidence、Merge Danger三部分生成审阅友好的PR正文，结构表达优先使用图/树/diff。"
+      }
+    ]
+  },
+  {
+    "id": "to-questionnaire",
+    "name": "生成外部确认问卷",
+    "summary": "开发/PM无法决定而客户、第三方或技术负责人掌握答案时，把缺失的事实/决策转成可填写Markdown问卷",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/productivity/to-questionnaire/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/to-questionnaire/SKILL.md"
+    },
+    "type": "Matt原版",
+    "stepTitle": "通用工具 · 外部问卷",
+    "diagram": {
+      "outcome": "让掌握信息的相关方一次性提供真实可用的决定或数据",
+      "input": "接收方的角色和需要其回答的事实/决策",
+      "work": [
+        "明确问卷发给谁与其知识背景",
+        "只询问用户能解释的交付目标",
+        "按重要性生成简洁可填写问题和回答栏",
+        "收回真实答复再输入原研发步骤"
+      ],
+      "gate": "每个问题都有接收人且对应实际未知事项吗？",
+      "fail": "信息由代码/文档可查时先查，不强制向客户提问",
+      "pass": "导出供相关方填写的Markdown问卷",
+      "output": "to-questionnaire-<slug>.md"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/to-questionnaire/SKILL.md",
+        "learned": "只先核实问卷发给谁、需要什么答案，随后针对外部知识缺口写问题，允许部分回答。"
       }
     ]
   }
