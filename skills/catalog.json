@@ -914,9 +914,9 @@
       "合入集成分支",
       "验证"
     ],
-    "stepId": "S12",
-    "stepTitle": "TDD实现与内置code-review",
-    "summary": "Matt原版负责TDD和内置code-review。导航在该步骤完成后以需求基线与真实自动测试证据生成待执行人工测试单，不改写Matt原版。",
+    "stepId": null,
+    "stepTitle": "Matt原版 implement-spec（由dev-implement-spec内部调用）",
+    "summary": "完整保留Matt原版Ticket依赖执行、TDD与最终code-review；本流程从自建dev-implement-spec显式调用原版并在之后追加人工测试单。",
     "inputs": [
       "当前模块的Spec与Tickets",
       "code/",
@@ -1054,40 +1054,84 @@
     ],
     "stepId": "S15",
     "stepTitle": "收口本轮并进入下一轮（可选 retro）",
-    "summary": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
+    "summary": "依据TDD/内置Review和人工验收证据收口，显式调用Matt官方retro复盘本轮AI编码会话，沉淀下轮可执行改进后再解锁下一轮。",
     "inputs": [
       "本轮验收记录.md",
       "缺陷任务",
       "项目模块清单.md",
-      "项目实施状态.md"
+      "项目实施状态.md",
+      "本轮AI编码会话真实日志与提交/工具及AGENTS/CI（用于retro）"
     ],
     "outputs": [
       "docs/output/项目总控/项目实施状态.md（更新）",
       "docs/output/06-模块迭代/本轮总结.md",
-      "按需：研发环境改进项"
+      "按需：研发环境改进项",
+      "docs/output/06-模块迭代/本轮retro改进建议.md"
     ],
-    "verification": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
+    "verification": "真实人审与Bug复测为业务收口门禁；在同一步运行Matt官方retro并形成按严重度排序的可执行Agent环境改进建议，批准后带入下一轮。",
     "diagram": {
-      "outcome": "让下一轮从可信状态继续",
-      "input": "本轮验收证据 + 模块实施状态",
+      "outcome": "本轮签收 + retro改进，让下一轮从更可靠的Agent环境开始",
+      "input": "本轮真实TDD/审查/人工结果 + AI编码会话 + 项目状态",
       "work": [
-        "逐模块追踪Spec、Review和双测试签收证据",
-        "更新项目状态与下一轮依赖解锁"
+        "逐模块检查代码/TDD/内置审查与人工测试证据",
+        "调用Matt官方retro对本轮AI会话做有证据的改进提案",
+        "只应用已获批准的导航/CI/规范/工具改进并更新下轮依赖"
       ],
-      "gate": "全部模块已经验收了吗？",
-      "fail": "未完成→选择下一轮；重复失误→按需retro",
-      "pass": "全部完成→系统验收",
-      "output": "项目实施状态 + 本轮总结"
+      "gate": "模块已签收、retro改进已向人审核了吗？",
+      "fail": "模块不合格→回测试/修复；无有效retro建议→记录无可靠候选",
+      "pass": "有剩余模块→选下一轮；全部签收→系统验收",
+      "output": "收口记录 + retro改进提案 + 实施状态"
     },
     "referenceLearnings": [
       {
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
         "learned": "以真实验收、缺陷和已运行证据决定能否关闭本轮，而不是看代码已提交",
         "name": "Superpowers — verification-before-completion"
+      },
+      {
+        "name": "Matt Pocock Skills — retro",
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md",
+        "learned": "在每轮收口显式触发官方会话复盘，按代码导航、自动守卫、编码规范、AGENTS与工具/信息访问筛选真实改进候选，并向用户按严重程度提交建议。"
       }
     ],
     "maturity": "已补充执行图、失败路径和验收证据",
-    "adaptation": "应用验证前核验证据原则，把Review→自动联调→人工验收→Bug闭环与项目实施状态、下一轮依赖联动。"
+    "adaptation": "真实验收证据守门之后内置官方Matt retro，检查AI会话中导航/自动检测/规范/工具经济性，并将获批准的改进带入下一轮；不重复项目结束复盘。",
+    "overview": {
+      "headline": "每一轮模块完成时先验收，再调用Matt retro改善下一轮的AI开发环境。",
+      "why": "业务测试签收与编码会话复盘分开做，但放在同一个收口步骤。retro不自动修改PRD、需求、CI或Skill，改进提案必须有证据并经过批准。",
+      "result": "本轮收口记录、retro改进建议、项目实施状态",
+      "sectionsTitle": "本轮收口实际做的三件事",
+      "sections": [
+        {
+          "title": "① 验收本轮模块",
+          "summary": "核查已完成TDD/最终Review/人工签收及Bug复测，阻塞项不能关闭",
+          "sample": "参数版本与审批等关键角色×场景人工复测应有真实证据"
+        },
+        {
+          "title": "② 调用Matt官方retro",
+          "summary": "基于本轮真实Agent会话对导航、CI守卫、编码规范/AGENTS、工具开销提出按风险排序的改进",
+          "sample": "反复找不到前端组件位置→提议在AGENTS增加单条准确导航指针"
+        },
+        {
+          "title": "③ 决定下一轮",
+          "summary": "把批准的CI/规范/工具改进列入下轮，更新模块状态与前置依赖；项目全部完成则去系统验收",
+          "sample": "一次只改验证过的问题，避免为了复盘而改动已经审批的架构"
+        }
+      ],
+      "thinking": [
+        {
+          "given": "本轮真实代码错误多次在人工测试才发现",
+          "answer": "retro先检查现有CI是否未运行已有测试或缺确定性的质量守卫，再给出可验证修正"
+        }
+      ],
+      "doesNot": [
+        "不把retro当人工验收或业务PRD复盘",
+        "不在项目上线后再强制跑一次重复retro",
+        "不在未经审核时自动修改全局AGENTS、CI或Skills"
+      ]
+    },
+    "outputSampleFile": "docs/examples/报价项目/iteration-close/本轮retro收口示例.md",
+    "sampleTitle": "报价模块验收与本轮retro改进示例"
   },
   {
     "id": "system-acceptance",
@@ -1330,9 +1374,9 @@
       "提出可自动化改进",
       "复核"
     ],
-    "stepId": "S20",
-    "stepTitle": "调用 retro 复盘 AI 编码会话",
-    "summary": "开发人员核实每个改进都有对应证据，并优先落到自动化检查和清晰的Agent指令。",
+    "stepId": null,
+    "stepTitle": "Matt官方retro（本轮收口内部调用）",
+    "summary": "由iteration-close在每轮模块签收阶段调用，复盘本轮AI编码会话的Agent环境、自动检查、规范及工具等可改进项，无须最后再重复一轮。",
     "inputs": [
       "典型开发会话记录",
       "代码提交与评审",
@@ -1366,59 +1410,6 @@
     ],
     "maturity": "官方原版，未改动",
     "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。"
-  },
-  {
-    "id": "project-retrospective",
-    "name": "project-retrospective",
-    "type": "基于Matt改造",
-    "source": {
-      "repo": "mattpocock/skills",
-      "path": "skills/engineering/retro/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md",
-      "name": "Matt Pocock Skills — retro"
-    },
-    "flow": [
-      "收集各阶段证据",
-      "定位工作流瓶颈",
-      "提炼Skill改进",
-      "评审沉淀"
-    ],
-    "stepId": "S21",
-    "stepTitle": "复盘完整研发流程并沉淀 Skill 改进",
-    "summary": "技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。",
-    "inputs": [
-      "各阶段审核记录",
-      "每轮模块计划与验收",
-      "AI开发会话复盘.md",
-      "上线交付记录"
-    ],
-    "outputs": [
-      "docs/output/09-复盘/研发流程复盘.md",
-      "docs/output/09-复盘/Skill优化清单.md",
-      "待确认的工作流变更建议"
-    ],
-    "verification": "技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。",
-    "diagram": {
-      "outcome": "让整个首次建设流程在下一项目更有效",
-      "input": "各阶段评审 + Ticket返工 + 上线记录",
-      "work": [
-        "追溯发生了哪些具体返工与缺失决策",
-        "落成有审核人和验证方式的Skill改进项"
-      ],
-      "gate": "技术总监/项目经理确认改进价值吗？",
-      "fail": "保留争议作为提案，不能改动已审批基线",
-      "pass": "批准改进后更新统一研发流程",
-      "output": "项目复盘与Skill改进计划"
-    },
-    "referenceLearnings": [
-      {
-        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md",
-        "learned": "保留真实会话问题与可测试的Agent环境改进，并在项目级复盘中分析阶段和返工原因",
-        "name": "Matt Pocock Skills — retro"
-      }
-    ],
-    "maturity": "已补充执行图、失败路径和验收证据",
-    "adaptation": "沿用Matt retro的经验归因方法，但扩展到跨项目Grill、设计返工、人工Bug发现和Skill门禁改进。"
   },
   {
     "id": "grill-with-docs",
@@ -1569,5 +1560,124 @@
       ],
       "result": "失败反馈环命令+假设证据+最小修复+回归与人工复测"
     }
+  },
+  {
+    "id": "dev-implement-spec",
+    "name": "dev-implement-spec",
+    "type": "基于Matt改造",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/implement-spec/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md",
+      "name": "Matt Pocock Skills — implement-spec"
+    },
+    "flow": [
+      "读取任务依赖图",
+      "TDD逐Ticket实现",
+      "合入集成分支",
+      "验证"
+    ],
+    "stepId": "S12",
+    "stepTitle": "基于implement-spec完成实现并生成人工测试单",
+    "summary": "保留Matt implement-spec的Tickets依赖执行、TDD、集成分支、最终code-review，再在原版结束后依据需求基线与真实覆盖证据生成待执行的人工测试用例。",
+    "inputs": [
+      "docs/input/需求资料/（已确认需求基线、角色×核心业务场景）",
+      ".scratch/<模块>/spec.md 与 Tickets（或实际Issue Tracker）",
+      "docs/output/06-模块迭代/<模块>/模块详细设计.md、迁移设计草案.md",
+      "docs/output/01-项目基线/项目基线.md、整体架构与数据库总体",
+      "code/（实际原型及后端）",
+      "真实自动化测试与Review证据"
+    ],
+    "outputs": [
+      "code/ 本轮增量实现与适用的database/migrations",
+      "docs/output/06-模块迭代/<模块>/实现与自动验证记录.md",
+      "docs/output/06-模块迭代/<模块>/代码审查记录.md",
+      "docs/output/06-模块迭代/<模块>/人工测试用例与结果.md（AI只生成待执行用例）"
+    ],
+    "verification": "原版implement-spec已实际完成全部就绪Tickets的TDD及最终代码审查；明确自动已覆盖/人工待测/环境受阻。手工测试单具有角色、前置、动作、可观察预期；AI不能填写人工通过。",
+    "diagram": {
+      "outcome": "保留原版TDD与code-review，最终额外交付可直接人工执行的测试单",
+      "input": "需求基线+模块Spec/Tickets+code/与实际运行证据",
+      "work": [
+        "调用Matt原版implement-spec：Ticket依赖图→TDD→集成分支→统一code-review",
+        "核对实际自动测试与PRD角色×核心业务场景的覆盖差异",
+        "生成待执行人工测试用例，实际结果留空"
+      ],
+      "gate": "原版真实完成、人工测试筛选依据充分吗？",
+      "fail": "返回未完成Ticket/Review或记录无法运行的阻塞",
+      "pass": "交付待人工操作用例并继续人工测试步骤",
+      "output": "实现分支、真实测试/审查记录、待执行人工测试单"
+    },
+    "referenceLearnings": [
+      {
+        "name": "Matt Pocock Skills — implement-spec",
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md",
+        "learned": "保留其Ticket依赖图、TDD子Agent、集成分支合并、末端code-review和问题修复，不重新实现这一套流程。"
+      },
+      {
+        "name": "pstack — create-verification-skill",
+        "url": "https://github.com/backnotprop/pstack/blob/main/skills/create-verification-skill/SKILL.md",
+        "learned": "学习先识别真实系统启动、健康、用户操作路径、证据和退出/清理，再用能真实运行的浏览器/API脚本验证用户可观察结果；这里只借鉴验证标准，不强制生成额外Skill。"
+      },
+      {
+        "name": "pstack — visual-parity playbook",
+        "url": "https://github.com/backnotprop/pstack/blob/main/skills/poteto-mode/playbooks/visual-parity.md",
+        "learned": "学习把现有页面当视觉基线，在可运行的浏览器上固定相同状态、尺寸并做截图差异，禁止修改原始基线以让比较通过；有截图/真实浏览器环境才声称视觉校验完成。"
+      },
+      {
+        "name": "Addy Osmani Agent Skills — browser-testing-with-devtools",
+        "url": "https://github.com/addyosmani/agent-skills/blob/main/skills/browser-testing-with-devtools/SKILL.md",
+        "learned": "学习真实浏览器DOM、console、Network、截图与页面互动测试，不用源码静态推断冒充用户可见行为；工具不可用则将场景留入待人工测试单。"
+      }
+    ],
+    "maturity": "可评审初版，需真实项目运行验证",
+    "adaptation": "直接调用并保留Matt原版implement-spec的全部步骤，不改动原版；在完成后新增对角色×核心场景和已运行测试证据的人工覆盖分析，生成可由人工回填的统一MD测试单。借鉴pstack与Addy Osmani真实用户路径验证原则，不新增重复TDD/Review。",
+    "overview": {
+      "headline": "Matt implement-spec 完整实现 + 一次人工覆盖差异筛选 = 本轮可交人工测试的交付物",
+      "why": "官方原版不会生成人工用例，因此此Skill以原版为主流程并追加唯一一次人工测试单准备，不能只是提示词里写一句附加操作。",
+      "result": "代码+TDD/内置Review证据+待执行人工测试用例与结果.md",
+      "sectionsTitle": "这个改造 Skill 比Matt原版增加了什么？",
+      "conversionTitle": "如何从实现结果中筛出必须人工测试的场景？",
+      "sections": [
+        {
+          "title": "① Matt原版实现（完整复用）",
+          "summary": "按Ticket依赖图分工、TDD开发、合入集成分支、统一代码审查与修复，不删减原版步骤",
+          "sample": "已确认模块Spec的所有就绪Tickets实现并获得真实执行日志"
+        },
+        {
+          "title": "② 核对实际已自动覆盖",
+          "summary": "从成功运行的测试、浏览器和Review证据中识别确实验证过的行为",
+          "sample": "服务端参数版本锁定有真实TDD证据则不重复列人工用例"
+        },
+        {
+          "title": "③ 补生成待人工测试单",
+          "summary": "只覆盖AI无法证明的视觉、复杂角色交互、真实设备/第三方与业务结果",
+          "sample": "审批驳回涉及多账号真实操作，AI写待执行步骤但不代填通过"
+        },
+        {
+          "title": "④ 把剩余不确定性显式标记",
+          "summary": "真实对接不通、测试工具不可用或原版Review未完成要保留阻塞，而不是假绿灯",
+          "sample": "真实接口不可访问时，标受阻并提交下一步人工验证"
+        }
+      ],
+      "thinking": [
+        {
+          "given": "Matt原版跑完全部Tickets、TDD和最终code-review",
+          "answer": "引用真实执行的日志和提交，避免再执行一轮同样的代码审查或自动化测试"
+        },
+        {
+          "given": "需求基线有真实角色/场景，但自动测试没有覆盖视觉/业务体验",
+          "answer": "在同一md中列清楚待执行用例与可观察预期，测试人及实际结果留空"
+        }
+      ],
+      "doesNot": [
+        "不修改Matt上游implement-spec/SKILL.md",
+        "不在这里替代人执行测试或填写实际结果",
+        "不为新增手工用例再开发独立测试Skill",
+        "不把未执行、Mock通过或无法访问第三方当真实验收通过"
+      ]
+    },
+    "outputSampleFile": "docs/examples/报价项目/dev-implement-spec/报价模块人工测试示例.md",
+    "sampleTitle": "报价模块原版实现后追加的待人工测试单示例"
   }
 ]
