@@ -3,13 +3,13 @@ const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const phase=()=>ui.data.phases.find(p=>p.id===ui.phase)||ui.data.phases[0];
 const step=()=>phase().steps.find(s=>s.id===ui.step)||phase().steps[0];
-const kind=k=>k==="repeat"?"按模块循环":k==="final"?"整体验收与交付":"项目建设阶段";
+const kind=k=>k==="prep"?"仅展示初始输入":k==="repeat"?"按模块循环":k==="final"?"整体验收与交付":"项目建设阶段";
 const fileList=files=>'<div class="file-list">'+(files||[]).map(f=>'<code class="file-item">'+esc(f.trim())+'</code>').join("")+'</div>';
-const skillList=skills=>'<div class="skill-grid">'+(skills||[]).map(s=>{const found=ui.data.skills.find(x=>x.id===s);const official=found?.origin==="Matt";return '<span class="skill-pill '+(official?"":"custom")+'" title="'+(official?"Matt Pocock 官方 Skill":"拟自建或辅助 Skill")+'">'+esc(s)+' <span class="skill-kind">'+(official?"Matt":"自建")+'</span></span>'}).join("")+'</div>';
+const skillList=skills=>!(skills||[]).length?'<div class="review-box">准备工作无需调用 Skill；进入第1阶段后按步骤执行。</div>':'<div class="skill-grid">'+(skills||[]).map(s=>{const found=ui.data.skills.find(x=>x.id===s);const official=found?.origin==="Matt";return '<span class="skill-pill '+(official?"":"custom")+'" title="'+(official?"Matt Pocock 官方 Skill":"拟自建或辅助 Skill")+'">'+esc(s)+' <span class="skill-kind">'+(official?"Matt":"自建")+'</span></span>'}).join("")+'</div>';
 function renderStages(){
   $("project-stats").textContent=ui.data.phases.length+" 个阶段 · "+ui.data.phases.reduce((n,p)=>n+p.steps.length,0)+" 个步骤";
   $("stage-list").innerHTML=ui.data.phases.map((p,i)=>
-    '<button type="button" class="stage-item '+(p.id===ui.phase?"active":"")+'" data-phase="'+esc(p.id)+'" aria-current="'+(p.id===ui.phase?"step":"false")+'"><span class="stage-index">'+String(i+1).padStart(2,"0")+'</span><span class="stage-body"><span class="stage-title">'+esc(p.title)+'</span><span class="stage-meta">'+p.steps.length+' 个步骤'+(p.kind==="repeat"?" · 循环":"")+'</span></span><span class="stage-arrow" aria-hidden="true">›</span></button>'
+    '<button type="button" class="stage-item '+(p.id===ui.phase?"active":"")+'" data-phase="'+esc(p.id)+'" aria-current="'+(p.id===ui.phase?"step":"false")+'"><span class="stage-index">'+String(i).padStart(2,"0")+'</span><span class="stage-body"><span class="stage-title">'+esc(p.title)+'</span><span class="stage-meta">'+p.steps.length+' 个步骤'+(p.kind==="repeat"?" · 循环":"")+'</span></span><span class="stage-arrow" aria-hidden="true">›</span></button>'
   ).join("");
 }
 function renderSteps(){
@@ -29,12 +29,12 @@ function renderDetails(){
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">✓</span> 审核要求</h3><div class="review-box">'+esc(s.review)+'</div><p class="owner">审核及参与角色：'+esc(p.owner)+'</p></section>';
   html+='<section class="detail-section prompt-section"><div class="prompt-heading"><h3><span class="section-icon">✎</span> 执行提示词</h3><button type="button" class="copy-prompt" data-copy-prompt aria-label="复制当前步骤提示词">复制提示词</button></div><div class="prompt-text">'+esc(s.prompt||"本步骤尚未配置执行提示词。")+'</div><p class="detail-hint">提示词为启动本步骤的初稿；实施时应先读取实际资料，缺少确认信息不得猜测。</p></section>';
-  if(p.id==="P05"){
+  if(p.id==="P01"&&s.id==="S07"){
     html+='<details class="extra-disclosure"><summary>查看本项目13个候选模块与菜单映射</summary>';
     html+=ui.data.modules.map(m=>'<div class="module-record"><b>'+esc(m.id+" · "+m.title)+'</b><p>'+esc([...m.menus,...(m.additional?[m.additional]:[])].join("、"))+'</p></div>').join("");
     html+='</details>';
   }
-  if(p.id==="P06"){html+='<details class="extra-disclosure"><summary>查看本轮8步模块开发循环</summary>'+ui.data.iterationFlow.map((it,i)=>'<div class="module-record"><b>'+(i+1)+'. '+esc(it.title)+'</b></div>').join("")+'</details>';}
+  if(p.id==="P02"){html+='<details class="extra-disclosure"><summary>查看本轮8步模块开发循环</summary>'+ui.data.iterationFlow.map((it,i)=>'<div class="module-record"><b>'+(i+1)+'. '+esc(it.title)+'</b></div>').join("")+'</details>';}
   $("step-detail").innerHTML=html;
 }
 function setSelection(phaseId,stepId,moveFocus=false){
