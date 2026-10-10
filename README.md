@@ -54,3 +54,12 @@
 GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/workflows/deploy.yml`构建带内联资源的网站及Skills ZIP，并测试基本的阶段、步骤、Skill目录、Grill、人工测试和通用工具交互。CI失败不发布。
 
 开发约定：所有Git提交消息使用中文；本公开仓库不存真实客户PRD、生产密码或未脱敏接口数据。
+
+## 2026-10-10：对抗式审计与来源学习
+- 项目基线Skill与Matt原版正文未改；其余15个定制Skill完善执行图/失败处理/证据机制。
+- S03Q架构Grill、S08Q模块Grill前置；Matt to-spec综合已确认内容，不替代Grill。
+- Matt code-review仅**Standards + Spec**；S14原型自动比对、S14H人工测试、S14B缺陷修复复测拆成独立环节。
+- 整体架构需要全部四类docs/input、基线及既有代码；数据总体与模块详细设计也必须读取项目基线。
+- 环境部署不要求固定的个人电脑目录。模块详细设计只输出SQL迁移设计草案，TDD编码阶段才产生正式版本化迁移。
+- 详细来源见 `skills/REFERENCES.md`：上游SKILL.md、借鉴机制和本项目采用/改造分别说明。
+- 静态契约校验：`python3 scripts/audit_contracts.py`；`python3 scripts/build_site.py` 在构建前强制运行校验并生成离线站点与Skills包。
