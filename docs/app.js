@@ -51,6 +51,7 @@ function setSelection(phaseId,stepId,moveFocus=false){
 let skillData=null;
 let currentSkill=null;
 let currentSkillTab="flow";
+let currentResult="final";
 let currentFile="SKILL.md";
 let showFileSource=false;
 function logicDiagram(d){
@@ -64,6 +65,54 @@ function logicDiagram(d){
  +'<div class="logic-branch positive"><span>可以继续 / 通过　↓</span><strong>'+esc(d.pass)+'</strong></div></div>'
  +'<div class="logic-arrow">↓</div><div class="logic-output"><span class="logic-kicker">最后交付什么</span><strong>'+esc(d.output)+'</strong></div>';
 }
+
+function renderSkillOverview(skill){
+ const a=skill.overview;
+ if(!a)return logicDiagram(skill.diagram);
+ const cards=(a.sections||[]).map((x,i)=>'<article class="skill-topic-card"><span class="skill-topic-index">'+String(i+1).padStart(2,"0")+'</span><h4>'+esc(x.title)+'</h4><p>'+esc(x.summary)+'</p><div class="skill-topic-example"><span>报价项目举例</span>'+esc(x.sample)+'</div></article>').join("");
+ const conversions=(a.thinking||[]).map(x=>'<div class="thinking-row"><div><span class="thinking-label">资料中有什么</span><p>'+esc(x.given)+'</p></div><span class="thinking-arrow">→</span><div><span class="thinking-label">Skill 提炼什么</span><p>'+esc(x.answer)+'</p></div></div>').join("");
+ const exclusions=(a.doesNot||[]).map(x=>'<li>'+esc(x)+'</li>').join("");
+ return '<div class="skill-overview"><div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
+ +'<div class="skill-overview-title"><h3>工程基线具体有哪些内容？</h3><span>7个核心板块</span></div><div class="skill-topic-grid">'+cards+'</div>'
+ +'<div class="skill-overview-title"><h3>资料与工程约束如何转化？</h3></div><div class="thinking-grid">'+conversions+'</div>'
+ +'<div class="skill-overview-title"><h3>本 Skill 不处理的内容</h3></div><ul class="skill-exclusions">'+exclusions+'</ul>'
+ +'<div class="skill-cta"><span>先看输出效果，再决定是否细读SKILL.md</span><button type="button" data-skill-tab="result">查看报价项目完整输出示例 →</button></div></div>';
+}
+function richInline(s){
+ return esc(s).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
+}
+function renderSampleMarkdown(content){
+ const lines=String(content||"").split(/\r?\n/);
+ let out='<article class="sample-document">',i=0;
+ while(i<lines.length){
+  const row=lines[i].trim();if(!row){i++;continue}
+  if(row.startsWith("|")&&row.endsWith("|")){
+   let buf=[];while(i<lines.length&&lines[i].trim().startsWith("|")&&lines[i].trim().endsWith("|")){buf.push(lines[i].trim());i++}
+   const data=buf.map(x=>x.slice(1,-1).split("|").map(y=>y.trim()));
+   const sep=r=>r.every(x=>/^:?-{3,}:?$/.test(x));
+   const hasHead=data.length>1&&sep(data[1]);
+   const table=hasHead?[data[0],...data.slice(2)]:data;
+   out+='<div class="sample-table-wrap"><table class="sample-table">';
+   table.forEach((cells,k)=>{const tag=hasHead&&k===0?"th":"td";out+='<tr>'+cells.map(c=>'<'+tag+'>'+richInline(c)+'</'+tag+'>').join("")+'</tr>'});
+   out+='</table></div>';continue
+  }
+  const heading=row.match(/^(#{1,4})\s+(.+)$/);
+  if(heading){const level=Math.min(heading[1].length+1,5);out+='<h'+level+'>'+richInline(heading[2])+'</h'+level+'>';i++;continue}
+  if(/^[-_]{3,}$/.test(row)){out+='<hr>';i++;continue}
+  if(row.startsWith(">")){out+='<blockquote class="sample-notice">'+richInline(row.replace(/^>\s?/,""))+'</blockquote>';i++;continue}
+  if(/^[-*]\s+/.test(row)){out+='<div class="sample-list">• '+richInline(row.slice(2))+'</div>';i++;continue}
+  out+='<p>'+richInline(row)+'</p>';i++;
+ }
+ return out+'</article>';
+}
+function renderSkillResult(){
+ const s=currentSkill;
+ const selected=currentResult==="consultation"&&s?.consultationFile?s.consultationFile:s?.outputSampleFile;
+ if(!selected||!s.files?.[selected])return '<p class="sample-empty">当前还没有经过审核的完整产物示例。</p>';
+ return '<div class="sample-head"><div><strong>报价系统工程基线——示范执行结果</strong><p>这是模拟输入及模拟裁定的成品形态，并非已运行真实客户PRD生成的正式基线。</p></div><div class="sample-actions"><button data-sample="final" class="'+(currentResult==="final"?"active":"")+'">工程基线成品</button>'+(s.consultationFile?'<button data-sample="consultation" class="'+(currentResult==="consultation"?"active":"")+'">AI澄清过程</button>':"")+'</div></div>'
+ +renderSampleMarkdown(s.files[selected]);
+}
+
 function renderMd(text){
  let html="",code=false,block=[];
  const flush=()=>{if(block.length){html+='<div class="md-paragraph">'+block.map(esc).join(" ")+'</div>';block=[]}};
@@ -99,7 +148,7 @@ function renderFiles(){
 function previewSkill(id){
  const item=skillData?.skills?.find(x=>x.id===id);
  if(!item)return;
- currentSkill=item;currentSkillTab="flow";currentFile="SKILL.md";showFileSource=false;
+ currentSkill=item;currentSkillTab="flow";currentResult="final";currentFile="SKILL.md";showFileSource=false;
  $("skill-dialog-title").textContent=id;
  $("skill-dialog-label").textContent="覆盖步骤："+item.stepTitle+" · 实际文件："+Object.keys(item.files||{}).length+" 个";
  refreshSkillPreview();
@@ -107,8 +156,8 @@ function previewSkill(id){
 }
 function refreshSkillPreview(){
  const sk=currentSkill;if(!sk)return;
- document.querySelectorAll("[data-skill-tab]").forEach(t=>{const active=t.dataset.skillTab===currentSkillTab;t.classList.toggle("active",active);t.setAttribute("aria-selected",String(active))});
- let content=currentSkillTab==="flow"?logicDiagram(sk.diagram):currentSkillTab==="files"?renderFiles():('<div class="source-detail"><h3>设计来源与改造说明</h3><p>这部分用于审核参考依据，不写入安装用的 SKILL.md，也不放进交付 ZIP。</p><div><strong>处理方式：</strong>'+esc(sk.type)+'</div><div><strong>主要参考：</strong><a href="'+esc(sk.source.url)+'" target="_blank" rel="noopener noreferrer">'+esc(sk.source.repo)+" / "+esc(sk.source.path)+'</a></div></div>');
+ document.querySelectorAll(".skill-dialog-tabs [data-skill-tab]").forEach(t=>{if(t.dataset.skillTab==="result")t.hidden=!sk.outputSampleFile;const active=t.dataset.skillTab===currentSkillTab;t.classList.toggle("active",active);t.setAttribute("aria-selected",String(active))});
+ let content=currentSkillTab==="flow"?renderSkillOverview(sk):currentSkillTab==="result"?renderSkillResult():currentSkillTab==="files"?renderFiles():('<div class="source-detail"><h3>设计来源与改造说明</h3><p>这部分用于审核参考依据，不写入安装用的 SKILL.md，也不放进交付 ZIP。</p><div><strong>处理方式：</strong>'+esc(sk.type)+'</div><div><strong>主要参考：</strong><a href="'+esc(sk.source.url)+'" target="_blank" rel="noopener noreferrer">'+esc(sk.source.repo)+" / "+esc(sk.source.path)+'</a></div></div>');
  $("skill-dialog-content").innerHTML=content;
  const a=sk.source;
  $("skill-reference").innerHTML='<span>研究来源：</span><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">'+esc(a.repo)+'</a> <span class="skill-aux">（不属于交付正文）</span>';
@@ -118,6 +167,8 @@ document.addEventListener("click",event=>{
  if(skill){previewSkill(skill.dataset.skill);return}
  const tab=event.target.closest("[data-skill-tab]");
  if(tab){currentSkillTab=tab.dataset.skillTab;refreshSkillPreview();return}
+ const sample=event.target.closest("[data-sample]");
+ if(sample){currentResult=sample.dataset.sample;refreshSkillPreview();return}
  const f=event.target.closest("[data-skill-file]");
  if(f){currentFile=f.dataset.skillFile;showFileSource=false;refreshSkillPreview();return}
  if(event.target.closest("[data-file-toggle]")){showFileSource=!showFileSource;refreshSkillPreview();return}
