@@ -28,3 +28,29 @@
   .steps-pane{padding:21px 16px}
   .detail-pane{padding:23px 17px}
 }
+
+/* Skill详情预览与下载 */
+.download-all{margin-left:12px;background:#245fa5;color:#fff;text-decoration:none;border-radius:9px;padding:11px 14px;font-size:12px;font-weight:700;white-space:nowrap;box-shadow:0 2px 10px #234f8a20}
+.download-all:hover{background:#1a4c87}
+.skill-pill{cursor:pointer;font-family:inherit}
+.skill-pill:hover{background:#dfeafe;border-color:#83addc}
+.skill-dialog{padding:0;border:1px solid #dce6f2;border-radius:17px;background:#fff;width:min(910px,calc(100vw - 36px));max-height:min(90vh,940px);box-shadow:0 28px 90px #17294342;color:#253952}
+.skill-dialog::backdrop{background:#11223b9e;backdrop-filter:blur(3px)}
+.skill-dialog-shell{display:flex;flex-direction:column;max-height:90vh}
+.skill-dialog-header{display:flex;justify-content:space-between;gap:20px;padding:24px 28px 15px;border-bottom:1px solid #ebf0f5}
+.skill-dialog-header h2{margin:6px 0 4px;font-size:23px}
+.skill-meta{font-size:12px;color:#8192a5}
+.dialog-close{border:1px solid #e2e9f1;background:#f5f7fb;border-radius:9px;width:34px;height:34px;color:#526783}
+.skill-dialog-tabs{display:flex;gap:6px;padding:15px 24px;border-bottom:1px solid #edf0f5;overflow-x:auto}
+.skill-tab{border:0;background:#f3f6fb;color:#617795;padding:9px 14px;border-radius:8px;white-space:nowrap;font-size:12px}
+.skill-tab.active{background:#dceaff;color:#1f5c9d;font-weight:700}
+.skill-dialog-content{padding:20px 27px 30px;overflow-y:auto;min-height:160px}
+.skill-flow-wrapper{max-width:710px;margin:0 auto}
+.skill-flow-svg{display:block;width:100%;height:auto}
+.flow-note{text-align:center;color:#71859b;font-size:12px;line-height:1.9}
+.skill-markdown{background:#f7f9fc;border:1px solid #e9edf4;border-radius:10px;padding:18px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.9;font-family:ui-monospace,Consolas,"Microsoft YaHei",monospace;user-select:text}
+.skill-dialog-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #edf0f5;padding:14px 28px;font-size:12px;color:#7489a4;overflow-wrap:anywhere}
+.skill-dialog-footer a{color:#2869ad}
+.dialog-close-bottom{background:#eef3fb;color:#366292;border:0;border-radius:8px;padding:8px 16px;white-space:nowrap}
+@media(max-width:1100px){.header-meta{display:none}.site-header{gap:10px}.download-all{margin-left:auto}}
+@media(max-width:780px){.download-all{margin-left:0;font-size:11px;padding:8px}.skill-dialog-header{padding:15px}.skill-dialog-tabs{padding:10px}.skill-dialog-content{padding:12px}.skill-dialog-footer{padding:10px 15px}}

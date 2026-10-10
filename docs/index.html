@@ -18,6 +18,7 @@
       <span class="project-future" title="报价系统流程确认后再建设">标准项目 · 待建设</span>
     </div>
     <span id="project-stats" class="header-meta">正在载入流程…</span>
+    <a id="download-skills" class="download-all" href="./skills-bundle.zip" download="报价系统-完整Skills包.zip" title="下载已配置的全部21个Skill（包括Matt原版、改造和自建）">⬇ 下载全部 Skills</a>
   </header>
   <div class="workspace">
     <aside class="phase-pane" aria-label="工作阶段">
@@ -37,6 +38,22 @@
       <div id="step-detail"></div>
     </aside>
   </div>
+  <dialog id="skill-dialog" class="skill-dialog" aria-label="Skill内容预览">
+    <div class="skill-dialog-shell">
+      <div class="skill-dialog-header">
+        <div><span class="eyebrow">SKILL EXPLORER</span><h2 id="skill-dialog-title">Skill 预览</h2><div id="skill-dialog-label" class="skill-meta"></div></div>
+        <button type="button" class="dialog-close" data-skill-close aria-label="关闭Skill预览">✕</button>
+      </div>
+      <div class="skill-dialog-tabs" role="tablist">
+        <button type="button" class="skill-tab active" data-skill-tab="flow">逻辑流程图</button>
+        <button type="button" class="skill-tab" data-skill-tab="content">SKILL.md 正文</button>
+        <button type="button" class="skill-tab" data-skill-tab="example">示例</button>
+        <button type="button" class="skill-tab" data-skill-tab="template">模板</button>
+      </div>
+      <div id="skill-dialog-content" class="skill-dialog-content"></div>
+      <div class="skill-dialog-footer"><div id="skill-reference"></div><button class="dialog-close-bottom" type="button" data-skill-close>关闭</button></div>
+    </div>
+  </dialog>
   <script type="module" src="./app.js"></script>
 </body>
 </html>

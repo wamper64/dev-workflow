@@ -29,6 +29,37 @@ if source not in js:
     raise ValueError("找不到原始远程数据加载代码，请检查 app.js")
 js = js.replace(source, target, 1)
 
+from zipfile import ZipFile, ZIP_DEFLATED
+
+skills_catalog = json.loads((ROOT / "skills" / "catalog.json").read_text(encoding="utf-8"))
+skill_payload = {"skills": []}
+for item in skills_catalog:
+    folder = ROOT / "skills" / item["id"]
+    main = folder / "SKILL.md"
+    if not main.is_file():
+        raise ValueError("Skill文件不存在：" + str(main))
+    record = dict(item)
+    record["content"] = main.read_text(encoding="utf-8")
+    example = folder / "examples" / "使用示例.md"
+    template_file = folder / "templates" / "输出模板.md"
+    record["example"] = example.read_text(encoding="utf-8") if example.is_file() else ""
+    record["template"] = template_file.read_text(encoding="utf-8") if template_file.is_file() else ""
+    skill_payload["skills"].append(record)
+assert len(skill_payload["skills"]) == 21, "Skill数量不正确"
+for p in data["phases"][1:]:
+    for s in p["steps"]:
+        if s.get("skillId") not in {k["id"] for k in skill_payload["skills"]}:
+            raise ValueError("工作步骤引用的Skill不存在：" + s["id"])
+
+# 公开网站只打包通用模板与Skill，不包含真实客户PRD、代码或凭据。
+archive = DIST / "skills-bundle.zip"
+with ZipFile(archive, "w", ZIP_DEFLATED) as z:
+    for root_name in ("skills", "templates/project"):
+        for filepath in sorted((ROOT / root_name).rglob("*")):
+            if filepath.is_file():
+                z.write(filepath, filepath.relative_to(ROOT).as_posix())
+    z.writestr("安装说明.md", "# 报价系统研发Skills包\\n\\n21个Skill，直接Matt原版6个、基于Matt改造及自建15个。请按项目工作流选用。\\n\\n- Matt原版内容保留上游MIT许可，见 skills/LICENSE-Matt-Pocock.txt。\\n- 自建Skill的来源及差异参见 skills/REFERENCES.md。\\n- 将 templates/project/docs/ 放入业务项目根目录，真实PRD由项目方自行提供，不包含于此公开包。\\n")
+
 stylesheet_tag = '<link rel="stylesheet" href="./styles.css">'
 script_tag = '<script type="module" src="./app.js"></script>'
 if template.count(stylesheet_tag) != 1 or template.count(script_tag) != 1:
@@ -74,7 +105,10 @@ template = template.replace('id="step-detail"></div>', 'id="step-detail">' + det
 
 # 防止 JSON 文本中出现 </script> 导致标签提前闭合。
 serialized = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
-inline = '<script type="application/json" id="workflow-data">' + serialized + '</script>\n<script>\n' + js + '\n</script>'
+skills_serialized = json.dumps(skill_payload, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+inline = '<script type="application/json" id="workflow-data">' + serialized + '</script>\\n'
+inline += '<script type="application/json" id="skill-data">' + skills_serialized + '</script>\\n'
+inline += '<script>\\n' + js + '\\n</script>'
 template = template.replace(script_tag, inline, 1)
 
 if 'href="./styles.css"' in template or 'src="./app.js"' in template or 'fetch("./data/' in template:
