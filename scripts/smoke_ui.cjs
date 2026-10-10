@@ -35,6 +35,11 @@ async function main(){
  assert.ok(!doc.getElementById("project-stats").textContent.includes("正在载入"),"JS未完成初始化");
  click('[data-phase="P01"]');
  assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"准备设计步骤错误");
+ click('[data-step="S01"]');
+ assert.equal(doc.querySelectorAll("#step-detail [data-skill]").length,0,"输入检查只用提示词");
+ assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/递归阅读 docs\/input\//);
+ click('[data-step="S02"]');
+ assert.match(doc.querySelector("#step-detail").textContent,/code\//);
  click('[data-step="S03"]');
  assert.match(doc.getElementById("step-detail").textContent,/项目基线/);
  click('[data-skill="project-baseline"]');
@@ -57,8 +62,7 @@ async function main(){
  assert.match(doc.getElementById("skill-dialog-content").textContent,/版本与依据可追溯/);
  click('[data-skill-tab="files"]');
  assert.ok(doc.querySelectorAll("[data-skill-file]").length>=8,"技能目录文件未全部呈现");
- click('[data-skill-file="examples/报价系统-工程基线输出示例.md"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/第一性原则/);
+ assert.ok(![...doc.querySelectorAll("[data-skill-file]")].some(x=>/examples/.test(x.dataset.skillFile)),"可安装Skill目录不得包含项目示例");
  click('[data-skill-file="references/checklist.md"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/项目基线生成覆盖检查/);
  click('[data-skill-file="scripts/check_inputs.py"]');
@@ -102,19 +106,15 @@ async function main(){
  click("[data-skill-close]");
   click('[data-step="S12"]');
  assert.match(doc.querySelector("#step-detail").textContent,/TDD/);
+ assert.match(doc.querySelector("#step-detail").textContent,/人工测试用例与结果.md/);
  assert.match(doc.querySelector("#step-detail").textContent,/code-review/,"implement-spec内部应执行双轴代码审查");
  assert.match(doc.querySelector("#step-detail").textContent,/自动验证|集成验证/);
  assert.match(doc.querySelector("#step-detail").textContent,/内置 code-review|code-review/,"实现阶段内部必须执行审查");
  click('[data-step="S14H"]');
- assert.match(doc.querySelector("#step-detail").textContent,/人工测试/);
- assert.match(doc.querySelector("#step-detail").textContent,/回填/);
+ assert.match(doc.querySelector("#step-detail").textContent,/人工执行测试/);
  assert.match(doc.querySelector("#step-detail").textContent,/人工测试用例与结果.md/);
- click('[data-skill="human-acceptance"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/测试/);
- click('[data-skill-tab="source"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/参考原文|借鉴|自动测试/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/实际采用与定制化改造/);
- click("[data-skill-close]");
+ assert.equal(doc.querySelectorAll("#step-detail [data-skill]").length,0,"人工测试不需要Skill");
+ assert.equal(doc.querySelectorAll("#step-detail [data-copy-prompt]").length,0,"人工回填不是执行提示词");
  click('[data-step="S14B"]');
  click('[data-skill="diagnosing-bugs"]');
  assert.equal(doc.querySelectorAll(".skill-topic-card").length,6,"官方diagnosing-bugs必须六个阶段");
@@ -155,7 +155,7 @@ async function main(){
  const all=fs.readFileSync(path.join(root,"scripts","build_site.py"),"utf8");
  assert.match(all,/skills-bundle\.zip|ZipFile/,"必须生成实际Skills压缩包");
  assert.equal(errors.length,0,"浏览器脚本异常："+errors.join("\n"));
- console.log("交互回归通过：Grill、Matt代码双轴审查、专项内容地图、自动联调、人工测试、Bug诊断、工作阶段工具箱、Handoff、完整目录与ZIP");
+ console.log("交互回归通过：标准项目导航、输入提示词、外置案例、TDD生成人工测试单、人工回填无Skill、Bug诊断、工具箱与30份Skill ZIP");
  dom.window.close();
 }
 main().catch(err=>{console.error(err);process.exitCode=1;dom.window.close()});
