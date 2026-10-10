@@ -175,3 +175,6 @@
 .toolkit-activity span{display:grid;place-items:center;width:22px;height:22px;flex-shrink:0;border-radius:6px;background:#deebfa;color:#3d73ab;font-size:11px;font-weight:700}
 .toolkit-activity p{margin:0;color:#4b6280;font-size:12px;line-height:1.75}
 @media(max-width:780px){.stage-toolkit-separator{display:none}.stage-toolkit{border-color:#cbdcf1!important;background:#f8fbff}}
+
+/* 清晰展示Grill、双轴审查、人工测试与返工链 */
+.phase-route{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:12px 0 16px;line-height:1.6}.route-chip{padding:5px 9px;border:1px solid #cbd5df;border-radius:9px;font-size:12px}.route-chip b{font-weight:750}.route-arrow{font-size:12px;opacity:.65}.source-adaptation{margin-top:16px;padding-top:14px;border-top:1px solid #d9dfe7;line-height:1.8}
