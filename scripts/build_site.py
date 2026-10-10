@@ -22,7 +22,7 @@ workspace = json.loads((ROOT / "skills/workspace.json").read_text(encoding="utf-
 
 subprocess.run(["python3", str(ROOT / "scripts" / "audit_contracts.py")], check=True)
 
-assert len(data["phases"]) == 5
+assert len(data["phases"]) == 4
 assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})
 assert len(data["phases"][1]["steps"]) == 7
 assert len(data["phases"][2]["steps"]) == 8
@@ -39,6 +39,8 @@ for p in data["phases"][1:]:
         assert step.get("skills") == [step["skillId"]], step["id"]
 
 payload = {"skills": [], "examples": {}}
+project_tree = (DOCS / "data/project-directory-tree.txt").read_text(encoding="utf-8")
+assert "本轮retro改进建议.md" in project_tree and "人工测试用例与结果.md" in project_tree
 for skill in catalog:
     folder = ROOT / "skills" / skill["id"]
     contents = {}
@@ -66,8 +68,8 @@ for s in payload["skills"]:
         ):
             assert required in s["files"], required
 assert custom_count == 13
-assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 30
-assert len(workspace) == 6
+assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 31
+assert len(workspace) == 7
 assert not any((ROOT / "skills" / old).exists() for old in ("input-readiness", "human-acceptance")), "旧的步骤型Skill应移除"
 assert all(x["source"]["url"].startswith("https://github.com/mattpocock/skills/") for x in workspace)
 assert set(x["id"] for x in workspace).isdisjoint(known)
@@ -113,7 +115,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
             z.write(f, f.relative_to(ROOT).as_posix())
     z.writestr("安装说明.md",
         "# 标准项目研发 Skills\n\n"
-        "包含21个主Skill和9个通用/执行依赖（共30份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
+        "包含21个主Skill和10个通用/执行依赖（共31份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
         "请将 skills/ 目录用于研发Agent工作区；"
         "把 templates/project/docs/ 下的目录结构复制到真实项目，"
         "实际PRD和已有前后端源码由项目方提供，不包含在下载包中。\n"
@@ -121,11 +123,15 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         "Matt 官方原版所需的版权和许可说明见 skills/LICENSE-Matt-Pocock.txt。\n")
 with ZipFile(archive) as z:
     names = z.namelist()
-    assert len([n for n in names if n.endswith("/SKILL.md")]) == 30
+    assert len([n for n in names if n.endswith("/SKILL.md")]) == 31
     assert not any(n.endswith(("REFERENCES.md", "catalog.json", "workspace.json")) for n in names)
     assert "skills/project-baseline/scripts/check_inputs.py" in names
     assert "skills/setup-matt-pocock-skills/issue-tracker-local.md" in names
     assert "skills/project-baseline/references/checklist.md" in names
+    assert "skills/dev-implement-spec/SKILL.md" in names
+    assert "skills/dev-implement-spec/assets/manual-test-template.md" in names
+    assert "skills/pr/SKILL.md" in names and "skills/to-questionnaire/SKILL.md" in names
+    assert not any(n.startswith(("skills/grill-me/","skills/project-retrospective/")) for n in names)
     assert not any("/examples/" in n for n in names), "Skill ZIP不应包含项目示例"
     assert not any(n.startswith(("skills/input-readiness/", "skills/human-acceptance/")) for n in names), "已取消的步骤Skill不应包含在ZIP"
 
@@ -180,6 +186,7 @@ skills_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).rep
 inline = '\n'.join((
     '<script type="application/json" id="workflow-data">' + workflow_json + '</script>',
     '<script type="application/json" id="skill-data">' + skills_json + '</script>',
+    '<script type="application/json" id="project-tree-data">' + json.dumps(project_tree, ensure_ascii=False).replace("<", "\\u003c") + '</script>',
     '<script>',
     javascript,
     '</script>',
@@ -219,4 +226,4 @@ html_path = DIST / "index.html"
 html_path.write_text(template, encoding="utf-8")
 print("内联JS校验通过")
 print(f"构建成功：{html_path}（{len(template.encode('utf-8'))}字节）")
-print(f"完整包：{archive}（{len(names)}个文件，30个Skill）")
+print(f"完整包：{archive}（{len(names)}个文件，31个Skill）")
