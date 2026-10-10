@@ -37,7 +37,7 @@ function renderStages(){
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
-  const route=p.id==="P01"?"输入就绪 → 工程基线 → <b>架构Grill</b> → 整体架构 → 数据总体 → 环境部署 → 模块拆分":p.id==="P02"?"模块选择 → <b>疑点Grill</b> → 详细设计 → Spec → Tickets → TDD → <b>双轴代码审查</b> → 自动联调/原型核对 → <b>人工测试</b> → Bug修复↩复测 → 收口":p.id==="P03"?"项目级验收 → 上线评审 → 部署预演及回滚 → 生产上线":p.id==="P04"?"Matt retro → 项目全程复盘 → Skill改进":"已确认PRD + 前端原型 + 若依工程";
+  const route=p.id==="P01"?"输入核对 → Matt初始化 → 工程基线 → <b>整体架构（内置Grill）</b> → 数据总体 → 开发环境 → 模块拆分":p.id==="P02"?"模块选择 → <b>模块详细设计（内置Grill）</b> → Spec → Tickets → TDD → <b>双轴代码审查</b> → 自动联调/原型对照 → <b>人工测试</b> → Bug修复↩复测 → 迭代收口":p.id==="P03"?"项目级验收 → 上线评审 → 部署预演及回滚 → 生产上线":p.id==="P04"?"Matt retro → 项目全程复盘 → Skill改进":"已确认PRD + 前端原型 + 若依工程";
   const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
   $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
  $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
