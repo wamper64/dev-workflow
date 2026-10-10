@@ -34,7 +34,7 @@ async function main(){
  assert.match(doc.querySelector("#project-stats").textContent,/5 个阶段.*6 个通用Skill/);
  assert.ok(!doc.getElementById("project-stats").textContent.includes("正在载入"),"JS未完成初始化");
  click('[data-phase="P01"]');
- assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,8,"准备设计步骤错误");
+ assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"准备设计步骤错误");
  click('[data-step="S03"]');
  assert.match(doc.getElementById("step-detail").textContent,/项目基线/);
  click('[data-skill="project-baseline"]');
@@ -65,7 +65,7 @@ async function main(){
  assert.match(doc.getElementById("skill-dialog-content").textContent,/argparse/);
  click("[data-skill-close]");
  click('[data-phase="P02"]');
- assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,11,"模块开发步骤错误");
+ assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,10,"模块开发步骤错误");
  assert.match(doc.querySelector("#phase-route").textContent,/Grill/,"模块流程速览必须显示Grill");
  assert.match(doc.querySelector("#phase-route").textContent,/人工测试/,"模块流程速览必须显示人工测试");
  click('[data-phase="P01"]');
@@ -114,10 +114,12 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/原始症状/);
  click("[data-skill-close]");
  click('[data-phase="P01"]');
- click('[data-step="S03Q"]');
- click('[data-skill="grill-with-docs"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/决策树/);
- click("[data-skill-close]");
+ click('[data-step="S04"]');
+ assert.match(doc.querySelector("#step-detail").textContent,/grill-with-docs/,"整体架构内必须包含Grill");
+ click('[data-phase="P02"]');
+ click('[data-step="S09"]');
+ assert.match(doc.querySelector("#step-detail").textContent,/grill-with-docs/,"模块详细设计内必须包含Grill");
+ click('[data-phase="P01"]');
  click('[data-phase="PTOOLS"]');
  assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,6,"通用Skill应在工作阶段显示全部6个");
  assert.match(doc.querySelector("#stage-intro").textContent,/通用 Skills/);
@@ -137,7 +139,7 @@ async function main(){
  click('[data-step="T_wizard"]');
  assert.match(doc.querySelector("#step-detail").textContent,/人工|配置/);
  click('[data-phase="P01"]');
- assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,8,"退出工具箱后应恢复主项目步骤");
+ assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"退出工具箱后应恢复主项目步骤");
   click('[data-phase="P00"]');
  assert.ok(!doc.querySelector("[data-copy-prompt]"),"准备工作不应出现执行提示词");
  assert.ok(fs.statSync(path.join(root,"dist","skills-bundle.zip")).size>15000,"ZIP不存在或过小");
