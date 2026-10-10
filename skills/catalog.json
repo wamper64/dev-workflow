@@ -47,7 +47,8 @@
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
         "learned": "把目录存在、内容可用、版本已确认拆成可证实的事实；无证据不能宣布输入就绪"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "setup-matt-pocock-skills",
@@ -89,7 +90,14 @@
       "fail": "先询问，再合并已有配置；不覆盖项目规则",
       "pass": "初始化本地Spec/Tickets使用环境",
       "output": "Issue tracker配置 + Agent约定"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/SKILL.md",
+        "learned": "先探测已有AGENTS.md、GLOSSARY、ADR、issue tracker，再让用户确认；初始化配置要和项目已有结构合并，而不是覆盖"
+      }
+    ],
+    "maturity": "上游原版"
   },
   {
     "id": "project-baseline",
@@ -210,9 +218,10 @@
     "referenceLearnings": [
       {
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
-        "learned": "量化约束覆盖及资源预算闭合采用既有项目基线插件标准；另参考证据先于完成声明"
+        "learned": "将技术栈、保存年限、CPU/内存/磁盘闭合、并发/P95/RPO/RTO变为必须以数值和证据验收的约束；具体覆盖以此前提供的dev-baseline Skill为基线"
       }
-    ]
+    ],
+    "maturity": "已完善"
   },
   {
     "id": "architecture-baseline",
@@ -261,9 +270,14 @@
     "referenceLearnings": [
       {
         "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md",
-        "learned": "只固定跨模块必须一致且难逆的架构决策，已有代码的习惯需要先调查，再用架构约束协调各开发单元"
+        "learned": "把需要多个模块共同遵守的难以逆转的决策固定为整体架构的骨架，逐项考虑已有代码、运行单元、协作和部署边界"
+      },
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md",
+        "learned": "模块边界和交互必须基于现有代码组织与真实职责，不能为新的理论架构重造既有若依框架"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "data-architecture",
@@ -309,9 +323,14 @@
     "referenceLearnings": [
       {
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md",
-        "learned": "先识别业务领域与数据责任，不在总体数据域阶段提前做业务字段DDL"
+        "learned": "先澄清业务术语和领域责任，数据域按权威归属与不变量划分，而非菜单或表名"
+      },
+      {
+        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md",
+        "learned": "确定跨模块必须共享的数据边界，把可以推迟的字段/索引等实现决定留到模块详细设计"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "development-environment",
@@ -363,7 +382,8 @@
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
         "learned": "以真实连接、版本、命令及健康输出而非主观描述验证开发环境"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "module-discovery",
@@ -412,9 +432,10 @@
     "referenceLearnings": [
       {
         "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md",
-        "learned": "以边界与跨模块共享不变量划分模块，不按页面菜单或预设Spec数量切分"
+        "learned": "由业务闭环与跨模块责任识别真实模块，让界面/数据库职责与架构协调，避免人为预设模块数量"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "iteration-planning",
@@ -463,7 +484,8 @@
         "url": "https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md",
         "learned": "按可执行小交付及依赖界定本轮边界，只承诺当前能验证的任务"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "module-design",
@@ -512,9 +534,10 @@
     "referenceLearnings": [
       {
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md",
-        "learned": "基于已有代码结构考虑模块边界与接口设计，不推倒原型或若依现成能力"
+        "learned": "实现前以现有代码接缝确定接口和职责，必要的领域术语按GLOSSARY继承，模块详细设计只细化本轮模块"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "to-spec",
@@ -556,7 +579,14 @@
       "fail": "针对不清楚的测试边界先确认，不重新开启全项目调研",
       "pass": "发布ready-for-agent Spec",
       "output": "当前模块Spec"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/to-spec/SKILL.md",
+        "learned": "对已经讨论清楚的设计进行综合，重点包含用户故事、实施/测试决定和排除项；本Skill本身不再次发起访谈，所以Grill必须提前"
+      }
+    ],
+    "maturity": "上游原版"
   },
   {
     "id": "to-tickets",
@@ -597,7 +627,14 @@
       "fail": "进一步拆分过大任务，修正依赖边",
       "pass": "形成可执行任务依赖图",
       "output": "逐张Ticket与阻塞关系"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md",
+        "learned": "Ticket按可演示的跨数据库/API/UI/测试垂直切片拆分，并声明阻塞边和批准粒度；拒绝只拆前端、只拆后端的横向任务"
+      }
+    ],
+    "maturity": "上游原版"
   },
   {
     "id": "implement-spec",
@@ -648,7 +685,8 @@
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md",
         "learned": "Spec→依赖图Tickets→可执行frontier→TDD实现→集成分支→内置code-review，再额外进行阶段质量关卡"
       }
-    ]
+    ],
+    "maturity": "上游原版"
   },
   {
     "id": "code-review",
@@ -698,7 +736,8 @@
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/code-review/SKILL.md",
         "learned": "Matt原版明确只有Standards和Spec双轴并行评审，并非完整原型视觉验收；最终UI交互由后续联调/人工测试负责"
       }
-    ]
+    ],
+    "maturity": "上游原版"
   },
   {
     "id": "module-integration-acceptance",
@@ -746,9 +785,14 @@
     "referenceLearnings": [
       {
         "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-qa-generate-e2e-tests/SKILL.md",
-        "learned": "先检测已有测试框架，再为已实现功能补API/E2E自动测试并真实执行；自动测试不是代码审查也不是人工验收"
+        "learned": "检测原有测试框架，对已有API和UI生成实际可运行的E2E/接口测试并总结覆盖盲区"
+      },
+      {
+        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
+        "learned": "与代码审查、人工业务观察分离，不把模拟测试认定真实接口联调"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "iteration-close",
@@ -798,7 +842,8 @@
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
         "learned": "以真实验收、缺陷和已运行证据决定能否关闭本轮，而不是看代码已提交"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "system-acceptance",
@@ -847,7 +892,8 @@
         "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
         "learned": "验证系统业务链的角色场景和既有回归，区分测试生成、真实执行与最终业务签收"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "release-readiness",
@@ -896,7 +942,8 @@
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
         "learned": "目标和实测分离，逐项查证性能、安全及回滚是否达到已批准基线"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "release-preflight",
@@ -947,7 +994,8 @@
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
         "learned": "发布前必须实测备份可恢复、迁移可预演和回滚可执行，不拿脚本代替验证"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "release-delivery",
@@ -996,7 +1044,8 @@
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
         "learned": "上线成功须有部署日志、版本、冒烟结果和真实服务可用的证据"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "retro",
@@ -1039,7 +1088,14 @@
       "fail": "丢弃空泛口号，优先加CI/自动检查",
       "pass": "提交Agent环境和规范改善建议",
       "output": "编码会话复盘"
-    }
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md",
+        "learned": "复盘AI编码会话应落到Agent导航、自动检查、规范、工具成本等可实际改动的执行环境，机械错误优先写CI/linters而不是加空泛规则"
+      }
+    ],
+    "maturity": "上游原版"
   },
   {
     "id": "project-retrospective",
@@ -1089,7 +1145,8 @@
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md",
         "learned": "保留真实会话问题与可测试的Agent环境改进，并在项目级复盘中分析阶段和返工原因"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "grill-with-docs",
@@ -1143,7 +1200,8 @@
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md",
         "learned": "随讨论澄清术语，仅真实高代价取舍记录ADR"
       }
-    ]
+    ],
+    "maturity": "上游原版"
   },
   {
     "id": "human-acceptance",
@@ -1189,13 +1247,14 @@
     "referenceLearnings": [
       {
         "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
-        "learned": "明确自动测试与人工观察互不替代；测试结果只来自实际执行"
+        "learned": "自动生成API/E2E测试不等于代码审查，也不等于人对界面和业务的实际观察；因此人工测试必须成为独立关卡"
       },
       {
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
-        "learned": "不能没有新鲜证据就宣布通过；所有完成声明有真实可复核依据"
+        "learned": "每个通过声明必须有本次实际执行证据；人工测试的用例初态为待执行，不能由AI预填成功"
       }
-    ]
+    ],
+    "maturity": "可评审初版"
   },
   {
     "id": "diagnosing-bugs",
@@ -1244,6 +1303,7 @@
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md",
         "learned": "先构造能抓到用户原始症状的快速red-capable反馈环，再定位根因，不允许靠观察代码猜故障"
       }
-    ]
+    ],
+    "maturity": "上游原版"
   }
 ]
