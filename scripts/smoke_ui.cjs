@@ -141,7 +141,7 @@ async function main(){
  assert.ok(!doc.querySelector("[data-copy-prompt]"),"准备工作不应出现执行提示词");
  assert.ok(fs.statSync(path.join(root,"dist","skills-bundle.zip")).size>15000,"ZIP不存在或过小");
  const all=fs.readFileSync(path.join(root,"scripts","build_site.py"),"utf8");
- assert.match(all,/33个Skill|33个主/);
+ assert.match(all,/skills-bundle\.zip|ZipFile/,"必须生成实际Skills压缩包");
  assert.equal(errors.length,0,"浏览器脚本异常："+errors.join("\n"));
  console.log("交互回归通过：Grill、Matt代码双轴审查、专项内容地图、自动联调、人工测试、Bug诊断、工作阶段工具箱、Handoff、完整目录与ZIP");
  dom.window.close();
