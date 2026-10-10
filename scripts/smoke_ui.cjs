@@ -77,7 +77,8 @@ async function main(){
  click('[data-skill-file="references/architecture-gate.md"]');
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/整体架构骨架的审核门禁/);
  click('[data-skill-tab="source"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/具体机制|难以逆转|协作|边界/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/实际采用与定制化改造/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/architecture spine|组件清单|交互/);
  click("[data-skill-close]");
  click('[data-step="S05"]');
  click('[data-skill="data-architecture"]');
