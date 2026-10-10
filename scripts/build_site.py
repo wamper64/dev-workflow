@@ -18,12 +18,13 @@ css = (DOCS / "styles.css").read_text(encoding="utf-8")
 javascript = (DOCS / "app.js").read_text(encoding="utf-8")
 data = json.loads((DOCS / "data/quotation.json").read_text(encoding="utf-8"))
 catalog = json.loads((ROOT / "skills/catalog.json").read_text(encoding="utf-8"))
+workspace = json.loads((ROOT / "skills/workspace.json").read_text(encoding="utf-8"))
 
 assert len(data["phases"]) == 5
-assert sum(len(p["steps"]) for p in data["phases"]) == 23
+assert sum(len(p["steps"]) for p in data["phases"]) == 27
 assert len(data["modules"]) == 13
-assert len(catalog) == 21
-assert len({x["id"] for x in catalog}) == 21
+assert len(catalog) == 24
+assert len({x["id"] for x in catalog}) == 24
 known = {x["id"] for x in catalog}
 for p in data["phases"][1:]:
     for step in p["steps"]:
@@ -58,8 +59,27 @@ for s in payload["skills"]:
             "examples/工程基线示例.md"
         ):
             assert required in s["files"], required
-assert custom_count == 15
-assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 24
+assert custom_count == 16
+assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 33
+assert len(workspace) == 6
+assert set(x["id"] for x in workspace).isdisjoint(known)
+assert set(x["id"] for x in workspace) == set(data["workspaceSkills"])
+
+# 工具箱的官方原版同样加载完整目录，不要求绑定固定研发步骤。
+for utility in workspace:
+    folder = ROOT / "skills" / utility["id"]
+    files = {}
+    for file in sorted(folder.rglob("*")):
+        if file.is_file():
+            files[file.relative_to(folder).as_posix()] = file.read_text(encoding="utf-8")
+    assert "SKILL.md" in files
+    payload["skills"].append({**utility, "files": files})
+
+# 交付检查覆盖全部技能与官方依赖。
+for needed in ("grill-with-docs", "grilling", "domain-modeling", "handoff",
+               "diagnosing-bugs", "human-acceptance", "research", "wizard"):
+    assert (ROOT / "skills" / needed / "SKILL.md").is_file(), needed
+
 
 archive = DIST / "skills-bundle.zip"
 with ZipFile(archive, "w", ZIP_DEFLATED) as z:
@@ -68,12 +88,12 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
             if not f.is_file():
                 continue
             # 调研信息只在网站侧呈现，安装包里不出现来源/类型目录元数据
-            if f == ROOT / "skills/catalog.json" or f == ROOT / "skills/REFERENCES.md":
+            if f in (ROOT / "skills/catalog.json", ROOT / "skills/workspace.json", ROOT / "skills/REFERENCES.md"):
                 continue
             z.write(f, f.relative_to(ROOT).as_posix())
     z.writestr("安装说明.md",
         "# 报价系统研发 Skills\n\n"
-        "包含21个主Skill以及3个官方依赖（共24份SKILL.md）。\n\n"
+        "包含24个主Skill和9个通用/执行依赖（共33份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
         "请将 skills/ 目录用于研发Agent工作区；"
         "把 templates/project/docs/ 下的目录结构复制到真实项目，"
         "实际PRD和已有前后端源码由项目方提供，不包含在下载包中。\n"
@@ -81,8 +101,8 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         "Matt 官方原版所需的版权和许可说明见 skills/LICENSE-Matt-Pocock.txt。\n")
 with ZipFile(archive) as z:
     names = z.namelist()
-    assert len([n for n in names if n.endswith("/SKILL.md")]) == 24
-    assert not any(n.endswith("REFERENCES.md") or n.endswith("catalog.json") for n in names)
+    assert len([n for n in names if n.endswith("/SKILL.md")]) == 33
+    assert not any(n.endswith(("REFERENCES.md", "catalog.json", "workspace.json")) for n in names)
     assert "skills/project-baseline/scripts/check_inputs.py" in names
     assert "skills/setup-matt-pocock-skills/issue-tracker-local.md" in names
     assert "skills/project-baseline/references/checklist.md" in names
@@ -177,4 +197,4 @@ html_path = DIST / "index.html"
 html_path.write_text(template, encoding="utf-8")
 print("内联JS校验通过")
 print(f"构建成功：{html_path}（{len(template.encode('utf-8'))}字节）")
-print(f"完整包：{archive}（{len(names)}个文件，24个Skill）")
+print(f"完整包：{archive}（{len(names)}个文件，33个Skill）")
