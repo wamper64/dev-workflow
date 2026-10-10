@@ -11,7 +11,7 @@ description: 在已审定模块池与依赖图中选择本轮可落实且可验�
 
 - `docs/output/05-模块拆分/项目模块清单.md`
 - `docs/output/05-模块拆分/模块依赖关系.md`
-- `docs/output/04-开发环境/开发环境部署与验收.md`
+- `docs/output/04-开发环境/部署步骤与执行记录.md`
 - `docs/output/项目总控/项目实施状态.md`（首次不存在时初始化）
 
 ## 2. 具体操作
@@ -38,7 +38,6 @@ description: 在已审定模块池与依赖图中选择本轮可落实且可验�
 
 - [专属审核标准](references/execution-gate.md)
 - [交付模板](assets/output-template.md)
-- [报价系统场景示例](examples/报价项目场景示例.md)
 
 ## 迭代选择的解锁算法
 
