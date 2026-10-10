@@ -301,8 +301,10 @@
             "docs/output/01-项目基线/项目基线.md",
             "docs/output/02-整体架构/整体架构设计.md（已审定组件与交互骨架）",
             "docs/output/03-数据库总体/数据库总体设计.md",
-            "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
-            "docs/output/06-模块迭代/本轮模块计划.md、前置依赖检查.md",
+            "docs/output/05-模块拆分/项目模块清单.md",
+            "docs/output/05-模块拆分/模块依赖关系.md",
+            "docs/output/06-模块迭代/本轮模块计划.md",
+            "docs/output/06-模块迭代/前置依赖检查.md",
             "code/fld/、code/guiwu_ruoyi/（本轮相关现有代码）",
             "GLOSSARY.md、docs/adr/（有则继承；内置Grill按需更新）"
           ],
@@ -550,7 +552,7 @@
             "docs/input/需求资料/（已确认PRD）",
             "docs/output/05-模块拆分/项目模块清单.md",
             "docs/output/项目总控/项目实施状态.md",
-            "全部模块人工场景验收记录",
+            "docs/output/06-模块迭代/<模块>/人工场景验收记录.md（逐模块验证，无遗漏）",
             "code/fld/",
             "code/guiwu_ruoyi/",
             "实际联调环境与第三方接入证据"
@@ -561,7 +563,7 @@
             "docs/output/07-系统验收/缺陷闭环记录.md"
           ],
           "review": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。",
-          "prompt": "请调用 Skill：system-acceptance（skills/system-acceptance/SKILL.md），执行「全项目业务链路和权限回归」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/项目总控/项目实施状态.md\n- 全部模块人工场景验收记录\n- code/fld/\n- code/guiwu_ruoyi/\n- 实际联调环境与第三方接入证据\n\n【具体执行方式】\n从项目PRD角色场景而非菜单做跨模块业务链、权限与异常的真实回归。\n\n【真实输出】\n- docs/output/07-系统验收/业务场景覆盖矩阵.md\n- docs/output/07-系统验收/系统验收报告.md\n- docs/output/07-系统验收/缺陷闭环记录.md\n\n【审核/不通过路径】\n项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "请调用 Skill：system-acceptance（skills/system-acceptance/SKILL.md），执行「全项目业务链路和权限回归」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/项目总控/项目实施状态.md\n- docs/output/06-模块迭代/<模块>/人工场景验收记录.md（逐模块验证）\n- code/fld/\n- code/guiwu_ruoyi/\n- 实际联调环境与第三方接入证据\n\n【具体执行方式】\n从项目PRD角色场景而非菜单做跨模块业务链、权限与异常的真实回归。\n\n【真实输出】\n- docs/output/07-系统验收/业务场景覆盖矩阵.md\n- docs/output/07-系统验收/系统验收报告.md\n- docs/output/07-系统验收/缺陷闭环记录.md\n\n【审核/不通过路径】\n项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
           "skillId": "system-acceptance",
           "skillOrigin": "自建"
         },
@@ -1381,8 +1383,10 @@
         "docs/output/01-项目基线/项目基线.md",
         "docs/output/02-整体架构/整体架构设计.md（已审定组件与交互骨架）",
         "docs/output/03-数据库总体/数据库总体设计.md",
-        "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
-        "docs/output/06-模块迭代/本轮模块计划.md、前置依赖检查.md",
+        "docs/output/05-模块拆分/项目模块清单.md",
+        "docs/output/05-模块拆分/模块依赖关系.md",
+        "docs/output/06-模块迭代/本轮模块计划.md",
+        "docs/output/06-模块迭代/前置依赖检查.md",
         "code/fld/、code/guiwu_ruoyi/（本轮相关现有代码）",
         "GLOSSARY.md、docs/adr/（有则继承；内置Grill按需更新）"
       ],
