@@ -43,8 +43,15 @@ for id in ("S05", "S09"):
     require("docs/output/01-项目基线/项目基线.md" in lookup[id]["inputs"], id + "遗漏项目基线")
 require("迁移设计草案.md" in " ".join(lookup["S09"]["outputs"]), "模块详细设计SQL不是草案")
 require("database/migrations/" in " ".join(lookup["S12"]["outputs"]), "TDD实现阶段缺正式版本化迁移")
-require(all(x in lookup["S14B"]["review"] for x in ("S13", "S14", "S14H")), "Bug修复后缺代码审查/联调/人工复测")
-require("Standards" in lookup["S13"]["title"], "Matt code-review未明确双轴")
+require("code-review" in lookup["S12"]["prompt"] and "TDD" in lookup["S12"]["prompt"], "implement-spec内应明确TDD和Matt双轴代码审查")
+require("代码审查记录.md" in " ".join(lookup["S12"]["outputs"]), "实现阶段缺真实代码审查证据文件")
+require("实现与自动验证记录.md" in " ".join(lookup["S12"]["outputs"]), "实现阶段缺自动验证证据文件")
+require("人工测试用例与结果.md" in " ".join(lookup["S14H"]["outputs"]), "人工测试必须生成待执行与回填同一文件")
+require("六阶段" in lookup["S14B"]["prompt"] and "人工" in lookup["S14B"]["prompt"], "Bug定位必须六阶段并人工复测")
+require("docs/output/04-开发环境/部署步骤与执行记录.md" in lookup["S06"]["outputs"], "环境部署主输出缺失")
+for id in ("S07", "S08", "S12"):
+    require("docs/output/04-开发环境/部署步骤与执行记录.md" in " ".join(lookup[id]["inputs"]), id+"引用旧环境验收文件")
+require("docs/output/06-模块迭代/<模块>/人工测试用例与结果.md" in " ".join(lookup["S16"]["inputs"]), "系统验收未读取真实人工测试结果")
 for id in ("S04", "S09"):
     require("grill-with-docs" in lookup[id]["prompt"], id + "未在主Skill内部启动Grill")
     require((ROOT / "skills" / lookup[id]["skillId"] / "SKILL.md").read_text(encoding="utf-8").find("grill-with-docs") != -1, id + "Skill正文缺内部Grill")
