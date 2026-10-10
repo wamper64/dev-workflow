@@ -1,8 +1,8 @@
 {
   "title": "报价系统首次项目建设研发导航",
-  "version": "Grill·人工测试·Bug闭环·完整Skill研究",
+  "version": "整体架构组件交互骨架·Grill内置·按需工具",
   "updated": "2026-10-10",
-  "overview": "仅聚焦报价系统首次建设。Grill显式位于整体架构与本轮模块详细设计前；开发质量分为Matt双轴代码审查、真实自动联调、人工测试及可选Bug诊断回退；handoff等Matt通用Skill独立在工作区工具箱中，不机械增加主步骤。",
+  "overview": "整体架构负责全项目主要组件与交互骨架，内部按需调用官方Grill；本轮模块设计同样内置Grill。数据库总体负责数据域/存储策略，模块设计只在已经审定的系统骨架内细化。",
   "inputs": [
     {
       "name": "需求资料",
@@ -82,7 +82,7 @@
       "title": "1. 项目准备与设计",
       "kind": "once",
       "owner": "项目经理、开发人员、技术总监",
-      "description": "项目输入就绪后初始化工作区、完成项目基线；架构关键问题通过Grill明确并记录必要ADR，再做整体架构、数据库总体、开发环境和模块划分。",
+      "description": "确认输入、初始化与项目基线后，整体架构设计Skill内部按需Grill，递归读取全部docs/input并定稿组件/交互/部署骨架，随后才设计数据库总体、部署开发环境与模块划分。",
       "steps": [
         {
           "id": "S01",
@@ -150,53 +150,30 @@
           "skillOrigin": "自建"
         },
         {
-          "id": "S03Q",
-          "title": "架构关键决策 Grill",
-          "skills": [
-            "grill-with-docs"
-          ],
-          "skillId": "grill-with-docs",
-          "skillOrigin": "Matt原版",
-          "inputs": [
-            "docs/output/01-项目基线/项目基线.md",
-            "docs/input/需求资料/（已确认PRD）",
-            "docs/input/工程资料/",
-            "已有GLOSSARY.md与docs/adr/（如有）"
-          ],
-          "outputs": [
-            "GLOSSARY.md（必要术语）",
-            "docs/adr/（必要ADR）",
-            "项目整体架构需落实的已确认决策"
-          ],
-          "review": "技术总监确认会影响架构的技术取舍、第三方/权限/运行边界；不重新询问已在PRD和基线裁定的问题。",
-          "prompt": "请调用 Skill：grill-with-docs（skills/grill-with-docs/SKILL.md），执行「架构关键决策 Grill」。\n\n【必须读取的输入】\n- docs/output/01-项目基线/项目基线.md\n- docs/input/需求资料/（已确认PRD）\n- docs/input/工程资料/\n- 已有GLOSSARY.md与docs/adr/（如有）\n\n【具体执行方式】\n按Matt grill-with-docs联动grilling/domain-modeling，独立查事实，逐轮处理决策前沿，写必要ADR。\n\n【真实输出】\n- GLOSSARY.md（必要术语）\n- docs/adr/（必要ADR）\n- 项目整体架构需落实的已确认决策\n\n【审核/不通过路径】\n技术总监确认会影响架构的技术取舍、第三方/权限/运行边界；不重新询问已在PRD和基线裁定的问题。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
-          "optional": false
-        },
-        {
           "id": "S04",
           "title": "整体架构设计",
           "skills": [
             "architecture-baseline"
           ],
           "inputs": [
-            "docs/input/需求资料/（已确认PRD）",
-            "docs/input/工程资料/（如有）",
-            "docs/input/环境资料/（如有）",
-            "docs/input/对接资料/（如有）",
-            "docs/output/01-项目基线/项目基线.md",
-            "GLOSSARY.md、docs/adr/（Grill已确认的决策如有）",
-            "code/fld/",
-            "code/guiwu_ruoyi/"
+            "docs/input/（递归读取全部现有类别及文件：PRD、工程资料、环境资料、对接资料与新增文件）",
+            "docs/output/01-项目基线/项目基线.md（已确认约束）",
+            "code/fld/（既有前端原型与真实路由/组件）",
+            "code/guiwu_ruoyi/（既有若依框架与实际认证/业务扩展能力）",
+            "GLOSSARY.md、docs/adr/（已有则继承；Grill内部按需新增）"
           ],
           "outputs": [
-            "docs/output/02-整体架构/整体架构设计.md",
+            "docs/output/02-整体架构/整体架构设计.md（完整组件全景/职责/交互/时序/部署骨架）",
             "docs/output/02-整体架构/架构评审记录.md",
-            "按需：docs/adr/架构决策.md"
+            "按需：GLOSSARY.md、docs/adr/（内部Grill形成必要术语与决策）"
           ],
-          "review": "技术总监审查全部上游原始输入、项目基线、已确认Grill结论、组件通信/授权/部署/容错；缺关键资料退回。",
-          "prompt": "请调用 Skill：architecture-baseline（skills/architecture-baseline/SKILL.md），执行「整体架构设计」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/input/工程资料/（如有）\n- docs/input/环境资料/（如有）\n- docs/input/对接资料/（如有）\n- docs/output/01-项目基线/项目基线.md\n- GLOSSARY.md、docs/adr/（Grill已确认的决策如有）\n- code/fld/\n- code/guiwu_ruoyi/\n\n【具体执行方式】\n基于原型与若依画组件/时序/部署图，走通正常及失败业务链，核实基线预算。\n\n【真实输出】\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/02-整体架构/架构评审记录.md\n- 按需：docs/adr/架构决策.md\n\n【审核/不通过路径】\n技术总监审查全部上游原始输入、项目基线、已确认Grill结论、组件通信/授权/部署/容错；缺关键资料退回。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "review": "项目经理审核PRD所有业务能力及外部对接均有承载组件；技术总监审核组件总表、完整交互矩阵、执行/HITL/审批/安全责任、部署资源以及后续数据库和模块设计能否只在骨架内填充。没有裁定的关键边界由本Skill内部调用Grill，不得臆造。",
+          "prompt": "请调用 Skill：architecture-baseline（skills/architecture-baseline/SKILL.md），由它内部按需调用官方 /grill-with-docs（skills/grill-with-docs/SKILL.md），不额外先跑一次独立Grill。\n\n必须递归阅读 docs/input/ 下**所有**实际项目文件，包括已确认PRD、工程、环境、对接和新增目录；继承 docs/output/01-项目基线/项目基线.md 的技术、服务器、并发、保存/恢复边界，并实际检查 code/fld 原型与 code/guiwu_ruoyi 现成能力。\n\n本步骤唯一目标：梳理全项目所有主要逻辑组件与真实运行单元、组件责任和所属边界、相互通信/鉴权、主要业务链与Worker/HITL/审批交互、异常恢复与部署拓扑，形成**完整整体架构骨架**，不是简单的Web→API→DB示意图。所有主要组件必须登记来源与部署状态；每条主要跨组件连线必须有交互矩阵支持（触发场景、协议、授权、请求/进度/结果、超时/取消/失败、状态Owner）。尤其要按真实对接资料核实统一编排、W1~W6、知识库、iframe/REST/gRPC等组件是否存在且如何交互，不能把候选协议视为事实。\n\n对输入未裁定的高成本结构性问题，在Skill内部调用grill-with-docs，按依赖决策树逐轮给推荐并等待确认，必要时记录GLOSSARY/ADR。PRD/基线已定事项不重问，未确认的边界不生成“已完成”架构。输出 docs/output/02-整体架构/整体架构设计.md 和真实评审记录。项目经理核对业务覆盖，技术总监核对组件完整性、交互责任与部署可落地。后续数据库总体/模块拆分/模块详细设计只能在这份架构骨架上补充，变更全局组件与通信必须返回本关卡审核。",
           "skillId": "architecture-baseline",
-          "skillOrigin": "基于Matt改造"
+          "skillOrigin": "基于Matt改造",
+          "invokes": [
+            "grill-with-docs"
+          ]
         },
         {
           "id": "S05",
@@ -205,18 +182,17 @@
             "data-architecture"
           ],
           "inputs": [
+            "docs/input/（全量相关资料：需求、工程、环境、对接及新增类别）",
             "docs/output/01-项目基线/项目基线.md",
-            "docs/output/02-整体架构/整体架构设计.md",
-            "docs/input/需求资料/（已确认PRD）",
-            "docs/input/环境资料/（如有）",
-            "docs/input/对接资料/（如有）"
+            "docs/output/02-整体架构/整体架构设计.md（已审批组件、Owner、交互责任）",
+            "GLOSSARY.md与docs/adr/（如有）"
           ],
           "outputs": [
             "docs/output/03-数据库总体/数据库总体设计.md",
             "docs/output/03-数据库总体/数据库设计审核.md"
           ],
           "review": "技术总监核对基线增长/留存/备份/一致性，不在总体阶段定义字段DDL。",
-          "prompt": "请调用 Skill：data-architecture（skills/data-architecture/SKILL.md），执行「数据库设计（总体）」。\n\n【必须读取的输入】\n- docs/output/01-项目基线/项目基线.md\n- docs/output/02-整体架构/整体架构设计.md\n- docs/input/需求资料/（已确认PRD）\n- docs/input/环境资料/（如有）\n- docs/input/对接资料/（如有）\n\n【具体执行方式】\n识别各数据域权威写入Owner、跨域关系与容量/留存依据，只设计总体库边界。\n\n【真实输出】\n- docs/output/03-数据库总体/数据库总体设计.md\n- docs/output/03-数据库总体/数据库设计审核.md\n\n【审核/不通过路径】\n技术总监核对基线增长/留存/备份/一致性，不在总体阶段定义字段DDL。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "调用 Skill：data-architecture（skills/data-architecture/SKILL.md）。读取 docs/input/ 全部与数据有关的原始资料、已批准项目基线与整体架构骨架。依据已确定的组件、数据Owner和跨组件交互，决定数据域、权威写入、数据存储/分库分表适用条件、跨域一致性、备份与保存年限。不得重新设计已经确认的运行单元/协议或臆造存储引擎；有未裁定的跨组件存储取舍时，内部按需调用grill-with-docs，请技术总监确认。此处不设计具体字段、DDL或API响应字段。",
           "skillId": "data-architecture",
           "skillOrigin": "基于Matt改造"
         },
@@ -251,13 +227,12 @@
             "module-discovery"
           ],
           "inputs": [
-            "docs/input/需求资料/（已确认PRD）",
+            "docs/input/（全部相关业务与工程输入）",
             "docs/output/01-项目基线/项目基线.md",
-            "docs/output/02-整体架构/整体架构设计.md",
+            "docs/output/02-整体架构/整体架构设计.md（主要组件及交互）",
             "docs/output/03-数据库总体/数据库总体设计.md",
             "docs/output/04-开发环境/开发环境部署与验收.md",
-            "code/fld/",
-            "code/guiwu_ruoyi/"
+            "code/fld/、code/guiwu_ruoyi/"
           ],
           "outputs": [
             "docs/output/05-模块拆分/项目模块清单.md",
@@ -265,7 +240,7 @@
             "docs/output/05-模块拆分/模块拆分审核.md"
           ],
           "review": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。",
-          "prompt": "请调用 Skill：module-discovery（skills/module-discovery/SKILL.md），执行「模块拆分」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/output/01-项目基线/项目基线.md\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/03-数据库总体/数据库总体设计.md\n- docs/output/04-开发环境/开发环境部署与验收.md\n- code/fld/\n- code/guiwu_ruoyi/\n\n【具体执行方式】\n从PRD角色×场景和原型页面反推模块与依赖DAG，反向执行补漏/去重/职责重划。\n\n【真实输出】\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/05-模块拆分/模块依赖关系.md\n- docs/output/05-模块拆分/模块拆分审核.md\n\n【审核/不通过路径】\n项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "调用 Skill：module-discovery（skills/module-discovery/SKILL.md）。阅读docs/input/中所有相关资料及已审定的整体架构、数据库总体，严格在既有组件与交互骨架中按业务闭环和数据责任拆分项目模块。模块是可验收的业务开发单元，不能一菜单一模块，也不能擅自新增新的整体服务、Worker或通信协议。输出全部模块、对应PRD场景/既有原型、组件归属、依赖顺序，项目经理确认覆盖、技术总监确认与整体架构吻合。",
           "skillId": "module-discovery",
           "skillOrigin": "自建"
         }
@@ -290,7 +265,7 @@
       "title": "2. 模块迭代开发",
       "kind": "repeat",
       "owner": "开发人员、项目经理、技术总监（涉及设计变更时）",
-      "description": "按模块迭代：依赖检查→Grill澄清→详细设计与迁移草案→Spec→Tickets→TDD→双轴代码审查→自动联调和原型对照→人工测试→有Bug诊断修复并完整复验→本轮收口。",
+      "description": "选择本轮模块→模块详细设计（内部Grill澄清疑点并继承整体架构骨架）→Spec→Tickets→TDD实现→代码审查→自动联调与原型核对→人工验收→Bug诊断及修复复测→收口。",
       "steps": [
         {
           "id": "S08",
@@ -315,57 +290,33 @@
           "skillOrigin": "自建"
         },
         {
-          "id": "S08Q",
-          "title": "本轮模块疑点 Grill（有疑点时）",
-          "skills": [
-            "grill-with-docs"
-          ],
-          "skillId": "grill-with-docs",
-          "skillOrigin": "Matt原版",
-          "inputs": [
-            "docs/output/06-模块迭代/本轮模块计划.md",
-            "docs/output/06-模块迭代/前置依赖检查.md",
-            "docs/output/01-项目基线/项目基线.md",
-            "docs/output/02-整体架构/整体架构设计.md",
-            "docs/output/03-数据库总体/数据库总体设计.md",
-            "docs/input/需求资料/（已确认PRD）",
-            "code/fld/原型",
-            "GLOSSARY.md、docs/adr/（如有）"
-          ],
-          "outputs": [
-            "docs/output/06-模块迭代/<模块>/已确认模块决策.md（有疑点时）",
-            "GLOSSARY.md、docs/adr/（需要时更新）"
-          ],
-          "review": "项目经理确认业务疑点，技术总监确认跨模块取舍；Grill只问真正未决问题，无疑点记录跳过原因。",
-          "prompt": "请调用 Skill：grill-with-docs（skills/grill-with-docs/SKILL.md），执行「本轮模块疑点 Grill（有疑点时）」。\n\n【必须读取的输入】\n- docs/output/06-模块迭代/本轮模块计划.md\n- docs/output/06-模块迭代/前置依赖检查.md\n- docs/output/01-项目基线/项目基线.md\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/03-数据库总体/数据库总体设计.md\n- docs/input/需求资料/（已确认PRD）\n- code/fld/原型\n- GLOSSARY.md、docs/adr/（如有）\n\n【具体执行方式】\n将本模块尚未裁决问题组织Grill决策树，问依赖前沿并给推荐，已定决策不重复问。\n\n【真实输出】\n- docs/output/06-模块迭代/<模块>/已确认模块决策.md（有疑点时）\n- GLOSSARY.md、docs/adr/（需要时更新）\n\n【审核/不通过路径】\n项目经理确认业务疑点，技术总监确认跨模块取舍；Grill只问真正未决问题，无疑点记录跳过原因。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
-          "optional": true
-        },
-        {
           "id": "S09",
           "title": "完成本轮模块详细设计",
           "skills": [
             "module-design"
           ],
           "inputs": [
-            "docs/output/06-模块迭代/本轮模块计划.md",
-            "docs/output/06-模块迭代/前置依赖检查.md",
+            "docs/input/（全量读取与本轮模块相关的需求、工程、环境、对接资料）",
             "docs/output/01-项目基线/项目基线.md",
-            "docs/output/02-整体架构/整体架构设计.md",
+            "docs/output/02-整体架构/整体架构设计.md（已审定组件与交互骨架）",
             "docs/output/03-数据库总体/数据库总体设计.md",
-            "docs/input/需求资料/（已确认PRD）",
-            "code/fld/",
-            "code/guiwu_ruoyi/",
-            "Grill结果及ADR（如有）"
+            "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
+            "docs/output/06-模块迭代/本轮模块计划.md、前置依赖检查.md",
+            "code/fld/、code/guiwu_ruoyi/（本轮相关现有代码）",
+            "GLOSSARY.md、docs/adr/（有则继承；内置Grill按需更新）"
           ],
           "outputs": [
             "docs/output/06-模块迭代/<模块>/模块详细设计.md",
             "docs/output/06-模块迭代/<模块>/迁移设计草案.md",
             "docs/adr/（符合条件时）"
           ],
-          "review": "依据工程基线、原型和总体设计完成状态、字段、API、权限；草案并非已执行SQL，开发改变时回写设计。",
-          "prompt": "请调用 Skill：module-design（skills/module-design/SKILL.md），执行「完成本轮模块详细设计」。\n\n【必须读取的输入】\n- docs/output/06-模块迭代/本轮模块计划.md\n- docs/output/06-模块迭代/前置依赖检查.md\n- docs/output/01-项目基线/项目基线.md\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/03-数据库总体/数据库总体设计.md\n- docs/input/需求资料/（已确认PRD）\n- code/fld/\n- code/guiwu_ruoyi/\n- Grill结果及ADR（如有）\n\n【具体执行方式】\n设计模块业务状态/接口/字段索引/权限与测试接缝；数据库只输出迁移设计草案。\n\n【真实输出】\n- docs/output/06-模块迭代/<模块>/模块详细设计.md\n- docs/output/06-模块迭代/<模块>/迁移设计草案.md\n- docs/adr/（符合条件时）\n\n【审核/不通过路径】\n依据工程基线、原型和总体设计完成状态、字段、API、权限；草案并非已执行SQL，开发改变时回写设计。\n\n必须继承已确认项目基线，在现有code/fld原型、code/guiwu_ruoyi上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "review": "先遵循整体架构骨架，仅在本轮模块内细化业务状态、数据库表字段、接口及原型动作；真正未决且阻塞设计的问题由module-design内部调用Grill逐轮澄清。越过已批准组件与通信边界时返回整体架构技术总监审核。",
+          "prompt": "请调用 Skill：module-design（skills/module-design/SKILL.md），它内部根据实际疑点调用官方 /grill-with-docs，无须独立前置一步。读取 docs/input/ 中所有本轮相关原始资料，并继承已确认项目基线、完整整体架构骨架（组件职责和交互矩阵）、数据库总体、模块划分与本轮依赖计划；实际核对 code/fld 原型与 code/guiwu_ruoyi 代码。先判断本轮模块在总体组件骨架中的归属，不能重新发明顶层服务或换掉既定协议。未决业务/技术取舍用内部Grill给推荐、等人工确认，已确定PRD内容不要重问。随后细化当前模块的状态机、页面动作映射、API具体契约、表字段/索引、权限异常、迁移设计草案及验收接缝。不得直接执行未裁定SQL；设计阶段只给迁移草案，开发TDD时生成/验证SQL并反向修正设计。",
           "skillId": "module-design",
-          "skillOrigin": "基于Matt改造"
+          "skillOrigin": "基于Matt改造",
+          "invokes": [
+            "grill-with-docs"
+          ]
         },
         {
           "id": "S10",
