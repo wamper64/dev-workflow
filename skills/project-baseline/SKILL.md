@@ -75,3 +75,5 @@ description: 已确认PRD、已有原型和工程资料进入整体架构设计�
 - [输入检查脚本](scripts/check_inputs.py)
 - [澄清矩阵模板](templates/澄清矩阵.md)
 - [工程基线示例](examples/工程基线示例.md)
+- [报价系统完整输出示例](examples/报价系统-工程基线输出示例.md)
+- [报价系统澄清过程示例](examples/报价系统-澄清过程示例.md)
