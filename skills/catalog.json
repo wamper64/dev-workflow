@@ -1,59 +1,5 @@
 [
   {
-    "id": "input-readiness",
-    "name": "input-readiness",
-    "type": "自建",
-    "source": {
-      "repo": "obra/superpowers",
-      "path": "skills/verification-before-completion/SKILL.md",
-      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
-      "name": "Superpowers — verification-before-completion"
-    },
-    "flow": [
-      "资料清点",
-      "确认范围",
-      "只记录阻塞项",
-      "允许继续"
-    ],
-    "stepId": "S01",
-    "stepTitle": "输入就绪确认",
-    "summary": "项目经理确认PRD可作为实施依据、可选材料可追溯、前端原型和后端框架已放置；不对若依内部代码进行技术审核。",
-    "inputs": [
-      "docs/input/需求资料/（已确认PRD）",
-      "docs/input/工程资料/（如有）",
-      "docs/input/环境资料/（如有）",
-      "docs/input/对接资料/（如有）",
-      "code/fld/（已存在原型）",
-      "code/guiwu_ruoyi/（仅确认框架在位）"
-    ],
-    "outputs": [
-      "docs/output/01-项目基线/输入核对.md",
-      "docs/output/01-项目基线/待确认事项.md"
-    ],
-    "verification": "项目经理确认PRD可作为实施依据、可选材料可追溯、前端原型和后端框架已放置；不对若依内部代码进行技术审核。",
-    "diagram": {
-      "outcome": "判断现有资料能否支撑下一步设计",
-      "input": "已确认PRD + 可选资料 + 两个代码目录",
-      "work": [
-        "确认PRD签收、前端原型及若依入口存在",
-        "区分必需与可选资料并出阻塞清单"
-      ],
-      "gate": "有阻塞基线制定的问题吗？",
-      "fail": "只提出需要项目经理确认的阻塞项；可选资料缺失不强制补",
-      "pass": "确认具备项目启动条件",
-      "output": "输入就绪核对 + 阻塞事项"
-    },
-    "referenceLearnings": [
-      {
-        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
-        "learned": "把目录存在、内容可用、版本已确认拆成可证实的事实；无证据不能宣布输入就绪",
-        "name": "Superpowers — verification-before-completion"
-      }
-    ],
-    "maturity": "已补充执行图、失败路径和验收证据",
-    "adaptation": "将“没有证据不能宣称完成”落实为已签PRD/原型/若依三个必需项+可选环境/对接资料的阻塞分级。"
-  },
-  {
     "id": "setup-matt-pocock-skills",
     "name": "setup-matt-pocock-skills",
     "type": "Matt原版",
@@ -73,7 +19,7 @@
     "stepTitle": "初始化项目",
     "summary": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
     "inputs": [
-      "已有code/fld/与code/guiwu_ruoyi/",
+      "已有code/",
       "docs/input/工程资料/",
       "已存在的AGENTS.md/CLAUDE.md（如有）"
     ],
@@ -123,7 +69,7 @@
     ],
     "stepId": "S03",
     "stepTitle": "项目基线",
-    "summary": "项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。",
+    "summary": "读入实际项目需求和现有资源，确定技术版本、CPU/内存/磁盘、保留年限、并发性能及恢复指标；不预设报价业务。",
     "inputs": [
       "docs/input/需求资料/PRD",
       "docs/input/工程资料/已定方案与技术栈",
@@ -220,8 +166,8 @@
       ],
       "approach": "资料确认→形成有数值推荐→最多3问/轮澄清→资源/保留/性能交叉闭合→输出具体约束→质量关卡"
     },
-    "outputSampleFile": "examples/报价系统-工程基线输出示例.md",
-    "consultationFile": "examples/报价系统-澄清过程示例.md",
+    "outputSampleFile": "docs/examples/报价项目/project-baseline/报价系统-工程基线输出示例.md",
+    "consultationFile": "docs/examples/报价项目/project-baseline/报价系统-澄清过程示例.md",
     "referenceLearnings": [
       {
         "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
@@ -254,8 +200,8 @@
     "inputs": [
       "docs/input/（全部文件，含所有目录与新增类别）",
       "docs/output/01-项目基线/项目基线.md",
-      "code/fld/、code/guiwu_ruoyi/（既有代码实际结构）",
-      "GLOSSARY.md、docs/adr/（已有则继承）"
+      "GLOSSARY.md、docs/adr/（已有则继承）",
+      "code/（真实现有工程，按项目识别子目录）"
     ],
     "outputs": [
       "docs/output/02-整体架构/整体架构设计.md（全景/组件/交互/时序/部署）",
@@ -369,7 +315,7 @@
         "不在整体架构阶段设计业务表字段、DTO、全模块Tickets"
       ]
     },
-    "outputSampleFile": "examples/报价整体架构示例.md",
+    "outputSampleFile": "docs/examples/报价项目/architecture-baseline/报价整体架构示例.md",
     "sampleTitle": "报价系统六Worker组件与交互骨架示例（非已审批设计）",
     "adaptation": "从原PRD与全部docs/input构建组件清单及交互清单，内部调用Grill并保留必要术语/ADR；借鉴BMAD架构骨架的跨团队一致性契约、arc42的组件/运行/交互视角与Matt的决策依赖树，但按定制前后端/Agent+报价系统扩展到六Worker和人工确认/iframe；非已裁定信息明确标候选。"
   },
@@ -481,7 +427,7 @@
         "不脱离实际量级预设Sharding"
       ]
     },
-    "outputSampleFile": "examples/报价业务数据域示例.md",
+    "outputSampleFile": "docs/examples/报价项目/data-architecture/报价业务数据域示例.md",
     "sampleTitle": "报价系统数据域划分示例",
     "adaptation": "使用领域术语与写入Owner的职责界定法，做总体数据域/一致性/容量/留存设计，模块字段索引及SQL延迟到详细设计。"
   },
@@ -507,7 +453,7 @@
     "inputs": [
       "右侧填写并导出的开发环境信息.md",
       "项目基线/整体架构/数据库总体",
-      "code/fld/、code/guiwu_ruoyi/"
+      "code/"
     ],
     "outputs": [
       "docs/input/环境资料/开发环境信息.md",
@@ -569,7 +515,7 @@
       ],
       "result": "docs/output/04-开发环境/部署步骤与执行记录.md"
     },
-    "outputSampleFile": "examples/报价项目场景示例.md"
+    "outputSampleFile": "docs/examples/报价项目/development-environment/报价项目场景示例.md"
   },
   {
     "id": "module-discovery",
@@ -663,7 +609,7 @@
         "不在模块拆分中制作每张数据库表"
       ]
     },
-    "outputSampleFile": "examples/报价模块拆分示例.md",
+    "outputSampleFile": "docs/examples/报价项目/module-discovery/报价模块拆分示例.md",
     "sampleTitle": "报价系统模块候选拆分示例",
     "adaptation": "把BMAD的全局一致性要求转成PRD角色场景→页面→数据责任→模块Owner反向矩阵及依赖DAG，避免按菜单机械切分。"
   },
@@ -742,7 +688,7 @@
       "docs/input/（本轮全部相关资料）",
       "已审定整体架构组件/交互矩阵",
       "项目基线、数据库总体、模块依赖、本轮计划",
-      "code/fld/、code/guiwu_ruoyi/"
+      "code/"
     ],
     "outputs": [
       "docs/output/06-模块迭代/<模块>/模块详细设计.md",
@@ -835,7 +781,7 @@
         "不能将已批准的整体组件图换成模块自己设计的服务拓扑"
       ]
     },
-    "outputSampleFile": "examples/报价需求核对模块设计示例.md",
+    "outputSampleFile": "docs/examples/报价项目/module-design/报价需求核对模块设计示例.md",
     "sampleTitle": "报价需求核对模块详细设计片段",
     "adaptation": "运用Matt深模块、Interface/Seam的设计原则，以已有原型/若依为约束详化业务状态、页面动作、REST、表字段、迁移设计草案。 已内置Grill并要求每个模块设计引用总体组件及交互ID，禁止越过已批准骨架。"
   },
@@ -960,16 +906,16 @@
     ],
     "stepId": "S12",
     "stepTitle": "TDD实现与内置code-review",
-    "summary": "Matt官方implement-spec内部依次执行Ticket、TDD、必要集成验证与code-review（Standards/Spec）；不另设代码审查或重复自动测试步骤。",
+    "summary": "Matt原版负责TDD和内置code-review。导航在该步骤完成后以需求基线与真实自动测试证据生成待执行人工测试单，不改写Matt原版。",
     "inputs": [
       "当前模块的Spec与Tickets",
-      "code/fld/",
-      "code/guiwu_ruoyi/",
+      "code/",
+      "code/",
       "database/migrations/"
     ],
     "outputs": [
-      "code/fld/原型页面增量代码",
-      "code/guiwu_ruoyi/后端实现",
+      "code/原型页面增量代码",
+      "code/后端实现",
       "database/migrations/*.sql",
       "自动化测试代码"
     ],
@@ -1492,88 +1438,6 @@
     ],
     "maturity": "官方原版，未改动",
     "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。"
-  },
-  {
-    "id": "human-acceptance",
-    "name": "human-acceptance",
-    "type": "自建",
-    "source": {
-      "repo": "bmad-code-org/BMAD-METHOD",
-      "path": "docs/build/test-completed-work.md",
-      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
-      "name": "BMAD Method — build"
-    },
-    "flow": [
-      "AI准备待执行用例",
-      "开发人员实际操作记录",
-      "失败提交可复现Bug",
-      "复测并按角色×场景签收"
-    ],
-    "stepId": "S14H",
-    "stepTitle": "生成用例与人工结果回填",
-    "summary": "AI只生成需求基线中自动化不能可靠证明的人工用例；人工亲测并在同一md填写结果，有Bug进入官方六阶段诊断。",
-    "inputs": [
-      "docs/input/需求资料/（已确认需求基线）",
-      "implement-spec TDD/集成验证与内置code-review证据",
-      "现有原型、模块Spec与真实测试环境"
-    ],
-    "outputs": [
-      "docs/output/06-模块迭代/<模块>/人工测试用例与结果.md",
-      "如有：Bug/人工复测记录"
-    ],
-    "verification": "开发人员真实操作、签证据；项目经理按角色×核心场景确认。失败不能进入迭代收口。",
-    "diagram": {
-      "outcome": "AI测试盲区得到真实人员验证，签收证据可信",
-      "input": "自动测试证据、真实页面、角色场景与可用测试环境",
-      "work": [
-        "按真实角色执行UI/第三方/业务用例",
-        "缺陷复现→诊断修复→复审联调→人工复测"
-      ],
-      "gate": "实际执行且所有关键场景均通过？",
-      "fail": "生成缺陷单→diagnosing-bugs→修改→review/联调/复测",
-      "pass": "项目经理签收模块并进入迭代收口",
-      "output": "人工测试记录、Bug证据、业务签收"
-    },
-    "referenceLearnings": [
-      {
-        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
-        "learned": "自动生成API/E2E测试不等于代码审查，也不等于人对界面和业务的实际观察；因此人工测试必须成为独立关卡",
-        "name": "BMAD Method — build"
-      },
-      {
-        "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md",
-        "learned": "每个通过声明必须有本次实际执行证据；人工测试的用例初态为待执行，不能由AI预填成功",
-        "name": "Superpowers — verification-before-completion"
-      }
-    ],
-    "maturity": "已补充执行图、失败路径和验收证据",
-    "overview": {
-      "headline": "一个Skill处理两个相连动作：AI先生成测试用例，人再执行并回填同一份Markdown。",
-      "why": "implement-spec已经完成自动测试和内置代码审查，这里只针对AI无权操作或无法判断的真实UI、人工业务、第三方与多角色场景。",
-      "sectionsTitle": "人工测试只保留两个实际动作",
-      "sections": [
-        {
-          "title": "① AI准备待执行测试单",
-          "summary": "从需求基线角色×核心场景中筛选人工必须执行的用例；含前置条件、操作步骤、预期结果，状态全部“待执行”",
-          "sample": "需求参数核对、审批驳回、原型视觉体验、真实第三方处理"
-        },
-        {
-          "title": "② 人执行并回填同一表",
-          "summary": "人工亲自操作，写真实结果、通过/失败/受阻、测试人、日期、截图与Bug；失败修复后原用例复测",
-          "sample": "AI不预填通过；项目经理按真实证据确认本轮关键场景"
-        }
-      ],
-      "thinking": [],
-      "doesNot": [
-        "不重新执行implement-spec已验证过的TDD/API测试",
-        "不由AI代替开发人员点页面或虚构通过",
-        "不再为同一人工测试生成重复的报告文档"
-      ],
-      "result": "docs/output/06-模块迭代/<模块>/人工测试用例与结果.md"
-    },
-    "outputSampleFile": "examples/报价需求解析人工测试示例.md",
-    "sampleTitle": "报价模块人工测试用例表（全部待执行）",
-    "adaptation": "吸收Superpowers完成必须有证据的原则，合并测试用例准备与人工结果回填，避免在implement-spec后重复TDD/独立code-review。"
   },
   {
     "id": "diagnosing-bugs",
