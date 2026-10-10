@@ -45,6 +45,11 @@ require(not (ROOT/"skills/grill-me").exists(),"轻量Grill冗余入口未移除"
 require("人工测试用例与结果.md" in " ".join(lookup["S14H"]["inputs"]),"人工执行未复用前序单据")
 require("Phase 6" in lookup["S14B"]["prompt"],"Bug诊断没有对应六阶段")
 require("开发环境信息.md" in " ".join(lookup["S06"]["inputs"]),"开发环境未从用户填表开始")
+require(lookup["S07"]["skillId"]=="module-discovery" and "Matt Tickets" in lookup["S07"]["title"],"模块拆分未采用Matt Tickets项目级适配")
+require("tracer bullet" in lookup["S07"]["prompt"] and "blocking edges" in lookup["S07"]["prompt"] and "quiz" in lookup["S07"]["prompt"],"模块级Tickets关键机制不完整")
+require("to-tickets" in lookup["S11"]["skills"],"本轮开发任务必须保持Matt原版to-tickets")
+require(not (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8").count("不发布全项目开发Tickets")==0,"模块规划必须禁止提前发布开发Ticket")
+
 for skill in catalog:
     root=ROOT/"skills"/skill["id"]
     require((root/"SKILL.md").is_file(),skill["id"]+" 无SKILL.md")

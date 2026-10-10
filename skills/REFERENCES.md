@@ -48,11 +48,13 @@
 - **Superpowers — verification-before-completion**：[Superpowers — verification-before-completion](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)
   - 实际学习：以真实连接、版本、命令及健康输出而非主观描述验证开发环境
 
-### module-discovery（已补充执行图、失败路径和验收证据）
-- 项目中的实际用途：项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。
-- 完全引用或改造：把BMAD的全局一致性要求转成PRD角色场景→页面→数据责任→模块Owner反向矩阵及依赖DAG，避免按菜单机械切分。
-- **BMAD Method — bmad-architecture**：[BMAD Method — bmad-architecture](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md)
-  - 实际学习：由业务闭环与跨模块责任识别真实模块，让界面/数据库职责与架构协调，避免人为预设模块数量
+### module-discovery（Matt Pocock Tickets 的项目模块级适配）
+- 项目中的实际用途：把完整已确认需求基线按“角色×核心场景 → 可验收纵向业务交付 → 项目模块Owner”划分为模块池，建立真实阻塞依赖DAG，供S08选择本轮模块。
+- 完全引用或改造：**改造而非直接套用原版**。模块与Ticket不是同一个粒度；模块可能包含多个开发Tickets，因此在S07只借鉴原版Process 3、4的机制，不调用Process 5向Tracker发布任务。
+- **Matt Pocock Skills — to-tickets**：[Matt Pocock Skills — to-tickets](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md)
+  - 具体学习：Process 3 tracer-bullet纵向切片、明确blocking edges、宽范围重构的expand–contract思路；Process 4向用户Quiz拆分粒度和阻塞关系。S07在**模块级**做业务覆盖与依赖确认，S11才用官方原版根据本轮Spec生成单上下文开发Tickets。
+- **Addy Osmani Agent Skills — incremental-implementation**：[Addy Osmani Agent Skills — incremental-implementation](https://github.com/addyosmani/agent-skills/blob/main/skills/incremental-implementation/SKILL.md)
+  - 具体学习：按小规模可验收纵向交付的原则确定首轮可行模块，不按代码层/菜单数量机械拆分，不一次性生成所有开发Tickets。
 
 ### iteration-planning（已补充执行图、失败路径和验收证据）
 - 项目中的实际用途：开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。

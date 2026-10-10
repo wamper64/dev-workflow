@@ -96,8 +96,13 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/数据域/);
  click("[data-skill-close]");
  click('[data-step="S07"]');
+ assert.match(doc.querySelector("#step-detail").textContent,/Matt Tickets/);
  click('[data-skill="module-discovery"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/业务闭环/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/Blocking edges|纵向|Tracer bullet/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/模块级/);
+ click('[data-skill-tab="files"]');
+ click('[data-skill-file="SKILL.md"]');
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/S11|to-tickets/);
  click("[data-skill-close]");
  click('[data-phase="P02"]');
  click('[data-step="S09"]');
