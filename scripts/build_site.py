@@ -26,16 +26,19 @@ assert len(data["phases"]) == 5
 assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})
 assert len(data["phases"][1]["steps"]) == 7
 assert len(data["phases"][2]["steps"]) == 8
-assert len(data["modules"]) == 13
-assert len(catalog) == 23
-assert len({x["id"] for x in catalog}) == 23
+assert isinstance(data["modules"], list) and len(data["modules"]) == 0
+assert len(catalog) == 21
+assert len({x["id"] for x in catalog}) == 21
 known = {x["id"] for x in catalog}
 for p in data["phases"][1:]:
     for step in p["steps"]:
+        if step.get("manual"):
+            assert step.get("skills") == [] and not step.get("skillId"), step["id"]
+            continue
         assert step.get("skillId") in known, step["id"]
         assert step.get("skills") == [step["skillId"]], step["id"]
 
-payload = {"skills": []}
+payload = {"skills": [], "examples": {}}
 for skill in catalog:
     folder = ROOT / "skills" / skill["id"]
     contents = {}
@@ -60,12 +63,12 @@ for s in payload["skills"]:
             "assets/baseline-template.md", "references/checklist.md",
             "references/consistency.md", "references/editorial-standard.md",
             "scripts/check_inputs.py", "templates/澄清矩阵.md",
-            "examples/工程基线示例.md"
         ):
             assert required in s["files"], required
-assert custom_count == 15
-assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 32
+assert custom_count == 13
+assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 30
 assert len(workspace) == 6
+assert not any((ROOT / "skills" / old).exists() for old in ("input-readiness", "human-acceptance")), "旧的步骤型Skill应移除"
 assert all(x["source"]["url"].startswith("https://github.com/mattpocock/skills/") for x in workspace)
 assert set(x["id"] for x in workspace).isdisjoint(known)
 assert set(x["id"] for x in workspace) == set(data["workspaceSkills"])
@@ -80,9 +83,21 @@ for utility in workspace:
     assert "SKILL.md" in files
     payload["skills"].append({**utility, "category": "workspace", "files": files})
 
+# 项目案例仅供网站预览，绝不能写入skills目录或安装ZIP。
+for record in catalog:
+    for key in ("outputSampleFile", "consultationFile"):
+        relative = record.get(key)
+        if not relative:
+            continue
+        assert relative.startswith("docs/examples/报价项目/"), relative
+        file = ROOT / relative
+        assert file.is_file(), relative
+        payload["examples"][relative] = file.read_text(encoding="utf-8")
+assert not any((ROOT / "skills").glob("*/examples")), "示例目录必须与安装Skill分离"
+
 # 交付检查覆盖全部技能与官方依赖。
 for needed in ("grill-with-docs", "grilling", "domain-modeling", "handoff",
-               "diagnosing-bugs", "human-acceptance", "research", "wizard"):
+               "diagnosing-bugs", "implement-spec", "research", "wizard"):
     assert (ROOT / "skills" / needed / "SKILL.md").is_file(), needed
 
 
@@ -97,8 +112,8 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
                 continue
             z.write(f, f.relative_to(ROOT).as_posix())
     z.writestr("安装说明.md",
-        "# 报价系统研发 Skills\n\n"
-        "包含23个主Skill和9个通用/执行依赖（共32份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
+        "# 标准项目研发 Skills\n\n"
+        "包含21个主Skill和9个通用/执行依赖（共30份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
         "请将 skills/ 目录用于研发Agent工作区；"
         "把 templates/project/docs/ 下的目录结构复制到真实项目，"
         "实际PRD和已有前后端源码由项目方提供，不包含在下载包中。\n"
@@ -106,11 +121,13 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         "Matt 官方原版所需的版权和许可说明见 skills/LICENSE-Matt-Pocock.txt。\n")
 with ZipFile(archive) as z:
     names = z.namelist()
-    assert len([n for n in names if n.endswith("/SKILL.md")]) == 32
+    assert len([n for n in names if n.endswith("/SKILL.md")]) == 30
     assert not any(n.endswith(("REFERENCES.md", "catalog.json", "workspace.json")) for n in names)
     assert "skills/project-baseline/scripts/check_inputs.py" in names
     assert "skills/setup-matt-pocock-skills/issue-tracker-local.md" in names
     assert "skills/project-baseline/references/checklist.md" in names
+    assert not any("/examples/" in n for n in names), "Skill ZIP不应包含项目示例"
+    assert not any(n.startswith(("skills/input-readiness/", "skills/human-acceptance/")) for n in names), "已取消的步骤Skill不应包含在ZIP"
 
 old = '''const res=await fetch("./data/quotation.json",{cache:"no-store"});
   if(!res.ok)throw Error("HTTP "+res.status);
@@ -202,4 +219,4 @@ html_path = DIST / "index.html"
 html_path.write_text(template, encoding="utf-8")
 print("内联JS校验通过")
 print(f"构建成功：{html_path}（{len(template.encode('utf-8'))}字节）")
-print(f"完整包：{archive}（{len(names)}个文件，32个Skill）")
+print(f"完整包：{archive}（{len(names)}个文件，30个Skill）")

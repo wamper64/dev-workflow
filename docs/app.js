@@ -37,7 +37,7 @@ function renderStages(){
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
-  const route=p.id==="P01"?"输入核对 → Matt初始化 → 工程基线 → <b>整体架构（内置Grill）</b> → 数据总体 → 开发环境 → 模块拆分":p.id==="P02"?"模块选择 → <b>模块详细设计（内置Grill）</b> → Spec → Tickets → TDD → <b>双轴代码审查</b> → 自动联调/原型对照 → <b>人工测试</b> → Bug修复↩复测 → 迭代收口":p.id==="P03"?"项目级验收 → 上线评审 → 部署预演及回滚 → 生产上线":p.id==="P04"?"Matt retro → 项目全程复盘 → Skill改进":"已确认PRD + 前端原型 + 若依工程";
+  const route=p.id==="P01"?"输入读取与检查 → Matt初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 开发环境 → 模块拆分":p.id==="P02"?"本轮模块 → 详细设计（内置Grill） → Spec → Tickets → <b>implement-spec / TDD / 内置审查 / 生成人工测试单</b> → <b>人工测试与回填</b> → 按需Bug修复 → 迭代收口":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.id==="P04"?"Matt retro → 项目级复盘 → Skill改进":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
   const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
   $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
  $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
@@ -104,13 +104,14 @@ function renderDetails(){
   $("step-position").textContent=String(index).padStart(2,"0")+" / "+String(p.steps.length).padStart(2,"0");
   let html='<h2>'+esc(s.title)+'</h2><p class="step-context">'+esc(p.title)+' · '+esc(s.id)+'</p>';
   if(p.id==="P01"&&s.id==="S06")html+=environmentForm();
-  html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
+  if((s.skills||[]).length)html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
+  else html+='<section class="detail-section"><h3><span class="section-icon">◎</span> 执行方式</h3><div class="review-box">'+(s.id==="S01"?"使用下方提示词直接读取并校验输入，无需安装Skill。":s.id==="S14H"?"人工执行上一步生成的用例，填写真实结果；无独立Skill。":"此步骤仅展示已有输入，不调用Skill。")+'</div></section>';
   if(Array.isArray(s.invokes)&&s.invokes.length){html+='<p class="detail-hint">本步骤主Skill内部调用：'+s.invokes.map(id=>'<code>'+esc(id)+'</code>').join("、")+'，不重复安排独立步骤。</p>';}
   html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">✓</span> 审核要求</h3><div class="review-box">'+esc(s.review)+'</div><p class="owner">审核及参与角色：'+esc(p.owner)+'</p></section>';
-  if(p.id!=="P00"){html+='<section class="detail-section prompt-section"><div class="prompt-heading"><h3><span class="section-icon">✎</span> 执行提示词</h3><button type="button" class="copy-prompt" data-copy-prompt aria-label="复制当前步骤提示词">复制提示词</button></div><div class="prompt-text">'+esc(s.prompt||"执行提示词待确认")+'</div><p class="detail-hint">提示词引用本步骤唯一主Skill，执行前仍需读取真实输入并进行必要验证。</p></section>';}
-  if(p.id==="P01"&&s.id==="S07"){
+  if(p.id!=="P00"&&s.prompt){html+='<section class="detail-section prompt-section"><div class="prompt-heading"><h3><span class="section-icon">✎</span> 执行提示词</h3><button type="button" class="copy-prompt" data-copy-prompt aria-label="复制当前步骤提示词">复制提示词</button></div><div class="prompt-text">'+esc(s.prompt||"执行提示词待确认")+'</div><p class="detail-hint">提示词引用本步骤唯一主Skill，执行前仍需读取真实输入并进行必要验证。</p></section>';}
+  if(p.id==="P01"&&s.id==="S07"&&ui.data.modules?.length){
     html+='<details class="extra-disclosure"><summary>查看本项目13个候选模块与菜单映射</summary>';
     html+=ui.data.modules.map(m=>'<div class="module-record"><b>'+esc(m.id+" · "+m.title)+'</b><p>'+esc([...m.menus,...(m.additional?[m.additional]:[])].join("、"))+'</p></div>').join("");
     html+='</details>';
@@ -156,7 +157,7 @@ function renderCodeReviewAxes(skill){
 function renderSkillOverview(skill){
  const a=skill.overview;
  if(!a)return skill.reviewAxes?renderCodeReviewAxes(skill):logicDiagram(skill.diagram);
- const cards=(a.sections||[]).map((x,i)=>'<article class="skill-topic-card"><span class="skill-topic-index">'+String(i+1).padStart(2,"0")+'</span><h4>'+esc(x.title)+'</h4><p>'+esc(x.summary)+'</p><div class="skill-topic-example"><span>报价项目举例</span>'+esc(x.sample)+'</div></article>').join("");
+ const cards=(a.sections||[]).map((x,i)=>'<article class="skill-topic-card"><span class="skill-topic-index">'+String(i+1).padStart(2,"0")+'</span><h4>'+esc(x.title)+'</h4><p>'+esc(x.summary)+'</p>'+(x.sample?'<div class="skill-topic-example"><span>示例（报价项目）</span>'+esc(x.sample)+'</div>':"")+'</article>').join("");
  const conversions=(a.thinking||[]).map(x=>'<div class="thinking-row"><div><span class="thinking-label">资料中有什么</span><p>'+esc(x.given)+'</p></div><span class="thinking-arrow">→</span><div><span class="thinking-label">Skill 提炼什么</span><p>'+esc(x.answer)+'</p></div></div>').join("");
  const exclusions=(a.doesNot||[]).map(x=>'<li>'+esc(x)+'</li>').join("");
  return '<div class="skill-overview"><div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
@@ -195,9 +196,9 @@ function renderSampleMarkdown(content){
 function renderSkillResult(){
  const s=currentSkill;
  const selected=currentResult==="consultation"&&s?.consultationFile?s.consultationFile:s?.outputSampleFile;
- if(!selected||!s.files?.[selected])return '<p class="sample-empty">当前还没有经过审核的完整产物示例。</p>';
+ if(!selected||!skillData?.examples?.[selected])return '<p class="sample-empty">此步骤暂未配置独立的示例文档。</p>';
  return '<div class="sample-head"><div><strong>'+esc(s.sampleTitle||"报价项目示例输出")+'</strong><p>这是以报价业务制作的示范内容，不是已运行真实客户PRD后的正式审批结果；是否为完整成品以本Skill示例说明为准。</p></div><div class="sample-actions"><button data-sample="final" class="'+(currentResult==="final"?"active":"")+'">'+(s.consultationFile?"工程基线成品":"报价项目示例")+'</button>'+(s.consultationFile?'<button data-sample="consultation" class="'+(currentResult==="consultation"?"active":"")+'">AI澄清过程</button>':"")+'</div></div>'
- +renderSampleMarkdown(s.files[selected]);
+ +renderSampleMarkdown(skillData.examples[selected]);
 }
 
 function renderMd(text){
@@ -240,7 +241,7 @@ function renderSkillSources(skill){
  +'<div class="research-rows">'+rs.map(x=>'<article class="research-row"><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.name||"参考源文件")+' ↗</a><p><strong>具体学习：</strong>'+esc(x.learned)+'</p></article>').join("")+'</div>'
  +'<p class="source-adaptation"><strong>实际采用与定制化改造：</strong>'+esc(skill.adaptation||"Matt官方原版保持不变。")+'</p>'
  +(!rs.length?'<p>暂无足够的逐项研究笔记，需要继续核实原始Skill文件，不能只凭仓库名称声称已参考。</p>':"")
- +'<p class="research-boundary">Matt原版保持不改；自建/改造说明只在网站中展示。</p></div>';
+ +'<p class="research-boundary">Matt原版保持不改；参考来源只在网站中展示。报价项目示例独立存放于 docs/examples/报价项目/，不属于可安装Skill文件目录。</p></div>';
 }
 function previewSkill(id){
  const item=skillData?.skills?.find(x=>x.id===id);
