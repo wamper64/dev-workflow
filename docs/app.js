@@ -25,6 +25,19 @@ const allPhases=()=>[...ui.data.phases,toolkitPhase()];
 const phase=()=>allPhases().find(p=>p.id===ui.phase)||ui.data.phases[0];
 const step=()=>phase().steps.find(s=>s.id===ui.step)||phase().steps[0];
 const kind=k=>k==="toolkit"?"跨阶段可调用":k==="prep"?"仅展示初始输入":k==="repeat"?"按模块循环":k==="final"?"整体验收与交付":"项目建设阶段";
+// 项目目录树是来源于当前阶段与步骤约定的中文展示文件，避免硬编码到Skill内容。
+const projectTree=JSON.parse(document.getElementById("project-tree-data").textContent);
+document.addEventListener("click",async event=>{
+ if(event.target.closest("#tree-open")){
+  $("tree-content").textContent=projectTree;
+  const dialog=$("tree-dialog");if(!dialog.open)dialog.showModal();
+ }else if(event.target.closest("[data-tree-close]")){$("tree-dialog").close()}
+ else if(event.target.closest("[data-tree-copy]")){
+  const btn=event.target.closest("button");
+  try{await navigator.clipboard.writeText(projectTree);btn.textContent="已复制目录树"}
+  catch(err){btn.textContent="无法复制，请手动选择下方文本"}
+ }
+});
 const fileList=files=>'<div class="file-list">'+(files||[]).map(f=>'<code class="file-item">'+esc(f.trim())+'</code>').join("")+'</div>';
 const skillList=skills=>!(skills||[]).length?'<div class="review-box">这里只展示已有输入，无需调用Skill。</div>':'<div class="skill-grid">'+(skills||[]).map(id=>{const sk=ui.data.skills.find(x=>x.id===id)||skillData?.workspace.find(x=>x.id===id);const origin=sk?.origin||sk?.type||"待核实";return '<button type="button" class="skill-pill '+(origin==="Matt原版"?"":"custom")+'" data-skill="'+esc(id)+'" title="点击查看SKILL.md、逻辑流程、示例与模板">'+esc(id)+' <span class="skill-kind">'+esc(origin)+'</span> ↗</button>'}).join("")+'</div>';
 function renderStages(){
@@ -37,7 +50,7 @@ function renderStages(){
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
-  const route=p.id==="P01"?"输入读取与检查 → Matt初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 开发环境 → 模块拆分":p.id==="P02"?"本轮模块 → 详细设计（内置Grill） → Spec → Tickets → <b>implement-spec / TDD / 内置审查 / 生成人工测试单</b> → <b>人工测试与回填</b> → 按需Bug修复 → 迭代收口":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.id==="P04"?"Matt retro → 项目级复盘 → Skill改进":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
+  const route=p.id==="P01"?"输入读取与检查 → Matt初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 开发环境 → 模块拆分":p.id==="P02"?"选择本轮 → 详细设计（Grill） → Spec → Tickets → <b>dev-implement-spec：原版实现 + 人工测试单</b> → <b>人工回填</b> → 按需Bug修复 → <b>验收 + retro</b> → 下一轮":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
   const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
   $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
  $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
@@ -106,7 +119,7 @@ function renderDetails(){
   if(p.id==="P01"&&s.id==="S06")html+=environmentForm();
   if((s.skills||[]).length)html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
   else html+='<section class="detail-section"><h3><span class="section-icon">◎</span> 执行方式</h3><div class="review-box">'+(s.id==="S01"?"使用下方提示词直接读取并校验输入，无需安装Skill。":s.id==="S14H"?"人工执行上一步生成的用例，填写真实结果；无独立Skill。":"此步骤仅展示已有输入，不调用Skill。")+'</div></section>';
-  if(Array.isArray(s.invokes)&&s.invokes.length){html+='<p class="detail-hint">本步骤主Skill内部调用：'+s.invokes.map(id=>'<code>'+esc(id)+'</code>').join("、")+'，不重复安排独立步骤。</p>';}
+  if(Array.isArray(s.invokes)&&s.invokes.length){html+='<section class="detail-section"><h3><span class="section-icon">↳</span> 主Skill内部引用</h3><p class="detail-hint">以下原版Skill由当前主Skill内部执行，不另占必经步骤；点击可查看完整原版内容。</p>'+skillList(s.invokes)+'</section>';}
   html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">✓</span> 审核要求</h3><div class="review-box">'+esc(s.review)+'</div><p class="owner">审核及参与角色：'+esc(p.owner)+'</p></section>';

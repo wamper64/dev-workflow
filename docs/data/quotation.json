@@ -886,9 +886,10 @@
   "workspaceSkills": [
     "handoff",
     "grilling",
-    "grill-me",
     "domain-modeling",
     "research",
-    "wizard"
+    "wizard",
+    "pr",
+    "to-questionnaire"
   ]
 }

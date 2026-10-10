@@ -14,6 +14,7 @@
       <div><strong>项目研发导航</strong><span class="brand-sub">首次项目建设 · Grill / TDD / 人工验收</span></div>
     </div>
     <span id="project-stats" class="header-meta">正在载入流程…</span>
+    <button id="tree-open" class="project-tree-open" type="button" title="按当前阶段与步骤查看含中文注释的预期项目目录">▦ 项目目录树</button>
     <a id="download-skills" class="download-all" href="./skills-bundle.zip" download="标准项目-完整Skills包.zip" title="下载完整Skills与通用依赖（不含项目示例）">⬇ 下载全部 Skills</a>
   </header>
   <div class="workspace">
@@ -35,6 +36,19 @@
       <div id="step-detail"></div>
     </aside>
   </div>
+  <dialog id="tree-dialog" class="tree-dialog" aria-label="标准项目预期目录结构">
+    <div class="tree-dialog-shell">
+      <div class="tree-dialog-head">
+        <div><span class="eyebrow">PROJECT DIRECTORY</span><h2>项目目录树 · 中文注释</h2><p>按当前研发阶段与步骤整理的预期目录；不是声称已经生成这些文件。标记“按需”的文件不强制创建。</p></div>
+        <button type="button" class="dialog-close" data-tree-close aria-label="关闭项目目录树">✕</button>
+      </div>
+      <div class="tree-dialog-tools">
+        <span>阶段0 输入 → 阶段1 设计 → 阶段2 迭代（含retro） → 阶段3 上线</span>
+        <button type="button" data-tree-copy>复制目录树</button>
+      </div>
+      <pre id="tree-content" class="project-tree-text" tabindex="0"></pre>
+    </div>
+  </dialog>
   <dialog id="skill-dialog" class="skill-dialog" aria-label="Skill内容预览">
     <div class="skill-dialog-shell">
       <div class="skill-dialog-header">
