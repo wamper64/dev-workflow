@@ -3,36 +3,191 @@
     "id": "handoff",
     "name": "会话交接",
     "summary": "跨Harness/目录/协作者切换时保存去敏的上下文接力；同会话一般不必调用",
-    "source": "skills/productivity/handoff/SKILL.md"
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/productivity/handoff/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md"
+    },
+    "type": "Matt原版",
+    "stepTitle": "工作区通用 · 会话交接",
+    "diagram": {
+      "outcome": "跨工具、跨目录、跨协作者交接时只携带必要上下文",
+      "input": "由当前任务或用户直接发起",
+      "work": [
+        "识别目标接力任务",
+        "引用现有Spec/ADR/Commit，而非重复复制",
+        "脱敏后写入系统临时目录",
+        "列下一个Agent推荐调用的Skill"
+      ],
+      "gate": "真的需要上下文跨边界传递？",
+      "fail": "同一会话一般compact即可，不生成无用文档",
+      "pass": "在系统临时目录输出handoff.md",
+      "output": "在系统临时目录输出handoff.md"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md",
+        "learned": "只在跨工具/目录/协作者或fork副任务时形成文件，且保存到系统临时目录而非工作区；复用现有Spec/ADR链接并脱敏"
+      }
+    ]
   },
   {
     "id": "grilling",
     "name": "决策树逐轮追问",
     "summary": "按依赖树决定当前可问的问题，给推荐；事实由Agent查，决策由用户确认",
-    "source": "skills/productivity/grilling/SKILL.md"
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/productivity/grilling/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md"
+    },
+    "type": "Matt原版",
+    "stepTitle": "工作区通用 · 决策树逐轮追问",
+    "diagram": {
+      "outcome": "使未决问题按依赖顺序被真正裁决",
+      "input": "由当前任务或用户直接发起",
+      "work": [
+        "建立决策树",
+        "找当前前沿可答问题",
+        "一次呈现问题及推荐",
+        "获得答复后更新树并继续"
+      ],
+      "gate": "前沿问题是否全部解决？",
+      "fail": "不可假设依赖尚未解决的问题",
+      "pass": "用户确认共享理解",
+      "output": "用户确认共享理解"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md",
+        "learned": "按依赖树的frontier分轮提问，每轮给推荐；找事实是Agent的任务，做决策是用户的任务"
+      }
+    ]
   },
   {
     "id": "grill-me",
     "name": "轻量Grill入口",
     "summary": "官方轻量入口，内部调用grilling",
-    "source": "skills/productivity/grill-me/SKILL.md"
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/productivity/grill-me/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md"
+    },
+    "type": "Matt原版",
+    "stepTitle": "工作区通用 · 轻量Grill入口",
+    "diagram": {
+      "outcome": "轻量启动官方Grilling",
+      "input": "由当前任务或用户直接发起",
+      "work": [
+        "用户明确发起Grill",
+        "转交官方grilling",
+        "完成决策前沿直到用户确认"
+      ],
+      "gate": "是否已达到共同理解？",
+      "fail": "继续grilling",
+      "pass": "交回主研发流程",
+      "output": "交回主研发流程"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md",
+        "learned": "它只是调用grilling的薄入口，不承载独立的规格生产"
+      }
+    ]
   },
   {
     "id": "domain-modeling",
     "name": "术语与ADR",
     "summary": "术语冲突现场澄清；仅不可逆、非显然、真实取舍时记录ADR",
-    "source": "skills/engineering/domain-modeling/SKILL.md"
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/domain-modeling/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md"
+    },
+    "type": "Matt原版",
+    "stepTitle": "工作区通用 · 术语与ADR",
+    "diagram": {
+      "outcome": "在设计过程中统一业务术语与必要架构决策",
+      "input": "由当前任务或用户直接发起",
+      "work": [
+        "发现模糊/冲突术语",
+        "结合真实业务场景澄清",
+        "确认后立即更新GLOSSARY",
+        "仅必要时记录高代价ADR"
+      ],
+      "gate": "属于难逆、令人疑惑且有真实取舍的决定？",
+      "fail": "只更新术语或不产文档",
+      "pass": "更新ADR",
+      "output": "更新ADR"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md",
+        "learned": "术语现场澄清、GLOSSARY只记录概念不放实现；ADR要求难以逆转、非显然、真实取舍三个条件全部满足"
+      }
+    ]
   },
   {
     "id": "research",
     "name": "原始资料技术调研",
     "summary": "使用官方/一手来源调查技术事实并沉淀带来源的Markdown文件",
-    "source": "skills/engineering/research/SKILL.md"
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/research/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/research/SKILL.md"
+    },
+    "type": "Matt原版",
+    "stepTitle": "工作区通用 · 原始资料技术调研",
+    "diagram": {
+      "outcome": "取得可信的技术事实供决策使用",
+      "input": "由当前任务或用户直接发起",
+      "work": [
+        "明确技术调研问题",
+        "优先查官方文档和源代码",
+        "逐条追溯来源",
+        "写带来源的结论文件"
+      ],
+      "gate": "信息是否有一手来源？",
+      "fail": "继续查证，不把二手资料当结论",
+      "pass": "作为Grill/架构设计输入",
+      "output": "作为Grill/架构设计输入"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/research/SKILL.md",
+        "learned": "调研以官方文档、源码和规范为主，每条关键主张能追溯到归属原始来源"
+      }
+    ]
   },
   {
     "id": "wizard",
     "name": "人工环境操作指引",
     "summary": "只对AI无法自动完成的环境配置逐步引导人操作",
-    "source": "skills/engineering/wizard/SKILL.md"
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/wizard/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/SKILL.md"
+    },
+    "type": "Matt原版",
+    "stepTitle": "工作区通用 · 人工环境操作指引",
+    "diagram": {
+      "outcome": "指导人完成AI无权或不能自动操作的环境步骤",
+      "input": "由当前任务或用户直接发起",
+      "work": [
+        "识别必须由人完成的操作",
+        "说明安全、前置条件和风险",
+        "一步一步指导并等待真实结果",
+        "校验状态再继续"
+      ],
+      "gate": "人已实际完成并有反馈证据？",
+      "fail": "停止，指导检查而非编造结果",
+      "pass": "记录为已核验的前置依赖",
+      "output": "记录为已核验的前置依赖"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/SKILL.md",
+        "learned": "面向无法自动完成的人工环境配置，而不是绕过权限或假称已执行"
+      }
+    ]
   }
 ]
