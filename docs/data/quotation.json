@@ -212,25 +212,25 @@
         },
         {
           "id": "S07",
-          "title": "模块拆分",
+          "title": "模块拆分（Matt Tickets 适配）",
           "skills": [
             "module-discovery"
           ],
           "inputs": [
-            "docs/input/（全部相关业务与工程输入）",
+            "docs/input/（完整已确认需求基线：PRD、角色×核心场景、已有页面映射及所有相关工程资料）",
             "docs/output/01-项目基线/项目基线.md",
-            "docs/output/02-整体架构/整体架构设计.md（主要组件及交互）",
-            "docs/output/03-数据库总体/数据库总体设计.md",
+            "docs/output/02-整体架构/整体架构设计.md（组件职责、交互与Owner）",
+            "docs/output/03-数据库总体/数据库总体设计.md（数据域、权威Owner与存储边界）",
             "docs/output/04-开发环境/部署步骤与执行记录.md",
-            "code/"
+            "code/（实际原型页面与已有业务代码）"
           ],
           "outputs": [
-            "docs/output/05-模块拆分/项目模块清单.md",
-            "docs/output/05-模块拆分/模块依赖关系.md",
-            "docs/output/05-模块拆分/模块拆分审核.md"
+            "docs/output/05-模块拆分/项目模块清单.md（模块级交付结果及场景映射）",
+            "docs/output/05-模块拆分/模块依赖关系.md（Blocked by/DAG及可并行契约）",
+            "docs/output/05-模块拆分/模块拆分审核.md（Matt式粒度提问、项目经理/技术总监确认）"
           ],
-          "review": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。",
-          "prompt": "调用 Skill：module-discovery（skills/module-discovery/SKILL.md）。阅读docs/input/中所有相关资料及已审定的整体架构、数据库总体，严格在既有组件与交互骨架中按业务闭环和数据责任拆分项目模块。模块是可验收的业务开发单元，不能一菜单一模块，也不能擅自新增新的整体服务、Worker或通信协议。输出全部模块、对应PRD场景/既有原型、组件归属、依赖顺序，项目经理确认覆盖、技术总监确认与整体架构吻合。",
+          "review": "按Matt to-tickets的纵向可交付切片、阻塞依赖和人工粒度确认审核全项目模块；此处是模块级DAG，不是单上下文开发Ticket。项目经理审核需求覆盖/真实业务结果，技术总监审核组件/数据Owner及依赖。S11再完整调用Matt原版to-tickets发布本轮模块开发Tickets。",
+          "prompt": "请调用【基于 Matt Pocock 官方 to-tickets 方法改造的模块拆分 Skill】module-discovery（skills/module-discovery/SKILL.md），这是项目级模块规划，**不是提前拆全项目开发Tickets**。\n\n请递归读取docs/input/中已确认的需求基线（项目/模块PRD、角色×核心业务场景、原型/页面映射等），并继承项目基线、整体架构的所有主要组件与交互、数据库总体中的数据Owner与存储边界，核对实际code/中的可复用代码。\n\n按Matt Tickets的三个核心机制操作：\n1）tracer bullet：把PRD场景变成贯穿实际前后端及数据Owner、可供角色验收的纵向交付切片，再根据业务责任聚合成项目模块；**不要按菜单数、前端、后端或数据库层机械分模块**。\n2）blocking edges：给每个模块写清Blocked by强依赖、只需接口冻结的契约依赖、真实第三方或环境阻塞，并画模块级依赖DAG，确认没有循环依赖和假阻塞。\n3）quiz：把模块名称、交付的真实业务结果、角色×场景和阻塞边交项目经理与技术总监逐项确认过大/过小、合并/拆分及依赖是否真的成立；未经确认只称候选。\n\n产物仅有 docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md、模块拆分审核.md。完成后S08才选择本轮模块、S09详细设计、S10生成本轮Spec，**S11再直接运行不修改的Matt原版to-tickets**，发布适合单个Agent上下文执行的纵向开发Tickets。不要在S07产生全项目Spec、.scratch/*/issues/或提交Tracker可执行Tickets。",
           "skillId": "module-discovery",
           "skillOrigin": "自建"
         }
@@ -618,8 +618,8 @@
     },
     {
       "id": "module-discovery",
-      "origin": "自建",
-      "description": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。"
+      "origin": "Matt适配",
+      "description": "基于Matt to-tickets的纵向业务交付、模块级Blocked by和Quiz人工确认，输出全项目业务模块池/依赖DAG；本轮开发Tickets仍由S11直接运行官方to-tickets。"
     },
     {
       "id": "iteration-planning",

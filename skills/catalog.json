@@ -520,103 +520,112 @@
   {
     "id": "module-discovery",
     "name": "module-discovery",
-    "type": "自建",
+    "type": "Matt适配",
     "source": {
-      "repo": "bmad-code-org/BMAD-METHOD",
-      "path": "skills/bmad-architecture/SKILL.md",
-      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md",
-      "name": "BMAD Method — bmad-architecture"
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/to-tickets/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md",
+      "name": "Matt Pocock Skills — to-tickets"
     },
     "flow": [
-      "引用PRD模块能力",
-      "按职责与数据域划分",
-      "依赖排序",
-      "双角色审核"
+      "从PRD角色×场景抽取端到端交付切片",
+      "按总体组件与数据Owner聚合模块",
+      "Matt Blocking edges：强依赖/契约依赖/外部阻断",
+      "Matt Quiz：项目经理与技术总监审核粒度和依赖",
+      "交付模块DAG，不发布开发Tickets"
     ],
     "stepId": "S07",
-    "stepTitle": "模块拆分",
-    "summary": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。",
+    "stepTitle": "全项目模块拆分（Matt Tickets 适配）",
+    "summary": "基于Matt to-tickets的纵向业务交付、模块级Blocked by和Quiz人工确认，输出全项目业务模块池/依赖DAG；本轮开发Tickets仍由S11直接运行官方to-tickets。",
     "inputs": [
-      "docs/input/需求资料/PRD（包含现有页面功能信息）",
+      "docs/input/（完整已确认需求基线：PRD、角色×核心场景、已有页面映射及所有相关工程资料）",
       "docs/output/01-项目基线/项目基线.md",
-      "docs/output/02-整体架构/整体架构设计.md",
-      "docs/output/03-数据库总体/数据库总体设计.md",
-      "docs/output/04-开发环境/开发环境部署与验收.md"
+      "docs/output/02-整体架构/整体架构设计.md（组件职责、交互与Owner）",
+      "docs/output/03-数据库总体/数据库总体设计.md（数据域、权威Owner与存储边界）",
+      "docs/output/04-开发环境/部署步骤与执行记录.md",
+      "code/（实际原型页面与已有业务代码）"
     ],
     "outputs": [
-      "docs/output/05-模块拆分/项目模块清单.md",
-      "docs/output/05-模块拆分/模块依赖关系.md",
-      "docs/output/05-模块拆分/模块拆分审核.md"
+      "docs/output/05-模块拆分/项目模块清单.md（模块级交付结果及场景映射）",
+      "docs/output/05-模块拆分/模块依赖关系.md（Blocked by/DAG及可并行契约）",
+      "docs/output/05-模块拆分/模块拆分审核.md（Matt式粒度提问、项目经理/技术总监确认）"
     ],
-    "verification": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。",
+    "verification": "按Matt to-tickets的纵向可交付切片、阻塞依赖和人工粒度确认审核全项目模块；此处是模块级DAG，不是单上下文开发Ticket。项目经理审核需求覆盖/真实业务结果，技术总监审核组件/数据Owner及依赖。S11再完整调用Matt原版to-tickets发布本轮模块开发Tickets。",
     "diagram": {
-      "outcome": "形成真正按业务责任划分的模块图",
-      "input": "PRD现有页面清单 + 数据域及整体架构",
+      "outcome": "从需求基线得到全项目可独立验收的业务模块及前置阻塞DAG，而不是预生成全部开发任务",
+      "input": "已确认项目PRD和原型、整体组件/交互骨架、数据库总体及code/",
       "work": [
-        "PRD场景→原型页面→业务Owner映射",
-        "补漏去重并建立有阻塞分类的DAG"
+        "从角色×核心场景识别可演示的端到端业务切片",
+        "按业务状态/数据Owner把切片聚合成模块",
+        "为每个模块列Blocked by、契约依赖与真实外部阻塞",
+        "像Matt原版一样Quiz模块粒度及阻塞边，取得两类负责人审核"
       ],
-      "gate": "业务范围完整且技术边界合理吗？",
-      "fail": "缺页补模块、重叠则合并、耦合高则重划",
-      "pass": "项目经理+技术总监确认模块清单",
-      "output": "模块清单 + 依赖关系"
+      "gate": "每个场景都有唯一主责模块、DAG可审查且粒度被确认了吗？",
+      "fail": "补漏/去重/合并/重拆模块，修正阻塞边；不发布Tracker Tickets",
+      "pass": "冻结项目模块池，交S08选择本轮模块",
+      "output": "模块清单＋依赖DAG＋审核记录（不是开发Tickets）"
     },
     "referenceLearnings": [
       {
-        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md",
-        "learned": "由业务闭环与跨模块责任识别真实模块，让界面/数据库职责与架构协调，避免人为预设模块数量",
-        "name": "BMAD Method — bmad-architecture"
+        "name": "Matt Pocock Skills — to-tickets",
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md",
+        "learned": "研究原版Process 3 Tracer bullet纵向切片、blocking edges、Process 4 Quiz粒度/依赖审核及Process 5发布Tracker的边界：S07复用前三者用于模块级规划，不在模块划分阶段提前发布单上下文开发Ticket；S11才完整使用原版。"
       },
       {
         "name": "Addy Osmani Agent Skills — incremental-implementation",
         "url": "https://github.com/addyosmani/agent-skills/blob/main/skills/incremental-implementation/SKILL.md",
-        "learned": "学习纵向可验证切片（UI/API/DB）、契约先行与风险优先分解；只决定模块交付顺序与依赖，不产生全模块Spec。"
+        "learned": "借鉴可验收端到端能力和小批量交付原则，使项目模块可以按依赖在不同轮次中交付，不复制另一套Tracker或强制一次性生成全部Tickets。"
       }
     ],
     "maturity": "已补充执行图、失败路径和验收证据",
     "overview": {
-      "headline": "按业务闭环与数据责任拆模块，而不是按左侧菜单数量拆。",
-      "why": "让每个模块的边界、上下游依赖和角色场景验收都可见。",
-      "result": "docs/output/05-模块拆分/项目模块清单.md",
-      "sectionsTitle": "模块拆分的判断依据",
-      "conversionTitle": "输入怎样变成可执行设计？",
+      "headline": "Matt Tickets用于全项目模块拆分：学其纵向交付、Blocked by与Quiz，不提前生成开发Tickets。",
+      "why": "Matt原版to-tickets会把Spec或计划拆成适合单个Agent上下文的开发Ticket并发布Tracker，粒度太细。全项目模块拆分要先确定业务Owner和模块集合，所以采用方法改造；S11仍完整调用官方原版。",
+      "result": "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md、模块拆分审核.md",
+      "sectionsTitle": "Matt Tickets 的三个机制在模块级如何落地",
+      "conversionTitle": "从业务需求到可分轮交付的模块池",
       "sections": [
         {
-          "title": "业务闭环",
-          "summary": "从PRD主要场景确认模块应负责什么",
-          "sample": "需求解析与人工核对可能是一个可交付模块"
+          "title": "① Tracer bullet：纵向业务切片",
+          "summary": "用角色×核心场景确定能从已有页面触发到实际业务结果的交付能力，再按Owner聚合模块",
+          "sample": "某个报价需求核对场景涉及页面、状态确认及后台接口，它们属于一条业务切片，不分成前端/后端模块"
         },
         {
-          "title": "数据主责",
-          "summary": "一个重要业务对象谁负责更新",
-          "sample": "报价状态与审批状态的统一主责"
+          "title": "② Blocking edges：模块依赖DAG",
+          "summary": "清楚区分必须等上游模块实际交付的强依赖、只需契约冻结的依赖与独立的第三方阻塞",
+          "sample": "需求确认状态是后续匹配的前置条件；接口合同确定不代表真实Worker已联通"
         },
         {
-          "title": "依赖关系",
-          "summary": "模块先后顺序与可并行接口契约",
-          "sample": "需求确认→计算单匹配→成本→报价→审批"
+          "title": "③ Quiz：审核粒度与阻塞",
+          "summary": "问模块是否过大过小、强阻塞是否真的必要、能否合并/拆开；项目经理确认业务覆盖，技术总监确认系统Owner",
+          "sample": "同一审批角色场景被两个模块重复承诺就必须明确唯一主责"
         },
         {
-          "title": "业务覆盖",
-          "summary": "从PRD反向核对遗漏/冗余/重叠并决定补删改",
-          "sample": "不能只看原型菜单，遗漏异常场景"
-        },
-        {
-          "title": "上下游交付",
-          "summary": "为选择本轮模块提供切入点",
-          "sample": "不提前为所有模块产出Spec和Tickets"
+          "title": "④ 输出模块池，不发布任务",
+          "summary": "只输出业务模块清单和模块DAG，不提前生成每个模块的Spec/开发Ticket",
+          "sample": "S08选择模块→S09模块详细设计→S10模块Spec→S11 Matt原版to-tickets开发任务"
         }
       ],
-      "thinking": [],
+      "thinking": [
+        {
+          "given": "一个项目有20个已有菜单、角色和业务流程相互交叉",
+          "answer": "不要按菜单生成20个模块；从业务可交付场景和数据Owner聚合后建立模块依赖DAG"
+        },
+        {
+          "given": "两个模块只依赖彼此已约定的REST接口",
+          "answer": "标记为契约依赖，不必两者强制串行；真实业务验收仍需验证接口可用"
+        }
+      ],
       "doesNot": [
-        "PRD若已有页面清单不再重做",
-        "模块不强制为13个或8个",
-        "不在模块拆分中制作每张数据库表"
+        "不直接把Matt可执行Ticket当成项目业务模块",
+        "不在S07调用官方to-tickets向Tracker发布全项目Tickets",
+        "不预生成全部模块Spec、DDL或接口字段",
+        "不默认项目业务、技术栈、页面数和模块数"
       ]
     },
     "outputSampleFile": "docs/examples/报价项目/module-discovery/报价模块拆分示例.md",
     "sampleTitle": "报价系统模块候选拆分示例",
-    "adaptation": "把BMAD的全局一致性要求转成PRD角色场景→页面→数据责任→模块Owner反向矩阵及依赖DAG，避免按菜单机械切分。"
+    "adaptation": "以Matt Pocock Skills官方to-tickets为主参考，**明确做项目模块级适配**：采用tracer-bullet纵向交付、blocking edges/依赖DAG、quiz人工粒度审核；原版单上下文Ticket、Issue Tracker发布属于S11而不在S07执行。进一步保留当前工作区必需的项目PRD角色×场景覆盖、既有原型/代码映射和整体架构组件及数据Owner约束。"
   },
   {
     "id": "iteration-planning",
