@@ -37,3 +37,15 @@ description: 复盘首次项目建设从基线、Grill、架构、模块、开�
 - [独立检查门禁](references/execution-gate.md)
 - [交付模板](assets/output-template.md)
 - [报价系统示例](examples/报价项目场景示例.md)
+
+## 跨阶段返工复盘（不同于Matt retro）
+
+```mermaid
+flowchart LR
+  A[Grill/设计/开发/测试/上线证据] --> B[返工发生在哪一关]
+  B --> C[根因归类:漏问/漏设计/实现缺陷/环境证据不足]
+  C --> D[具体改哪一个Skill或质量门禁]
+  D --> E[在下一项目验证改进结果]
+```
+
+对于每个反复出现的失败用 `发生阶段 | 相关文件/会话/缺陷证据 | 当时应该识别的前置条件 | 未识别原因 | 拟调整Skill/工作流 | 如何验证 | 审核人` 表达；不要把推测的AI提效时间写成实际数据。Matt `retro` 保持AI编码会话层面的工具/Agent改进；本Skill关注跨阶段的项目交付效率、Grill决策前置和验收门禁。输出 `docs/output/09-复盘/项目研发复盘.md` 与 `Skill和流程改进建议.md`。
