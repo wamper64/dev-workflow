@@ -66,17 +66,23 @@ function logicDiagram(d){
  +'<div class="logic-arrow">↓</div><div class="logic-output"><span class="logic-kicker">最后交付什么</span><strong>'+esc(d.output)+'</strong></div>';
 }
 
+function renderCodeReviewAxes(skill){
+ const parts=skill.reviewAxes||[];
+ return '<div class="source-detail"><h3>Matt code-review 的审查范围</h3><p>它首先固定Git Diff与来源Spec，通过 Standards 与 Spec 两个相互独立的评审轴发现代码问题。**原型视觉和人工业务验收是后续关卡，不是把它们塞进code-review就已经自动完成。**</p>'
+ +'<div class="skill-topic-grid">'+parts.map((x,i)=>'<article class="skill-topic-card"><span class="skill-topic-index">'+String(i+1).padStart(2,"0")+'</span><h4>'+esc(x.title)+'</h4><p>'+esc(x.detail)+'</p></article>').join("")+'</div><p class="flow-note">流程：固定比较基准与Spec → Standards/Spec双轴审查 → 修复并复审 → 真实联调/原型与人工验证</p></div>';
+}
+
 function renderSkillOverview(skill){
  const a=skill.overview;
- if(!a)return logicDiagram(skill.diagram);
+ if(!a)return skill.reviewAxes?renderCodeReviewAxes(skill):logicDiagram(skill.diagram);
  const cards=(a.sections||[]).map((x,i)=>'<article class="skill-topic-card"><span class="skill-topic-index">'+String(i+1).padStart(2,"0")+'</span><h4>'+esc(x.title)+'</h4><p>'+esc(x.summary)+'</p><div class="skill-topic-example"><span>报价项目举例</span>'+esc(x.sample)+'</div></article>').join("");
  const conversions=(a.thinking||[]).map(x=>'<div class="thinking-row"><div><span class="thinking-label">资料中有什么</span><p>'+esc(x.given)+'</p></div><span class="thinking-arrow">→</span><div><span class="thinking-label">Skill 提炼什么</span><p>'+esc(x.answer)+'</p></div></div>').join("");
  const exclusions=(a.doesNot||[]).map(x=>'<li>'+esc(x)+'</li>').join("");
  return '<div class="skill-overview"><div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
- +'<div class="skill-overview-title"><h3>工程基线具体有哪些内容？</h3><span>7个核心板块</span></div><div class="skill-topic-grid">'+cards+'</div>'
- +'<div class="skill-overview-title"><h3>资料与工程约束如何转化？</h3></div><div class="thinking-grid">'+conversions+'</div>'
+ +'<div class="skill-overview-title"><h3>'+esc(a.sectionsTitle||"此 Skill 涵盖的关键内容") +'</h3><span>'+(a.sections||[]).length+'个具体板块</span></div><div class="skill-topic-grid">'+cards+'</div>'
+ +'<div class="skill-overview-title"><h3>'+esc(a.conversionTitle||"输入信息如何形成关键决定？") +'</h3></div><div class="thinking-grid">'+conversions+'</div>'
  +'<div class="skill-overview-title"><h3>本 Skill 不处理的内容</h3></div><ul class="skill-exclusions">'+exclusions+'</ul>'
- +'<div class="skill-cta"><span>先看输出效果，再决定是否细读SKILL.md</span><button type="button" data-skill-tab="result">查看报价项目完整输出示例 →</button></div></div>';
+ +(skill.outputSampleFile?'<div class="skill-cta"><span>先查看报价项目示例，再决定是否细读SKILL.md</span><button type="button" data-skill-tab="result">查看示例 →</button></div>':'')+'</div>';
 }
 function richInline(s){
  return esc(s).replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>");
@@ -109,7 +115,7 @@ function renderSkillResult(){
  const s=currentSkill;
  const selected=currentResult==="consultation"&&s?.consultationFile?s.consultationFile:s?.outputSampleFile;
  if(!selected||!s.files?.[selected])return '<p class="sample-empty">当前还没有经过审核的完整产物示例。</p>';
- return '<div class="sample-head"><div><strong>报价系统工程基线——示范执行结果</strong><p>这是模拟输入及模拟裁定的成品形态，并非已运行真实客户PRD生成的正式基线。</p></div><div class="sample-actions"><button data-sample="final" class="'+(currentResult==="final"?"active":"")+'">工程基线成品</button>'+(s.consultationFile?'<button data-sample="consultation" class="'+(currentResult==="consultation"?"active":"")+'">AI澄清过程</button>':"")+'</div></div>'
+ return '<div class="sample-head"><div><strong>'+esc(s.sampleTitle||"报价项目示例输出")+'</strong><p>这是以报价业务制作的示范内容，不是已运行真实客户PRD后的正式审批结果；是否为完整成品以本Skill示例说明为准。</p></div><div class="sample-actions"><button data-sample="final" class="'+(currentResult==="final"?"active":"")+'">'+(s.consultationFile?"工程基线成品":"报价项目示例")+'</button>'+(s.consultationFile?'<button data-sample="consultation" class="'+(currentResult==="consultation"?"active":"")+'">AI澄清过程</button>':"")+'</div></div>'
  +renderSampleMarkdown(s.files[selected]);
 }
 
@@ -172,7 +178,7 @@ function previewSkill(id){
  if(!item)return;
  currentSkill=item;currentSkillTab="flow";currentResult="final";currentFile="SKILL.md";showFileSource=false;
  $("skill-dialog-title").textContent=id;
- $("skill-dialog-label").textContent="覆盖步骤："+item.stepTitle+" · 实际文件："+Object.keys(item.files||{}).length+" 个";
+ $("skill-dialog-label").textContent=item.stepTitle+" · "+(item.maturity||"官方原版")+" · 实际文件："+Object.keys(item.files||{}).length+" 个";
  refreshSkillPreview();
  const dlg=$("skill-dialog");if(!dlg.open)dlg.showModal();
 }
