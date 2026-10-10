@@ -25,6 +25,7 @@ subprocess.run(["python3", str(ROOT / "scripts" / "audit_contracts.py")], check=
 assert len(data["phases"]) == 5
 assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})
 assert len(data["phases"][1]["steps"]) == 7
+assert len(data["phases"][2]["steps"]) == 8
 assert len(data["modules"]) == 13
 assert len(catalog) == 23
 assert len({x["id"] for x in catalog}) == 23
@@ -89,7 +90,7 @@ archive = DIST / "skills-bundle.zip"
 with ZipFile(archive, "w", ZIP_DEFLATED) as z:
     for folder in (ROOT / "skills", ROOT / "templates" / "project"):
         for f in sorted(folder.rglob("*")):
-            if not f.is_file():
+            if not f.is_file() or "module-integration-acceptance" in f.parts:
                 continue
             # 调研信息只在网站侧呈现，安装包里不出现来源/类型目录元数据
             if f in (ROOT / "skills/catalog.json", ROOT / "skills/workspace.json", ROOT / "skills/REFERENCES.md"):
@@ -97,7 +98,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
             z.write(f, f.relative_to(ROOT).as_posix())
     z.writestr("安装说明.md",
         "# 报价系统研发 Skills\n\n"
-        "包含24个主Skill和9个通用/执行依赖（共33份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
+        "包含23个主Skill和9个通用/执行依赖（共32份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
         "请将 skills/ 目录用于研发Agent工作区；"
         "把 templates/project/docs/ 下的目录结构复制到真实项目，"
         "实际PRD和已有前后端源码由项目方提供，不包含在下载包中。\n"
@@ -105,7 +106,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         "Matt 官方原版所需的版权和许可说明见 skills/LICENSE-Matt-Pocock.txt。\n")
 with ZipFile(archive) as z:
     names = z.namelist()
-    assert len([n for n in names if n.endswith("/SKILL.md")]) == 33
+    assert len([n for n in names if n.endswith("/SKILL.md")]) == 32
     assert not any(n.endswith(("REFERENCES.md", "catalog.json", "workspace.json")) for n in names)
     assert "skills/project-baseline/scripts/check_inputs.py" in names
     assert "skills/setup-matt-pocock-skills/issue-tracker-local.md" in names
@@ -201,4 +202,4 @@ html_path = DIST / "index.html"
 html_path.write_text(template, encoding="utf-8")
 print("内联JS校验通过")
 print(f"构建成功：{html_path}（{len(template.encode('utf-8'))}字节）")
-print(f"完整包：{archive}（{len(names)}个文件，33个Skill）")
+print(f"完整包：{archive}（{len(names)}个文件，32个Skill）")

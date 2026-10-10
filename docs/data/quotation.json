@@ -1045,7 +1045,7 @@
     {
       "id": "architecture-baseline",
       "origin": "基于Matt改造",
-      "description": "技术总监评审运行架构、跨服务通信、全局认证及对接方案；不通过则修正设计。",
+      "description": "递归读取全部docs/input，识别全项目所有主要组件/运行单元和跨组件交互，内部Grill补足决策，形成可供下游填充的完整骨架。",
       "usedAt": [
         {
           "phase": "P01",
@@ -1057,7 +1057,7 @@
     {
       "id": "data-architecture",
       "origin": "基于Matt改造",
-      "description": "技术总监确认数据域划分、单库/分库分表及容量策略；明确不涉及具体表字段。",
+      "description": "在整体架构已确定的组件/交互骨架下细化数据域、权威与分库分表/容量策略；关键未决存储边界可内部Grill，绝不反向新造服务。",
       "usedAt": [
         {
           "phase": "P01",
@@ -1069,7 +1069,7 @@
     {
       "id": "development-environment",
       "origin": "自建",
-      "description": "开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。",
+      "description": "右侧用户填写真实环境信息表，导出docs/input/环境资料/开发环境信息.md，Skill按表和整体架构有序部署依赖，并记录实际执行结果。",
       "usedAt": [
         {
           "phase": "P01",
@@ -1105,12 +1105,12 @@
     {
       "id": "module-design",
       "origin": "基于Matt改造",
-      "description": "开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。",
+      "description": "读取全量模块资料，继承已批准整体组件和交互骨架，内部按需Grill后只细化本轮业务状态、API、表字段与迁移草案。",
       "usedAt": [
         {
           "phase": "P02",
           "step": "S09",
-          "title": "完成本轮模块详细设计"
+          "title": "完成本轮模块详细设计（内部Grill）"
         }
       ]
     },
@@ -1141,38 +1141,20 @@
     {
       "id": "implement-spec",
       "origin": "Matt原版",
-      "description": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。",
+      "description": "Matt官方implement-spec内部依次执行Ticket、TDD、必要集成验证与code-review（Standards/Spec）；不另设代码审查或重复自动测试步骤。",
       "usedAt": [
         {
           "phase": "P02",
           "step": "S12",
-          "title": "TDD 驱动实现及前后端联动"
+          "title": "TDD实现、集成验证与内置代码审查"
         }
       ]
     },
     {
       "id": "code-review",
       "origin": "Matt原版",
-      "description": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S13",
-          "title": "代码审查（规范 + Spec）"
-        }
-      ]
-    },
-    {
-      "id": "module-integration-acceptance",
-      "origin": "自建",
-      "description": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S14",
-          "title": "模块联调与AI自动测试"
-        }
-      ]
+      "description": "Matt原版代码审查通过implement-spec内部调用，无独立导航步骤，仍保留完整原版Skill供查看。",
+      "usedAt": []
     },
     {
       "id": "iteration-close",
@@ -1261,41 +1243,30 @@
     {
       "id": "grill-with-docs",
       "origin": "Matt原版",
-      "description": "逐轮澄清本项目未决设计，不重问已确认PRD",
-      "usedAt": [
-        {
-          "phase": "P01",
-          "step": "S03Q",
-          "title": "架构关键决策 Grill"
-        },
-        {
-          "phase": "P02",
-          "step": "S08Q",
-          "title": "本轮模块疑点 Grill（有疑点时）"
-        }
-      ]
+      "description": "官方Grill组合Skill，由整体架构设计及模块详细设计内部按需调用；不单独占一个工作步骤。",
+      "usedAt": []
     },
     {
       "id": "human-acceptance",
       "origin": "自建",
-      "description": "只记录人工实际执行结果，bug闭环后签收",
+      "description": "AI只生成需求基线中自动化不能可靠证明的人工用例；人工亲测并在同一md填写结果，有Bug进入官方六阶段诊断。",
       "usedAt": [
         {
           "phase": "P02",
           "step": "S14H",
-          "title": "人工测试与角色场景验收"
+          "title": "生成人工测试单 → 人工执行与结果回填"
         }
       ]
     },
     {
       "id": "diagnosing-bugs",
       "origin": "Matt原版",
-      "description": "只有发现Bug才调用，根因先于修复",
+      "description": "严格遵守Matt官方六阶段：构造红灯反馈环、复现最小化、3–5个可证伪假设、针对性插桩、修复/回归测试、清理。",
       "usedAt": [
         {
           "phase": "P02",
           "step": "S14B",
-          "title": "缺陷定位修复（测试不通过时）"
+          "title": "诊断与修复 Bug（按需，官方六阶段）"
         }
       ]
     }
