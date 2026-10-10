@@ -64,7 +64,7 @@ for s in payload["skills"]:
         ):
             assert required in s["files"], required
 assert custom_count == 15
-assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 33
+assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 32
 assert len(workspace) == 6
 assert all(x["source"]["url"].startswith("https://github.com/mattpocock/skills/") for x in workspace)
 assert set(x["id"] for x in workspace).isdisjoint(known)
@@ -90,7 +90,7 @@ archive = DIST / "skills-bundle.zip"
 with ZipFile(archive, "w", ZIP_DEFLATED) as z:
     for folder in (ROOT / "skills", ROOT / "templates" / "project"):
         for f in sorted(folder.rglob("*")):
-            if not f.is_file() or "module-integration-acceptance" in f.parts:
+            if not f.is_file():
                 continue
             # 调研信息只在网站侧呈现，安装包里不出现来源/类型目录元数据
             if f in (ROOT / "skills/catalog.json", ROOT / "skills/workspace.json", ROOT / "skills/REFERENCES.md"):

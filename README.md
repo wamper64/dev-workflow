@@ -39,7 +39,7 @@
 | 3 全项目验收与部署 | 系统业务验收→非功能上线评审→生产预演与回滚→正式部署交接 |
 | 4 复盘与沉淀 | Matt编码会话retro→项目级流程与Skill改进 |
 
-共**5个阶段、23个导航步骤（包括第0阶段2项输入展示）**，21个可执行步骤引用**23个主Skill**（Grill由整体架构和模块详细设计两个Skill按需内调用）。另外有6个通用工具Skill及3个必要官方依赖，共**32份SKILL.md**。实际模块数量须从PRD识别；报价项目目前展示的13个模块只是待审核候选分组。
+共**5个阶段、23个导航步骤（包括第0阶段2项输入展示）**，21个可执行步骤引用**23个主Skill**（其中Grill与代码审查由其他Skill内部按需调用）。另外有6个通用工具Skill及3个必要官方依赖，共**32份SKILL.md**。实际模块数量须从PRD识别；报价项目目前展示的13个模块只是待审核候选分组。
 
 ## Skill质量与采用原则
 
@@ -61,7 +61,7 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 - Matt code-review仅**Standards + Spec**；S12实现阶段内置TDD/必要集成验证与Standards/Spec双轴代码审查；S14H由AI生成待执行测试单、人工回填，S14B以官方六阶段诊断Bug。
 - 整体架构需要全部四类docs/input、基线及既有代码；数据总体与模块详细设计也必须读取项目基线。
 - 环境部署不要求固定的个人电脑目录。模块详细设计只输出SQL迁移设计草案，TDD编码阶段才产生正式版本化迁移。
-- 详细来源见 `skills/REFERENCES.md`：上游SKILL.md、借鉴机制和本项目采用/改造分别说明。
+- 详细来源见 `skills/REFERENCES.md` 和 `docs/research/skill-sources.md`：标明具体项目及Skill名称、学习机制和项目采用/改造，不进入可安装Skill正文。
 - 静态契约校验：`python3 scripts/audit_contracts.py`；`python3 scripts/build_site.py` 在构建前强制运行校验并生成离线站点与Skills包。
 
 - 首次进入S08时按已审核模块清单初始化 `docs/output/项目总控/项目实施状态.md`，后续轮次只更新，不覆盖历史已验收记录。
