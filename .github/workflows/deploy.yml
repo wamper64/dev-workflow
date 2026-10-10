@@ -29,6 +29,10 @@ jobs:
         run: node --check docs/app.js
       - name: 构建单文件网站
         run: python3 scripts/build_site.py
+      - name: 安装页面交互验证依赖
+        run: npm install --no-save --no-package-lock --prefix /tmp/dev-workflow-ui-test jsdom@26
+      - name: 验证实际点击与Skill目录预览
+        run: node scripts/smoke_ui.cjs
       - name: 配置 GitHub Pages
         uses: actions/configure-pages@v5
       - name: 上传静态网站
