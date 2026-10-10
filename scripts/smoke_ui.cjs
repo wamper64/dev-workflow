@@ -41,7 +41,7 @@ async function main(){
  assert.equal(doc.querySelectorAll(".skill-topic-card").length,8,"工程基线8类量化内容未展示");
  assert.match(doc.querySelector(".skill-overview").textContent,/16GiB|16 GiB/);
  assert.match(doc.querySelector(".skill-overview").textContent,/保留|5年/);
- assert.match(doc.querySelector(".skill-summary").textContent,/第一性原则|共同边界/);
+ assert.match(doc.querySelector(".skill-summary").textContent,/可量化的设计边界/);
  click('[data-skill-tab="result"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/报价系统项目工程基线/);
  assert.ok(doc.querySelectorAll(".sample-table").length>=6,"成品示例应显示可阅读表格");
