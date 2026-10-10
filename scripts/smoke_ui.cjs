@@ -75,7 +75,7 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/运行单元/);
  click('[data-skill-tab="files"]');
  click('[data-skill-file="references/architecture-gate.md"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/整体架构设计检查关卡/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/整体架构骨架的审核门禁/);
  click('[data-skill-tab="source"]');
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/具体机制|难以逆转|协作|边界/);
  click("[data-skill-close]");
