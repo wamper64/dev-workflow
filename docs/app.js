@@ -50,7 +50,7 @@ document.addEventListener("click",event=>{
   const target=event.target.closest("button[data-phase],button[data-step]");
   if(!target)return;
   if(target.dataset.phase)setSelection(target.dataset.phase,null,true);
-  else if(target.dataset.step){setSelection(ui.phase,target.dataset.step);if(innerWidth<781)document.getElementById("detail").scrollIntoView({behavior:"smooth",block:"start"});}
+  else if(target.dataset.step){setSelection(ui.phase,target.dataset.step);if(innerWidth<781)document.querySelector(".detail-pane")?.scrollIntoView({behavior:"smooth",block:"start"});}
 });
 (async()=>{
  try{
