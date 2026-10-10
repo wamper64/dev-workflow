@@ -502,20 +502,16 @@
       "实测验证"
     ],
     "stepId": "S06",
-    "stepTitle": "开发环境部署",
-    "summary": "开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。",
+    "stepTitle": "开发环境部署（先填右侧表）",
+    "summary": "右侧用户填写真实环境信息表，导出docs/input/环境资料/开发环境信息.md，Skill按表和整体架构有序部署依赖，并记录实际执行结果。",
     "inputs": [
-      "docs/output/02-整体架构/整体架构设计.md",
-      "docs/output/03-数据库总体/数据库总体设计.md",
-      "docs/input/环境资料/",
-      "D:/company/environment/（有则优先复用）",
-      "code/fld/",
-      "code/guiwu_ruoyi/"
+      "右侧填写并导出的开发环境信息.md",
+      "项目基线/整体架构/数据库总体",
+      "code/fld/、code/guiwu_ruoyi/"
     ],
     "outputs": [
-      "docs/output/04-开发环境/开发环境部署与验收.md",
-      "按需：deploy/dev/docker-compose.yml",
-      "按需：deploy/dev/.env.example"
+      "docs/input/环境资料/开发环境信息.md",
+      "docs/output/04-开发环境/部署步骤与执行记录.md"
     ],
     "verification": "开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。",
     "diagram": {
@@ -538,7 +534,42 @@
       }
     ],
     "maturity": "已补充执行图、失败路径和验收证据",
-    "adaptation": "证据驱动探测本机已有依赖/容器/端口，按实际缺项安装并实测前后端/API/数据库；不复制参考库的语言和运行环境。"
+    "adaptation": "证据驱动探测本机已有依赖/容器/端口，按实际缺项安装并实测前后端/API/数据库；不复制参考库的语言和运行环境。",
+    "overview": {
+      "headline": "用户先填环境信息表 → 按已有环境及架构列部署步骤 → 逐项真实执行和验收。",
+      "why": "不同开发机已有数据库、Docker、端口及可用目录不一样。只有用户填写的环境事实才能决定哪些服务应复用、哪些必须安装。",
+      "sectionsTitle": "环境部署如何实际执行",
+      "sections": [
+        {
+          "title": "1 用户填写右侧表",
+          "summary": "填操作系统/资源、版本、端口、现有服务、允许目录、网络和权限；不存密码令牌",
+          "sample": "浏览器填表后下载开发环境信息.md，放docs/input/环境资料/"
+        },
+        {
+          "title": "2 形成差异及顺序计划",
+          "summary": "对照架构组件与数据库总体，已存在复用、缺失才部署、无权限停止",
+          "sample": "MySQL已有且可复用就不用再创建第二套数据库"
+        },
+        {
+          "title": "3 执行并逐项核验",
+          "summary": "用真实命令安装/启动，检查版本/端口/DB/API/原型；执行失败写具体状态",
+          "sample": "数据库容器就绪→后端连接→前端原型→登录/业务接口联通"
+        },
+        {
+          "title": "4 交付部署记录",
+          "summary": "输出已执行命令、真实结果、阻塞及可重复启动方式",
+          "sample": "未授权或未运行的依赖不得标为通过"
+        }
+      ],
+      "thinking": [],
+      "doesNot": [
+        "不自动猜用户的Windows安装目录",
+        "不要求下载包携带或保存密码/SSH密钥",
+        "不声称用户只填表就等于已经部署成功"
+      ],
+      "result": "docs/output/04-开发环境/部署步骤与执行记录.md"
+    },
+    "outputSampleFile": "examples/报价项目场景示例.md"
   },
   {
     "id": "module-discovery",
@@ -928,8 +959,8 @@
       "验证"
     ],
     "stepId": "S12",
-    "stepTitle": "TDD 驱动实现及前后端联动",
-    "summary": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。",
+    "stepTitle": "TDD实现与内置code-review",
+    "summary": "Matt官方implement-spec内部依次执行Ticket、TDD、必要集成验证与code-review（Standards/Spec）；不另设代码审查或重复自动测试步骤。",
     "inputs": [
       "当前模块的Spec与Tickets",
       "code/fld/",
@@ -958,9 +989,9 @@
     },
     "referenceLearnings": [
       {
+        "name": "Matt Pocock Skills — implement-spec",
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md",
-        "learned": "Spec→依赖图Tickets→可执行frontier→TDD实现→集成分支→内置code-review，再额外进行阶段质量关卡",
-        "name": "Matt Pocock Skills — implement-spec"
+        "learned": "由implement-spec内部完成TDD与code-review并返回真实代码及通过证据，后续只衔接人工未覆盖场景。"
       }
     ],
     "maturity": "官方原版，未改动",
@@ -982,9 +1013,9 @@
       "双轴评审",
       "修复复审"
     ],
-    "stepId": "S13",
-    "stepTitle": "代码审查与原型一致性审核",
-    "summary": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
+    "stepId": null,
+    "stepTitle": "implement-spec内部调用的 Standards + Spec 审查",
+    "summary": "Matt原版代码审查通过implement-spec内部调用，无独立导航步骤，仍保留完整原版Skill供查看。",
     "inputs": [
       "代码Diff",
       "当前Spec与Tickets",
@@ -1033,101 +1064,6 @@
       }
     ],
     "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。"
-  },
-  {
-    "id": "module-integration-acceptance",
-    "name": "module-integration-acceptance",
-    "type": "自建",
-    "source": {
-      "repo": "bmad-code-org/BMAD-METHOD",
-      "path": "skills/bmad-qa-generate-e2e-tests/SKILL.md",
-      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-qa-generate-e2e-tests/SKILL.md",
-      "name": "BMAD Method — bmad-qa-generate-e2e-tests"
-    },
-    "flow": [
-      "模块合并",
-      "业务主/异常链联调",
-      "角色验收",
-      "失败返工"
-    ],
-    "stepId": "S14",
-    "stepTitle": "完成模块集成联调与验收",
-    "summary": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
-    "inputs": [
-      "本轮各模块代码与SQL",
-      "对应Spec",
-      "本轮模块计划.md",
-      "角色场景PRD"
-    ],
-    "outputs": [
-      "docs/output/06-模块迭代/本轮联调记录.md",
-      "docs/output/06-模块迭代/本轮验收记录.md",
-      "端到端回归测试"
-    ],
-    "verification": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
-    "diagram": {
-      "outcome": "确认模块能在真实系统里按场景运行",
-      "input": "模块代码 + SQL + 前置模块 + 角色场景",
-      "work": [
-        "真实DB/API/E2E回归并保留运行证据",
-        "核对原型路由、组件、截图；移交人工场景"
-      ],
-      "gate": "真实业务联调与回归是否通过？",
-      "fail": "回退Ticket补修；没有真实对接则标受限",
-      "pass": "更新模块为已验收",
-      "output": "模块联调记录 + 场景验收记录"
-    },
-    "referenceLearnings": [
-      {
-        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-qa-generate-e2e-tests/SKILL.md",
-        "learned": "检测原有测试框架，对已有API和UI生成实际可运行的E2E/接口测试并总结覆盖盲区",
-        "name": "BMAD Method — bmad-qa-generate-e2e-tests"
-      },
-      {
-        "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md",
-        "learned": "与代码审查、人工业务观察分离，不把模拟测试认定真实接口联调",
-        "name": "BMAD Method — build"
-      }
-    ],
-    "maturity": "已补充执行图、失败路径和验收证据",
-    "overview": {
-      "headline": "证明当前模块真正联通、自动测试有证据、原型没有另起一套。",
-      "why": "把代码Diff评审之外的接口、数据库、真实浏览器和权限链路交给可执行测试。",
-      "result": "docs/output/06-模块迭代/<模块>/自动联调与测试记录.md",
-      "sectionsTitle": "自动联调与原型检查要证明什么？",
-      "conversionTitle": "输入怎样变成可执行设计？",
-      "sections": [
-        {
-          "title": "真实联通",
-          "summary": "页面→后端API→实际数据库/第三方",
-          "sample": "项目详情页调用真实若依服务，而不是全程Mock"
-        },
-        {
-          "title": "自动功能测试",
-          "summary": "接口/E2E/失败路径/重复提交及权限",
-          "sample": "未授权修改参数→403或业务拒绝"
-        },
-        {
-          "title": "原型对照",
-          "summary": "路由、布局、组件、CSS变量和截图差异",
-          "sample": "核对前后端开发使用已有code/fld页面"
-        },
-        {
-          "title": "覆盖盲区",
-          "summary": "哪些测试只有人工能判断，明确转交",
-          "sample": "视觉细节、审批理解与真实第三方对接"
-        }
-      ],
-      "thinking": [],
-      "doesNot": [
-        "不等同于Matt code-review",
-        "不能取代人工测试与业务验收",
-        "没有真实对接时不得写正式通过"
-      ]
-    },
-    "outputSampleFile": "examples/报价模板联调示例.md",
-    "sampleTitle": "报价模板自动联调计划示例",
-    "adaptation": "BMAD自动API/E2E测试只作为参考，改成真实RuoYi/Vue联调、原型结构和视觉核对、Mock与真实证据分流、向人工移交。"
   },
   {
     "id": "iteration-close",
@@ -1574,16 +1510,16 @@
       "复测并按角色×场景签收"
     ],
     "stepId": "S14H",
-    "stepTitle": "人工测试与角色场景验收",
-    "summary": "只记录人工实际执行结果，bug闭环后签收",
+    "stepTitle": "生成用例与人工结果回填",
+    "summary": "AI只生成需求基线中自动化不能可靠证明的人工用例；人工亲测并在同一md填写结果，有Bug进入官方六阶段诊断。",
     "inputs": [
-      "docs/output/06-模块迭代/<模块>/自动联调与测试记录.md",
-      "本轮模块Spec/PRD、现有原型",
-      "真实开发环境和已授权测试角色"
+      "docs/input/需求资料/（已确认需求基线）",
+      "implement-spec TDD/集成验证与内置code-review证据",
+      "现有原型、模块Spec与真实测试环境"
     ],
     "outputs": [
-      "docs/output/06-模块迭代/<模块>/人工测试与缺陷单.md",
-      "docs/output/06-模块迭代/<模块>/人工场景验收记录.md"
+      "docs/output/06-模块迭代/<模块>/人工测试用例与结果.md",
+      "如有：Bug/人工复测记录"
     ],
     "verification": "开发人员真实操作、签证据；项目经理按角色×核心场景确认。失败不能进入迭代收口。",
     "diagram": {
@@ -1612,43 +1548,32 @@
     ],
     "maturity": "已补充执行图、失败路径和验收证据",
     "overview": {
-      "headline": "AI准备“待执行”测试单，人做操作、记录真实结果、验收和Bug闭环。",
-      "why": "自动API和截图测试无法代替有实际业务权限的人判断报价操作是否正确、可用。",
-      "result": "docs/output/06-模块迭代/<模块>/人工测试与缺陷单.md",
-      "sectionsTitle": "人工测试到底要做哪些事？",
-      "conversionTitle": "输入怎样变成可执行设计？",
+      "headline": "一个Skill处理两个相连动作：AI先生成测试用例，人再执行并回填同一份Markdown。",
+      "why": "implement-spec已经完成自动测试和内置代码审查，这里只针对AI无权操作或无法判断的真实UI、人工业务、第三方与多角色场景。",
+      "sectionsTitle": "人工测试只保留两个实际动作",
       "sections": [
         {
-          "title": "准备测试单",
-          "summary": "AI按角色×场景生成步骤和预期，不能提前写通过",
-          "sample": "需求参数人工核对用例初态为待执行"
+          "title": "① AI准备待执行测试单",
+          "summary": "从需求基线角色×核心场景中筛选人工必须执行的用例；含前置条件、操作步骤、预期结果，状态全部“待执行”",
+          "sample": "需求参数核对、审批驳回、原型视觉体验、真实第三方处理"
         },
         {
-          "title": "人工实际操作",
-          "summary": "页面体验、复杂组件、审批/权限、客户输出与第三方",
-          "sample": "亲自点击参数确认并检查报价能引用正确版本"
-        },
-        {
-          "title": "Bug闭环",
-          "summary": "可复现记录→diagnosing-bugs→TDD修复→Review/联调→复测",
-          "sample": "审批驳回失败必须按原始步骤重新测试"
-        },
-        {
-          "title": "角色场景签收",
-          "summary": "项目经理依据真实证据批准当前模块完成",
-          "sample": "无实际截图和执行人不能写人工验收通过"
+          "title": "② 人执行并回填同一表",
+          "summary": "人工亲自操作，写真实结果、通过/失败/受阻、测试人、日期、截图与Bug；失败修复后原用例复测",
+          "sample": "AI不预填通过；项目经理按真实证据确认本轮关键场景"
         }
       ],
       "thinking": [],
       "doesNot": [
-        "AI不预填用例为通过",
-        "Bug没有复测不得关闭",
-        "Mock不能冒充正式第三方验收"
-      ]
+        "不重新执行implement-spec已验证过的TDD/API测试",
+        "不由AI代替开发人员点页面或虚构通过",
+        "不再为同一人工测试生成重复的报告文档"
+      ],
+      "result": "docs/output/06-模块迭代/<模块>/人工测试用例与结果.md"
     },
     "outputSampleFile": "examples/报价需求解析人工测试示例.md",
-    "sampleTitle": "需求解析人工测试用例示例",
-    "adaptation": "将BMAD自动覆盖与人工Walkthrough职责区分，要求开发人员按真实角色操作，项目经理按角色×场景确认，Bug驱动复测。"
+    "sampleTitle": "报价模块人工测试用例表（全部待执行）",
+    "adaptation": "吸收Superpowers完成必须有证据的原则，合并测试用例准备与人工结果回填，避免在implement-spec后重复TDD/独立code-review。"
   },
   {
     "id": "diagnosing-bugs",
@@ -1661,14 +1586,16 @@
       "name": "Matt Pocock Skills — diagnosing-bugs"
     },
     "flow": [
-      "建立原始症状红灯信号",
-      "可复现并缩小范围",
-      "单一假设与实验",
-      "TDD修复重测"
+      "Phase 1 构建快速可重复反馈环",
+      "Phase 2 复现并最小化",
+      "Phase 3 3–5个可证伪假设",
+      "Phase 4 定点插桩验证",
+      "Phase 5 修复及回归",
+      "Phase 6 清理调试设施"
     ],
     "stepId": "S14B",
-    "stepTitle": "缺陷诊断与修复",
-    "summary": "只有发现Bug才调用，根因先于修复",
+    "stepTitle": "Bug 六阶段诊断与修复（按需）",
+    "summary": "严格遵守Matt官方六阶段：构造红灯反馈环、复现最小化、3–5个可证伪假设、针对性插桩、修复/回归测试、清理。",
     "inputs": [
       "人工测试发现的Bug与复现步骤/证据",
       "对应Spec、日志和真实执行环境",
@@ -1679,28 +1606,64 @@
       "新的回归测试与修复Commit"
     ],
     "verification": "开发人员验证同一症状先红后绿；必须回到S12实现/代码审查/联调/人工复测。无缺陷则跳过此步骤。",
-    "diagram": {
-      "outcome": "不是修复表象，而是先建立真正能抓到原始症状的反馈环",
-      "input": "人工用例失败步骤、截图、日志、环境",
-      "work": [
-        "首先建立能红能绿的最小复现命令",
-        "复现并最小化症状",
-        "逐一验证假设和根因",
-        "TDD回归用例与最小修复"
-      ],
-      "gate": "原症状能被复现且修复后测试真实通过？",
-      "fail": "重采证据/缩小失败路径，不能凭猜测宣称修复",
-      "pass": "回到实现审查、自动联调和人工复测",
-      "output": "Bug根因+失败/修复证据+回归测试"
-    },
+    "diagram": null,
     "referenceLearnings": [
       {
+        "name": "Matt Pocock Skills — diagnosing-bugs",
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md",
-        "learned": "先构造能抓到用户原始症状的快速red-capable反馈环，再定位根因，不允许靠观察代码猜故障",
-        "name": "Matt Pocock Skills — diagnosing-bugs"
+        "learned": "逐字对齐六阶段：反馈环→复现最小化→3–5个排序假设→针对性插桩→修复回归→清理，第一阶段需真实执行过能捕捉原始症状的命令。"
       }
     ],
     "maturity": "官方原版，未改动",
-    "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。"
+    "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
+    "overview": {
+      "headline": "先用一个能抓住用户原始症状的快速红灯反馈环，再分六阶段诊断，不能靠读代码猜Bug。",
+      "why": "Matt原版要求先建立稳定、快速、Agent可运行的red-capable命令；只有复现、最小化之后才提出3–5个排序且可证伪的假设，再单变量验证、修复回归并清理。",
+      "sectionsTitle": "Matt 官方 diagnosing-bugs 的 6 个阶段",
+      "sections": [
+        {
+          "title": "Phase 1 · Build a feedback loop",
+          "summary": "优先投入精力建立能对原始Bug变红、修复后变绿的快速确定性执行命令；没有反馈环就停止，不能猜测",
+          "sample": "按实际症状选失败测试、curl脚本、Playwright、回放录制请求等；展示已执行命令及脱敏输出"
+        },
+        {
+          "title": "Phase 2 · Reproduce + minimise",
+          "summary": "用反馈环真实复现**同一个用户症状**，持续减少输入、配置和调用环节，直到所有剩余因素都必需",
+          "sample": "从完整报价审批链缩到能稳定触发错误的最小流程"
+        },
+        {
+          "title": "Phase 3 · Hypothesise",
+          "summary": "一次提出3–5个按可能性排序、能被实验推翻的根因假设，先向用户展示列表",
+          "sample": "每个假设明确“改变X会使错误消失/加重”的可检验预测"
+        },
+        {
+          "title": "Phase 4 · Instrument",
+          "summary": "逐项使用调试器/REPL或定点日志验证假设，一次只改变一个变量；性能问题先测基线",
+          "sample": "临时日志必须打唯一[DEBUG-...]标记，不能全量乱打日志"
+        },
+        {
+          "title": "Phase 5 · Fix + regression test",
+          "summary": "若有正确测试接缝，先把最小复现转为红灯回归测试，再修复变绿；重跑Phase 1原始完整症状",
+          "sample": "如果没有能真实触发Bug的测试接口，明确记录测试接缝不足"
+        },
+        {
+          "title": "Phase 6 · Cleanup",
+          "summary": "重跑原始反馈环、确认回归测试及清理调试日志与临时工具；提交信息写明真实根因",
+          "sample": "确认[DEBUG-...]已经清除、无遗留诊断脚本干扰正式运行"
+        }
+      ],
+      "thinking": [
+        {
+          "given": "人工测试报告写：审批被第一个人驳回后出现错误待办",
+          "answer": "先构造可以抓住“错误待办”的测试/接口脚本并证明会红；然后才按Phase2~6定位修复"
+        }
+      ],
+      "doesNot": [
+        "不在没有执行过red-capable反馈环时先猜根因",
+        "不能将“有6种工具造反馈环”误解为六个阶段",
+        "不能只修一个表象而不重跑原始失败路径"
+      ],
+      "result": "失败反馈环命令+假设证据+最小修复+回归与人工复测"
+    }
   }
 ]
