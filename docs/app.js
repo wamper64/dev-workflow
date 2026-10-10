@@ -145,6 +145,28 @@ function renderFiles(){
  return '<div class="file-explorer"><aside class="file-sidebar"><div class="file-sidebar-title">所有目录文件 <span>'+paths.length+'</span></div>'+options+'</aside>'
  +'<section class="file-preview"><div class="file-toolbar"><strong>'+esc(currentFile)+'</strong><button type="button" data-file-toggle>'+ (showFileSource?"阅读模式":"查看原文")+'</button></div>'+view+'</section></div>';
 }
+
+function renderSkillSources(skill){
+ const rs=skill.referenceLearnings||[];
+ return '<div class="source-detail"><h3>为什么参考这些Skill？</h3><p>这里只记录调研来源、实际借鉴的机制和本项目适配范围，绝不会插进用户下载安装的SKILL.md正文。</p>'
+ +'<div class="research-type"><strong>采用方式：</strong>'+esc(skill.type||"Matt原版")+'</div>'
+ +'<div class="research-rows">'+rs.map(x=>'<article class="research-row"><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">查看参考原文 ↗</a><p>'+esc(x.learned)+'</p></article>').join("")+'</div>'
+ +(!rs.length?'<p>暂无足够的逐项研究笔记，需要继续核实原始Skill文件，不能只凭仓库名称声称已参考。</p>':"")
+ +'<p class="research-boundary">Matt原版保持不改；自建/改造说明只在网站中展示。</p></div>';
+}
+function renderWorkspace(){
+ const list=skillData?.workspace||[];
+ $("workspace-skills").innerHTML=list.map(k=>
+  '<button type="button" class="workspace-skill" data-workspace-skill="'+esc(k.id)+'"><strong>'+esc(k.name)+' <code>/'+esc(k.id)+'</code></strong><p>'+esc(k.summary)+'</p><span>查看完整Skill与学习来源 ↗</span></button>'
+ ).join("");
+}
+document.addEventListener("click",event=>{
+ if(event.target.closest("#workspace-open")){renderWorkspace();const dlg=$("workspace-dialog");if(!dlg.open)dlg.showModal();return}
+ if(event.target.closest("[data-workspace-close]")){$("workspace-dialog").close();return}
+ const b=event.target.closest("[data-workspace-skill]");
+ if(b){$("workspace-dialog").close();previewSkill(b.dataset.workspaceSkill)}
+});
+
 function previewSkill(id){
  const item=skillData?.skills?.find(x=>x.id===id);
  if(!item)return;
@@ -157,7 +179,7 @@ function previewSkill(id){
 function refreshSkillPreview(){
  const sk=currentSkill;if(!sk)return;
  document.querySelectorAll(".skill-dialog-tabs [data-skill-tab]").forEach(t=>{if(t.dataset.skillTab==="result")t.hidden=!sk.outputSampleFile;const active=t.dataset.skillTab===currentSkillTab;t.classList.toggle("active",active);t.setAttribute("aria-selected",String(active))});
- let content=currentSkillTab==="flow"?renderSkillOverview(sk):currentSkillTab==="result"?renderSkillResult():currentSkillTab==="files"?renderFiles():('<div class="source-detail"><h3>设计来源与改造说明</h3><p>这部分用于审核参考依据，不写入安装用的 SKILL.md，也不放进交付 ZIP。</p><div><strong>处理方式：</strong>'+esc(sk.type)+'</div><div><strong>主要参考：</strong><a href="'+esc(sk.source.url)+'" target="_blank" rel="noopener noreferrer">'+esc(sk.source.repo)+" / "+esc(sk.source.path)+'</a></div></div>');
+ let content=currentSkillTab==="flow"?renderSkillOverview(sk):currentSkillTab==="result"?renderSkillResult():currentSkillTab==="files"?renderFiles():renderSkillSources(sk);
  $("skill-dialog-content").innerHTML=content;
  const a=sk.source;
  $("skill-reference").innerHTML='<span>研究来源：</span><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">'+esc(a.repo)+'</a> <span class="skill-aux">（不属于交付正文）</span>';
@@ -210,6 +232,7 @@ document.addEventListener("click",event=>{
   if(!res.ok)throw Error("HTTP "+res.status);
   ui.data=await res.json();
   skillData=JSON.parse(document.getElementById("skill-data").textContent);
+  skillData.workspace=skillData.skills.filter(s=>s.category==='workspace');
   if(!Array.isArray(ui.data.phases)||!ui.data.phases.length)throw Error("缺少研发阶段");
   const qs=new URLSearchParams(location.hash.slice(1));
   const p=ui.data.phases.find(p=>p.id===qs.get("phase"))||ui.data.phases[0];

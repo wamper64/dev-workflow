@@ -18,7 +18,8 @@
       <span class="project-future" title="报价系统流程确认后再建设">标准项目 · 待建设</span>
     </div>
     <span id="project-stats" class="header-meta">正在载入流程…</span>
-    <a id="download-skills" class="download-all" href="./skills-bundle.zip" download="报价系统-完整Skills包.zip" title="下载已配置的全部21个Skill（包括Matt原版、改造和自建）">⬇ 下载全部 Skills</a>
+    <button id="workspace-open" class="workspace-open" type="button" title="查看Handoff、Grilling、Research等工作区通用Skill">通用 Skills <span>6</span></button>
+    <a id="download-skills" class="download-all" href="./skills-bundle.zip" download="报价系统-完整Skills包.zip" title="下载24个主Skill和9个通用/依赖Skill（共33个完整目录）">⬇ 下载全部 Skills</a>
   </header>
   <div class="workspace">
     <aside class="phase-pane" aria-label="工作阶段">
@@ -31,7 +32,7 @@
       <div id="stage-intro"></div>
       <div class="step-heading"><h2>执行步骤</h2><span id="step-count"></span></div>
       <div id="step-list" class="step-list"></div>
-      <div class="step-notice">按当前业务条件执行。完成一轮模块开发并验收后，返回「选择本轮开发模块」开始下一轮。</div>
+      <div class="step-notice">Grill只澄清未决问题；AI联调后必须经过人工测试。发现Bug回到诊断、修复、审查和复测。</div>
     </main>
     <aside class="detail-pane" aria-label="步骤详情">
       <div class="detail-top"><span class="eyebrow">STEP DETAILS</span><span id="step-position" class="step-number"></span></div>
@@ -52,6 +53,15 @@
       </div>
       <div id="skill-dialog-content" class="skill-dialog-content"></div>
       <div class="skill-dialog-footer"><div id="skill-reference"></div><button class="dialog-close-bottom" type="button" data-skill-close>关闭</button></div>
+    </div>
+  </dialog>
+  <dialog id="workspace-dialog" class="skill-dialog workspace-dialog" aria-label="通用Skill工具箱">
+    <div class="skill-dialog-shell">
+      <div class="skill-dialog-header">
+        <div><span class="eyebrow">WORKSPACE TOOLKIT</span><h2>通用 Skills</h2><div class="skill-meta">按实际需要调用，不属于每个项目的强制阶段。</div></div>
+        <button type="button" class="dialog-close" data-workspace-close aria-label="关闭通用Skill">✕</button>
+      </div>
+      <div id="workspace-skills" class="workspace-skills"></div>
     </div>
   </dialog>
   <script type="module" src="./app.js"></script>
