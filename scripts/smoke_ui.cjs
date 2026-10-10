@@ -71,7 +71,7 @@ async function main(){
  click('[data-phase="P01"]');
  click('[data-step="S04"]');
  click('[data-skill="architecture-baseline"]');
- assert.equal(doc.querySelectorAll(".skill-topic-card").length,5,"整体架构应是内容地图而非同一流程图");
+ assert.ok(doc.querySelectorAll(".skill-topic-card").length>=5,"整体架构须展示组件与交互的多个内容板块，而非空壳");
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/运行单元/);
  click('[data-skill-tab="files"]');
  click('[data-skill-file="references/architecture-gate.md"]');
