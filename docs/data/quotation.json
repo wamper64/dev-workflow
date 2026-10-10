@@ -1,27 +1,27 @@
 {
   "title": "报价系统首次项目建设研发导航",
-  "version": "五阶段（含第0阶段）",
+  "version": "Skill逐步骤评审稿",
   "updated": "2026-10-10",
-  "overview": "0准备工作展示已有input与code；1项目准备与设计一次完成七项工作；2按模块迭代；3整体交付；4复盘。",
+  "overview": "第0阶段展示 docs/input/ 与 code/；每个执行步骤只有一个主Skill。优先直接使用Matt，无法覆盖则在Matt理念上改造或借鉴已核实的GitHub开源方案自建。",
   "inputs": [
     {
       "name": "需求资料",
-      "path": "input/需求资料/",
+      "path": "docs/input/需求资料/",
       "desc": "已确认的项目PRD与模块需求"
     },
     {
       "name": "工程资料",
-      "path": "input/工程资料/",
+      "path": "docs/input/工程资料/",
       "desc": "已有方案、技术选型、技术约束；可为空"
     },
     {
       "name": "环境资料",
-      "path": "input/环境资料/",
+      "path": "docs/input/环境资料/",
       "desc": "本地或服务器信息；可为空"
     },
     {
       "name": "对接资料",
-      "path": "input/对接资料/",
+      "path": "docs/input/对接资料/",
       "desc": "第三方API及设备协议等；可为空"
     },
     {
@@ -46,32 +46,30 @@
         {
           "id": "S00A",
           "title": "input：已有项目资料",
-          "skills": [],
           "inputs": [
-            "input/需求资料/（已确认的项目PRD、模块PRD）",
-            "input/工程资料/（已有方案、选型及约束，可为空）",
-            "input/环境资料/（已有服务器或本地环境资料，可为空）",
-            "input/对接资料/（第三方API、设备协议，可为空）"
+            "docs/input/需求资料/（已确认的项目PRD、模块PRD）",
+            "docs/input/工程资料/（已有方案、选型及约束，可为空）",
+            "docs/input/环境资料/（已有服务器或本地环境资料，可为空）",
+            "docs/input/对接资料/（第三方API、设备协议，可为空）"
           ],
           "outputs": [
-            "无新增文件（原始输入保持不变）"
+            "无新增文件（仅展示已有输入）"
           ],
           "review": "当前只准备输入文件；下一阶段第1步「审核输入」由 dev-project-baseline 核验。",
-          "prompt": "请执行报价系统首次项目建设的「input：已有项目资料」步骤。\n\n【调用 Skill（按顺序）】\n本步骤为输入准备，不调用 Skill。\n\n【输入】\n- input/需求资料/（已确认的项目PRD、模块PRD）\n- input/工程资料/（已有方案、选型及约束，可为空）\n- input/环境资料/（已有服务器或本地环境资料，可为空）\n- input/对接资料/（第三方API、设备协议，可为空）\n\n【执行要求】\n把已有且已确认的项目资料按四个目录存放，保留原文件和版本，资料缺失的可选目录可以为空。不要在准备工作中重新生成PRD或擅自补充未确认的对接参数。下一步调用 dev-project-baseline 审核这些输入。\n\n【输出】\n- 无新增文件（原始输入保持不变）\n\n【审核】\n当前只准备输入文件；下一阶段第1步「审核输入」由 dev-project-baseline 核验。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "skills": []
         },
         {
           "id": "S00B",
           "title": "code：已有前后端工程",
-          "skills": [],
           "inputs": [
             "code/fld/（已经完成的前端原型）",
             "code/guiwu_ruoyi/（已有若依后端框架）"
           ],
           "outputs": [
-            "无新增文件（现有工程作为开发基础）"
+            "无新增文件（仅展示已有输入）"
           ],
           "review": "开发时必须基于原型及若依框架，不在准备阶段重建工程；初始化由下阶段 setup-matt-pocock-skills 执行。",
-          "prompt": "请执行报价系统首次项目建设的「code：已有前后端工程」步骤。\n\n【调用 Skill（按顺序）】\n本步骤为输入准备，不调用 Skill。\n\n【输入】\n- code/fld/（已经完成的前端原型）\n- code/guiwu_ruoyi/（已有若依后端框架）\n\n【执行要求】\n确保前端原型与若依后端框架已经置于 code/ 下。后续直接修改 code/fld 的既有页面并延用组件和样式，后端扩展 code/guiwu_ruoyi。这里不运行 Skill，下一阶段将调用 setup-matt-pocock-skills 初始化研发Agent环境。\n\n【输出】\n- 无新增文件（现有工程作为开发基础）\n\n【审核】\n开发时必须基于原型及若依框架，不在准备阶段重建工程；初始化由下阶段 setup-matt-pocock-skills 执行。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "skills": []
         }
       ],
       "artifacts": [
@@ -88,25 +86,26 @@
       "steps": [
         {
           "id": "S01",
-          "title": "审核输入",
+          "title": "输入就绪确认",
           "skills": [
-            "dev-project-baseline",
-            "grill-with-docs"
+            "input-readiness"
           ],
           "inputs": [
-            "input/需求资料/（已确认PRD）",
-            "input/工程资料/",
-            "input/环境资料/",
-            "input/对接资料/",
-            "code/fld/",
-            "code/guiwu_ruoyi/"
+            "docs/input/需求资料/（已确认PRD）",
+            "docs/input/工程资料/（如有）",
+            "docs/input/环境资料/（如有）",
+            "docs/input/对接资料/（如有）",
+            "code/fld/（已存在原型）",
+            "code/guiwu_ruoyi/（仅确认框架在位）"
           ],
           "outputs": [
-            "doc/output/01-项目基线/输入核对.md",
-            "doc/output/01-项目基线/待确认事项.md"
+            "docs/output/01-项目基线/输入核对.md",
+            "docs/output/01-项目基线/待确认事项.md"
           ],
-          "review": "项目经理确认资料版本和业务范围；只对影响实施的缺失或冲突提出问题。",
-          "prompt": "请执行报价系统首次项目建设的「审核输入」步骤。\n\n【调用 Skill（按顺序）】\n1. dev-project-baseline：核对与固化项目已有约束，不重复生成PRD\n2. grill-with-docs：必要时只询问阻塞性未确认问题\n\n【输入】\n- input/需求资料/（已确认PRD）\n- input/工程资料/\n- input/环境资料/\n- input/对接资料/\n- code/fld/\n- code/guiwu_ruoyi/\n\n【执行要求】\n核对已存在的 input/ 与 code/，记录材料完整性、版本、明确冲突和阻塞项。工程资料里已有的技术栈、PRD已有页面映射不重复单独扫描或生成文档。grill-with-docs 仅在确实出现阻塞问题时使用。\n\n【输出】\n- doc/output/01-项目基线/输入核对.md\n- doc/output/01-项目基线/待确认事项.md\n\n【审核】\n项目经理确认资料版本和业务范围；只对影响实施的缺失或冲突提出问题。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "review": "项目经理确认PRD可作为实施依据、可选材料可追溯、前端原型和后端框架已放置；不对若依内部代码进行技术审核。",
+          "prompt": "请调用 Skill：input-readiness，完成「输入就绪确认」。\n\nSkill 说明文件：skills/input-readiness/SKILL.md\n执行逻辑：资料清点→确认范围→只记录阻塞项→允许继续\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/input/需求资料/（已确认PRD）\n- docs/input/工程资料/（如有）\n- docs/input/环境资料/（如有）\n- docs/input/对接资料/（如有）\n- code/fld/（已存在原型）\n- code/guiwu_ruoyi/（仅确认框架在位）\n\n实施要点：\n项目经理确认PRD可作为实施依据、可选材料可追溯、前端原型和后端框架已放置；不对若依内部代码进行技术审核。\n\n输出文件：\n- docs/output/01-项目基线/输入核对.md\n- docs/output/01-项目基线/待确认事项.md\n\n审核关卡：项目经理确认PRD可作为实施依据、可选材料可追溯、前端原型和后端框架已放置；不对若依内部代码进行技术审核。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "input-readiness",
+          "skillOrigin": "自建"
         },
         {
           "id": "S02",
@@ -116,7 +115,7 @@
           ],
           "inputs": [
             "已有code/fld/与code/guiwu_ruoyi/",
-            "input/工程资料/",
+            "docs/input/工程资料/",
             "已存在的AGENTS.md/CLAUDE.md（如有）"
           ],
           "outputs": [
@@ -125,112 +124,120 @@
             "docs/agents/domain.md"
           ],
           "review": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
-          "prompt": "请执行报价系统首次项目建设的「初始化项目」步骤。\n\n【调用 Skill（按顺序）】\n1. setup-matt-pocock-skills：初始化Matt Skills及本地任务跟踪设置\n\n【输入】\n- 已有code/fld/与code/guiwu_ruoyi/\n- input/工程资料/\n- 已存在的AGENTS.md/CLAUDE.md（如有）\n\n【执行要求】\n调用 setup-matt-pocock-skills 配置项目 Agent 约束和任务跟踪，复用现有开发工程及说明文件。固定原型样式复用、TDD方式、中文Git提交规则。尚未选定的模块不要预生成Spec和Tickets。\n\n【输出】\n- AGENTS.md（复用或更新）\n- docs/agents/issue-tracker.md\n- docs/agents/domain.md\n\n【审核】\n开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "prompt": "请调用 Skill：setup-matt-pocock-skills，完成「初始化项目」。\n\nSkill 说明文件：skills/setup-matt-pocock-skills/SKILL.md\n执行逻辑：读取仓库→核对现有规则→配置Tracker→初始化上下文\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 已有code/fld/与code/guiwu_ruoyi/\n- docs/input/工程资料/\n- 已存在的AGENTS.md/CLAUDE.md（如有）\n\n实施要点：\n开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。\n\n输出文件：\n- AGENTS.md（复用或更新）\n- docs/agents/issue-tracker.md\n- docs/agents/domain.md\n\n审核关卡：开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "setup-matt-pocock-skills",
+          "skillOrigin": "Matt原版"
         },
         {
           "id": "S03",
           "title": "项目基线",
           "skills": [
-            "dev-project-baseline"
+            "project-baseline"
           ],
           "inputs": [
-            "input/需求资料/PRD",
-            "input/工程资料/已定方案与技术栈",
-            "input/环境资料/",
-            "input/对接资料/",
-            "doc/output/01-项目基线/输入核对.md"
+            "docs/input/需求资料/PRD",
+            "docs/input/工程资料/已定方案与技术栈",
+            "docs/input/环境资料/",
+            "docs/input/对接资料/",
+            "docs/output/01-项目基线/输入核对.md"
           ],
           "outputs": [
-            "doc/output/01-项目基线/项目基线.md"
+            "docs/output/01-项目基线/项目基线.md"
           ],
           "review": "项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。",
-          "prompt": "请执行报价系统首次项目建设的「项目基线」步骤。\n\n【调用 Skill（按顺序）】\n1. dev-project-baseline：核对与固化项目已有约束，不重复生成PRD\n\n【输入】\n- input/需求资料/PRD\n- input/工程资料/已定方案与技术栈\n- input/环境资料/\n- input/对接资料/\n- doc/output/01-项目基线/输入核对.md\n\n【执行要求】\n直接从已确认的输入整理全局项目基线，包括系统角色与主业务流程、项目范围、技术栈/技术选型、前端原型与若依复用约束、第三方对接、性能与环境约束。PRD已说明的页面映射不另外生成；不凭空增加技术栈，也不展开模块字段/API。\n\n【输出】\n- doc/output/01-项目基线/项目基线.md\n\n【审核】\n项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "prompt": "请调用 Skill：project-baseline，完成「项目基线」。\n\nSkill 说明文件：skills/project-baseline/SKILL.md\n执行逻辑：读取已确认PRD→提取项目共性约束→核对工程资料→评审基线\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/input/需求资料/PRD\n- docs/input/工程资料/已定方案与技术栈\n- docs/input/环境资料/\n- docs/input/对接资料/\n- docs/output/01-项目基线/输入核对.md\n\n实施要点：\n项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。\n\n输出文件：\n- docs/output/01-项目基线/项目基线.md\n\n审核关卡：项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "project-baseline",
+          "skillOrigin": "自建"
         },
         {
           "id": "S04",
           "title": "整体架构设计",
           "skills": [
-            "dev-architecture",
-            "codebase-design"
+            "architecture-baseline"
           ],
           "inputs": [
-            "doc/output/01-项目基线/项目基线.md",
-            "input/工程资料/",
+            "docs/output/01-项目基线/项目基线.md",
+            "docs/input/工程资料/",
             "code/fld/",
             "code/guiwu_ruoyi/",
-            "input/对接资料/"
+            "docs/input/对接资料/"
           ],
           "outputs": [
-            "doc/output/02-整体架构/整体架构设计.md",
-            "doc/output/02-整体架构/架构评审记录.md",
+            "docs/output/02-整体架构/整体架构设计.md",
+            "docs/output/02-整体架构/架构评审记录.md",
             "按需：docs/adr/架构决策.md"
           ],
           "review": "技术总监评审运行架构、跨服务通信、全局认证及对接方案；不通过则修正设计。",
-          "prompt": "请执行报价系统首次项目建设的「整体架构设计」步骤。\n\n【调用 Skill（按顺序）】\n1. dev-architecture：完成整体架构设计与技术约束决策\n2. codebase-design：遵循既有工程组织完成设计\n\n【输入】\n- doc/output/01-项目基线/项目基线.md\n- input/工程资料/\n- code/fld/\n- code/guiwu_ruoyi/\n- input/对接资料/\n\n【执行要求】\n依据项目基线及现有架构约束完成整个系统的运行单元、前后端交互、认证/权限、文件/缓存/服务与第三方对接架构。优先采用已有方案，记录必要ADR。不设计业务表字段和所有页面的Controller。\n\n【输出】\n- doc/output/02-整体架构/整体架构设计.md\n- doc/output/02-整体架构/架构评审记录.md\n- 按需：docs/adr/架构决策.md\n\n【审核】\n技术总监评审运行架构、跨服务通信、全局认证及对接方案；不通过则修正设计。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "prompt": "请调用 Skill：architecture-baseline，完成「整体架构设计」。\n\nSkill 说明文件：skills/architecture-baseline/SKILL.md\n执行逻辑：确认系统边界→设计运行组件及交互→记录决策→技术总监审核\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/output/01-项目基线/项目基线.md\n- docs/input/工程资料/\n- code/fld/\n- code/guiwu_ruoyi/\n- docs/input/对接资料/\n\n实施要点：\n技术总监评审运行架构、跨服务通信、全局认证及对接方案；不通过则修正设计。\n\n输出文件：\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/02-整体架构/架构评审记录.md\n- 按需：docs/adr/架构决策.md\n\n审核关卡：技术总监评审运行架构、跨服务通信、全局认证及对接方案；不通过则修正设计。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "architecture-baseline",
+          "skillOrigin": "基于Matt改造"
         },
         {
           "id": "S05",
           "title": "数据库设计（总体）",
           "skills": [
-            "dev-data-architecture",
-            "domain-modeling"
+            "data-architecture"
           ],
           "inputs": [
-            "doc/output/01-项目基线/项目基线.md",
-            "doc/output/02-整体架构/整体架构设计.md",
-            "input/环境资料/"
+            "docs/output/01-项目基线/项目基线.md",
+            "docs/output/02-整体架构/整体架构设计.md",
+            "docs/input/环境资料/"
           ],
           "outputs": [
-            "doc/output/03-数据库总体/数据库总体设计.md",
-            "doc/output/03-数据库总体/数据库设计审核.md"
+            "docs/output/03-数据库总体/数据库总体设计.md",
+            "docs/output/03-数据库总体/数据库设计审核.md"
           ],
           "review": "技术总监确认数据域划分、单库/分库分表及容量策略；明确不涉及具体表字段。",
-          "prompt": "请执行报价系统首次项目建设的「数据库设计（总体）」步骤。\n\n【调用 Skill（按顺序）】\n1. dev-data-architecture：确定数据域、数据库和分库分表总体边界\n2. domain-modeling：梳理领域对象与关系\n\n【输入】\n- doc/output/01-项目基线/项目基线.md\n- doc/output/02-整体架构/整体架构设计.md\n- input/环境资料/\n\n【执行要求】\n划分报价项目、需求参数、历史计算单、成本、报价审批、归档等数据域，确定数据库与存储边界、数据增长/备份/一致性、是否需要分库分表及其依据。不写具体业务表、字段、索引或DDL，这些只在对应模块开发时设计。\n\n【输出】\n- doc/output/03-数据库总体/数据库总体设计.md\n- doc/output/03-数据库总体/数据库设计审核.md\n\n【审核】\n技术总监确认数据域划分、单库/分库分表及容量策略；明确不涉及具体表字段。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "prompt": "请调用 Skill：data-architecture，完成「数据库设计（总体）」。\n\nSkill 说明文件：skills/data-architecture/SKILL.md\n执行逻辑：识别数据域→确定库/存储边界→评估分库分表→审核\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/output/01-项目基线/项目基线.md\n- docs/output/02-整体架构/整体架构设计.md\n- docs/input/环境资料/\n\n实施要点：\n技术总监确认数据域划分、单库/分库分表及容量策略；明确不涉及具体表字段。\n\n输出文件：\n- docs/output/03-数据库总体/数据库总体设计.md\n- docs/output/03-数据库总体/数据库设计审核.md\n\n审核关卡：技术总监确认数据域划分、单库/分库分表及容量策略；明确不涉及具体表字段。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "data-architecture",
+          "skillOrigin": "基于Matt改造"
         },
         {
           "id": "S06",
           "title": "开发环境部署",
           "skills": [
-            "dev-environment-deploy",
-            "diagnosing-bugs"
+            "development-environment"
           ],
           "inputs": [
-            "doc/output/02-整体架构/整体架构设计.md",
-            "doc/output/03-数据库总体/数据库总体设计.md",
-            "input/环境资料/",
+            "docs/output/02-整体架构/整体架构设计.md",
+            "docs/output/03-数据库总体/数据库总体设计.md",
+            "docs/input/环境资料/",
             "D:/company/environment/（有则优先复用）",
             "code/fld/",
             "code/guiwu_ruoyi/"
           ],
           "outputs": [
-            "doc/output/04-开发环境/开发环境部署与验收.md",
+            "docs/output/04-开发环境/开发环境部署与验收.md",
             "按需：deploy/dev/docker-compose.yml",
             "按需：deploy/dev/.env.example"
           ],
           "review": "开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。",
-          "prompt": "请执行报价系统首次项目建设的「开发环境部署」步骤。\n\n【调用 Skill（按顺序）】\n1. dev-environment-deploy：部署及验证开发基础设施\n2. diagnosing-bugs：只有环境报错时诊断并修复\n\n【输入】\n- doc/output/02-整体架构/整体架构设计.md\n- doc/output/03-数据库总体/数据库总体设计.md\n- input/环境资料/\n- D:/company/environment/（有则优先复用）\n- code/fld/\n- code/guiwu_ruoyi/\n\n【执行要求】\n按整体架构部署或复用本地 MySQL、Redis及确有需要的消息中间件，并验证端口、持久化、数据库连接、若依服务启动及前端原型API代理。不能强行安装无需组件；只准备框架基础表，具体业务表留到模块详细设计。只有发生错误时才调用 diagnosing-bugs。\n\n【输出】\n- doc/output/04-开发环境/开发环境部署与验收.md\n- 按需：deploy/dev/docker-compose.yml\n- 按需：deploy/dev/.env.example\n\n【审核】\n开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "prompt": "请调用 Skill：development-environment，完成「开发环境部署」。\n\nSkill 说明文件：skills/development-environment/SKILL.md\n执行逻辑：检查已有依赖→补齐数据库与中间件→连接前后端→实测验证\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/03-数据库总体/数据库总体设计.md\n- docs/input/环境资料/\n- D:/company/environment/（有则优先复用）\n- code/fld/\n- code/guiwu_ruoyi/\n\n实施要点：\n开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。\n\n输出文件：\n- docs/output/04-开发环境/开发环境部署与验收.md\n- 按需：deploy/dev/docker-compose.yml\n- 按需：deploy/dev/.env.example\n\n审核关卡：开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "development-environment",
+          "skillOrigin": "自建"
         },
         {
           "id": "S07",
           "title": "模块拆分",
           "skills": [
-            "dev-module-split",
-            "domain-modeling"
+            "module-discovery"
           ],
           "inputs": [
-            "input/需求资料/PRD（包含现有页面功能信息）",
-            "doc/output/01-项目基线/项目基线.md",
-            "doc/output/02-整体架构/整体架构设计.md",
-            "doc/output/03-数据库总体/数据库总体设计.md",
-            "doc/output/04-开发环境/开发环境部署与验收.md"
+            "docs/input/需求资料/PRD（包含现有页面功能信息）",
+            "docs/output/01-项目基线/项目基线.md",
+            "docs/output/02-整体架构/整体架构设计.md",
+            "docs/output/03-数据库总体/数据库总体设计.md",
+            "docs/output/04-开发环境/开发环境部署与验收.md"
           ],
           "outputs": [
-            "doc/output/05-模块拆分/项目模块清单.md",
-            "doc/output/05-模块拆分/模块依赖关系.md",
-            "doc/output/05-模块拆分/模块拆分审核.md"
+            "docs/output/05-模块拆分/项目模块清单.md",
+            "docs/output/05-模块拆分/模块依赖关系.md",
+            "docs/output/05-模块拆分/模块拆分审核.md"
           ],
           "review": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。",
-          "prompt": "请执行报价系统首次项目建设的「模块拆分」步骤。\n\n【调用 Skill（按顺序）】\n1. dev-module-split：按照PRD和领域职责识别业务模块\n2. domain-modeling：梳理领域对象与关系\n\n【输入】\n- input/需求资料/PRD（包含现有页面功能信息）\n- doc/output/01-项目基线/项目基线.md\n- doc/output/02-整体架构/整体架构设计.md\n- doc/output/03-数据库总体/数据库总体设计.md\n- doc/output/04-开发环境/开发环境部署与验收.md\n\n【执行要求】\n利用PRD中已有的页面/业务清单，结合数据域和系统架构划分模块，形成每个模块的功能范围、页面归属、依赖和可开发条件。原先13个报价候选模块仅作参考，可拆、合、调。无需重复绘制原型映射表；不为未确定模块生成Spec/Tickets。\n\n【输出】\n- doc/output/05-模块拆分/项目模块清单.md\n- doc/output/05-模块拆分/模块依赖关系.md\n- doc/output/05-模块拆分/模块拆分审核.md\n\n【审核】\n项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。\n\n共同约束：已确认的PRD放在 input/需求资料；已有前端原型 code/fld 直接延用页面、组件、样式与视觉风格，不得再写一套；后端在 code/guiwu_ruoyi 框架扩展；不得将未核实信息标为已确认；如发生代码提交，提交说明使用中文。"
+          "prompt": "请调用 Skill：module-discovery，完成「模块拆分」。\n\nSkill 说明文件：skills/module-discovery/SKILL.md\n执行逻辑：引用PRD模块能力→按职责与数据域划分→依赖排序→双角色审核\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/input/需求资料/PRD（包含现有页面功能信息）\n- docs/output/01-项目基线/项目基线.md\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/03-数据库总体/数据库总体设计.md\n- docs/output/04-开发环境/开发环境部署与验收.md\n\n实施要点：\n项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。\n\n输出文件：\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/05-模块拆分/模块依赖关系.md\n- docs/output/05-模块拆分/模块拆分审核.md\n\n审核关卡：项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "module-discovery",
+          "skillOrigin": "自建"
         }
       ],
       "artifacts": [
@@ -253,44 +260,45 @@
           "id": "S08",
           "title": "选择本轮模块并校验依赖",
           "skills": [
-            "dev-iteration-plan",
-            "dev-project-control"
+            "iteration-planning"
           ],
           "inputs": [
-            "doc/output/05-模块拆分/项目模块清单.md",
+            "docs/output/05-模块拆分/项目模块清单.md",
             "模块依赖关系.md",
             "项目实施状态.md",
             "开发环境验收记录.md"
           ],
           "outputs": [
-            "doc/output/06-模块迭代/本轮模块计划.md",
-            "doc/output/06-模块迭代/前置依赖检查.md"
+            "docs/output/06-模块迭代/本轮模块计划.md",
+            "docs/output/06-模块迭代/前置依赖检查.md"
           ],
           "review": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-iteration-plan：确定本轮开发范围并检查依赖\n2. dev-project-control：维护模块进度、依赖及审核状态\n\n【执行任务】\n从已确认的 项目模块清单.md 中选择本轮可开发模块（可以1个或多个）。\n逐模块检查已有代码、基础数据、前置模块、字典规则、第三方真实接口和开发环境状态。对可并行工作建立依赖清单，对受阻功能只补最小前置Ticket或暂缓。\n输出 本轮模块计划.md、前置依赖检查.md，列清每个模块的交付场景和负责人。不要为其他未确定模块生成完整Spec。\n\n【输入】\n- doc/output/05-模块拆分/项目模块清单.md\n- 模块依赖关系.md\n- 项目实施状态.md\n- 开发环境验收记录.md\n\n【输出】\n- doc/output/06-模块迭代/本轮模块计划.md\n- doc/output/06-模块迭代/前置依赖检查.md\n\n【审核】\n开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：iteration-planning，完成「选择本轮模块并校验依赖」。\n\nSkill 说明文件：skills/iteration-planning/SKILL.md\n执行逻辑：读取模块池→检查阻塞关系→选择可交付模块→形成迭代计划\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/output/05-模块拆分/项目模块清单.md\n- 模块依赖关系.md\n- 项目实施状态.md\n- 开发环境验收记录.md\n\n实施要点：\n从已确认的 项目模块清单.md 中选择本轮可开发模块（可以1个或多个）。\n逐模块检查已有代码、基础数据、前置模块、字典规则、第三方真实接口和开发环境状态。对可并行工作建立依赖清单，对受阻功能只补最小前置Ticket或暂缓。\n输出 本轮模块计划.md、前置依赖检查.md，列清每个模块的交付场景和负责人。不要为其他未确定模块生成完整Spec。\n\n输出文件：\n- docs/output/06-模块迭代/本轮模块计划.md\n- docs/output/06-模块迭代/前置依赖检查.md\n\n审核关卡：开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "iteration-planning",
+          "skillOrigin": "自建"
         },
         {
           "id": "S09",
           "title": "完成本轮模块详细设计",
           "skills": [
-            "dev-module-design",
-            "codebase-design",
-            "domain-modeling"
+            "module-design"
           ],
           "inputs": [
             "本轮模块计划.md",
-            "项目PRD",
+            "docs/input/需求资料/PRD",
             "已有代码/页面",
             "整体架构设计.md",
             "数据库总体设计.md"
           ],
           "outputs": [
-            "doc/output/06-模块迭代/<模块>/模块详细设计.md",
+            "docs/output/06-模块迭代/<模块>/模块详细设计.md",
             "database/migrations/<模块>*.sql（设计后形成）",
             "按需：docs/adr/*.md"
           ],
           "review": "开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-module-design：完成本轮模块表字段、API和业务详细设计\n2. codebase-design：遵循既有工程组织完成设计\n3. domain-modeling：梳理领域对象与关系\n\n【执行任务】\n对本轮选中的每个报价业务模块完成可以直接进入编码的详细设计。\n以PRD、已有前端原型、若依源码、整体架构和数据库总体设计为边界，具体设计模块业务规则、操作/异常路径、状态、数据库表与字段/索引、API契约、权限和测试要点。\n输出 doc/output/06-模块迭代/<模块>/模块详细设计.md 和必要的增量SQL。**具体表字段只在本阶段设计**，不得重构原型UI；与共享基线冲突时先申请技术总监评审再实现。\n\n【输入】\n- 本轮模块计划.md\n- 项目PRD\n- 已有代码/页面\n- 整体架构设计.md\n- 数据库总体设计.md\n\n【输出】\n- doc/output/06-模块迭代/<模块>/模块详细设计.md\n- database/migrations/<模块>*.sql（设计后形成）\n- 按需：docs/adr/*.md\n\n【审核】\n开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：module-design，完成「完成本轮模块详细设计」。\n\nSkill 说明文件：skills/module-design/SKILL.md\n执行逻辑：对齐原型与架构→设计业务状态及API→设计业务表字段→评审\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本轮模块计划.md\n- docs/input/需求资料/PRD\n- 已有代码/页面\n- 整体架构设计.md\n- 数据库总体设计.md\n\n实施要点：\n对本轮选中的每个报价业务模块完成可以直接进入编码的详细设计。\n以PRD、已有前端原型、若依源码、整体架构和数据库总体设计为边界，具体设计模块业务规则、操作/异常路径、状态、数据库表与字段/索引、API契约、权限和测试要点。\n输出 doc/output/06-模块迭代/<模块>/模块详细设计.md 和必要的增量SQL。**具体表字段只在本阶段设计**，不得重构原型UI；与共享基线冲突时先申请技术总监评审再实现。\n\n输出文件：\n- docs/output/06-模块迭代/<模块>/模块详细设计.md\n- database/migrations/<模块>*.sql（设计后形成）\n- 按需：docs/adr/*.md\n\n审核关卡：开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "module-design",
+          "skillOrigin": "基于Matt改造"
         },
         {
           "id": "S10",
@@ -308,7 +316,9 @@
             " .scratch/<module>/spec.md"
           ],
           "review": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
-          "prompt": "【调用 Skill（按顺序）】\n1. to-spec：将本轮已确认设计转成可实施的模块规格\n\n【执行任务】\n请使用 Matt Pocock 的 to-spec 为当前模块生成可实施规格。\n输入：已确认的模块详细设计、模块PRD、现有code/fld页面、code/guiwu_ruoyi约束、跨模块依赖。\n在 .scratch/<module>/spec.md 中明确交付范围、主要业务行为、实现决策、边界、错误处理、测试策略及明确不做的事情。不得将其他未启动的模块一起打包；若仍有关键不确定项，先提问再定稿。\n\n【输入】\n- 本模块PRD\n- 模块详细设计.md\n- 已有前端原型\n- 共享工程基线\n\n【输出】\n-  .scratch/<module>/spec.md\n\n【审核】\nSpec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：to-spec，完成「生成当前模块 Spec」。\n\nSkill 说明文件：skills/to-spec/SKILL.md\n执行逻辑：读取既有结论→确定测试接缝→综合Spec→确认发布\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本模块PRD\n- 模块详细设计.md\n- 已有前端原型\n- 共享工程基线\n\n实施要点：\n请使用 Matt Pocock 的 to-spec 为当前模块生成可实施规格。\n输入：已确认的模块详细设计、模块PRD、现有code/fld页面、code/guiwu_ruoyi约束、跨模块依赖。\n在 .scratch/<module>/spec.md 中明确交付范围、主要业务行为、实现决策、边界、错误处理、测试策略及明确不做的事情。不得将其他未启动的模块一起打包；若仍有关键不确定项，先提问再定稿。\n\n输出文件：\n-  .scratch/<module>/spec.md\n\n审核关卡：Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "to-spec",
+          "skillOrigin": "Matt原版"
         },
         {
           "id": "S11",
@@ -325,16 +335,15 @@
             " .scratch/<module>/issues/NN-*.md"
           ],
           "review": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
-          "prompt": "【调用 Skill（按顺序）】\n1. to-tickets：拆分可测试的纵向Ticket和依赖\n\n【执行任务】\n请使用 to-tickets 把当前模块Spec拆为可独立验收的纵向开发任务。\n每张Ticket应尽量同时覆盖数据库迁移、后端API、现有原型页面接入和自动测试，明确阻塞关系、验收标准和涉及的文件位置。\n输出 .scratch/<module>/issues/NN-*.md。对于并行Ticket标出共享表/接口冲突；禁止把一个菜单一概当成一张大Ticket。\n\n【输入】\n-  .scratch/<module>/spec.md\n- 本轮模块计划.md\n- 前置依赖检查.md\n\n【输出】\n-  .scratch/<module>/issues/NN-*.md\n\n【审核】\n每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：to-tickets，完成「拆分纵向 Tickets 和依赖」。\n\nSkill 说明文件：skills/to-tickets/SKILL.md\n执行逻辑：读取Spec→拆分纵向切片→声明阻塞依赖→发布Tickets\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n-  .scratch/<module>/spec.md\n- 本轮模块计划.md\n- 前置依赖检查.md\n\n实施要点：\n请使用 to-tickets 把当前模块Spec拆为可独立验收的纵向开发任务。\n每张Ticket应尽量同时覆盖数据库迁移、后端API、现有原型页面接入和自动测试，明确阻塞关系、验收标准和涉及的文件位置。\n输出 .scratch/<module>/issues/NN-*.md。对于并行Ticket标出共享表/接口冲突；禁止把一个菜单一概当成一张大Ticket。\n\n输出文件：\n-  .scratch/<module>/issues/NN-*.md\n\n审核关卡：每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "to-tickets",
+          "skillOrigin": "Matt原版"
         },
         {
           "id": "S12",
           "title": "TDD 驱动实现及前后端联动",
           "skills": [
-            "implement-spec",
-            "implement",
-            "tdd",
-            "dev-ui-guard"
+            "implement-spec"
           ],
           "inputs": [
             "当前模块的Spec与Tickets",
@@ -349,15 +358,15 @@
             "自动化测试代码"
           ],
           "review": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。",
-          "prompt": "【调用 Skill（按顺序）】\n1. implement-spec：按依赖组织Spec中的多个Ticket\n2. implement：实现单张Ticket\n3. tdd：测试先行、实现及回归\n4. dev-ui-guard：保留现有原型页面和视觉风格\n\n【执行任务】\n请按当前已解锁Ticket执行 implement-spec（按依赖执行多Ticket）或 implement（单Ticket），并应用 tdd。\n先添加失败测试，再实现若依后端/数据库增量及 code/fld 原型页面的真实API接入；页面布局、样式类、组件优先沿用原型，新的交互也必须采用既有视觉风格。\n每个Ticket结束执行自动测试并记录证据，禁止用硬编码假数据代替已声明的真实接口成功。Git提交说明用中文。\n\n【输入】\n- 当前模块的Spec与Tickets\n- code/fld/\n- code/guiwu_ruoyi/\n- database/migrations/\n\n【输出】\n- code/fld/原型页面增量代码\n- code/guiwu_ruoyi/后端实现\n- database/migrations/*.sql\n- 自动化测试代码\n\n【审核】\n开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：implement-spec，完成「TDD 驱动实现及前后端联动」。\n\nSkill 说明文件：skills/implement-spec/SKILL.md\n执行逻辑：读取任务依赖图→TDD逐Ticket实现→合入集成分支→验证\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 当前模块的Spec与Tickets\n- code/fld/\n- code/guiwu_ruoyi/\n- database/migrations/\n\n实施要点：\n请按当前已解锁Ticket执行 implement-spec（按依赖执行多Ticket）或 implement（单Ticket），并应用 tdd。\n先添加失败测试，再实现若依后端/数据库增量及 code/fld 原型页面的真实API接入；页面布局、样式类、组件优先沿用原型，新的交互也必须采用既有视觉风格。\n每个Ticket结束执行自动测试并记录证据，禁止用硬编码假数据代替已声明的真实接口成功。Git提交说明用中文。\n\n输出文件：\n- code/fld/原型页面增量代码\n- code/guiwu_ruoyi/后端实现\n- database/migrations/*.sql\n- 自动化测试代码\n\n审核关卡：开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "implement-spec",
+          "skillOrigin": "Matt原版"
         },
         {
           "id": "S13",
           "title": "代码审查与原型一致性审核",
           "skills": [
-            "code-review",
-            "dev-ui-guard",
-            "pr"
+            "code-review"
           ],
           "inputs": [
             "代码Diff",
@@ -371,14 +380,15 @@
             "通过的代码提交"
           ],
           "review": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
-          "prompt": "【调用 Skill（按顺序）】\n1. code-review：对照Spec和编码规范评审代码\n2. dev-ui-guard：保留现有原型页面和视觉风格\n3. pr：仅采用PR评审时使用\n\n【执行任务】\n对当前模块实现代码执行 code-review 和 dev-ui-guard。\n从Spec符合性、代码规范、TDD覆盖、数据库增量正确性、接口鉴权、跨模块共享约束、原型页面一致性审查差异。\n重点检测：是否创建与原型重复的页面/组件，是否未经允许引入新样式体系，是否改写原有导航/布局。输出可定位到文件的缺陷列表；修复后复测并用中文提交。\n\n【输入】\n- 代码Diff\n- 当前Spec与Tickets\n- AGENTS.md\n- 原型页面映射.md\n\n【输出】\n- 代码评审结果\n- 样式一致性检查\n- 通过的代码提交\n\n【审核】\n开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：code-review，完成「代码审查与原型一致性审核」。\n\nSkill 说明文件：skills/code-review/SKILL.md\n执行逻辑：固定代码差异→读取Spec和原型守护标准→双轴评审→修复复审\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 代码Diff\n- 当前Spec与Tickets\n- AGENTS.md\n- 原型页面映射.md\n\n实施要点：\n对当前模块实现代码执行 code-review 和 dev-ui-guard。\n从Spec符合性、代码规范、TDD覆盖、数据库增量正确性、接口鉴权、跨模块共享约束、原型页面一致性审查差异。\n重点检测：是否创建与原型重复的页面/组件，是否未经允许引入新样式体系，是否改写原有导航/布局。输出可定位到文件的缺陷列表；修复后复测并用中文提交。\n\n输出文件：\n- 代码评审结果\n- 样式一致性检查\n- 通过的代码提交\n\n审核关卡：开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "code-review",
+          "skillOrigin": "Matt原版"
         },
         {
           "id": "S14",
           "title": "完成模块集成联调与验收",
           "skills": [
-            "dev-integration",
-            "dev-module-acceptance"
+            "module-integration-acceptance"
           ],
           "inputs": [
             "本轮各模块代码与SQL",
@@ -387,20 +397,20 @@
             "角色场景PRD"
           ],
           "outputs": [
-            "doc/output/06-模块迭代/本轮联调记录.md",
-            "doc/output/06-模块迭代/本轮验收记录.md",
+            "docs/output/06-模块迭代/本轮联调记录.md",
+            "docs/output/06-模块迭代/本轮验收记录.md",
             "端到端回归测试"
           ],
           "review": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-integration：验证本轮模块与已有系统的业务联动\n2. dev-module-acceptance：按角色与场景验收本轮模块\n\n【执行任务】\n把本轮已经通过代码审核的模块合入当前可运行系统，执行真实前后端接口、数据库迁移、模块之间状态和权限联调。\n以角色×业务场景验收：例如需求文件上传→手动点击解析→参数人工核对→确认版本；资产模板需可维护且后续模块能读取。检查其他已完成模块不退化。\n记录 本轮联调记录.md、本轮验收记录.md；失败项形成可复现的Ticket并返回开发；未经真实对接不能写「验收通过」。\n\n【输入】\n- 本轮各模块代码与SQL\n- 对应Spec\n- 本轮模块计划.md\n- 角色场景PRD\n\n【输出】\n- doc/output/06-模块迭代/本轮联调记录.md\n- doc/output/06-模块迭代/本轮验收记录.md\n- 端到端回归测试\n\n【审核】\n开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：module-integration-acceptance，完成「完成模块集成联调与验收」。\n\nSkill 说明文件：skills/module-integration-acceptance/SKILL.md\n执行逻辑：模块合并→业务主/异常链联调→角色验收→失败返工\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本轮各模块代码与SQL\n- 对应Spec\n- 本轮模块计划.md\n- 角色场景PRD\n\n实施要点：\n把本轮已经通过代码审核的模块合入当前可运行系统，执行真实前后端接口、数据库迁移、模块之间状态和权限联调。\n以角色×业务场景验收：例如需求文件上传→手动点击解析→参数人工核对→确认版本；资产模板需可维护且后续模块能读取。检查其他已完成模块不退化。\n记录 本轮联调记录.md、本轮验收记录.md；失败项形成可复现的Ticket并返回开发；未经真实对接不能写「验收通过」。\n\n输出文件：\n- docs/output/06-模块迭代/本轮联调记录.md\n- docs/output/06-模块迭代/本轮验收记录.md\n- 端到端回归测试\n\n审核关卡：开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "module-integration-acceptance",
+          "skillOrigin": "自建"
         },
         {
           "id": "S15",
           "title": "收口本轮并进入下一轮（可选 retro）",
           "skills": [
-            "dev-project-control",
-            "triage",
-            "retro"
+            "iteration-close"
           ],
           "inputs": [
             "本轮验收记录.md",
@@ -409,12 +419,14 @@
             "项目实施状态.md"
           ],
           "outputs": [
-            "doc/output/项目总控/项目实施状态.md（更新）",
-            "doc/output/06-模块迭代/本轮总结.md",
+            "docs/output/项目总控/项目实施状态.md（更新）",
+            "docs/output/06-模块迭代/本轮总结.md",
             "按需：研发环境改进项"
           ],
           "review": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-project-control：维护模块进度、依赖及审核状态\n2. triage：归类缺陷和修复任务\n3. retro：复盘编码会话并改进Agent环境与自动化检查\n\n【执行任务】\n核对当前迭代已完成的模块Spec、Tickets、代码、数据库脚本和角色×场景验收证据。\n更新项目实施状态中的「未开始/依赖阻塞/开发中/已验收」及下一轮可解锁模块，形成 本轮总结.md。\n若本轮发生典型AI问题（例如反复修改原型样式、测试缺位或导航成本高），**按需调用Matt retro** 复盘会话并提出工具、CI、规范改进。未完成的模块不得标记已验收；还有模块则返回S15。\n\n【输入】\n- 本轮验收记录.md\n- 缺陷任务\n- 项目模块清单.md\n- 项目实施状态.md\n\n【输出】\n- doc/output/项目总控/项目实施状态.md（更新）\n- doc/output/06-模块迭代/本轮总结.md\n- 按需：研发环境改进项\n\n【审核】\n项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：iteration-close，完成「收口本轮并进入下一轮（可选 retro）」。\n\nSkill 说明文件：skills/iteration-close/SKILL.md\n执行逻辑：核对验收证据→更新模块状态→检查剩余依赖→进入下一轮\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本轮验收记录.md\n- 缺陷任务\n- 项目模块清单.md\n- 项目实施状态.md\n\n实施要点：\n核对当前迭代已完成的模块Spec、Tickets、代码、数据库脚本和角色×场景验收证据。\n更新项目实施状态中的「未开始/依赖阻塞/开发中/已验收」及下一轮可解锁模块，形成 本轮总结.md。\n若本轮发生典型AI问题（例如反复修改原型样式、测试缺位或导航成本高），**按需调用Matt retro** 复盘会话并提出工具、CI、规范改进。未完成的模块不得标记已验收；还有模块则返回S15。\n\n输出文件：\n- docs/output/项目总控/项目实施状态.md（更新）\n- docs/output/06-模块迭代/本轮总结.md\n- 按需：研发环境改进项\n\n审核关卡：项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "iteration-close",
+          "skillOrigin": "自建"
         }
       ],
       "artifacts": [
@@ -436,8 +448,7 @@
           "id": "S16",
           "title": "全项目业务链路和权限回归",
           "skills": [
-            "dev-integration",
-            "dev-acceptance"
+            "system-acceptance"
           ],
           "inputs": [
             "已确认项目模块清单.md",
@@ -446,43 +457,43 @@
             "PRD"
           ],
           "outputs": [
-            "doc/output/07-系统验收/全流程验收报告.md",
-            "doc/output/07-系统验收/缺陷闭环记录.md"
+            "docs/output/07-系统验收/全流程验收报告.md",
+            "docs/output/07-系统验收/缺陷闭环记录.md"
           ],
           "review": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-integration：验证本轮模块与已有系统的业务联动\n2. dev-acceptance：执行全项目验收和上线条件评审\n\n【执行任务】\n对报价系统进行全项目验收，不只检查各模块单独通过。\n用同一真实测试项目走完登录→全部项目→需求解析与核对→计算单匹配→成本核定→报价编制→多级审批（含驳回与重新提交）→客户输出→成交归档，并核查待办、分析、审计、权限与17个菜单。\n按角色×场景记录结果及可复现证据，输出全流程验收报告.md和缺陷闭环记录.md。存在阻塞缺陷时退回对应模块修复。\n\n【输入】\n- 已确认项目模块清单.md\n- 所有模块验收记录\n- 最终可运行代码\n- PRD\n\n【输出】\n- doc/output/07-系统验收/全流程验收报告.md\n- doc/output/07-系统验收/缺陷闭环记录.md\n\n【审核】\n项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：system-acceptance，完成「全项目业务链路和权限回归」。\n\nSkill 说明文件：skills/system-acceptance/SKILL.md\n执行逻辑：覆盖矩阵→全链路E2E→回归及权限→签署缺陷结论\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 已确认项目模块清单.md\n- 所有模块验收记录\n- 最终可运行代码\n- PRD\n\n实施要点：\n对报价系统进行全项目验收，不只检查各模块单独通过。\n用同一真实测试项目走完登录→全部项目→需求解析与核对→计算单匹配→成本核定→报价编制→多级审批（含驳回与重新提交）→客户输出→成交归档，并核查待办、分析、审计、权限与17个菜单。\n按角色×场景记录结果及可复现证据，输出全流程验收报告.md和缺陷闭环记录.md。存在阻塞缺陷时退回对应模块修复。\n\n输出文件：\n- docs/output/07-系统验收/全流程验收报告.md\n- docs/output/07-系统验收/缺陷闭环记录.md\n\n审核关卡：项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "system-acceptance",
+          "skillOrigin": "自建"
         },
         {
           "id": "S17",
           "title": "非功能指标及上线评审",
           "skills": [
-            "dev-acceptance",
-            "dev-project-control",
-            "code-review"
+            "release-readiness"
           ],
           "inputs": [
-            "工程基线.md",
+            "docs/output/01-项目基线/项目基线.md",
             "架构设计.md",
             "全流程验收报告.md",
             "系统运行记录"
           ],
           "outputs": [
-            "doc/output/07-系统验收/性能安全检查.md",
-            "doc/output/07-系统验收/上线评审结论.md"
+            "docs/output/07-系统验收/性能安全检查.md",
+            "docs/output/07-系统验收/上线评审结论.md"
           ],
           "review": "技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-acceptance：执行全项目验收和上线条件评审\n2. dev-project-control：维护模块进度、依赖及审核状态\n3. code-review：对照Spec和编码规范评审代码\n\n【执行任务】\n核对整个系统的非功能指标：目标并发、响应、权限与越权、日志和审计、错误处理、数据容量、备份恢复、第三方失败影响。\n依据项目基线中的实际指标执行可行的测试并标注环境限制。输出 性能安全检查.md、上线评审结论.md，由技术总监判断能否进入正式部署；未实测项不得写「已验证」。\n\n【输入】\n- 工程基线.md\n- 架构设计.md\n- 全流程验收报告.md\n- 系统运行记录\n\n【输出】\n- doc/output/07-系统验收/性能安全检查.md\n- doc/output/07-系统验收/上线评审结论.md\n\n【审核】\n技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：release-readiness，完成「非功能指标及上线评审」。\n\nSkill 说明文件：skills/release-readiness/SKILL.md\n执行逻辑：核对非功能与安全→风险评估→上线门禁→技术总监审核\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/output/01-项目基线/项目基线.md\n- 架构设计.md\n- 全流程验收报告.md\n- 系统运行记录\n\n实施要点：\n核对整个系统的非功能指标：目标并发、响应、权限与越权、日志和审计、错误处理、数据容量、备份恢复、第三方失败影响。\n依据项目基线中的实际指标执行可行的测试并标注环境限制。输出 性能安全检查.md、上线评审结论.md，由技术总监判断能否进入正式部署；未实测项不得写「已验证」。\n\n输出文件：\n- docs/output/07-系统验收/性能安全检查.md\n- docs/output/07-系统验收/上线评审结论.md\n\n审核关卡：技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "release-readiness",
+          "skillOrigin": "自建"
         },
         {
           "id": "S18",
           "title": "生产环境核验、部署预演与回滚准备",
           "skills": [
-            "dev-release",
-            "research",
-            "wizard"
+            "release-preflight"
           ],
           "inputs": [
-            "input/环境资料/",
+            "docs/input/环境资料/",
             "上线评审结论.md",
             "code/",
             "database/migrations/"
@@ -490,18 +501,19 @@
           "outputs": [
             "deploy/docker-compose.yml（正式）",
             "deploy/nginx/",
-            "doc/output/08-上线交付/部署预演.md",
-            "doc/output/08-上线交付/备份回滚方案.md"
+            "docs/output/08-上线交付/部署预演.md",
+            "docs/output/08-上线交付/备份回滚方案.md"
           ],
           "review": "技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-release：部署预演、发布、恢复和回滚\n2. research：确有资料缺口时定向调研\n3. wizard：按Skill文件要求执行\n\n【执行任务】\n进入正式发布准备：根据 input/环境资料 和实际服务器确认Docker、MySQL、Redis、磁盘、端口、域名/HTTPS及第三方网络可达性。\n准备生产配置样例、容器镜像、数据库增量迁移顺序、备份/回滚方案；在隔离环境预演启动、迁移及关键报价冒烟用例。\n输出部署预演.md、备份回滚方案.md与必要的deploy配置。敏感凭据只在安全环境配置，禁止上传仓库。\n\n【输入】\n- input/环境资料/\n- 上线评审结论.md\n- code/\n- database/migrations/\n\n【输出】\n- deploy/docker-compose.yml（正式）\n- deploy/nginx/\n- doc/output/08-上线交付/部署预演.md\n- doc/output/08-上线交付/备份回滚方案.md\n\n【审核】\n技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：release-preflight，完成「生产环境核验、部署预演与回滚准备」。\n\nSkill 说明文件：skills/release-preflight/SKILL.md\n执行逻辑：校验生产环境→备份及SQL预演→回滚试验→发布批准\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/input/环境资料/\n- 上线评审结论.md\n- code/\n- database/migrations/\n\n实施要点：\n进入正式发布准备：根据 input/环境资料 和实际服务器确认Docker、MySQL、Redis、磁盘、端口、域名/HTTPS及第三方网络可达性。\n准备生产配置样例、容器镜像、数据库增量迁移顺序、备份/回滚方案；在隔离环境预演启动、迁移及关键报价冒烟用例。\n输出部署预演.md、备份回滚方案.md与必要的deploy配置。敏感凭据只在安全环境配置，禁止上传仓库。\n\n输出文件：\n- deploy/docker-compose.yml（正式）\n- deploy/nginx/\n- docs/output/08-上线交付/部署预演.md\n- docs/output/08-上线交付/备份回滚方案.md\n\n审核关卡：技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "release-preflight",
+          "skillOrigin": "自建"
         },
         {
           "id": "S19",
           "title": "生产部署、验收与交付",
           "skills": [
-            "dev-release",
-            "dev-acceptance"
+            "release-delivery"
           ],
           "inputs": [
             "部署预演.md",
@@ -510,11 +522,13 @@
             "上线评审结论.md"
           ],
           "outputs": [
-            "doc/output/08-上线交付/上线记录.md",
-            "doc/output/08-上线交付/交付清单.md"
+            "docs/output/08-上线交付/上线记录.md",
+            "docs/output/08-上线交付/交付清单.md"
           ],
           "review": "开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-release：部署预演、发布、恢复和回滚\n2. dev-acceptance：执行全项目验收和上线条件评审\n\n【执行任务】\n只有系统验收和发布预演通过后才实施生产部署。\n先完成备份并核查恢复条件，按发布步骤执行数据库迁移、前后端部署、健康检查和登录/报价/审批/输出的生产环境冒烟测试。\n记录真实环境、版本、时间、操作结果、异常与回退处理到 上线记录.md，输出代码/SQL/配置样例/验收与部署文档的交付清单。没有权限或环境时报告阻塞，不要宣称已上线。\n\n【输入】\n- 部署预演.md\n- 备份回滚方案.md\n- 可发布代码\n- 上线评审结论.md\n\n【输出】\n- doc/output/08-上线交付/上线记录.md\n- doc/output/08-上线交付/交付清单.md\n\n【审核】\n开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：release-delivery，完成「生产部署、验收与交付」。\n\nSkill 说明文件：skills/release-delivery/SKILL.md\n执行逻辑：备份→部署/迁移→业务冒烟→交接文档\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 部署预演.md\n- 备份回滚方案.md\n- 可发布代码\n- 上线评审结论.md\n\n实施要点：\n只有系统验收和发布预演通过后才实施生产部署。\n先完成备份并核查恢复条件，按发布步骤执行数据库迁移、前后端部署、健康检查和登录/报价/审批/输出的生产环境冒烟测试。\n记录真实环境、版本、时间、操作结果、异常与回退处理到 上线记录.md，输出代码/SQL/配置样例/验收与部署文档的交付清单。没有权限或环境时报告阻塞，不要宣称已上线。\n\n输出文件：\n- docs/output/08-上线交付/上线记录.md\n- docs/output/08-上线交付/交付清单.md\n\n审核关卡：开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "release-delivery",
+          "skillOrigin": "自建"
         }
       ],
       "artifacts": [
@@ -536,8 +550,7 @@
           "id": "S20",
           "title": "调用 retro 复盘 AI 编码会话",
           "skills": [
-            "retro",
-            "writing-for-agents"
+            "retro"
           ],
           "inputs": [
             "典型开发会话记录",
@@ -546,18 +559,19 @@
             "AGENTS.md"
           ],
           "outputs": [
-            "doc/output/09-复盘/AI开发会话复盘.md",
+            "docs/output/09-复盘/AI开发会话复盘.md",
             "必要的AGENTS.md、CI检查或编码规范更新"
           ],
           "review": "开发人员核实每个改进都有对应证据，并优先落到自动化检查和清晰的Agent指令。",
-          "prompt": "【调用 Skill（按顺序）】\n1. retro：复盘编码会话并改进Agent环境与自动化检查\n2. writing-for-agents：将复盘改进转化为Agent可执行规则\n\n【执行任务】\n执行 Matt Pocock 官方 retro 对首次报价系统建设中的代表性AI编码会话进行复盘。\n关注AI是否难以定位原型文件、是否重复创建样式、自动化检查是否不足、Spec/Ticket上下文是否不清楚、工具调用是否浪费。逐项给出证据→根因→改进位置（AGENTS.md / CI / lint / 工具 / Skill）。\n形成 AI开发会话复盘.md，并优先建议可自动验证的守护检查，而不只是追加「以后注意」类说明。未经审核不要直接改动已上线业务代码。\n\n【输入】\n- 典型开发会话记录\n- 代码提交与评审\n- 测试和缺陷记录\n- AGENTS.md\n\n【输出】\n- doc/output/09-复盘/AI开发会话复盘.md\n- 必要的AGENTS.md、CI检查或编码规范更新\n\n【审核】\n开发人员核实每个改进都有对应证据，并优先落到自动化检查和清晰的Agent指令。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：retro，完成「调用 retro 复盘 AI 编码会话」。\n\nSkill 说明文件：skills/retro/SKILL.md\n执行逻辑：读取编码会话→发现工具/守护问题→提出可自动化改进→复核\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 典型开发会话记录\n- 代码提交与评审\n- 测试和缺陷记录\n- AGENTS.md\n\n实施要点：\n执行 Matt Pocock 官方 retro 对首次报价系统建设中的代表性AI编码会话进行复盘。\n关注AI是否难以定位原型文件、是否重复创建样式、自动化检查是否不足、Spec/Ticket上下文是否不清楚、工具调用是否浪费。逐项给出证据→根因→改进位置（AGENTS.md / CI / lint / 工具 / Skill）。\n形成 AI开发会话复盘.md，并优先建议可自动验证的守护检查，而不只是追加「以后注意」类说明。未经审核不要直接改动已上线业务代码。\n\n输出文件：\n- docs/output/09-复盘/AI开发会话复盘.md\n- 必要的AGENTS.md、CI检查或编码规范更新\n\n审核关卡：开发人员核实每个改进都有对应证据，并优先落到自动化检查和清晰的Agent指令。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "retro",
+          "skillOrigin": "Matt原版"
         },
         {
           "id": "S21",
           "title": "复盘完整研发流程并沉淀 Skill 改进",
           "skills": [
-            "dev-project-retro",
-            "retro"
+            "project-retrospective"
           ],
           "inputs": [
             "各阶段审核记录",
@@ -566,12 +580,14 @@
             "上线交付记录"
           ],
           "outputs": [
-            "doc/output/09-复盘/研发流程复盘.md",
-            "doc/output/09-复盘/Skill优化清单.md",
+            "docs/output/09-复盘/研发流程复盘.md",
+            "docs/output/09-复盘/Skill优化清单.md",
             "待确认的工作流变更建议"
           ],
           "review": "技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。",
-          "prompt": "【调用 Skill（按顺序）】\n1. dev-project-retro：复盘项目级研发流程并沉淀改进\n2. retro：复盘编码会话并改进Agent环境与自动化检查\n\n【执行任务】\n请从「项目基线→整体架构→数据库总体→开发环境→模块拆分→模块迭代→系统上线」的全流程复盘首次项目建设。\n整理每个阶段是否提供了足够的输入、审核是否过早/过晚、哪些自建Skill可合并或删除、哪些Matt Skills应直接复用，以及需求澄清/返工/人工审核的真实成本。\n输出 研发流程复盘.md、Skill优化清单.md，按必须修改/可选优化区分。**retro 用于代码会话的工程环境复盘**；项目级工作流改进由 dev-project-retro 汇总提出，先审议后更新标准流程。\n\n【输入】\n- 各阶段审核记录\n- 每轮模块计划与验收\n- AI开发会话复盘.md\n- 上线交付记录\n\n【输出】\n- doc/output/09-复盘/研发流程复盘.md\n- doc/output/09-复盘/Skill优化清单.md\n- 待确认的工作流变更建议\n\n【审核】\n技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+          "prompt": "请调用 Skill：project-retrospective，完成「复盘完整研发流程并沉淀 Skill 改进」。\n\nSkill 说明文件：skills/project-retrospective/SKILL.md\n执行逻辑：收集各阶段证据→定位工作流瓶颈→提炼Skill改进→评审沉淀\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 各阶段审核记录\n- 每轮模块计划与验收\n- AI开发会话复盘.md\n- 上线交付记录\n\n实施要点：\n请从「项目基线→整体架构→数据库总体→开发环境→模块拆分→模块迭代→系统上线」的全流程复盘首次项目建设。\n整理每个阶段是否提供了足够的输入、审核是否过早/过晚、哪些自建Skill可合并或删除、哪些Matt Skills应直接复用，以及需求澄清/返工/人工审核的真实成本。\n输出 研发流程复盘.md、Skill优化清单.md，按必须修改/可选优化区分。**retro 用于代码会话的工程环境复盘**；项目级工作流改进由 dev-project-retro 汇总提出，先审议后更新标准流程。\n\n输出文件：\n- docs/output/09-复盘/研发流程复盘.md\n- docs/output/09-复盘/Skill优化清单.md\n- 待确认的工作流变更建议\n\n审核关卡：技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "skillId": "project-retrospective",
+          "skillOrigin": "基于Matt改造"
         }
       ],
       "artifacts": [
@@ -935,38 +951,21 @@
   ],
   "skills": [
     {
-      "id": "dev-project-baseline",
-      "origin": "拟自建",
-      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "id": "input-readiness",
+      "origin": "自建",
+      "description": "项目经理确认PRD可作为实施依据、可选材料可追溯、前端原型和后端框架已放置；不对若依内部代码进行技术审核。",
       "usedAt": [
         {
           "phase": "P01",
           "step": "S01",
-          "title": "审核输入"
-        },
-        {
-          "phase": "P01",
-          "step": "S03",
-          "title": "项目基线"
-        }
-      ]
-    },
-    {
-      "id": "grill-with-docs",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P01",
-          "step": "S01",
-          "title": "审核输入"
+          "title": "输入就绪确认"
         }
       ]
     },
     {
       "id": "setup-matt-pocock-skills",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "origin": "Matt原版",
+      "description": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
       "usedAt": [
         {
           "phase": "P01",
@@ -976,9 +975,21 @@
       ]
     },
     {
-      "id": "dev-architecture",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
+      "id": "project-baseline",
+      "origin": "自建",
+      "description": "项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。",
+      "usedAt": [
+        {
+          "phase": "P01",
+          "step": "S03",
+          "title": "项目基线"
+        }
+      ]
+    },
+    {
+      "id": "architecture-baseline",
+      "origin": "基于Matt改造",
+      "description": "技术总监评审运行架构、跨服务通信、全局认证及对接方案；不通过则修正设计。",
       "usedAt": [
         {
           "phase": "P01",
@@ -988,26 +999,9 @@
       ]
     },
     {
-      "id": "codebase-design",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P01",
-          "step": "S04",
-          "title": "整体架构设计"
-        },
-        {
-          "phase": "P02",
-          "step": "S09",
-          "title": "完成本轮模块详细设计"
-        }
-      ]
-    },
-    {
-      "id": "dev-data-architecture",
-      "origin": "拟自建",
-      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "id": "data-architecture",
+      "origin": "基于Matt改造",
+      "description": "技术总监确认数据域划分、单库/分库分表及容量策略；明确不涉及具体表字段。",
       "usedAt": [
         {
           "phase": "P01",
@@ -1017,31 +1011,9 @@
       ]
     },
     {
-      "id": "domain-modeling",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P01",
-          "step": "S05",
-          "title": "数据库设计（总体）"
-        },
-        {
-          "phase": "P01",
-          "step": "S07",
-          "title": "模块拆分"
-        },
-        {
-          "phase": "P02",
-          "step": "S09",
-          "title": "完成本轮模块详细设计"
-        }
-      ]
-    },
-    {
-      "id": "dev-environment-deploy",
-      "origin": "拟自建",
-      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "id": "development-environment",
+      "origin": "自建",
+      "description": "开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。",
       "usedAt": [
         {
           "phase": "P01",
@@ -1051,21 +1023,9 @@
       ]
     },
     {
-      "id": "diagnosing-bugs",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P01",
-          "step": "S06",
-          "title": "开发环境部署"
-        }
-      ]
-    },
-    {
-      "id": "dev-module-split",
-      "origin": "拟自建",
-      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "id": "module-discovery",
+      "origin": "自建",
+      "description": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。",
       "usedAt": [
         {
           "phase": "P01",
@@ -1075,9 +1035,9 @@
       ]
     },
     {
-      "id": "dev-iteration-plan",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
+      "id": "iteration-planning",
+      "origin": "自建",
+      "description": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。",
       "usedAt": [
         {
           "phase": "P02",
@@ -1087,31 +1047,9 @@
       ]
     },
     {
-      "id": "dev-project-control",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S08",
-          "title": "选择本轮模块并校验依赖"
-        },
-        {
-          "phase": "P02",
-          "step": "S15",
-          "title": "收口本轮并进入下一轮（可选 retro）"
-        },
-        {
-          "phase": "P03",
-          "step": "S17",
-          "title": "非功能指标及上线评审"
-        }
-      ]
-    },
-    {
-      "id": "dev-module-design",
-      "origin": "拟自建",
-      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "id": "module-design",
+      "origin": "基于Matt改造",
+      "description": "开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。",
       "usedAt": [
         {
           "phase": "P02",
@@ -1122,8 +1060,8 @@
     },
     {
       "id": "to-spec",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "origin": "Matt原版",
+      "description": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
       "usedAt": [
         {
           "phase": "P02",
@@ -1134,8 +1072,8 @@
     },
     {
       "id": "to-tickets",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "origin": "Matt原版",
+      "description": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
       "usedAt": [
         {
           "phase": "P02",
@@ -1146,78 +1084,20 @@
     },
     {
       "id": "implement-spec",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "origin": "Matt原版",
+      "description": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。",
       "usedAt": [
         {
           "phase": "P02",
           "step": "S12",
           "title": "TDD 驱动实现及前后端联动"
-        }
-      ]
-    },
-    {
-      "id": "implement",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S12",
-          "title": "TDD 驱动实现及前后端联动"
-        }
-      ]
-    },
-    {
-      "id": "tdd",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S12",
-          "title": "TDD 驱动实现及前后端联动"
-        }
-      ]
-    },
-    {
-      "id": "dev-ui-guard",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S12",
-          "title": "TDD 驱动实现及前后端联动"
-        },
-        {
-          "phase": "P02",
-          "step": "S13",
-          "title": "代码审查与原型一致性审核"
         }
       ]
     },
     {
       "id": "code-review",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S13",
-          "title": "代码审查与原型一致性审核"
-        },
-        {
-          "phase": "P03",
-          "step": "S17",
-          "title": "非功能指标及上线评审"
-        }
-      ]
-    },
-    {
-      "id": "pr",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "origin": "Matt原版",
+      "description": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
       "usedAt": [
         {
           "phase": "P02",
@@ -1227,15 +1107,34 @@
       ]
     },
     {
-      "id": "dev-integration",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
+      "id": "module-integration-acceptance",
+      "origin": "自建",
+      "description": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
       "usedAt": [
         {
           "phase": "P02",
           "step": "S14",
           "title": "完成模块集成联调与验收"
-        },
+        }
+      ]
+    },
+    {
+      "id": "iteration-close",
+      "origin": "自建",
+      "description": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
+      "usedAt": [
+        {
+          "phase": "P02",
+          "step": "S15",
+          "title": "收口本轮并进入下一轮（可选 retro）"
+        }
+      ]
+    },
+    {
+      "id": "system-acceptance",
+      "origin": "自建",
+      "description": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。",
+      "usedAt": [
         {
           "phase": "P03",
           "step": "S16",
@@ -1244,118 +1143,45 @@
       ]
     },
     {
-      "id": "dev-module-acceptance",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
+      "id": "release-readiness",
+      "origin": "自建",
+      "description": "技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。",
       "usedAt": [
         {
-          "phase": "P02",
-          "step": "S14",
-          "title": "完成模块集成联调与验收"
+          "phase": "P03",
+          "step": "S17",
+          "title": "非功能指标及上线评审"
         }
       ]
     },
     {
-      "id": "triage",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
+      "id": "release-preflight",
+      "origin": "自建",
+      "description": "技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。",
       "usedAt": [
         {
-          "phase": "P02",
-          "step": "S15",
-          "title": "收口本轮并进入下一轮（可选 retro）"
+          "phase": "P03",
+          "step": "S18",
+          "title": "生产环境核验、部署预演与回滚准备"
+        }
+      ]
+    },
+    {
+      "id": "release-delivery",
+      "origin": "自建",
+      "description": "开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。",
+      "usedAt": [
+        {
+          "phase": "P03",
+          "step": "S19",
+          "title": "生产部署、验收与交付"
         }
       ]
     },
     {
       "id": "retro",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P02",
-          "step": "S15",
-          "title": "收口本轮并进入下一轮（可选 retro）"
-        },
-        {
-          "phase": "P04",
-          "step": "S20",
-          "title": "调用 retro 复盘 AI 编码会话"
-        },
-        {
-          "phase": "P04",
-          "step": "S21",
-          "title": "复盘完整研发流程并沉淀 Skill 改进"
-        }
-      ]
-    },
-    {
-      "id": "dev-acceptance",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P03",
-          "step": "S16",
-          "title": "全项目业务链路和权限回归"
-        },
-        {
-          "phase": "P03",
-          "step": "S17",
-          "title": "非功能指标及上线评审"
-        },
-        {
-          "phase": "P03",
-          "step": "S19",
-          "title": "生产部署、验收与交付"
-        }
-      ]
-    },
-    {
-      "id": "dev-release",
-      "origin": "拟自建",
-      "description": "当前项目拟自建Skill，职责以引用节点的输入、输出及审核约束为准。",
-      "usedAt": [
-        {
-          "phase": "P03",
-          "step": "S18",
-          "title": "生产环境核验、部署预演与回滚准备"
-        },
-        {
-          "phase": "P03",
-          "step": "S19",
-          "title": "生产部署、验收与交付"
-        }
-      ]
-    },
-    {
-      "id": "research",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P03",
-          "step": "S18",
-          "title": "生产环境核验、部署预演与回滚准备"
-        }
-      ]
-    },
-    {
-      "id": "wizard",
-      "origin": "Matt",
-      "description": "Matt Pocock官方Skill，当前流程中作为可组合的工程执行能力。",
-      "usedAt": [
-        {
-          "phase": "P03",
-          "step": "S18",
-          "title": "生产环境核验、部署预演与回滚准备"
-        }
-      ]
-    },
-    {
-      "id": "writing-for-agents",
-      "origin": "Matt",
-      "description": "Matt Pocock Skills中的研发执行能力。",
+      "origin": "Matt原版",
+      "description": "开发人员核实每个改进都有对应证据，并优先落到自动化检查和清晰的Agent指令。",
       "usedAt": [
         {
           "phase": "P04",
@@ -1365,9 +1191,9 @@
       ]
     },
     {
-      "id": "dev-project-retro",
-      "origin": "拟自建",
-      "description": "首次项目建设中建议自建的Skill，详细内容待研发流程确认。",
+      "id": "project-retrospective",
+      "origin": "基于Matt改造",
+      "description": "技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。",
       "usedAt": [
         {
           "phase": "P04",
@@ -1382,44 +1208,45 @@
       "id": "I01",
       "title": "选择本轮模块并校验依赖",
       "skills": [
-        "dev-iteration-plan",
-        "dev-project-control"
+        "iteration-planning"
       ],
       "inputs": [
-        "doc/output/05-模块拆分/项目模块清单.md",
+        "docs/output/05-模块拆分/项目模块清单.md",
         "模块依赖关系.md",
         "项目实施状态.md",
         "开发环境验收记录.md"
       ],
       "outputs": [
-        "doc/output/06-模块迭代/本轮模块计划.md",
-        "doc/output/06-模块迭代/前置依赖检查.md"
+        "docs/output/06-模块迭代/本轮模块计划.md",
+        "docs/output/06-模块迭代/前置依赖检查.md"
       ],
       "review": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。",
-      "prompt": "【调用 Skill（按顺序）】\n1. dev-iteration-plan：确定本轮开发范围并检查依赖\n2. dev-project-control：维护模块进度、依赖及审核状态\n\n【执行任务】\n从已确认的 项目模块清单.md 中选择本轮可开发模块（可以1个或多个）。\n逐模块检查已有代码、基础数据、前置模块、字典规则、第三方真实接口和开发环境状态。对可并行工作建立依赖清单，对受阻功能只补最小前置Ticket或暂缓。\n输出 本轮模块计划.md、前置依赖检查.md，列清每个模块的交付场景和负责人。不要为其他未确定模块生成完整Spec。\n\n【输入】\n- doc/output/05-模块拆分/项目模块清单.md\n- 模块依赖关系.md\n- 项目实施状态.md\n- 开发环境验收记录.md\n\n【输出】\n- doc/output/06-模块迭代/本轮模块计划.md\n- doc/output/06-模块迭代/前置依赖检查.md\n\n【审核】\n开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+      "prompt": "请调用 Skill：iteration-planning，完成「选择本轮模块并校验依赖」。\n\nSkill 说明文件：skills/iteration-planning/SKILL.md\n执行逻辑：读取模块池→检查阻塞关系→选择可交付模块→形成迭代计划\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/output/05-模块拆分/项目模块清单.md\n- 模块依赖关系.md\n- 项目实施状态.md\n- 开发环境验收记录.md\n\n实施要点：\n从已确认的 项目模块清单.md 中选择本轮可开发模块（可以1个或多个）。\n逐模块检查已有代码、基础数据、前置模块、字典规则、第三方真实接口和开发环境状态。对可并行工作建立依赖清单，对受阻功能只补最小前置Ticket或暂缓。\n输出 本轮模块计划.md、前置依赖检查.md，列清每个模块的交付场景和负责人。不要为其他未确定模块生成完整Spec。\n\n输出文件：\n- docs/output/06-模块迭代/本轮模块计划.md\n- docs/output/06-模块迭代/前置依赖检查.md\n\n审核关卡：开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+      "skillId": "iteration-planning",
+      "skillOrigin": "自建"
     },
     {
       "id": "I02",
       "title": "完成本轮模块详细设计",
       "skills": [
-        "dev-module-design",
-        "codebase-design",
-        "domain-modeling"
+        "module-design"
       ],
       "inputs": [
         "本轮模块计划.md",
-        "项目PRD",
+        "docs/input/需求资料/PRD",
         "已有代码/页面",
         "整体架构设计.md",
         "数据库总体设计.md"
       ],
       "outputs": [
-        "doc/output/06-模块迭代/<模块>/模块详细设计.md",
+        "docs/output/06-模块迭代/<模块>/模块详细设计.md",
         "database/migrations/<模块>*.sql（设计后形成）",
         "按需：docs/adr/*.md"
       ],
       "review": "开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。",
-      "prompt": "【调用 Skill（按顺序）】\n1. dev-module-design：完成本轮模块表字段、API和业务详细设计\n2. codebase-design：遵循既有工程组织完成设计\n3. domain-modeling：梳理领域对象与关系\n\n【执行任务】\n对本轮选中的每个报价业务模块完成可以直接进入编码的详细设计。\n以PRD、已有前端原型、若依源码、整体架构和数据库总体设计为边界，具体设计模块业务规则、操作/异常路径、状态、数据库表与字段/索引、API契约、权限和测试要点。\n输出 doc/output/06-模块迭代/<模块>/模块详细设计.md 和必要的增量SQL。**具体表字段只在本阶段设计**，不得重构原型UI；与共享基线冲突时先申请技术总监评审再实现。\n\n【输入】\n- 本轮模块计划.md\n- 项目PRD\n- 已有代码/页面\n- 整体架构设计.md\n- 数据库总体设计.md\n\n【输出】\n- doc/output/06-模块迭代/<模块>/模块详细设计.md\n- database/migrations/<模块>*.sql（设计后形成）\n- 按需：docs/adr/*.md\n\n【审核】\n开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+      "prompt": "请调用 Skill：module-design，完成「完成本轮模块详细设计」。\n\nSkill 说明文件：skills/module-design/SKILL.md\n执行逻辑：对齐原型与架构→设计业务状态及API→设计业务表字段→评审\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本轮模块计划.md\n- docs/input/需求资料/PRD\n- 已有代码/页面\n- 整体架构设计.md\n- 数据库总体设计.md\n\n实施要点：\n对本轮选中的每个报价业务模块完成可以直接进入编码的详细设计。\n以PRD、已有前端原型、若依源码、整体架构和数据库总体设计为边界，具体设计模块业务规则、操作/异常路径、状态、数据库表与字段/索引、API契约、权限和测试要点。\n输出 doc/output/06-模块迭代/<模块>/模块详细设计.md 和必要的增量SQL。**具体表字段只在本阶段设计**，不得重构原型UI；与共享基线冲突时先申请技术总监评审再实现。\n\n输出文件：\n- docs/output/06-模块迭代/<模块>/模块详细设计.md\n- database/migrations/<模块>*.sql（设计后形成）\n- 按需：docs/adr/*.md\n\n审核关卡：开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+      "skillId": "module-design",
+      "skillOrigin": "基于Matt改造"
     },
     {
       "id": "I03",
@@ -1437,7 +1264,9 @@
         " .scratch/<module>/spec.md"
       ],
       "review": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
-      "prompt": "【调用 Skill（按顺序）】\n1. to-spec：将本轮已确认设计转成可实施的模块规格\n\n【执行任务】\n请使用 Matt Pocock 的 to-spec 为当前模块生成可实施规格。\n输入：已确认的模块详细设计、模块PRD、现有code/fld页面、code/guiwu_ruoyi约束、跨模块依赖。\n在 .scratch/<module>/spec.md 中明确交付范围、主要业务行为、实现决策、边界、错误处理、测试策略及明确不做的事情。不得将其他未启动的模块一起打包；若仍有关键不确定项，先提问再定稿。\n\n【输入】\n- 本模块PRD\n- 模块详细设计.md\n- 已有前端原型\n- 共享工程基线\n\n【输出】\n-  .scratch/<module>/spec.md\n\n【审核】\nSpec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+      "prompt": "请调用 Skill：to-spec，完成「生成当前模块 Spec」。\n\nSkill 说明文件：skills/to-spec/SKILL.md\n执行逻辑：读取既有结论→确定测试接缝→综合Spec→确认发布\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本模块PRD\n- 模块详细设计.md\n- 已有前端原型\n- 共享工程基线\n\n实施要点：\n请使用 Matt Pocock 的 to-spec 为当前模块生成可实施规格。\n输入：已确认的模块详细设计、模块PRD、现有code/fld页面、code/guiwu_ruoyi约束、跨模块依赖。\n在 .scratch/<module>/spec.md 中明确交付范围、主要业务行为、实现决策、边界、错误处理、测试策略及明确不做的事情。不得将其他未启动的模块一起打包；若仍有关键不确定项，先提问再定稿。\n\n输出文件：\n-  .scratch/<module>/spec.md\n\n审核关卡：Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+      "skillId": "to-spec",
+      "skillOrigin": "Matt原版"
     },
     {
       "id": "I04",
@@ -1454,16 +1283,15 @@
         " .scratch/<module>/issues/NN-*.md"
       ],
       "review": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
-      "prompt": "【调用 Skill（按顺序）】\n1. to-tickets：拆分可测试的纵向Ticket和依赖\n\n【执行任务】\n请使用 to-tickets 把当前模块Spec拆为可独立验收的纵向开发任务。\n每张Ticket应尽量同时覆盖数据库迁移、后端API、现有原型页面接入和自动测试，明确阻塞关系、验收标准和涉及的文件位置。\n输出 .scratch/<module>/issues/NN-*.md。对于并行Ticket标出共享表/接口冲突；禁止把一个菜单一概当成一张大Ticket。\n\n【输入】\n-  .scratch/<module>/spec.md\n- 本轮模块计划.md\n- 前置依赖检查.md\n\n【输出】\n-  .scratch/<module>/issues/NN-*.md\n\n【审核】\n每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+      "prompt": "请调用 Skill：to-tickets，完成「拆分纵向 Tickets 和依赖」。\n\nSkill 说明文件：skills/to-tickets/SKILL.md\n执行逻辑：读取Spec→拆分纵向切片→声明阻塞依赖→发布Tickets\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n-  .scratch/<module>/spec.md\n- 本轮模块计划.md\n- 前置依赖检查.md\n\n实施要点：\n请使用 to-tickets 把当前模块Spec拆为可独立验收的纵向开发任务。\n每张Ticket应尽量同时覆盖数据库迁移、后端API、现有原型页面接入和自动测试，明确阻塞关系、验收标准和涉及的文件位置。\n输出 .scratch/<module>/issues/NN-*.md。对于并行Ticket标出共享表/接口冲突；禁止把一个菜单一概当成一张大Ticket。\n\n输出文件：\n-  .scratch/<module>/issues/NN-*.md\n\n审核关卡：每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+      "skillId": "to-tickets",
+      "skillOrigin": "Matt原版"
     },
     {
       "id": "I05",
       "title": "TDD 驱动实现及前后端联动",
       "skills": [
-        "implement-spec",
-        "implement",
-        "tdd",
-        "dev-ui-guard"
+        "implement-spec"
       ],
       "inputs": [
         "当前模块的Spec与Tickets",
@@ -1478,15 +1306,15 @@
         "自动化测试代码"
       ],
       "review": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。",
-      "prompt": "【调用 Skill（按顺序）】\n1. implement-spec：按依赖组织Spec中的多个Ticket\n2. implement：实现单张Ticket\n3. tdd：测试先行、实现及回归\n4. dev-ui-guard：保留现有原型页面和视觉风格\n\n【执行任务】\n请按当前已解锁Ticket执行 implement-spec（按依赖执行多Ticket）或 implement（单Ticket），并应用 tdd。\n先添加失败测试，再实现若依后端/数据库增量及 code/fld 原型页面的真实API接入；页面布局、样式类、组件优先沿用原型，新的交互也必须采用既有视觉风格。\n每个Ticket结束执行自动测试并记录证据，禁止用硬编码假数据代替已声明的真实接口成功。Git提交说明用中文。\n\n【输入】\n- 当前模块的Spec与Tickets\n- code/fld/\n- code/guiwu_ruoyi/\n- database/migrations/\n\n【输出】\n- code/fld/原型页面增量代码\n- code/guiwu_ruoyi/后端实现\n- database/migrations/*.sql\n- 自动化测试代码\n\n【审核】\n开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+      "prompt": "请调用 Skill：implement-spec，完成「TDD 驱动实现及前后端联动」。\n\nSkill 说明文件：skills/implement-spec/SKILL.md\n执行逻辑：读取任务依赖图→TDD逐Ticket实现→合入集成分支→验证\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 当前模块的Spec与Tickets\n- code/fld/\n- code/guiwu_ruoyi/\n- database/migrations/\n\n实施要点：\n请按当前已解锁Ticket执行 implement-spec（按依赖执行多Ticket）或 implement（单Ticket），并应用 tdd。\n先添加失败测试，再实现若依后端/数据库增量及 code/fld 原型页面的真实API接入；页面布局、样式类、组件优先沿用原型，新的交互也必须采用既有视觉风格。\n每个Ticket结束执行自动测试并记录证据，禁止用硬编码假数据代替已声明的真实接口成功。Git提交说明用中文。\n\n输出文件：\n- code/fld/原型页面增量代码\n- code/guiwu_ruoyi/后端实现\n- database/migrations/*.sql\n- 自动化测试代码\n\n审核关卡：开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+      "skillId": "implement-spec",
+      "skillOrigin": "Matt原版"
     },
     {
       "id": "I06",
       "title": "代码审查与原型一致性审核",
       "skills": [
-        "code-review",
-        "dev-ui-guard",
-        "pr"
+        "code-review"
       ],
       "inputs": [
         "代码Diff",
@@ -1500,14 +1328,15 @@
         "通过的代码提交"
       ],
       "review": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
-      "prompt": "【调用 Skill（按顺序）】\n1. code-review：对照Spec和编码规范评审代码\n2. dev-ui-guard：保留现有原型页面和视觉风格\n3. pr：仅采用PR评审时使用\n\n【执行任务】\n对当前模块实现代码执行 code-review 和 dev-ui-guard。\n从Spec符合性、代码规范、TDD覆盖、数据库增量正确性、接口鉴权、跨模块共享约束、原型页面一致性审查差异。\n重点检测：是否创建与原型重复的页面/组件，是否未经允许引入新样式体系，是否改写原有导航/布局。输出可定位到文件的缺陷列表；修复后复测并用中文提交。\n\n【输入】\n- 代码Diff\n- 当前Spec与Tickets\n- AGENTS.md\n- 原型页面映射.md\n\n【输出】\n- 代码评审结果\n- 样式一致性检查\n- 通过的代码提交\n\n【审核】\n开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+      "prompt": "请调用 Skill：code-review，完成「代码审查与原型一致性审核」。\n\nSkill 说明文件：skills/code-review/SKILL.md\n执行逻辑：固定代码差异→读取Spec和原型守护标准→双轴评审→修复复审\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 代码Diff\n- 当前Spec与Tickets\n- AGENTS.md\n- 原型页面映射.md\n\n实施要点：\n对当前模块实现代码执行 code-review 和 dev-ui-guard。\n从Spec符合性、代码规范、TDD覆盖、数据库增量正确性、接口鉴权、跨模块共享约束、原型页面一致性审查差异。\n重点检测：是否创建与原型重复的页面/组件，是否未经允许引入新样式体系，是否改写原有导航/布局。输出可定位到文件的缺陷列表；修复后复测并用中文提交。\n\n输出文件：\n- 代码评审结果\n- 样式一致性检查\n- 通过的代码提交\n\n审核关卡：开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+      "skillId": "code-review",
+      "skillOrigin": "Matt原版"
     },
     {
       "id": "I07",
       "title": "完成模块集成联调与验收",
       "skills": [
-        "dev-integration",
-        "dev-module-acceptance"
+        "module-integration-acceptance"
       ],
       "inputs": [
         "本轮各模块代码与SQL",
@@ -1516,20 +1345,20 @@
         "角色场景PRD"
       ],
       "outputs": [
-        "doc/output/06-模块迭代/本轮联调记录.md",
-        "doc/output/06-模块迭代/本轮验收记录.md",
+        "docs/output/06-模块迭代/本轮联调记录.md",
+        "docs/output/06-模块迭代/本轮验收记录.md",
         "端到端回归测试"
       ],
       "review": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
-      "prompt": "【调用 Skill（按顺序）】\n1. dev-integration：验证本轮模块与已有系统的业务联动\n2. dev-module-acceptance：按角色与场景验收本轮模块\n\n【执行任务】\n把本轮已经通过代码审核的模块合入当前可运行系统，执行真实前后端接口、数据库迁移、模块之间状态和权限联调。\n以角色×业务场景验收：例如需求文件上传→手动点击解析→参数人工核对→确认版本；资产模板需可维护且后续模块能读取。检查其他已完成模块不退化。\n记录 本轮联调记录.md、本轮验收记录.md；失败项形成可复现的Ticket并返回开发；未经真实对接不能写「验收通过」。\n\n【输入】\n- 本轮各模块代码与SQL\n- 对应Spec\n- 本轮模块计划.md\n- 角色场景PRD\n\n【输出】\n- doc/output/06-模块迭代/本轮联调记录.md\n- doc/output/06-模块迭代/本轮验收记录.md\n- 端到端回归测试\n\n【审核】\n开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+      "prompt": "请调用 Skill：module-integration-acceptance，完成「完成模块集成联调与验收」。\n\nSkill 说明文件：skills/module-integration-acceptance/SKILL.md\n执行逻辑：模块合并→业务主/异常链联调→角色验收→失败返工\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本轮各模块代码与SQL\n- 对应Spec\n- 本轮模块计划.md\n- 角色场景PRD\n\n实施要点：\n把本轮已经通过代码审核的模块合入当前可运行系统，执行真实前后端接口、数据库迁移、模块之间状态和权限联调。\n以角色×业务场景验收：例如需求文件上传→手动点击解析→参数人工核对→确认版本；资产模板需可维护且后续模块能读取。检查其他已完成模块不退化。\n记录 本轮联调记录.md、本轮验收记录.md；失败项形成可复现的Ticket并返回开发；未经真实对接不能写「验收通过」。\n\n输出文件：\n- docs/output/06-模块迭代/本轮联调记录.md\n- docs/output/06-模块迭代/本轮验收记录.md\n- 端到端回归测试\n\n审核关卡：开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+      "skillId": "module-integration-acceptance",
+      "skillOrigin": "自建"
     },
     {
       "id": "I08",
       "title": "收口本轮并进入下一轮（可选 retro）",
       "skills": [
-        "dev-project-control",
-        "triage",
-        "retro"
+        "iteration-close"
       ],
       "inputs": [
         "本轮验收记录.md",
@@ -1538,12 +1367,14 @@
         "项目实施状态.md"
       ],
       "outputs": [
-        "doc/output/项目总控/项目实施状态.md（更新）",
-        "doc/output/06-模块迭代/本轮总结.md",
+        "docs/output/项目总控/项目实施状态.md（更新）",
+        "docs/output/06-模块迭代/本轮总结.md",
         "按需：研发环境改进项"
       ],
       "review": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
-      "prompt": "【调用 Skill（按顺序）】\n1. dev-project-control：维护模块进度、依赖及审核状态\n2. triage：归类缺陷和修复任务\n3. retro：复盘编码会话并改进Agent环境与自动化检查\n\n【执行任务】\n核对当前迭代已完成的模块Spec、Tickets、代码、数据库脚本和角色×场景验收证据。\n更新项目实施状态中的「未开始/依赖阻塞/开发中/已验收」及下一轮可解锁模块，形成 本轮总结.md。\n若本轮发生典型AI问题（例如反复修改原型样式、测试缺位或导航成本高），**按需调用Matt retro** 复盘会话并提出工具、CI、规范改进。未完成的模块不得标记已验收；还有模块则返回S15。\n\n【输入】\n- 本轮验收记录.md\n- 缺陷任务\n- 项目模块清单.md\n- 项目实施状态.md\n\n【输出】\n- doc/output/项目总控/项目实施状态.md（更新）\n- doc/output/06-模块迭代/本轮总结.md\n- 按需：研发环境改进项\n\n【审核】\n项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。\n\n涉及源码时务必在现有 code/fld 原型与 code/guiwu_ruoyi 后端框架上开发，Git提交信息采用中文。"
+      "prompt": "请调用 Skill：iteration-close，完成「收口本轮并进入下一轮（可选 retro）」。\n\nSkill 说明文件：skills/iteration-close/SKILL.md\n执行逻辑：核对验收证据→更新模块状态→检查剩余依赖→进入下一轮\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- 本轮验收记录.md\n- 缺陷任务\n- 项目模块清单.md\n- 项目实施状态.md\n\n实施要点：\n核对当前迭代已完成的模块Spec、Tickets、代码、数据库脚本和角色×场景验收证据。\n更新项目实施状态中的「未开始/依赖阻塞/开发中/已验收」及下一轮可解锁模块，形成 本轮总结.md。\n若本轮发生典型AI问题（例如反复修改原型样式、测试缺位或导航成本高），**按需调用Matt retro** 复盘会话并提出工具、CI、规范改进。未完成的模块不得标记已验收；还有模块则返回S15。\n\n输出文件：\n- docs/output/项目总控/项目实施状态.md（更新）\n- docs/output/06-模块迭代/本轮总结.md\n- 按需：研发环境改进项\n\n审核关卡：项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+      "skillId": "iteration-close",
+      "skillOrigin": "自建"
     }
   ]
 }

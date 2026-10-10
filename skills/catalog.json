@@ -1,0 +1,647 @@
+[
+  {
+    "id": "input-readiness",
+    "name": "input-readiness",
+    "type": "自建",
+    "source": {
+      "repo": "obra/superpowers",
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
+    },
+    "flow": [
+      "资料清点",
+      "确认范围",
+      "只记录阻塞项",
+      "允许继续"
+    ],
+    "stepId": "S01",
+    "stepTitle": "输入就绪确认",
+    "summary": "项目经理确认PRD可作为实施依据、可选材料可追溯、前端原型和后端框架已放置；不对若依内部代码进行技术审核。",
+    "inputs": [
+      "docs/input/需求资料/（已确认PRD）",
+      "docs/input/工程资料/（如有）",
+      "docs/input/环境资料/（如有）",
+      "docs/input/对接资料/（如有）",
+      "code/fld/（已存在原型）",
+      "code/guiwu_ruoyi/（仅确认框架在位）"
+    ],
+    "outputs": [
+      "docs/output/01-项目基线/输入核对.md",
+      "docs/output/01-项目基线/待确认事项.md"
+    ],
+    "verification": "项目经理确认PRD可作为实施依据、可选材料可追溯、前端原型和后端框架已放置；不对若依内部代码进行技术审核。"
+  },
+  {
+    "id": "setup-matt-pocock-skills",
+    "name": "setup-matt-pocock-skills",
+    "type": "Matt原版",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/setup-matt-pocock-skills/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/SKILL.md"
+    },
+    "flow": [
+      "读取仓库",
+      "核对现有规则",
+      "配置Tracker",
+      "初始化上下文"
+    ],
+    "stepId": "S02",
+    "stepTitle": "初始化项目",
+    "summary": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
+    "inputs": [
+      "已有code/fld/与code/guiwu_ruoyi/",
+      "docs/input/工程资料/",
+      "已存在的AGENTS.md/CLAUDE.md（如有）"
+    ],
+    "outputs": [
+      "AGENTS.md（复用或更新）",
+      "docs/agents/issue-tracker.md",
+      "docs/agents/domain.md"
+    ],
+    "verification": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。"
+  },
+  {
+    "id": "project-baseline",
+    "name": "project-baseline",
+    "type": "自建",
+    "source": {
+      "repo": "github/spec-kit",
+      "path": "templates/commands/plan.md",
+      "url": "https://github.com/github/spec-kit/blob/main/templates/commands/plan.md"
+    },
+    "flow": [
+      "读取已确认PRD",
+      "提取项目共性约束",
+      "核对工程资料",
+      "评审基线"
+    ],
+    "stepId": "S03",
+    "stepTitle": "项目基线",
+    "summary": "项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。",
+    "inputs": [
+      "docs/input/需求资料/PRD",
+      "docs/input/工程资料/已定方案与技术栈",
+      "docs/input/环境资料/",
+      "docs/input/对接资料/",
+      "docs/output/01-项目基线/输入核对.md"
+    ],
+    "outputs": [
+      "docs/output/01-项目基线/项目基线.md"
+    ],
+    "verification": "项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。"
+  },
+  {
+    "id": "architecture-baseline",
+    "name": "architecture-baseline",
+    "type": "基于Matt改造",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/codebase-design/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md"
+    },
+    "flow": [
+      "确认系统边界",
+      "设计运行组件及交互",
+      "记录决策",
+      "技术总监审核"
+    ],
+    "stepId": "S04",
+    "stepTitle": "整体架构设计",
+    "summary": "技术总监评审运行架构、跨服务通信、全局认证及对接方案；不通过则修正设计。",
+    "inputs": [
+      "docs/output/01-项目基线/项目基线.md",
+      "docs/input/工程资料/",
+      "code/fld/",
+      "code/guiwu_ruoyi/",
+      "docs/input/对接资料/"
+    ],
+    "outputs": [
+      "docs/output/02-整体架构/整体架构设计.md",
+      "docs/output/02-整体架构/架构评审记录.md",
+      "按需：docs/adr/架构决策.md"
+    ],
+    "verification": "技术总监评审运行架构、跨服务通信、全局认证及对接方案；不通过则修正设计。"
+  },
+  {
+    "id": "data-architecture",
+    "name": "data-architecture",
+    "type": "基于Matt改造",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/domain-modeling/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md"
+    },
+    "flow": [
+      "识别数据域",
+      "确定库/存储边界",
+      "评估分库分表",
+      "审核"
+    ],
+    "stepId": "S05",
+    "stepTitle": "数据库设计（总体）",
+    "summary": "技术总监确认数据域划分、单库/分库分表及容量策略；明确不涉及具体表字段。",
+    "inputs": [
+      "docs/output/01-项目基线/项目基线.md",
+      "docs/output/02-整体架构/整体架构设计.md",
+      "docs/input/环境资料/"
+    ],
+    "outputs": [
+      "docs/output/03-数据库总体/数据库总体设计.md",
+      "docs/output/03-数据库总体/数据库设计审核.md"
+    ],
+    "verification": "技术总监确认数据域划分、单库/分库分表及容量策略；明确不涉及具体表字段。"
+  },
+  {
+    "id": "development-environment",
+    "name": "development-environment",
+    "type": "自建",
+    "source": {
+      "repo": "obra/superpowers",
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
+    },
+    "flow": [
+      "检查已有依赖",
+      "补齐数据库与中间件",
+      "连接前后端",
+      "实测验证"
+    ],
+    "stepId": "S06",
+    "stepTitle": "开发环境部署",
+    "summary": "开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。",
+    "inputs": [
+      "docs/output/02-整体架构/整体架构设计.md",
+      "docs/output/03-数据库总体/数据库总体设计.md",
+      "docs/input/环境资料/",
+      "D:/company/environment/（有则优先复用）",
+      "code/fld/",
+      "code/guiwu_ruoyi/"
+    ],
+    "outputs": [
+      "docs/output/04-开发环境/开发环境部署与验收.md",
+      "按需：deploy/dev/docker-compose.yml",
+      "按需：deploy/dev/.env.example"
+    ],
+    "verification": "开发人员实际核验数据库和必要中间件，验证已有前后端连接成功；未实测不得宣称完成。"
+  },
+  {
+    "id": "module-discovery",
+    "name": "module-discovery",
+    "type": "自建",
+    "source": {
+      "repo": "bmad-code-org/BMAD-METHOD",
+      "path": "README.md",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/README.md"
+    },
+    "flow": [
+      "引用PRD模块能力",
+      "按职责与数据域划分",
+      "依赖排序",
+      "双角色审核"
+    ],
+    "stepId": "S07",
+    "stepTitle": "模块拆分",
+    "summary": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。",
+    "inputs": [
+      "docs/input/需求资料/PRD（包含现有页面功能信息）",
+      "docs/output/01-项目基线/项目基线.md",
+      "docs/output/02-整体架构/整体架构设计.md",
+      "docs/output/03-数据库总体/数据库总体设计.md",
+      "docs/output/04-开发环境/开发环境部署与验收.md"
+    ],
+    "outputs": [
+      "docs/output/05-模块拆分/项目模块清单.md",
+      "docs/output/05-模块拆分/模块依赖关系.md",
+      "docs/output/05-模块拆分/模块拆分审核.md"
+    ],
+    "verification": "项目经理确认业务覆盖和功能归属，技术总监确认模块依赖与架构一致；不预设Spec数量。"
+  },
+  {
+    "id": "iteration-planning",
+    "name": "iteration-planning",
+    "type": "自建",
+    "source": {
+      "repo": "obra/superpowers",
+      "path": "skills/writing-plans/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md"
+    },
+    "flow": [
+      "读取模块池",
+      "检查阻塞关系",
+      "选择可交付模块",
+      "形成迭代计划"
+    ],
+    "stepId": "S08",
+    "stepTitle": "选择本轮模块并校验依赖",
+    "summary": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。",
+    "inputs": [
+      "docs/output/05-模块拆分/项目模块清单.md",
+      "模块依赖关系.md",
+      "项目实施状态.md",
+      "开发环境验收记录.md"
+    ],
+    "outputs": [
+      "docs/output/06-模块迭代/本轮模块计划.md",
+      "docs/output/06-模块迭代/前置依赖检查.md"
+    ],
+    "verification": "开发人员判断依赖是否满足，项目经理确认本轮范围和业务验收目标。"
+  },
+  {
+    "id": "module-design",
+    "name": "module-design",
+    "type": "基于Matt改造",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/codebase-design/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md"
+    },
+    "flow": [
+      "对齐原型与架构",
+      "设计业务状态及API",
+      "设计业务表字段",
+      "评审"
+    ],
+    "stepId": "S09",
+    "stepTitle": "完成本轮模块详细设计",
+    "summary": "开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。",
+    "inputs": [
+      "本轮模块计划.md",
+      "docs/input/需求资料/PRD",
+      "已有代码/页面",
+      "整体架构设计.md",
+      "数据库总体设计.md"
+    ],
+    "outputs": [
+      "docs/output/06-模块迭代/<模块>/模块详细设计.md",
+      "database/migrations/<模块>*.sql（设计后形成）",
+      "按需：docs/adr/*.md"
+    ],
+    "verification": "开发人员审核业务逻辑和数据关系；更改全局架构、数据库域时需技术总监确认。"
+  },
+  {
+    "id": "to-spec",
+    "name": "to-spec",
+    "type": "Matt原版",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/to-spec/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/to-spec/SKILL.md"
+    },
+    "flow": [
+      "读取既有结论",
+      "确定测试接缝",
+      "综合Spec",
+      "确认发布"
+    ],
+    "stepId": "S10",
+    "stepTitle": "生成当前模块 Spec",
+    "summary": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
+    "inputs": [
+      "本模块PRD",
+      "模块详细设计.md",
+      "已有前端原型",
+      "共享工程基线"
+    ],
+    "outputs": [
+      " .scratch/<module>/spec.md"
+    ],
+    "verification": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。"
+  },
+  {
+    "id": "to-tickets",
+    "name": "to-tickets",
+    "type": "Matt原版",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/to-tickets/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md"
+    },
+    "flow": [
+      "读取Spec",
+      "拆分纵向切片",
+      "声明阻塞依赖",
+      "发布Tickets"
+    ],
+    "stepId": "S11",
+    "stepTitle": "拆分纵向 Tickets 和依赖",
+    "summary": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
+    "inputs": [
+      " .scratch/<module>/spec.md",
+      "本轮模块计划.md",
+      "前置依赖检查.md"
+    ],
+    "outputs": [
+      " .scratch/<module>/issues/NN-*.md"
+    ],
+    "verification": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。"
+  },
+  {
+    "id": "implement-spec",
+    "name": "implement-spec",
+    "type": "Matt原版",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/implement-spec/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md"
+    },
+    "flow": [
+      "读取任务依赖图",
+      "TDD逐Ticket实现",
+      "合入集成分支",
+      "验证"
+    ],
+    "stepId": "S12",
+    "stepTitle": "TDD 驱动实现及前后端联动",
+    "summary": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。",
+    "inputs": [
+      "当前模块的Spec与Tickets",
+      "code/fld/",
+      "code/guiwu_ruoyi/",
+      "database/migrations/"
+    ],
+    "outputs": [
+      "code/fld/原型页面增量代码",
+      "code/guiwu_ruoyi/后端实现",
+      "database/migrations/*.sql",
+      "自动化测试代码"
+    ],
+    "verification": "开发人员验证测试先失败后通过、接口能实际联通、无独立新造UI。"
+  },
+  {
+    "id": "code-review",
+    "name": "code-review",
+    "type": "Matt原版",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/code-review/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/code-review/SKILL.md"
+    },
+    "flow": [
+      "固定代码差异",
+      "读取Spec和原型守护标准",
+      "双轴评审",
+      "修复复审"
+    ],
+    "stepId": "S13",
+    "stepTitle": "代码审查与原型一致性审核",
+    "summary": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
+    "inputs": [
+      "代码Diff",
+      "当前Spec与Tickets",
+      "AGENTS.md",
+      "原型页面映射.md"
+    ],
+    "outputs": [
+      "代码评审结果",
+      "样式一致性检查",
+      "通过的代码提交"
+    ],
+    "verification": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。"
+  },
+  {
+    "id": "module-integration-acceptance",
+    "name": "module-integration-acceptance",
+    "type": "自建",
+    "source": {
+      "repo": "obra/superpowers",
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
+    },
+    "flow": [
+      "模块合并",
+      "业务主/异常链联调",
+      "角色验收",
+      "失败返工"
+    ],
+    "stepId": "S14",
+    "stepTitle": "完成模块集成联调与验收",
+    "summary": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。",
+    "inputs": [
+      "本轮各模块代码与SQL",
+      "对应Spec",
+      "本轮模块计划.md",
+      "角色场景PRD"
+    ],
+    "outputs": [
+      "docs/output/06-模块迭代/本轮联调记录.md",
+      "docs/output/06-模块迭代/本轮验收记录.md",
+      "端到端回归测试"
+    ],
+    "verification": "开发人员完成全链路联调；项目经理按角色×场景验收，不通过退回S19。"
+  },
+  {
+    "id": "iteration-close",
+    "name": "iteration-close",
+    "type": "自建",
+    "source": {
+      "repo": "bmad-code-org/BMAD-METHOD",
+      "path": "README.md",
+      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/README.md"
+    },
+    "flow": [
+      "核对验收证据",
+      "更新模块状态",
+      "检查剩余依赖",
+      "进入下一轮"
+    ],
+    "stepId": "S15",
+    "stepTitle": "收口本轮并进入下一轮（可选 retro）",
+    "summary": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。",
+    "inputs": [
+      "本轮验收记录.md",
+      "缺陷任务",
+      "项目模块清单.md",
+      "项目实施状态.md"
+    ],
+    "outputs": [
+      "docs/output/项目总控/项目实施状态.md（更新）",
+      "docs/output/06-模块迭代/本轮总结.md",
+      "按需：研发环境改进项"
+    ],
+    "verification": "项目经理确认本轮场景完成；剩余模块返回S15，有重大AI开发问题时调用retro改进工程环境。"
+  },
+  {
+    "id": "system-acceptance",
+    "name": "system-acceptance",
+    "type": "自建",
+    "source": {
+      "repo": "obra/superpowers",
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
+    },
+    "flow": [
+      "覆盖矩阵",
+      "全链路E2E",
+      "回归及权限",
+      "签署缺陷结论"
+    ],
+    "stepId": "S16",
+    "stepTitle": "全项目业务链路和权限回归",
+    "summary": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。",
+    "inputs": [
+      "已确认项目模块清单.md",
+      "所有模块验收记录",
+      "最终可运行代码",
+      "PRD"
+    ],
+    "outputs": [
+      "docs/output/07-系统验收/全流程验收报告.md",
+      "docs/output/07-系统验收/缺陷闭环记录.md"
+    ],
+    "verification": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。"
+  },
+  {
+    "id": "release-readiness",
+    "name": "release-readiness",
+    "type": "自建",
+    "source": {
+      "repo": "github/spec-kit",
+      "path": "templates/commands/plan.md",
+      "url": "https://github.com/github/spec-kit/blob/main/templates/commands/plan.md"
+    },
+    "flow": [
+      "核对非功能与安全",
+      "风险评估",
+      "上线门禁",
+      "技术总监审核"
+    ],
+    "stepId": "S17",
+    "stepTitle": "非功能指标及上线评审",
+    "summary": "技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。",
+    "inputs": [
+      "docs/output/01-项目基线/项目基线.md",
+      "架构设计.md",
+      "全流程验收报告.md",
+      "系统运行记录"
+    ],
+    "outputs": [
+      "docs/output/07-系统验收/性能安全检查.md",
+      "docs/output/07-系统验收/上线评审结论.md"
+    ],
+    "verification": "技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。"
+  },
+  {
+    "id": "release-preflight",
+    "name": "release-preflight",
+    "type": "自建",
+    "source": {
+      "repo": "obra/superpowers",
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
+    },
+    "flow": [
+      "校验生产环境",
+      "备份及SQL预演",
+      "回滚试验",
+      "发布批准"
+    ],
+    "stepId": "S18",
+    "stepTitle": "生产环境核验、部署预演与回滚准备",
+    "summary": "技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。",
+    "inputs": [
+      "docs/input/环境资料/",
+      "上线评审结论.md",
+      "code/",
+      "database/migrations/"
+    ],
+    "outputs": [
+      "deploy/docker-compose.yml（正式）",
+      "deploy/nginx/",
+      "docs/output/08-上线交付/部署预演.md",
+      "docs/output/08-上线交付/备份回滚方案.md"
+    ],
+    "verification": "技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。"
+  },
+  {
+    "id": "release-delivery",
+    "name": "release-delivery",
+    "type": "自建",
+    "source": {
+      "repo": "obra/superpowers",
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
+    },
+    "flow": [
+      "备份",
+      "部署/迁移",
+      "业务冒烟",
+      "交接文档"
+    ],
+    "stepId": "S19",
+    "stepTitle": "生产部署、验收与交付",
+    "summary": "开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。",
+    "inputs": [
+      "部署预演.md",
+      "备份回滚方案.md",
+      "可发布代码",
+      "上线评审结论.md"
+    ],
+    "outputs": [
+      "docs/output/08-上线交付/上线记录.md",
+      "docs/output/08-上线交付/交付清单.md"
+    ],
+    "verification": "开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。"
+  },
+  {
+    "id": "retro",
+    "name": "retro",
+    "type": "Matt原版",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/retro/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md"
+    },
+    "flow": [
+      "读取编码会话",
+      "发现工具/守护问题",
+      "提出可自动化改进",
+      "复核"
+    ],
+    "stepId": "S20",
+    "stepTitle": "调用 retro 复盘 AI 编码会话",
+    "summary": "开发人员核实每个改进都有对应证据，并优先落到自动化检查和清晰的Agent指令。",
+    "inputs": [
+      "典型开发会话记录",
+      "代码提交与评审",
+      "测试和缺陷记录",
+      "AGENTS.md"
+    ],
+    "outputs": [
+      "docs/output/09-复盘/AI开发会话复盘.md",
+      "必要的AGENTS.md、CI检查或编码规范更新"
+    ],
+    "verification": "开发人员核实每个改进都有对应证据，并优先落到自动化检查和清晰的Agent指令。"
+  },
+  {
+    "id": "project-retrospective",
+    "name": "project-retrospective",
+    "type": "基于Matt改造",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/retro/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md"
+    },
+    "flow": [
+      "收集各阶段证据",
+      "定位工作流瓶颈",
+      "提炼Skill改进",
+      "评审沉淀"
+    ],
+    "stepId": "S21",
+    "stepTitle": "复盘完整研发流程并沉淀 Skill 改进",
+    "summary": "技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。",
+    "inputs": [
+      "各阶段审核记录",
+      "每轮模块计划与验收",
+      "AI开发会话复盘.md",
+      "上线交付记录"
+    ],
+    "outputs": [
+      "docs/output/09-复盘/研发流程复盘.md",
+      "docs/output/09-复盘/Skill优化清单.md",
+      "待确认的工作流变更建议"
+    ],
+    "verification": "技术总监确认流程调整优先级；项目经理核实业务沟通成本；改进不直接覆盖已审核基线。"
+  }
+]

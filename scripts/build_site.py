@@ -17,6 +17,7 @@ js = (DOCS / "app.js").read_text(encoding="utf-8")
 data = json.loads((DOCS / "data" / "quotation.json").read_text(encoding="utf-8"))
 
 assert len(data["phases"]) == 5, "阶段数检查失败"
+assert all(len(s.get("skills", [])) == 1 for p in data["phases"][1:] for s in p["steps"]), "每步必须绑定一个Skill"
 assert sum(len(p["steps"]) for p in data["phases"]) == 23, "步骤数检查失败"
 assert len(data["modules"]) == 13, "业务模块数检查失败"
 
