@@ -165,3 +165,13 @@
 .research-row a{font-size:12px}
 .research-boundary{color:#8a96a5!important;font-size:11px}
 @media(max-width:740px){.workspace-skills{grid-template-columns:1fr;padding:15px}.workspace-open{padding:7px 8px}}
+
+/* 通用Skill显示在左侧工作阶段下，但不计入五个主项目阶段 */
+.stage-toolkit-separator{border-top:1px solid #e1e8f2;margin:15px 10px 7px;padding:12px 0 2px;font-size:11px;color:#8ba0b9;letter-spacing:.4px;font-weight:700}
+.stage-toolkit .stage-index{font-size:18px;color:#457cac}
+.stage-toolkit.active .stage-index{color:#2863a5}
+.toolkit-steps{display:grid;gap:9px}
+.toolkit-activity{display:flex;align-items:flex-start;gap:12px;padding:10px 12px;background:#f5f8fd;border:1px solid #e7edf6;border-radius:9px}
+.toolkit-activity span{display:grid;place-items:center;width:22px;height:22px;flex-shrink:0;border-radius:6px;background:#deebfa;color:#3d73ab;font-size:11px;font-weight:700}
+.toolkit-activity p{margin:0;color:#4b6280;font-size:12px;line-height:1.75}
+@media(max-width:780px){.stage-toolkit-separator{display:none}.stage-toolkit{border-color:#cbdcf1!important;background:#f8fbff}}

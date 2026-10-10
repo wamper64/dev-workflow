@@ -1,27 +1,61 @@
 const ui={data:null,phase:"P01",step:"S01"};
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const phase=()=>ui.data.phases.find(p=>p.id===ui.phase)||ui.data.phases[0];
+const toolkitPhase=()=>({
+ id:"PTOOLS",
+ title:"通用 Skills",
+ kind:"toolkit",
+ owner:"按需使用的开发人员、项目经理或技术总监",
+ description:"贯穿所有研发阶段的辅助能力。选择 Skill 后查看用途、调用时机和完整文件；它们不是强制研发步骤，也不改变主流程的先后顺序。",
+ steps:(skillData?.workspace||[]).map(w=>({
+   id:"T_"+w.id,
+   title:w.name,
+   skills:[w.id],
+   skillId:w.id,
+   summary:w.summary,
+   input:w.diagram?.input||"当前会话或实际项目上下文",
+   output:w.diagram?.output||"依据调用目标确定",
+   workflow:w.diagram?.work||[],
+   limitation:w.diagram?.fail||"由具体任务决定是否需要",
+   prompt:"请调用 Matt 官方 Skill：/"+w.id+"（skills/"+w.id+"/SKILL.md）。"+w.summary+"。请先读取该Skill的全部适用文件，并依据当前项目的真实上下文执行，不把工具调用误作必经项目步骤。",
+   source:w.source?.url||""
+ }))
+});
+const allPhases=()=>[...ui.data.phases,toolkitPhase()];
+const phase=()=>allPhases().find(p=>p.id===ui.phase)||ui.data.phases[0];
 const step=()=>phase().steps.find(s=>s.id===ui.step)||phase().steps[0];
-const kind=k=>k==="prep"?"仅展示初始输入":k==="repeat"?"按模块循环":k==="final"?"整体验收与交付":"项目建设阶段";
+const kind=k=>k==="toolkit"?"跨阶段可调用":k==="prep"?"仅展示初始输入":k==="repeat"?"按模块循环":k==="final"?"整体验收与交付":"项目建设阶段";
 const fileList=files=>'<div class="file-list">'+(files||[]).map(f=>'<code class="file-item">'+esc(f.trim())+'</code>').join("")+'</div>';
-const skillList=skills=>!(skills||[]).length?'<div class="review-box">这里只展示已有输入，无需调用Skill。</div>':'<div class="skill-grid">'+(skills||[]).map(id=>{const sk=ui.data.skills.find(x=>x.id===id);const origin=sk?.origin||"待核实";return '<button type="button" class="skill-pill '+(origin==="Matt原版"?"":"custom")+'" data-skill="'+esc(id)+'" title="点击查看SKILL.md、逻辑流程、示例与模板">'+esc(id)+' <span class="skill-kind">'+esc(origin)+'</span> ↗</button>'}).join("")+'</div>';
+const skillList=skills=>!(skills||[]).length?'<div class="review-box">这里只展示已有输入，无需调用Skill。</div>':'<div class="skill-grid">'+(skills||[]).map(id=>{const sk=ui.data.skills.find(x=>x.id===id)||skillData?.workspace.find(x=>x.id===id);const origin=sk?.origin||sk?.type||"待核实";return '<button type="button" class="skill-pill '+(origin==="Matt原版"?"":"custom")+'" data-skill="'+esc(id)+'" title="点击查看SKILL.md、逻辑流程、示例与模板">'+esc(id)+' <span class="skill-kind">'+esc(origin)+'</span> ↗</button>'}).join("")+'</div>';
 function renderStages(){
-  $("project-stats").textContent=ui.data.phases.length+" 个阶段 · "+ui.data.phases.reduce((n,p)=>n+p.steps.length,0)+" 个步骤";
+  $("project-stats").textContent=ui.data.phases.length+" 个阶段 · "+ui.data.phases.reduce((n,p)=>n+p.steps.length,0)+" 个步骤 · "+(skillData?.workspace.length||0)+" 个通用Skill";
   $("stage-list").innerHTML=ui.data.phases.map((p,i)=>
     '<button type="button" class="stage-item '+(p.id===ui.phase?"active":"")+'" data-phase="'+esc(p.id)+'" aria-current="'+(p.id===ui.phase?"step":"false")+'"><span class="stage-index">'+String(i).padStart(2,"0")+'</span><span class="stage-body"><span class="stage-title">'+esc(p.title)+'</span><span class="stage-meta">'+p.steps.length+' 个步骤'+(p.kind==="repeat"?" · 循环":"")+'</span></span><span class="stage-arrow" aria-hidden="true">›</span></button>'
-  ).join("");
+  ).join("")+'<div class="stage-toolkit-separator" role="separator">跨阶段工具</div>'+
+  '<button type="button" class="stage-item stage-toolkit '+(ui.phase==="PTOOLS"?"active":"")+'" data-phase="PTOOLS" aria-current="'+(ui.phase==="PTOOLS"?"step":"false")+'"><span class="stage-index">✦</span><span class="stage-body"><span class="stage-title">通用 Skills</span><span class="stage-meta">'+(skillData?.workspace.length||0)+' 个 · 随时使用</span></span><span class="stage-arrow" aria-hidden="true">›</span></button>';
 }
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
-  $("step-count").textContent=p.steps.length+" 项工作";
+  $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
+ $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
   $("step-list").innerHTML=p.steps.map((s,k)=>
-    '<button type="button" class="step-item '+(s.id===ui.step?"active":"")+'" data-step="'+esc(s.id)+'" aria-current="'+(s.id===ui.step?"step":"false")+'"><span class="step-index">'+(k+1)+'</span><span class="step-body"><strong>'+esc(s.title)+'</strong><small>阶段 '+i+' · '+s.id+'</small></span><span class="step-chevron" aria-hidden="true">›</span></button>'
+    '<button type="button" class="step-item '+(s.id===ui.step?"active":"")+'" data-step="'+esc(s.id)+'" aria-current="'+(s.id===ui.step?"step":"false")+'"><span class="step-index">'+(k+1)+'</span><span class="step-body"><strong>'+esc(s.title)+'</strong><small>'+(p.kind==="toolkit"?esc("/"+s.skillId)+" · 按需调用":"阶段 "+i+" · "+s.id)+'</small></span><span class="step-chevron" aria-hidden="true">›</span></button>'
   ).join("");
 }
 function renderDetails(){
   const p=phase(),s=step(),index=p.steps.indexOf(s)+1;
+  if(p.kind==="toolkit"){
+    $("step-position").textContent="通用 "+String(index).padStart(2,"0")+" / "+String(p.steps.length).padStart(2,"0");
+    let content='<h2>'+esc(s.title)+'</h2><p class="step-context">跨阶段通用工具 · /'+esc(s.skillId)+'</p>';
+    content+='<section class="detail-section"><h3><span class="section-icon">◇</span> 查看完整 Skill</h3>'+skillList(s.skills)+'</section>';
+    content+='<section class="detail-section"><h3><span class="section-icon">◎</span> 用途与调用时机</h3><div class="review-box">'+esc(s.summary)+'</div><p class="owner">按实际任务需要调用，不要求每个阶段都执行。</p></section>';
+    content+='<section class="detail-section"><h3><span class="section-icon">↘</span> 使用上下文</h3>'+fileList([s.input])+'</section>';
+    content+='<section class="detail-section"><h3><span class="section-icon">↗</span> 可能的结果</h3>'+fileList([s.output])+'</section>';
+    content+='<section class="detail-section"><h3><span class="section-icon">✓</span> 核心执行方式</h3><div class="toolkit-steps">'+s.workflow.map((t,i)=>'<div class="toolkit-activity"><span>'+String(i+1)+'</span><p>'+esc(t)+'</p></div>').join("")+'</div><p class="detail-hint">适用边界：'+esc(s.limitation)+'</p></section>';
+    content+='<section class="detail-section prompt-section"><div class="prompt-heading"><h3><span class="section-icon">✎</span> 调用提示词</h3><button type="button" class="copy-prompt" data-copy-prompt>复制提示词</button></div><div class="prompt-text">'+esc(s.prompt)+'</div></section>';
+    $("step-detail").innerHTML=content;return;
+  }
   $("step-position").textContent=String(index).padStart(2,"0")+" / "+String(p.steps.length).padStart(2,"0");
   let html='<h2>'+esc(s.title)+'</h2><p class="step-context">'+esc(p.title)+' · '+esc(s.id)+'</p>';
   html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
@@ -38,7 +72,7 @@ function renderDetails(){
   $("step-detail").innerHTML=html;
 }
 function setSelection(phaseId,stepId,moveFocus=false){
-  const next=ui.data.phases.find(p=>p.id===phaseId);
+  const next=allPhases().find(p=>p.id===phaseId);
   if(!next)return;
   ui.phase=next.id;
   ui.step=next.steps.some(s=>s.id===stepId)?stepId:next.steps[0].id;
@@ -160,25 +194,12 @@ function renderSkillSources(skill){
  +(!rs.length?'<p>暂无足够的逐项研究笔记，需要继续核实原始Skill文件，不能只凭仓库名称声称已参考。</p>':"")
  +'<p class="research-boundary">Matt原版保持不改；自建/改造说明只在网站中展示。</p></div>';
 }
-function renderWorkspace(){
- const list=skillData?.workspace||[];
- $("workspace-skills").innerHTML=list.map(k=>
-  '<button type="button" class="workspace-skill" data-workspace-skill="'+esc(k.id)+'"><strong>'+esc(k.name)+' <code>/'+esc(k.id)+'</code></strong><p>'+esc(k.summary)+'</p><span>查看完整Skill与学习来源 ↗</span></button>'
- ).join("");
-}
-document.addEventListener("click",event=>{
- if(event.target.closest("#workspace-open")){renderWorkspace();const dlg=$("workspace-dialog");if(!dlg.open)dlg.showModal();return}
- if(event.target.closest("[data-workspace-close]")){$("workspace-dialog").close();return}
- const b=event.target.closest("[data-workspace-skill]");
- if(b){$("workspace-dialog").close();previewSkill(b.dataset.workspaceSkill)}
-});
-
 function previewSkill(id){
  const item=skillData?.skills?.find(x=>x.id===id);
  if(!item)return;
  currentSkill=item;currentSkillTab="flow";currentResult="final";currentFile="SKILL.md";showFileSource=false;
  $("skill-dialog-title").textContent=id;
- const current=ui.data?.phases?.flatMap(p=>p.steps)?.find(st=>st.id===ui.step&&st.skills?.includes(id));
+ const current=phase()?.steps?.find(st=>st.id===ui.step&&st.skills?.includes(id));
  $("skill-dialog-label").textContent=(current?.title||item.stepTitle)+" · "+(item.maturity||"官方原版")+" · 实际文件："+Object.keys(item.files||{}).length+" 个";
  refreshSkillPreview();
  const dlg=$("skill-dialog");if(!dlg.open)dlg.showModal();
@@ -242,7 +263,7 @@ document.addEventListener("click",event=>{
   skillData.workspace=skillData.skills.filter(s=>s.category==='workspace');
   if(!Array.isArray(ui.data.phases)||!ui.data.phases.length)throw Error("缺少研发阶段");
   const qs=new URLSearchParams(location.hash.slice(1));
-  const p=ui.data.phases.find(p=>p.id===qs.get("phase"))||ui.data.phases[0];
+  const p=allPhases().find(p=>p.id===qs.get("phase"))||ui.data.phases[0];
   setSelection(p.id,qs.get("step"));
  }catch(error){
   $("stage-list").innerHTML="";

@@ -27,7 +27,7 @@
 
 左栏为工作阶段，中栏为步骤，右栏为所用Skill、输入、输出、审核和可复制中文提示词。点击Skill可以选择按其特点设计的快速理解、报价项目示例、完整目录文件以及**逐文件开源研究来源与实际借鉴机制**。
 
-右上角“通用 Skills”可浏览handoff、grilling、domain-modeling、research等按需调用的官方Skill；下载“全部Skills”可得到安装文件包。研究说明不进入安装包中的SKILL.md正文。
+左侧「工作阶段」下方独立展示「通用 Skills」入口（随时使用，不计入主研发阶段）；中间可选handoff、grilling、domain-modeling、research等，右侧查看调用时机、执行方式和提示词。点击Skill可预览完整文件。右上角提供全部Skills ZIP下载；研究说明不进入SKILL.md正文。
 
 ## 当前流程
 
