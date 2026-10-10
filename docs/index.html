@@ -1,1 +1,42 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="报价系统首次项目建设、模块迭代与Matt Pocock Skills研发方案导航"><title>项目研发导航 · 报价系统</title><link rel="stylesheet" href="./styles.css"></head><body><div id="root"><header class="top"><div class="brand">◇ <b>项目研发导航</b><span>WORKFLOW / SKILLS</span></div><div class="switch"><button class="active">报价系统研发导航</button><button disabled title="报价方案确认后再建设">标准项目 · 待后续</button></div><div class="top-status">● 方案设计稿 · 非执行进度</div></header><aside class="left"><div class="overline">WORKSPACE</div><h3>研发方案导航</h3><nav id="menu"></nav><hr><div class="overline">PROJECT PHASES</div><div id="phases"></div><div class="left-tip">先确定流程与模块边界，再完善Skill正文、模板、示例和导出。</div></aside><main id="main"></main><aside id="detail" class="right"></aside></div><script type="module" src="./app.js"></script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="报价系统首次项目建设研发导航：阶段、步骤、Skill、输入、输出与审核。">
+  <title>报价系统研发导航</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-brand">
+      <span class="logo" aria-hidden="true">◇</span>
+      <div><strong>项目研发导航</strong><span class="brand-sub">首次项目建设 · 方案设计</span></div>
+    </div>
+    <div class="project-switch" aria-label="研发导航类型">
+      <span class="project-active">报价系统</span>
+      <span class="project-future" title="报价系统流程确认后再建设">标准项目 · 待建设</span>
+    </div>
+    <span id="project-stats" class="header-meta">正在载入流程…</span>
+  </header>
+  <div class="workspace">
+    <aside class="phase-pane" aria-label="工作阶段">
+      <div class="pane-heading"><span class="eyebrow">WORK STAGES</span><h2>工作阶段</h2><p>选择阶段查看研发步骤</p></div>
+      <nav id="stage-list" class="stage-list" aria-label="选择工作阶段"></nav>
+      <div class="pane-foot">范围：首次项目建设<br>从现有 PRD、前端原型、后端框架开始</div>
+    </aside>
+    <main class="steps-pane" id="steps-pane">
+      <div class="eyebrow">EXECUTION STEPS</div>
+      <div id="stage-intro"></div>
+      <div class="step-heading"><h2>执行步骤</h2><span id="step-count"></span></div>
+      <div id="step-list" class="step-list"></div>
+      <div class="step-notice">按当前业务条件执行。完成一轮模块开发并验收后，返回「选择本轮开发模块」开始下一轮。</div>
+    </main>
+    <aside class="detail-pane" aria-label="步骤详情">
+      <div class="detail-top"><span class="eyebrow">STEP DETAILS</span><span id="step-position" class="step-number"></span></div>
+      <div id="step-detail"></div>
+    </aside>
+  </div>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
