@@ -45,6 +45,49 @@ function renderSteps(){
     '<button type="button" class="step-item '+(s.id===ui.step?"active":"")+'" data-step="'+esc(s.id)+'" aria-current="'+(s.id===ui.step?"step":"false")+'"><span class="step-index">'+(k+1)+'</span><span class="step-body"><strong>'+esc(s.title)+'</strong><small>'+(p.kind==="toolkit"?esc("/"+s.skillId)+" · 按需调用":"阶段 "+i+" · "+s.id)+'</small></span><span class="step-chevron" aria-hidden="true">›</span></button>'
   ).join("");
 }
+
+// 用户填入的是开发环境的事实，而不是AI推断结果；只缓存本浏览器非敏感字段
+const devFields=[
+ {id:"os",label:"开发主机与操作系统",placeholder:"例如 Windows 11 + WSL2 / Ubuntu LTS"},
+ {id:"resources",label:"CPU / 内存 / 可用磁盘",placeholder:"例如 8 vCPU / 16GiB / 200GB可用"},
+ {id:"runtime",label:"Java / Node / Docker / Compose 版本",placeholder:"已安装的真实版本；未验证填待核实"},
+ {id:"existing",label:"已有数据库/缓存等服务",placeholder:"MySQL/Redis/消息服务及版本，未安装填无"},
+ {id:"ports",label:"端口与运行中服务",placeholder:"MySQL:3306，Redis:6379等；不要填写密码"},
+ {id:"paths",label:"允许使用的环境与数据目录",placeholder:"例如本机开发依赖目录、允许写入的目录"},
+ {id:"access",label:"访问方式与权限",placeholder:"本机管理员/普通用户，是否可使用Docker/网络"},
+ {id:"network",label:"内网/出网/镜像源与第三方",placeholder:"公网或离线、代理、可用第三方接口"},
+ {id:"restriction",label:"已存在服务与禁止变更事项",placeholder:"不能停用的数据库、不能覆盖的目录/容器"},
+ {id:"goal",label:"本次需要部署的依赖",placeholder:"如MySQL8、Redis7；应以架构/数据库设计为准"}
+];
+const devStorage="dev-workflow:environment-form:v1";
+let devValues={};
+try{devValues=JSON.parse(localStorage.getItem(devStorage)||"{}")||{}}catch(e){devValues={}}
+function environmentForm(){
+ return '<section class="detail-section env-form-section"><h3><span class="section-icon">▦</span> ① 用户填写开发环境表</h3>'
+ +'<p class="detail-hint">先填写已确认的真实环境事实，未知填“待核实”。不填写账号密码、Token或私钥；填写内容只保存在本浏览器，点击下方下载后放到指定项目目录。</p>'
+ +'<table class="env-table"><tbody>'+devFields.map(f=>'<tr><th scope="row"><label for="dev-'+esc(f.id)+'">'+esc(f.label)+'</label></th><td><textarea id="dev-'+esc(f.id)+'" data-dev-field="'+esc(f.id)+'" rows="2" placeholder="'+esc(f.placeholder)+'">'+esc(devValues[f.id]||"")+'</textarea></td></tr>').join("")+'</tbody></table>'
+ +'<div class="env-form-actions"><button type="button" data-dev-download>下载填写表（Markdown）</button><button type="button" data-dev-copy>复制表格内容</button></div>'
+ +'<p class="detail-hint">② 下载后放到 <code>docs/input/环境资料/开发环境信息.md</code> → ③ 调用下方 development-environment Skill 按实际版本、端口、权限和依赖顺序执行部署及验证。</p></section>';
+}
+function envMd(){
+ return '# 开发环境信息（用户填写）\n\n> 本表仅记录已知事实，未确认内容写待核实。请勿填写密码、令牌、SSH私钥。\n\n| 项目 | 用户填写内容 |\n|---|---|\n'+devFields.map(f=>'| '+f.label+' | '+String(devValues[f.id]||"待核实").replaceAll("|","/").replaceAll("\n","；")+' |').join("\n")+'\n\n## 执行规则\n\n请调用 skills/development-environment/SKILL.md：先核对本表和已批准的工程基线/整体架构/数据库总体，列出具体部署步骤；按授权范围执行，附实际命令/健康和业务连通证据。未操作不算部署成功。\n';
+}
+document.addEventListener("input",event=>{
+ const area=event.target.closest("[data-dev-field]");if(!area)return;
+ devValues[area.dataset.devField]=area.value;
+ try{localStorage.setItem(devStorage,JSON.stringify(devValues))}catch(e){/* 私有模式禁用缓存时仍可在当前页面导出 */}
+});
+document.addEventListener("click",async event=>{
+ if(event.target.closest("[data-dev-download]")){
+  const blob=new Blob([envMd()],{type:"text/markdown;charset=utf-8"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="开发环境信息.md";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+ }else if(event.target.closest("[data-dev-copy]")){
+  const b=event.target.closest("button");
+  try{await navigator.clipboard.writeText(envMd());b.textContent="已复制 Markdown"}catch(e){b.textContent="复制不可用，请点击下载填写表"}
+ }
+});
+
 function renderDetails(){
   const p=phase(),s=step(),index=p.steps.indexOf(s)+1;
   if(p.kind==="toolkit"){
@@ -60,7 +103,9 @@ function renderDetails(){
   }
   $("step-position").textContent=String(index).padStart(2,"0")+" / "+String(p.steps.length).padStart(2,"0");
   let html='<h2>'+esc(s.title)+'</h2><p class="step-context">'+esc(p.title)+' · '+esc(s.id)+'</p>';
+  if(p.id==="P01"&&s.id==="S06")html+=environmentForm();
   html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
+  if(Array.isArray(s.invokes)&&s.invokes.length){html+='<p class="detail-hint">本步骤主Skill内部调用：'+s.invokes.map(id=>'<code>'+esc(id)+'</code>').join("、")+'，不重复安排独立步骤。</p>';}
   html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">✓</span> 审核要求</h3><div class="review-box">'+esc(s.review)+'</div><p class="owner">审核及参与角色：'+esc(p.owner)+'</p></section>';
@@ -192,7 +237,7 @@ function renderSkillSources(skill){
  const rs=skill.referenceLearnings||[];
  return '<div class="source-detail"><h3>为什么参考这些Skill？</h3><p>这里只记录调研来源、实际借鉴的机制和本项目适配范围，绝不会插进用户下载安装的SKILL.md正文。</p>'
  +'<div class="research-type"><strong>采用方式：</strong>'+esc(skill.type||"Matt原版")+'</div>'
- +'<div class="research-rows">'+rs.map(x=>'<article class="research-row"><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">查看参考原文 ↗</a><p><strong>具体学习：</strong>'+esc(x.learned)+'</p></article>').join("")+'</div>'
+ +'<div class="research-rows">'+rs.map(x=>'<article class="research-row"><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.name||"参考源文件")+' ↗</a><p><strong>具体学习：</strong>'+esc(x.learned)+'</p></article>').join("")+'</div>'
  +'<p class="source-adaptation"><strong>实际采用与定制化改造：</strong>'+esc(skill.adaptation||"Matt官方原版保持不变。")+'</p>'
  +(!rs.length?'<p>暂无足够的逐项研究笔记，需要继续核实原始Skill文件，不能只凭仓库名称声称已参考。</p>':"")
  +'<p class="research-boundary">Matt原版保持不改；自建/改造说明只在网站中展示。</p></div>';
@@ -213,7 +258,7 @@ function refreshSkillPreview(){
  let content=currentSkillTab==="flow"?renderSkillOverview(sk):currentSkillTab==="result"?renderSkillResult():currentSkillTab==="files"?renderFiles():renderSkillSources(sk);
  $("skill-dialog-content").innerHTML=content;
  const a=sk.source;
- $("skill-reference").innerHTML='<span>研究来源：</span><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">'+esc(a.repo)+'</a> <span class="skill-aux">（不属于交付正文）</span>';
+ $("skill-reference").innerHTML='<span>研究来源：</span><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">'+esc(a.name||a.repo)+'</a> <span class="skill-aux">（不属于交付正文）</span>';
 }
 document.addEventListener("click",event=>{
  const skill=event.target.closest("[data-skill]");
