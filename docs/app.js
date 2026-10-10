@@ -51,52 +51,76 @@ function setSelection(phaseId,stepId,moveFocus=false){
 let skillData=null;
 let currentSkill=null;
 let currentSkillTab="flow";
-function flowDiagram(items){
-  if(!items?.length)return '<p>此Skill尚未配置流程图。</p>';
-  const width=640,nodeX=112,nodeWidth=416,nodeHeight=58,gap=42,ys=items.map((_,i)=>20+i*(nodeHeight+gap));
-  const h=ys.at(-1)+nodeHeight+95;
-  let svg='<svg class="skill-flow-svg" viewBox="0 0 '+width+' '+h+'" role="img" aria-label="Skill内部执行流程图"><defs><marker id="skill-arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 Z" fill="#7291ba"/></marker></defs>';
-  for(let i=0;i<items.length;i++){
-    let y=ys[i],txt=items[i],mid=y+nodeHeight/2;
-    const a=Array.from(txt);const lines=[];
-    for(let j=0;j<a.length;j+=19)lines.push(a.slice(j,j+19).join(""));
-    svg+='<rect x="'+nodeX+'" y="'+y+'" rx="10" width="'+nodeWidth+'" height="'+nodeHeight+'" fill="'+(i===0?"#e7efff":"#f3f6fb")+'" stroke="#86a5d0" stroke-width="1.5"/>';
-    lines.slice(0,2).forEach((line,j)=>svg+='<text x="'+width/2+'" y="'+(mid-(Math.min(lines.length,2)-1)*10+j*20)+'" font-size="15" text-anchor="middle" dominant-baseline="middle" fill="#2c4b70">'+esc(line)+'</text>');
-    if(i>0){svg+='<path d="M320 '+(ys[i-1]+nodeHeight)+' V'+(y-4)+'" fill="none" stroke="#7291ba" stroke-width="2" marker-end="url(#skill-arr)"/>'}
-  }
-  const dy=ys.at(-1)+nodeHeight+25;
-  svg+='<path d="M320 '+(ys.at(-1)+nodeHeight)+' V'+(dy-5)+'" fill="none" stroke="#7291ba" stroke-width="2" marker-end="url(#skill-arr)"/>';
-  svg+='<rect x="208" y="'+dy+'" width="224" height="45" rx="22" fill="#e1f2e8" stroke="#8ab89e"/><text x="320" y="'+(dy+28)+'" font-size="14" text-anchor="middle" fill="#256344">审核 / 输出 / 通过</text></svg>';
-  return '<div class="skill-flow-wrapper">'+svg+'</div><p class="flow-note">每一步必须基于真实文件或验证证据；未通过审核退回相关环节，不能直接宣布完成。</p>';
+let currentFile="SKILL.md";
+let showFileSource=false;
+function logicDiagram(d){
+ if(!d)return '<p>该技能的速览内容尚未配置。</p>';
+ const actions=(d.work||[]).map((s,i)=>'<div class="logic-node work"><span class="logic-ordinal">'+(i+1)+'</span><span>'+esc(s)+'</span></div>').join('<div class="logic-arrow">↓</div>');
+ return '<div class="logic-goal"><div class="logic-kicker">这个 Skill 解决什么</div><strong>'+esc(d.outcome)+'</strong></div>'
+ +'<div class="logic-node start"><span class="logic-kicker">输入 / 上游条件</span><b>'+esc(d.input)+'</b></div>'
+ +'<div class="logic-arrow">↓</div><div class="logic-steps">'+actions+'</div><div class="logic-arrow">↓</div>'
+ +'<div class="logic-decision"><span class="logic-kicker">关键决策</span><b>'+esc(d.gate)+'</b></div>'
+ +'<div class="logic-forks"><div class="logic-branch negative"><span>需要处理 / 不通过　↶</span><strong>'+esc(d.fail)+'</strong><small>退回补证据、提问或修正后重新检查</small></div>'
+ +'<div class="logic-branch positive"><span>可以继续 / 通过　↓</span><strong>'+esc(d.pass)+'</strong></div></div>'
+ +'<div class="logic-arrow">↓</div><div class="logic-output"><span class="logic-kicker">最后交付什么</span><strong>'+esc(d.output)+'</strong></div>';
 }
-function markdownPreview(md){return '<pre class="skill-markdown">'+esc(md||"暂未提供该类型的内容。")+'</pre>'}
+function renderMd(text){
+ let html="",code=false,block=[];
+ const flush=()=>{if(block.length){html+='<div class="md-paragraph">'+block.map(esc).join(" ")+'</div>';block=[]}};
+ for(const row of String(text).split(/\r?\n/)){
+   if(/^\s*```/.test(row)){flush();if(code){html+="</code></pre>";code=false}else{html+='<pre class="md-code"><code>';code=true}continue}
+   if(code){html+=esc(row)+"\n";continue}
+   const h=row.match(/^(#{1,4})\s+(.+)/);
+   if(h){flush();html+='<h'+Math.min(h[1].length+1,5)+'>'+esc(h[2])+'</h'+Math.min(h[1].length+1,5)+'>';continue}
+   if(!row.trim()){flush();continue}
+   if(/^---+$/.test(row.trim())){flush();html+="<hr>";continue}
+   if(/^\s*[-*]\s+/.test(row)){flush();html+='<div class="md-list-item">• '+esc(row.replace(/^\s*[-*]\s+/,""))+'</div>';continue}
+   if(/^\s*\d+\.\s+/.test(row)){flush();html+='<div class="md-list-item">'+esc(row.trim())+'</div>';continue}
+   if(row.trim().startsWith("|")){flush();html+='<pre class="md-table">'+esc(row)+'</pre>';continue}
+   if(/^>\s*/.test(row)){flush();html+='<blockquote class="md-quote">'+esc(row.replace(/^>\s*/,""))+'</blockquote>';continue}
+   block.push(row);
+ }
+ flush();if(code)html+="</code></pre>";
+ return '<div class="rendered-markdown">'+html+'</div>';
+}
+function renderFiles(){
+ const all=currentSkill?.files||{};
+ const paths=Object.keys(all).sort((a,b)=>a==="SKILL.md"?-1:b==="SKILL.md"?1:a.localeCompare(b,"zh-CN"));
+ if(!paths.includes(currentFile))currentFile=paths[0]||"SKILL.md";
+ const options=paths.map(path=>{const depth=path.split("/").length-1;
+   return '<button type="button" class="skill-file '+(path===currentFile?"active":"")+'" data-skill-file="'+esc(path)+'" style="padding-left:'+(12+depth*10)+'px" title="'+esc(path)+'">'+esc(path.split("/").at(-1))+'<small>'+esc(path.includes("/")?path.substring(0,path.lastIndexOf("/"))+"/":"根目录")+'</small></button>'
+ }).join("");
+ const content=all[currentFile]||"";
+ const markdown=/\.md$/i.test(currentFile);
+ const view=showFileSource||!markdown?'<pre class="skill-file-code">'+esc(content)+'</pre>':renderMd(content);
+ return '<div class="file-explorer"><aside class="file-sidebar"><div class="file-sidebar-title">所有目录文件 <span>'+paths.length+'</span></div>'+options+'</aside>'
+ +'<section class="file-preview"><div class="file-toolbar"><strong>'+esc(currentFile)+'</strong><button type="button" data-file-toggle>'+ (showFileSource?"阅读模式":"查看原文")+'</button></div>'+view+'</section></div>';
+}
 function previewSkill(id){
  const item=skillData?.skills?.find(x=>x.id===id);
  if(!item)return;
- currentSkill=item;currentSkillTab="flow";
+ currentSkill=item;currentSkillTab="flow";currentFile="SKILL.md";showFileSource=false;
  $("skill-dialog-title").textContent=id;
- $("skill-dialog-label").textContent=item.type+" · "+item.stepTitle;
+ $("skill-dialog-label").textContent="覆盖步骤："+item.stepTitle+" · 实际文件："+Object.keys(item.files||{}).length+" 个";
  refreshSkillPreview();
  const dlg=$("skill-dialog");if(!dlg.open)dlg.showModal();
 }
 function refreshSkillPreview(){
  const sk=currentSkill;if(!sk)return;
- const tabs=[...document.querySelectorAll("[data-skill-tab]")];
- tabs.forEach(t=>{const active=t.dataset.skillTab===currentSkillTab;t.classList.toggle("active",active);t.setAttribute("aria-selected",String(active))});
- let content="";
- if(currentSkillTab==="flow")content=flowDiagram(sk.flow);
- else if(currentSkillTab==="content")content=markdownPreview(sk.content);
- else if(currentSkillTab==="example")content=markdownPreview(sk.example||"Matt原版Skill未单独附带本项目示例；原版正文保持不变，可结合右侧步骤提示词使用。");
- else content=markdownPreview(sk.template||"Matt原版Skill的模板按官方SKILL.md内容执行，未覆盖或复制上游额外资源。");
+ document.querySelectorAll("[data-skill-tab]").forEach(t=>{const active=t.dataset.skillTab===currentSkillTab;t.classList.toggle("active",active);t.setAttribute("aria-selected",String(active))});
+ let content=currentSkillTab==="flow"?logicDiagram(sk.diagram):currentSkillTab==="files"?renderFiles():('<div class="source-detail"><h3>设计来源与改造说明</h3><p>这部分用于审核参考依据，不写入安装用的 SKILL.md，也不放进交付 ZIP。</p><div><strong>处理方式：</strong>'+esc(sk.type)+'</div><div><strong>主要参考：</strong><a href="'+esc(sk.source.url)+'" target="_blank" rel="noopener noreferrer">'+esc(sk.source.repo)+" / "+esc(sk.source.path)+'</a></div></div>');
  $("skill-dialog-content").innerHTML=content;
  const a=sk.source;
- $("skill-reference").innerHTML='参考：<a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">'+esc(a.repo)+'</a> · '+esc(a.path);
+ $("skill-reference").innerHTML='<span>研究来源：</span><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">'+esc(a.repo)+'</a> <span class="skill-aux">（不属于交付正文）</span>';
 }
 document.addEventListener("click",event=>{
  const skill=event.target.closest("[data-skill]");
  if(skill){previewSkill(skill.dataset.skill);return}
  const tab=event.target.closest("[data-skill-tab]");
  if(tab){currentSkillTab=tab.dataset.skillTab;refreshSkillPreview();return}
+ const f=event.target.closest("[data-skill-file]");
+ if(f){currentFile=f.dataset.skillFile;showFileSource=false;refreshSkillPreview();return}
+ if(event.target.closest("[data-file-toggle]")){showFileSource=!showFileSource;refreshSkillPreview();return}
  if(event.target.closest("[data-skill-close]")){$("skill-dialog").close()}
 });
 

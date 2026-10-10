@@ -54,3 +54,48 @@
 .dialog-close-bottom{background:#eef3fb;color:#366292;border:0;border-radius:8px;padding:8px 16px;white-space:nowrap}
 @media(max-width:1100px){.header-meta{display:none}.site-header{gap:10px}.download-all{margin-left:auto}}
 @media(max-width:780px){.download-all{margin-left:0;font-size:11px;padding:8px}.skill-dialog-header{padding:15px}.skill-dialog-tabs{padding:10px}.skill-dialog-content{padding:12px}.skill-dialog-footer{padding:10px 15px}}
+
+/* 流程速览：让业务决策、退回与交付在第一屏形成完整图景 */
+.logic-goal,.logic-output,.logic-node,.logic-decision,.logic-branch{border:1px solid #dce6f3;border-radius:11px;padding:13px 18px;line-height:1.65}
+.logic-goal{background:#e8f0fc;color:#213b60;text-align:center;margin:0 auto 17px;max-width:650px}
+.logic-goal strong{font-size:16px;display:block}
+.logic-kicker{font-size:10px;letter-spacing:1px;color:#728ba9;display:block;margin-bottom:6px}
+.logic-node{background:#f7faff;text-align:center;max-width:620px;margin:auto}
+.logic-node.start{background:#f4f7fb}
+.logic-node.work{background:white;display:flex;align-items:center;text-align:left;gap:12px;max-width:620px;font-size:13px}
+.logic-ordinal{display:inline-flex;align-items:center;justify-content:center;width:27px;height:27px;flex:0 0 27px;background:#e6eef9;color:#3566a1;border-radius:8px}
+.logic-arrow{text-align:center;font-size:20px;color:#8ea7c8;line-height:1.7}
+.logic-decision{max-width:620px;margin:auto;background:#fff5e4;border:2px solid #dfb16b;text-align:center}
+.logic-decision strong,.logic-decision b{color:#714b16}
+.logic-forks{max-width:770px;margin:22px auto 2px;display:grid;grid-template-columns:1fr 1fr;gap:15px;position:relative}
+.logic-forks:before{content:"";position:absolute;left:25%;right:25%;top:-13px;border-top:2px solid #d4a66d}
+.logic-branch{font-size:12px;position:relative}
+.logic-branch:before{content:"↓";color:#ac8b57;position:absolute;top:-18px;left:50%}
+.logic-branch span{display:block;font-size:11px;font-weight:700;letter-spacing:.5px;margin-bottom:6px}
+.logic-branch strong{display:block;font-size:13px}
+.logic-branch small{display:block;opacity:.7;margin-top:8px}
+.logic-branch.negative{background:#fff5f4;border-color:#f0d6d2;color:#924d45}
+.logic-branch.positive{background:#ecf7ef;border-color:#c7e7d2;color:#2a6546}
+.logic-output{background:#e9f6ee;border-color:#b9d8c7;text-align:center;max-width:620px;margin:auto}
+.logic-output strong{color:#235d3d}
+.file-explorer{display:grid;grid-template-columns:245px minmax(0,1fr);border:1px solid #e3e9f2;border-radius:11px;overflow:hidden;min-height:440px}
+.file-sidebar{background:#f5f7fb;border-right:1px solid #e4e9f2;overflow-y:auto;max-height:62vh;padding:12px 8px}
+.file-sidebar-title{font-size:11px;font-weight:700;color:#627996;padding:8px}
+.file-sidebar-title span{float:right;color:#95a6bb}
+.skill-file{display:block;width:100%;border:0;background:transparent;text-align:left;padding:11px 8px;font:12px/1.4 ui-monospace,Consolas,"Microsoft YaHei",sans-serif;color:#496178;border-radius:7px;overflow-wrap:anywhere}
+.skill-file:hover{background:#eaf1fc}.skill-file.active{background:#dfeaf9;color:#225a9c;font-weight:700}
+.skill-file small{display:block;font-size:10px;color:#91a1b3;margin-top:3px;font-weight:400}
+.file-preview{min-width:0;overflow:auto;max-height:62vh;background:white}
+.file-toolbar{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;background:#fafdff;border-bottom:1px solid #e9eff7;gap:12px;position:sticky;top:0;z-index:2}
+.file-toolbar strong{font-size:12px;overflow-wrap:anywhere}
+.file-toolbar button{border:1px solid #cbd9ea;border-radius:7px;background:#f1f6fc;color:#456c98;padding:7px 10px;white-space:nowrap;font-size:11px}
+.skill-file-code{white-space:pre-wrap;overflow-wrap:anywhere;padding:18px;font:12px/1.8 ui-monospace,Consolas,"Microsoft YaHei",monospace;color:#41526c}
+.rendered-markdown{padding:7px 20px 24px;line-height:1.95;font-size:13px}
+.rendered-markdown h2{font-size:19px;margin:25px 0 11px}.rendered-markdown h3{font-size:16px;margin:19px 0 9px}.rendered-markdown h4{font-size:14px;margin:15px 0 7px}
+.md-paragraph{margin:10px 0;color:#41536e}.md-list-item{padding:3px 0 3px 10px;color:#455971}
+.md-code,.md-table{background:#f5f7fb;border:1px solid #e7ecf5;border-radius:8px;padding:11px;white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}
+.md-table{margin:3px 0;font-size:11px}.md-quote{padding:8px 12px;background:#f4f7fd;color:#60738d;border-left:3px solid #b6c9e4}
+.source-detail{background:#f5f8fc;padding:20px;line-height:2.1;border-radius:9px}
+.source-detail a{color:#2567a8}.source-detail h3{margin-top:0}
+.skill-aux{opacity:.75}
+@media(max-width:650px){.file-explorer{display:flex;flex-direction:column}.file-sidebar{max-height:180px;border-right:0;border-bottom:1px solid #e4e9f2}.file-preview{max-height:45vh}.logic-forks{grid-template-columns:1fr}.logic-forks:before{display:none}}
