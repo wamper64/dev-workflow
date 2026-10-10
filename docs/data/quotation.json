@@ -145,7 +145,7 @@
             "docs/output/01-项目基线/项目基线.md"
           ],
           "review": "项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。",
-          "prompt": "请调用 Skill：project-baseline，完成「项目基线」。\n\nSkill 说明文件：skills/project-baseline/SKILL.md\n执行逻辑：读取已确认PRD→提取项目共性约束→核对工程资料→评审基线\n\n项目边界：docs/input/ 下已有PRD及可选工程/环境/对接资料；code/fld是既有前端原型，页面结构、样式与组件优先沿用，不允许新造一套；code/guiwu_ruoyi仅为既有后端框架，按原有组织扩展。\n\n输入资料：\n- docs/input/需求资料/PRD\n- docs/input/工程资料/已定方案与技术栈\n- docs/input/环境资料/\n- docs/input/对接资料/\n- docs/output/01-项目基线/输入核对.md\n\n实施要点：\n项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。\n\n输出文件：\n- docs/output/01-项目基线/项目基线.md\n\n审核关卡：项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。\n\n若不具备真实输入或运行权限，应输出阻塞项和验证依据，不得虚构已完成结果。Git提交内容必须使用中文。",
+          "prompt": "请调用 Skill：project-baseline（skills/project-baseline/SKILL.md），生成本报价系统工程基线。\n\n先完整读取 Skill 所有相关说明与配套文件，特别是 references/checklist.md、references/quantification-standard.md、assets/baseline-template.md。\n\n输入：docs/input/需求资料/ 已确认PRD、docs/input/工程资料/、docs/input/环境资料/、docs/input/对接资料/；按需核对既有前端 code/fld 与若依 code/guiwu_ruoyi 的真实框架与版本。不要重新整理PRD已包含的页面映射。\n\n本次输出必须落实到以下能够指导后续架构设计的定量要求：\n1. 实际技术栈的产品及版本、必须沿用和允许升级范围；\n2. CPU、内存、磁盘、OS、网络等目标服务器条件；\n3. CPU按服务核数分配，内存按运行单元GiB上限及余量，磁盘按数据库/附件/日志/临时/备份/系统GB划分并计算闭合；\n4. 数据库、报价版本、审批、计算单、附件等保存的具体年限及起算点；\n5. 用户在线量、HTTP请求并发、长任务执行并发、排队上限；\n6. 主要业务API的P95目标、数据量与负载口径、持续运行浸泡时间；\n7. 内存RSS、连接/线程/文件句柄、日志上限、RPO和RTO。\n\n如果输入缺少关键数值，先给出具体推荐值、适用前提、理由、备选和影响，每轮最多询问3组问题。推荐值未经同意不能变为正式约束。所有资源分配和保存/性能口径必须交叉一致，不能编造已具备的客户设备或第三方能力。\n\n输出：docs/output/01-项目基线/项目基线.md。正文不得成为模板空壳，且不能混入TDD、Tickets及代码评审等开发方式。关键量化约束未裁定前明确说明不能作为完整基线进入下游设计。",
           "skillId": "project-baseline",
           "skillOrigin": "自建"
         },
