@@ -99,3 +99,51 @@
 .source-detail a{color:#2567a8}.source-detail h3{margin-top:0}
 .skill-aux{opacity:.75}
 @media(max-width:650px){.file-explorer{display:flex;flex-direction:column}.file-sidebar{max-height:180px;border-right:0;border-bottom:1px solid #e4e9f2}.file-preview{max-height:45vh}.logic-forks{grid-template-columns:1fr}.logic-forks:before{display:none}}
+
+
+/* 按Skill特征展示：工程基线使用内容地图，而非强制套流程图 */
+.skill-tab[hidden]{display:none}
+.skill-overview{max-width:900px;margin:auto;line-height:1.7}
+.skill-summary{padding:19px 23px;background:#eef5ff;border:1px solid #d8e6f8;border-radius:12px}
+.skill-summary>span{font-size:11px;color:#5478a2;letter-spacing:.6px;font-weight:700}
+.skill-summary h3{font-size:18px;color:#244976;margin:9px 0 7px}
+.skill-summary p{font-size:13px;color:#53708e;margin:0 0 14px}
+.skill-summary-output{border-top:1px solid #d8e6f8;padding-top:10px;color:#2c659f;overflow-wrap:anywhere;font-size:12px}
+.skill-overview-title{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin:25px 0 11px}
+.skill-overview-title h3{font-size:16px;color:#2b4562;margin:0}
+.skill-overview-title span{font-size:11px;color:#8b9bae}
+.skill-topic-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.skill-topic-card{background:#fff;border:1px solid #dfe8f3;border-radius:11px;padding:15px 16px}
+.skill-topic-index{color:#84a4c9;font-size:11px;font-weight:700}
+.skill-topic-card h4{font-size:15px;color:#304a6b;margin:5px 0}
+.skill-topic-card p{font-size:12px;color:#798aa0;margin:0 0 11px}
+.skill-topic-example{border-top:1px solid #edf1f7;padding-top:9px;font-size:12px;color:#476382}
+.skill-topic-example span{display:block;color:#8ca1b7;font-size:10px;margin-bottom:3px}
+.thinking-grid{border:1px solid #e2e9f2;border-radius:11px;overflow:hidden}
+.thinking-row{display:grid;grid-template-columns:1fr 28px 1.3fr;gap:10px;padding:12px 16px;align-items:center;border-bottom:1px solid #e6ebf2}
+.thinking-row:last-child{border:0}.thinking-row p{font-size:12px;color:#4e607a;line-height:1.7;margin:2px 0}
+.thinking-label{font-size:10px;color:#87a0b7}.thinking-arrow{text-align:center;color:#7b9dc2;font-size:19px}
+.skill-exclusions{background:#fff8ed;color:#8a6533;border-radius:9px;font-size:12px;margin:5px 0;padding:10px 12px 10px 27px}
+.skill-exclusions li{margin:5px 0}
+.skill-cta{margin-top:18px;background:#f1f6fc;border-radius:10px;padding:14px 16px;display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:13px}
+.skill-cta button{background:#245fa6;color:white;border:0;border-radius:8px;padding:10px 13px;cursor:pointer}
+.sample-head{padding:15px 17px;background:#edf4fd;border-radius:12px;margin-bottom:18px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.sample-head strong{font-size:14px;color:#2f527c}
+.sample-head p{font-size:11px;line-height:1.8;color:#6884a7;margin:5px 0 0}
+.sample-actions{display:flex;gap:7px;flex-wrap:wrap;flex-shrink:0}
+.sample-actions button{padding:8px 10px;border-radius:8px;background:white;border:1px solid #cbdced;color:#436c9a;font-size:11px;cursor:pointer}
+.sample-actions button.active{background:#2564aa;color:white;border-color:#2564aa}
+.sample-document{padding:15px 24px 45px;color:#354965;line-height:1.8;font-size:13px}
+.sample-document h2{font-size:23px;margin:10px 0 16px;color:#233b59}
+.sample-document h3{font-size:19px;margin:27px 0 13px;border-bottom:1px solid #e7edf5;padding-bottom:8px;color:#254b71}
+.sample-document h4{font-size:16px;margin:21px 0 10px;color:#325374}
+.sample-document h5{font-size:14px;color:#375675}
+.sample-document p{color:#415773;margin:9px 0}
+.sample-table-wrap{overflow-x:auto;border:1px solid #e0e9f3;border-radius:9px;margin:12px 0 17px}
+.sample-table{width:100%;border-collapse:collapse;font-size:12px;line-height:1.7}
+.sample-table th,.sample-table td{padding:10px 12px;border-bottom:1px solid #e7edf5;text-align:left;vertical-align:top;min-width:110px}
+.sample-table th{background:#eef4fc;color:#385a7f;font-weight:700}
+.sample-table tr:last-child td{border:0}
+.sample-notice{background:#fff8ec;border-left:3px solid #d29b45;padding:11px 16px;color:#785b37;margin:9px 0}
+.sample-list{padding:3px 0 3px 12px}.sample-empty{padding:24px;color:#8594a8}
+@media(max-width:800px){.skill-topic-grid{grid-template-columns:1fr}.thinking-row{grid-template-columns:1fr}.thinking-arrow{transform:rotate(90deg)}.sample-head{flex-direction:column}.sample-document{padding:12px}.skill-cta{flex-direction:column;align-items:flex-start}}
