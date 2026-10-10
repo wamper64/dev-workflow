@@ -20,7 +20,7 @@ def inputs(id):
 
 require(len(lookup) == len(steps), "步骤ID不唯一")
 require(len(catalog) == 24 and len(workspace) == 6, "Skill/工具箱数量不匹配")
-require(len(workflow["iterationFlow"]) == len(next(p for p in workflow["phases"] if p["id"] == "P02")["steps"]), "模块循环使用了旧的8步结构")
+require(len(workflow["iterationFlow"]) == len(next(p for p in workflow["phases"] if p["id"] == "P02")["steps"]), "模块循环与当前P02真实步骤不一致")
 for step in steps:
     if step["id"].startswith("S00"):
         continue
@@ -34,15 +34,20 @@ for step in steps:
 for p in workflow["phases"]:
     for v in p.get("artifacts", []):
         require("doc/output/" not in v.replace("docs/output/", ""), p["id"] + "阶段产物路径写错")
-for mandatory in ("docs/input/需求资料/", "docs/input/工程资料/", "docs/input/环境资料/", "docs/input/对接资料/", "docs/output/01-项目基线/项目基线.md", "code/fld/", "code/guiwu_ruoyi/"):
+require("docs/input/" in inputs("S04") and ("递归" in inputs("S04") or "全部" in inputs("S04")), "整体架构必须递归读取docs/input全部类别")
+for mandatory in ("docs/output/01-项目基线/项目基线.md", "code/fld/", "code/guiwu_ruoyi/"):
     require(mandatory in inputs("S04"), "整体架构设计遗漏输入: " + mandatory)
+for required in ("需求资料", "工程资料", "环境资料", "对接资料"):
+    require(required in lookup["S04"]["prompt"] or required in (ROOT/"skills/architecture-baseline/SKILL.md").read_text(encoding="utf-8"),"架构Skill未覆盖全部原始输入目录: "+required)
 for id in ("S05", "S09"):
     require("docs/output/01-项目基线/项目基线.md" in lookup[id]["inputs"], id + "遗漏项目基线")
 require("迁移设计草案.md" in " ".join(lookup["S09"]["outputs"]), "模块详细设计SQL不是草案")
 require("database/migrations/" in " ".join(lookup["S12"]["outputs"]), "TDD实现阶段缺正式版本化迁移")
 require(all(x in lookup["S14B"]["review"] for x in ("S13", "S14", "S14H")), "Bug修复后缺代码审查/联调/人工复测")
 require("Standards" in lookup["S13"]["title"], "Matt code-review未明确双轴")
-require("S03Q" in lookup and "S08Q" in lookup, "Grill未前置")
+for id in ("S04", "S09"):
+    require("grill-with-docs" in lookup[id]["prompt"], id + "未在主Skill内部启动Grill")
+    require((ROOT / "skills" / lookup[id]["skillId"] / "SKILL.md").read_text(encoding="utf-8").find("grill-with-docs") != -1, id + "Skill正文缺内部Grill")
 for x in catalog + workspace:
     require(x["source"]["url"].startswith("https://github.com/"), x["id"] + "缺上游链接")
     require(bool(x.get("referenceLearnings")), x["id"] + "没有写参考的具体内容")
