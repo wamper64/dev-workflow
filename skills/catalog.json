@@ -66,9 +66,9 @@
     "name": "project-baseline",
     "type": "自建",
     "source": {
-      "repo": "github/spec-kit",
-      "path": "templates/commands/plan.md",
-      "url": "https://github.com/github/spec-kit/blob/main/templates/commands/plan.md"
+      "repo": "obra/superpowers",
+      "path": "skills/writing-plans/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md"
     },
     "flow": [
       "读取已确认PRD",
@@ -190,9 +190,9 @@
     "name": "module-discovery",
     "type": "自建",
     "source": {
-      "repo": "bmad-code-org/BMAD-METHOD",
-      "path": "README.md",
-      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/README.md"
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/domain-modeling/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md"
     },
     "flow": [
       "引用PRD模块能力",
@@ -435,9 +435,9 @@
     "name": "iteration-close",
     "type": "自建",
     "source": {
-      "repo": "bmad-code-org/BMAD-METHOD",
-      "path": "README.md",
-      "url": "https://github.com/bmad-code-org/BMAD-METHOD/blob/main/README.md"
+      "repo": "obra/superpowers",
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
     },
     "flow": [
       "核对验收证据",
@@ -496,9 +496,9 @@
     "name": "release-readiness",
     "type": "自建",
     "source": {
-      "repo": "github/spec-kit",
-      "path": "templates/commands/plan.md",
-      "url": "https://github.com/github/spec-kit/blob/main/templates/commands/plan.md"
+      "repo": "obra/superpowers",
+      "path": "skills/verification-before-completion/SKILL.md",
+      "url": "https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md"
     },
     "flow": [
       "核对非功能与安全",

@@ -6,8 +6,8 @@ description: 项目基线。用于已有PRD、既有前端原型、若依框架�
 # 项目基线
 
 > 类型：自建  
-> 参考：github/spec-kit / templates/commands/plan.md  
-> 来源：[GitHub 源文件](https://github.com/github/spec-kit/blob/main/templates/commands/plan.md)  
+> 参考：obra/superpowers / skills/writing-plans/SKILL.md  
+> 来源：[GitHub 源文件](https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md)  
 > 本文是针对项目场景的原创实现说明，并非上游 Skill 原文。
 
 ## 一、职责与边界
@@ -74,4 +74,4 @@ flowchart TD
 
 ## 八、参考与差异
 
-参考项目：github/spec-kit（[源文件](https://github.com/github/spec-kit/blob/main/templates/commands/plan.md)）。参考其结构化验证、计划或质量关卡思想；本技能额外增加报价项目目录、前端原型守护、角色审核及可追溯产物要求。
+参考项目：github/spec-kit（[源文件](https://github.com/obra/superpowers/blob/main/skills/writing-plans/SKILL.md)）。参考其结构化验证、计划或质量关卡思想；本技能额外增加报价项目目录、前端原型守护、角色审核及可追溯产物要求。

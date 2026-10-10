@@ -6,8 +6,8 @@ description: 收口本轮并进入下一轮（可选 retro）。用于已有PRD�
 # 收口本轮并进入下一轮（可选 retro）
 
 > 类型：自建  
-> 参考：bmad-code-org/BMAD-METHOD / README.md  
-> 来源：[GitHub 源文件](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/README.md)  
+> 参考：obra/superpowers / skills/verification-before-completion/SKILL.md  
+> 来源：[GitHub 源文件](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)  
 > 本文是针对项目场景的原创实现说明，并非上游 Skill 原文。
 
 ## 一、职责与边界
@@ -75,4 +75,4 @@ flowchart TD
 
 ## 八、参考与差异
 
-参考项目：bmad-code-org/BMAD-METHOD（[源文件](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/README.md)）。参考其结构化验证、计划或质量关卡思想；本技能额外增加报价项目目录、前端原型守护、角色审核及可追溯产物要求。
+参考项目：bmad-code-org/BMAD-METHOD（[源文件](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)）。参考其结构化验证、计划或质量关卡思想；本技能额外增加报价项目目录、前端原型守护、角色审核及可追溯产物要求。

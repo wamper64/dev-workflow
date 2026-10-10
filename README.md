@@ -29,3 +29,8 @@ https://wamper64.github.io/dev-workflow/
 0 准备工作（既有 input/ 与 code/）→ 1 项目准备与设计（审核输入、初始化项目、项目基线、整体架构、数据库总体、开发环境、模块拆分）→ 2 模块迭代开发 → 3 全项目验收与部署上线 → 4 复盘与沉淀。
 
 所有可执行步骤的提示词均明确列出需要调用的 Skill 名称与顺序；第0阶段仅展示原始输入，不运行Skill。
+
+## Skill包与官方依赖
+- 网站的21个执行步骤严格对应21个主Skill（6个Matt原版，15个改造或自建）。
+- 全部Skill导出包另附 Matt 原版 tdd、implement、writing-for-agents 依赖，共24份SKILL.md，并保留MIT许可。
+- 参考来源请看 skills/REFERENCES.md；已将自建的主要参考指向具体的上游SKILL.md，不将普通README冒充Skill。

@@ -6,8 +6,8 @@ description: 模块拆分。用于已有PRD、既有前端原型、若依框架�
 # 模块拆分
 
 > 类型：自建  
-> 参考：bmad-code-org/BMAD-METHOD / README.md  
-> 来源：[GitHub 源文件](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/README.md)  
+> 参考：mattpocock/skills / skills/engineering/domain-modeling/SKILL.md  
+> 来源：[GitHub 源文件](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md)  
 > 本文是针对项目场景的原创实现说明，并非上游 Skill 原文。
 
 ## 一、职责与边界
@@ -77,4 +77,4 @@ flowchart TD
 
 ## 八、参考与差异
 
-参考项目：bmad-code-org/BMAD-METHOD（[源文件](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/README.md)）。参考其结构化验证、计划或质量关卡思想；本技能额外增加报价项目目录、前端原型守护、角色审核及可追溯产物要求。
+参考项目：bmad-code-org/BMAD-METHOD（[源文件](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md)）。参考其结构化验证、计划或质量关卡思想；本技能额外增加报价项目目录、前端原型守护、角色审核及可追溯产物要求。
