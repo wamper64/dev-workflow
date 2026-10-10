@@ -19,7 +19,7 @@ def inputs(id):
     return "\n".join(lookup[id]["inputs"])
 
 require(len(lookup) == len(steps), "步骤ID不唯一")
-require(len(catalog) == 24 and len(workspace) == 6, "Skill/工具箱数量不匹配")
+require(len(catalog) == 23 and len(workspace) == 6, "Skill/工具箱数量不匹配")
 require(len(workflow["iterationFlow"]) == len(next(p for p in workflow["phases"] if p["id"] == "P02")["steps"]), "模块循环与当前P02真实步骤不一致")
 for step in steps:
     if step["id"].startswith("S00"):
