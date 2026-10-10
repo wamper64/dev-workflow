@@ -107,10 +107,42 @@ template = template.replace('id="step-detail"></div>', 'id="step-detail">' + det
 # 防止 JSON 文本中出现 </script> 导致标签提前闭合。
 serialized = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
 skills_serialized = json.dumps(skill_payload, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
-inline = '<script type="application/json" id="workflow-data">' + serialized + '</script>\\n'
-inline += '<script type="application/json" id="skill-data">' + skills_serialized + '</script>\\n'
-inline += '<script>\\n' + js + '\\n</script>'
+inline = '<script type="application/json" id="workflow-data">' + serialized + '</script>\n'
+inline += '<script type="application/json" id="skill-data">' + skills_serialized + '</script>\n'
+inline += '<script>\n' + js + '\n</script>'
 template = template.replace(script_tag, inline, 1)
+
+# 构建产物必须可执行，不能仅检验源码 app.js。上一版双重转义的
+# \\n 会变成实际JS开头的非法字符；对最终 HTML 内联脚本语法复检。
+import subprocess
+import tempfile
+with tempfile.TemporaryDirectory() as tmp:
+    from html.parser import HTMLParser
+    class InlineScripts(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.active = False
+            self.javascript = []
+        def handle_starttag(self, tag, attrs):
+            if tag == "script":
+                a = dict(attrs)
+                self.active = a.get("type", "text/javascript") in ("text/javascript", "module")
+        def handle_endtag(self, tag):
+            if tag == "script":
+                self.active = False
+        def handle_data(self, data):
+            if self.active:
+                self.javascript.append(data)
+    parser = InlineScripts()
+    parser.feed(template)
+    assert parser.javascript, "最终HTML中未发现可执行的内联JavaScript"
+    js_output = Path(tmp) / "site-inline.js"
+    js_output.write_text("\\n".join(parser.javascript), encoding="utf-8")
+    result = subprocess.run(["node", "--check", str(js_output)], capture_output=True, text=True)
+    if result.returncode != 0:
+        raise RuntimeError("最终HTML脚本语法错误:\\n" + result.stderr)
+    print("最终HTML内联脚本语法校验通过")
+
 
 if 'href="./styles.css"' in template or 'src="./app.js"' in template or 'fetch("./data/' in template:
     raise ValueError("构建结果仍依赖外部样式/脚本/流程数据")
