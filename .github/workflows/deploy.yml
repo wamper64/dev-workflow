@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
+      - 'scripts/build_site.py'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 permissions:
@@ -22,12 +23,16 @@ jobs:
     steps:
       - name: 检出仓库
         uses: actions/checkout@v4
+      - name: 校验前端脚本语法
+        run: node --check docs/app.js
+      - name: 构建单文件网站
+        run: python3 scripts/build_site.py
       - name: 配置 GitHub Pages
         uses: actions/configure-pages@v5
       - name: 上传静态网站
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs
+          path: dist
       - name: 发布GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
