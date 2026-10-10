@@ -7,7 +7,7 @@ description: 已完成项目基线和架构Grill后，基于既有前端原型�
 
 ## 必需输入与前提
 
-读取`docs/output/01-项目基线/项目基线.md`，`docs/input/需求资料/`的确认PRD、工程/对接资料、`code/fld/`及`code/guiwu_ruoyi/`的实际结构；复用前一步 `grill-with-docs` 裁定的关键架构决策和GLOSSARY/ADR。**项目基线中的版本、CPU/内存/磁盘预算、性能与数据保存要求是硬约束**，不能由架构设计擅自改写。
+读取`docs/output/01-项目基线/项目基线.md`，`docs/input/需求资料/`的确认PRD、`docs/input/工程资料/`、`docs/input/环境资料/`、`docs/input/对接资料/`、`code/fld/`及`code/guiwu_ruoyi/`的实际结构；复用前一步 `grill-with-docs` 裁定的关键架构决策和GLOSSARY/ADR。**项目基线中的版本、CPU/内存/磁盘预算、性能与数据保存要求是硬约束**，不能由架构设计擅自改写。
 
 ## 执行顺序
 
