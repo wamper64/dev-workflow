@@ -178,7 +178,8 @@ function previewSkill(id){
  if(!item)return;
  currentSkill=item;currentSkillTab="flow";currentResult="final";currentFile="SKILL.md";showFileSource=false;
  $("skill-dialog-title").textContent=id;
- $("skill-dialog-label").textContent=item.stepTitle+" · "+(item.maturity||"官方原版")+" · 实际文件："+Object.keys(item.files||{}).length+" 个";
+ const current=ui.data?.phases?.flatMap(p=>p.steps)?.find(st=>st.id===ui.step&&st.skills?.includes(id));
+ $("skill-dialog-label").textContent=(current?.title||item.stepTitle)+" · "+(item.maturity||"官方原版")+" · 实际文件："+Object.keys(item.files||{}).length+" 个";
  refreshSkillPreview();
  const dlg=$("skill-dialog");if(!dlg.open)dlg.showModal();
 }
