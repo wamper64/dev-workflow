@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
+      - 'skills/**'
+      - 'templates/project/**'
       - 'scripts/build_site.py'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:

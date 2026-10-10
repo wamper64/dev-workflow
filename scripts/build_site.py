@@ -45,7 +45,8 @@ for item in skills_catalog:
     record["example"] = example.read_text(encoding="utf-8") if example.is_file() else ""
     record["template"] = template_file.read_text(encoding="utf-8") if template_file.is_file() else ""
     skill_payload["skills"].append(record)
-assert len(skill_payload["skills"]) == 21, "Skill数量不正确"
+assert len(skill_payload["skills"]) == 21, "主Skill数量不正确"
+assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 24, "全量Skill文件数量不正确"
 for p in data["phases"][1:]:
     for s in p["steps"]:
         if s.get("skillId") not in {k["id"] for k in skill_payload["skills"]}:
@@ -58,7 +59,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         for filepath in sorted((ROOT / root_name).rglob("*")):
             if filepath.is_file():
                 z.write(filepath, filepath.relative_to(ROOT).as_posix())
-    z.writestr("安装说明.md", "# 报价系统研发Skills包\\n\\n21个Skill，直接Matt原版6个、基于Matt改造及自建15个。请按项目工作流选用。\\n\\n- Matt原版内容保留上游MIT许可，见 skills/LICENSE-Matt-Pocock.txt。\\n- 自建Skill的来源及差异参见 skills/REFERENCES.md。\\n- 将 templates/project/docs/ 放入业务项目根目录，真实PRD由项目方自行提供，不包含于此公开包。\\n")
+    z.writestr("安装说明.md", "# 报价系统研发Skills包\\n\\n21个主Skill（Matt原版6个、基于Matt改造及自建15个），额外附带tdd、implement、writing-for-agents三个官方依赖，共24份SKILL.md。请按项目工作流选用。\\n\\n- Matt原版内容保留上游MIT许可，见 skills/LICENSE-Matt-Pocock.txt。\\n- 自建Skill的来源及差异参见 skills/REFERENCES.md。\\n- 将 templates/project/docs/ 放入业务项目根目录，真实PRD由项目方自行提供，不包含于此公开包。\\n")
 
 stylesheet_tag = '<link rel="stylesheet" href="./styles.css">'
 script_tag = '<script type="module" src="./app.js"></script>'
