@@ -125,6 +125,29 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/S11|to-tickets/);
  click("[data-skill-close]");
  click('[data-phase="P02"]');
+ // 逐阶段逐步骤检查来源标签由完整 catalog 提供，而不是把 ID 字符串当对象。
+ const allPhaseIds=[...doc.querySelectorAll('#stage-list button[data-phase]')].map(el=>el.dataset.phase);
+ for(const phaseId of allPhaseIds){
+   click('[data-phase="'+phaseId+'"]');
+   const stepIds=[...doc.querySelectorAll('#step-list button[data-step]')].map(el=>el.dataset.step);
+   for(const stepId of stepIds){
+     click('[data-step="'+stepId+'"]');
+     for(const b of doc.querySelectorAll('#step-detail .skill-kind')){
+       assert.doesNotMatch(b.textContent,/待核实|类型未登记/,"Skill应从完整catalog中取得来源");
+     }
+   }
+ }
+ click('[data-phase="P02"]');
+ click('[data-step="S09"]');
+ assert.match(doc.querySelector('#step-detail [data-skill="module-design"] .skill-kind').textContent,/基于Matt改造/);
+ assert.match(doc.querySelector('#step-detail [data-skill="grill-with-docs"] .skill-kind').textContent,/Matt原版/);
+ click('[data-step="S12"]');
+ assert.match(doc.querySelector('#step-detail [data-skill="implement-spec"] .skill-kind').textContent,/Matt原版/);
+ click('[data-step="S14H"]');
+ assert.match(doc.querySelector('#step-detail [data-skill="manual-testing"] .skill-kind').textContent,/自建/);
+ click('[data-step="S15"]');
+ assert.match(doc.querySelector('#step-detail [data-skill="retro"] .skill-kind').textContent,/Matt原版/);
+
  click('[data-step="S09"]');
  click('[data-skill="module-design"]');
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/字段|状态机/);

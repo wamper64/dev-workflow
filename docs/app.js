@@ -39,7 +39,7 @@ document.addEventListener("click",async event=>{
  }
 });
 const fileList=files=>'<div class="file-list">'+(files||[]).map(f=>'<code class="file-item">'+esc(f.trim())+'</code>').join("")+'</div>';
-const skillList=skills=>!(skills||[]).length?'<div class="review-box">这里只展示已有输入，无需调用Skill。</div>':'<div class="skill-grid">'+(skills||[]).map(id=>{const sk=ui.data.skills.find(x=>x.id===id)||skillData?.workspace.find(x=>x.id===id);const origin=sk?.origin||sk?.type||"待核实";return '<button type="button" class="skill-pill '+(origin==="Matt原版"?"":"custom")+'" data-skill="'+esc(id)+'" title="点击查看SKILL.md、逻辑流程、示例与模板">'+esc(id)+' <span class="skill-kind">'+esc(origin)+'</span> ↗</button>'}).join("")+'</div>';
+const skillList=skills=>!(skills||[]).length?'<div class="review-box">这里只展示已有输入，无需调用Skill。</div>':'<div class="skill-grid">'+(skills||[]).map(id=>{const sk=skillData?.skills?.find(x=>x.id===id);const origin=sk?.type||"类型未登记";return '<button type="button" class="skill-pill '+(origin==="Matt原版"?"":"custom")+'" data-skill="'+esc(id)+'" title="点击查看SKILL.md、逻辑流程、示例与模板">'+esc(id)+' <span class="skill-kind">'+esc(origin)+'</span> ↗</button>'}).join("")+'</div>';
 function renderStages(){
   $("project-stats").textContent=ui.data.phases.length+" 个阶段 · "+ui.data.phases.reduce((n,p)=>n+p.steps.length,0)+" 个步骤 · "+(skillData?.workspace.length||0)+" 个通用Skill";
   $("stage-list").innerHTML=ui.data.phases.map((p,i)=>
