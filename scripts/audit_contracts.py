@@ -13,6 +13,24 @@ errors=[]
 def require(v,msg):
     if not v: errors.append(msg)
 require(len(lookup)==len(steps)==20 and len(data["phases"])==4,"阶段或步骤数量不一致")
+
+# 复制到Agent的Skill提示词必须以Slash命令开头，内部/后续调用同样须有Slash前缀。
+for item in steps:
+    skill_id=item.get("skillId")
+    prompt=item.get("prompt","")
+    if skill_id:
+        require(prompt.startswith("/"+skill_id+"\n\n"),item["id"]+" 提示词未以 /skill-id 开头")
+        require("skills/"+skill_id+"/SKILL.md" in prompt,item["id"]+" 缺主Skill文件引用")
+        require("请调用 Skill：" not in prompt and "调用Skill：" not in prompt,item["id"]+" 残留旧式调用")
+    elif item["id"]=="S01":
+        require(not prompt.startswith("/"),"S01没有主Skill，不应强制Slash调用")
+for step_id,slash in (("S04","/grill-with-docs"),("S05","/grill-with-docs"),
+                      ("S07","/to-tickets"),("S09","/grill-with-docs"),
+                      ("S10","/module-design"),("S14H","/retro")):
+    require(slash in lookup[step_id].get("prompt",""),step_id+" 的内部或后续调用缺Slash形式")
+renderer_source=(ROOT/"docs/app.js").read_text(encoding="utf-8")
+require('prompt:"/"+w.id+' in renderer_source,"通用Skill提示词未使用Slash命令开头")
+
 require(len(catalog)==19 and len(workspace)==8,"主Skill或工具箱数量错误")
 require(data["title"]=="标准项目研发导航","导航标题未标准化")
 require(not data.get("modules"),"标准导航不可预设报价项目模块")

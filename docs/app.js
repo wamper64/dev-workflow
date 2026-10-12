@@ -17,7 +17,7 @@ const toolkitPhase=()=>({
    output:w.diagram?.output||"依据调用目标确定",
    workflow:w.diagram?.work||[],
    limitation:w.diagram?.fail||"由具体任务决定是否需要",
-   prompt:"请调用 Matt 官方 Skill：/"+w.id+"（skills/"+w.id+"/SKILL.md）。"+w.summary+"。请先读取该Skill的全部适用文件，并依据当前项目的真实上下文执行，不把工具调用误作必经项目步骤。",
+   prompt:"/"+w.id+"\n\n请按 `skills/"+w.id+"/SKILL.md` 的要求执行。"+w.summary+"。先读取该Skill适用文件并结合真实项目上下文；通用工具按需调用，不视作固定研发步骤。",
    source:w.source?.url||""
  }))
 });

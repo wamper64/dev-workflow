@@ -38,6 +38,25 @@ async function main(){
  click('[data-step="S01"]');
  assert.equal(doc.querySelectorAll("#step-detail [data-skill]").length,0,"输入检查只用提示词");
  assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/递归阅读 docs\/input\//);
+  // 所有正式步骤的复制提示词应以 /skill-id 开头；输入核验无Skill。
+  for(const section of ["P01","P02","P03"]){
+    click('[data-phase="'+section+'"]');
+    const ids=[...doc.querySelectorAll('#step-list [data-step]')].map(el=>el.dataset.step);
+    for(const id of ids){
+      click('[data-step="'+id+'"]');
+      const skill=doc.querySelector('#step-detail [data-skill]');
+      const text=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
+      if(!skill){
+        assert.equal(id,"S01","无主Skill的任务应只有输入核验");
+        assert.doesNotMatch(text,/^\//,"S01没有Skill，不需Slash指令");
+        continue;
+      }
+      assert.ok(text.startsWith("/"+skill.dataset.skill+"\n"),"未使用 /Skill 作为提示词开头："+id);
+      assert.doesNotMatch(text,/请调用\s*Skill：|调用Skill：/,"有旧式Skill调用："+id);
+    }
+  }
+  click('[data-phase="P01"]');
+  click('[data-step="S01"]');
  // 设计阶段六个Skill的快速理解必须同时显示可视流程与具体缺口清单。
  const designs=[
    ["S02","setup-matt-pocock-skills",5,5],
@@ -238,6 +257,12 @@ async function main(){
   assert.ok(doc.getElementById("skill-dialog-content").textContent.length>50,"原版SKILL文件未呈现："+id);
   click("[data-skill-close]");
  }
+  // 八项通用工具同样需要首行Slash命令。
+  for(const id of toolboxExpected){
+    click('[data-step="T_'+id+'"]');
+    const text=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
+    assert.ok(text.startsWith("/"+id+"\n"),"通用Skill未使用Slash命令："+id);
+  }
  click('[data-step="T_handoff"]');
  assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/\/handoff/);
  click('[data-step="T_research"]');
