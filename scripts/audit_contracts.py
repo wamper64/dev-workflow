@@ -34,6 +34,18 @@ for key in ("input-readiness","human-acceptance"):
     require(key not in skills and not (ROOT/"skills"/key).exists(),key+" 旧Skill应删除")
 require("docs/input/" in " ".join(lookup["S01"]["inputs"]) and "code/" in " ".join(lookup["S01"]["inputs"]),"输入核对没覆盖原始目录")
 require("grill-with-docs" in lookup["S04"]["prompt"] and "grill-with-docs" in lookup["S09"]["prompt"],"Grill应内嵌")
+# S04须能真正约束后续工程结构及模块开发；不允许网站内容与正式模板分裂。
+architecture=(ROOT/"skills/architecture-baseline/SKILL.md").read_text(encoding="utf-8")
+architecture_template=(ROOT/"skills/architecture-baseline/assets/architecture-template.md").read_text(encoding="utf-8")
+for ref in ("architecture-applicability.md","engineering-contract.md","freeze-and-change.md"):
+    require((ROOT/"skills/architecture-baseline/references"/ref).is_file(),"S04缺参考文件："+ref)
+for token in ("工程组织","允许依赖","架构冻结","角色×核心场景","grill-with-docs"):
+    require(token in architecture or token in architecture_template,"S04契约缺失："+token)
+for token in ("2.1.3 工程组织","业务场景架构覆盖","A/B/C架构冻结清单"):
+    require(token in architecture_template,"S04正式模板缺失："+token)
+require("专项" in lookup["S04"]["prompt"] and "冻结" in lookup["S04"]["prompt"],"导航S04提示词未同步新规则")
+require("冻结" in (ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8"),"S09未继承架构冻结规则")
+
 require("人工测试用例与结果.md" in " ".join(lookup["S12"]["outputs"]),"implement-spec未提供人工测试单")
 require(lookup["S12"]["skillId"]=="dev-implement-spec" and lookup["S12"]["invokes"]==["implement-spec"],"实现步骤必须采用改造Skill内部调用原版")
 require("code-review" in lookup["S12"]["prompt"] and "TDD" in lookup["S12"]["prompt"],"实现缺原版内置能力")
