@@ -19,12 +19,12 @@
     "stepTitle": "初始化项目",
     "summary": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
     "inputs": [
-      "已有code/",
-      "docs/input/工程资料/",
-      "已存在的AGENTS.md/CLAUDE.md（如有）"
+      "code/（按真实已有工程结构初始化，不覆盖既有配置）",
+      "docs/input/工程资料/（如有）",
+      "已有AGENTS.md / CLAUDE.md（如有）"
     ],
     "outputs": [
-      "AGENTS.md（复用或更新）",
+      "AGENTS.md 或 CLAUDE.md（复用或更新现有Agent配置）",
       "docs/agents/issue-tracker.md",
       "docs/agents/domain.md"
     ],
@@ -203,15 +203,15 @@
     "stepTitle": "项目基线",
     "summary": "从已确认需求与真实工程提取可量化/可判定的项目级约束；先生成项目专属的前置确认表，只让用户确认缺口，再生成正式基线，不写需求也不做设计。",
     "inputs": [
-      "docs/input/需求资料/PRD及原型",
-      "docs/input/工程资料/已定技术或工程约束",
-      "docs/input/环境资料/",
-      "docs/input/对接资料/",
-      "code/（既有工程只读核实）"
+      "docs/input/需求资料/（已确认PRD、原型、项目约束）",
+      "docs/input/工程资料/（已有技术选择、原框架）",
+      "docs/input/环境资料/（真实目标资源/网络）",
+      "docs/input/对接资料/（按需）",
+      "code/（只读核实已有前后端工程）"
     ],
     "outputs": [
       "docs/output/01-项目基线/项目基线前置约束确认表.md",
-      "docs/output/01-项目基线/项目基线.md"
+      "docs/output/01-项目基线/项目基线.md（关键约束裁定后）"
     ],
     "verification": "项目经理确认禁止事项、责任及规模事实；技术总监裁定技术/资源/质量/恢复目标，关键冲突未解不进入架构。",
     "diagram": {
@@ -473,15 +473,15 @@
     "stepTitle": "整体架构设计（内部 Grill）",
     "summary": "双核心：先从PRD关键业务链路反推并冻结全项目组件/工程/接口架构，再逐条明确从触发、接入、业务判断、持久化、后续动作到结果与异常恢复的端到端处理流程；两边相互核验，外围落实容量、安全与变更。",
     "inputs": [
-      "docs/input/（全部文件，含所有目录与新增类别）",
-      "docs/output/01-项目基线/项目基线.md",
-      "GLOSSARY.md、docs/adr/（已有则继承）",
-      "code/（真实现有工程，按项目识别子目录）"
+      "docs/input/（递归读取全部现有类别及文件：PRD、工程资料、环境资料、对接资料与新增文件）",
+      "docs/output/01-项目基线/项目基线.md（已确认约束）",
+      "GLOSSARY.md、docs/adr/（已有则继承；Grill内部按需新增）",
+      "code/（实际已有前后端/Agent/设备系统工程，读取真实结构）"
     ],
     "outputs": [
-      "docs/output/02-整体架构/整体架构设计.md（完整组件、工程依赖、交互、专项、部署和冻结）",
+      "docs/output/02-整体架构/整体架构设计.md（总体组件架构＋核心业务链路目录/处理流程/状态异常＋双向映射/冻结）",
       "docs/output/02-整体架构/架构评审记录.md",
-      "按需更新GLOSSARY.md、docs/adr/"
+      "按需：GLOSSARY.md、docs/adr/（内部Grill形成必要术语与决策）"
     ],
     "verification": "双核心审核：组件完整性、工程落点、交互Owner有依据；核心业务链路目录完整且每条有处理流程图、状态与失败出口；流程步骤→组件与组件→链路双向核对后可供开发演练。",
     "diagram": {
@@ -917,10 +917,11 @@
     "stepTitle": "数据库设计（总体）",
     "summary": "按整体数据规则→关键数据业务流程→核心表/核心字段/ER三核心先定全局数据骨架；S09补模块内部结构，S12产生DDL。",
     "inputs": [
-      "docs/input/（全部与数据相关的原始资料）",
+      "docs/input/（全部相关PRD/原型/工程/环境/第三方或设备对接资料）",
       "docs/output/01-项目基线/项目基线.md",
-      "docs/output/02-整体架构/整体架构设计.md（组件及交互Owner）",
-      "GLOSSARY.md与docs/adr/（已有）"
+      "docs/output/02-整体架构/整体架构设计.md（核心业务链、组件Owner及冻结）",
+      "code/（已有DDL/迁移/Entity/Mapper，无法核实时明确标记）",
+      "GLOSSARY.md与docs/adr/（如有）"
     ],
     "outputs": [
       "docs/output/03-数据库总体/数据库总体设计.md",
@@ -1611,7 +1612,7 @@
       "docs/input/（完整已确认需求基线：PRD、角色×核心场景、已有页面映射及所有相关工程资料）",
       "docs/output/01-项目基线/项目基线.md",
       "docs/output/02-整体架构/整体架构设计.md（组件职责、交互与Owner）",
-      "docs/output/03-数据库总体/数据库总体设计.md（数据域、权威Owner与存储边界）",
+      "docs/output/03-数据库总体/数据库总体设计.md（数据规则、关键数据流程、核心表/字段/ER及存储边界）",
       "docs/output/04-开发环境/部署步骤与执行记录.md",
       "code/（实际原型页面与已有业务代码）"
     ],
@@ -1850,7 +1851,7 @@
       "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
       "docs/output/项目总控/项目实施状态.md（初次不存在则初始化）",
       "docs/output/01-项目基线/项目基线.md、02-整体架构/整体架构设计.md、03-数据库总体/数据库总体设计.md",
-      "docs/output/04-开发环境/部署步骤与执行记录.md、当前code/、GLOSSARY.md和ADR"
+      "实际已有的逐环境初次部署配置和部署结果README（若已执行），以及code/、术语和ADR"
     ],
     "outputs": [
       "docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md",
@@ -2128,13 +2129,13 @@
     "stepTitle": "生成当前模块 Spec",
     "summary": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
     "inputs": [
-      "本模块PRD",
-      "模块详细设计.md",
-      "已有前端原型",
-      "共享工程基线"
+      "本轮角色×场景、PRD/原型、已有代码、GLOSSARY与ADR",
+      "docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md",
+      "docs/output/06-模块迭代/<模块>/模块详细设计.md",
+      "既有独立开发任务Spec/Tickets（用于识别历史与当前需求差异）"
     ],
     "outputs": [
-      " .scratch/<module>/spec.md"
+      ".scratch/<模块>/<任务标识>/spec.md（或Issue Tracker中的独立Spec）"
     ],
     "verification": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
     "diagram": {
@@ -2366,12 +2367,13 @@
     "stepTitle": "拆分纵向 Tickets 和依赖",
     "summary": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
     "inputs": [
-      " .scratch/<module>/spec.md",
-      "本轮模块计划.md",
-      "前置依赖检查.md"
+      ".scratch/<模块>/<任务标识>/spec.md（或Tracker对应Spec）",
+      "docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md",
+      "docs/agents/issue-tracker.md",
+      "当前代码与已批准模块设计"
     ],
     "outputs": [
-      " .scratch/<module>/issues/NN-*.md"
+      ".scratch/<模块>/<任务标识>/issues/NN-*.md（或Tracker对应关联Tickets）"
     ],
     "verification": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
     "diagram": {
@@ -2922,13 +2924,17 @@
     "stepTitle": "全项目业务链路和权限回归",
     "summary": "项目经理按已确认PRD的角色×核心场景验证真实跨模块链路和权限，缺陷返回责任模块并保留复测证据。",
     "inputs": [
-      "已确认项目模块清单.md",
-      "所有模块验收记录",
-      "最终可运行代码",
-      "PRD"
+      "docs/input/需求资料/（已确认PRD）",
+      "docs/output/05-模块拆分/项目模块清单.md",
+      "docs/output/项目总控/项目实施状态.md",
+      "docs/output/06-模块迭代/<模块>/任务/<任务标识>/人工测试用例与结果.md（按已签收任务逐项关联）",
+      "code/",
+      "code/",
+      "实际联调环境与第三方接入证据"
     ],
     "outputs": [
-      "docs/output/07-系统验收/全流程验收报告.md",
+      "docs/output/07-系统验收/业务场景覆盖矩阵.md",
+      "docs/output/07-系统验收/系统验收报告.md",
       "docs/output/07-系统验收/缺陷闭环记录.md"
     ],
     "verification": "项目经理按已确认PRD的角色×核心场景验证真实跨模块链路和权限，缺陷返回责任模块并保留复测证据。",
@@ -2985,9 +2991,9 @@
     "summary": "技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。",
     "inputs": [
       "docs/output/01-项目基线/项目基线.md",
-      "架构设计.md",
-      "全流程验收报告.md",
-      "系统运行记录"
+      "docs/output/02-整体架构/整体架构设计.md",
+      "docs/output/07-系统验收/系统验收报告.md",
+      "真实性能/安全/容量/备份恢复证据"
     ],
     "outputs": [
       "docs/output/07-系统验收/性能安全检查.md",
@@ -3041,14 +3047,15 @@
     "stepTitle": "生产环境核验、部署预演与回滚准备",
     "summary": "技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。",
     "inputs": [
-      "docs/input/环境资料/",
-      "上线评审结论.md",
-      "code/",
-      "database/migrations/"
+      "docs/input/环境资料/（如有）",
+      "docs/output/01-项目基线/项目基线.md",
+      "docs/output/02-整体架构/整体架构设计.md",
+      "docs/output/07-系统验收/上线评审结论.md",
+      "code/构建产物",
+      "database/migrations/（已批准迁移）"
     ],
     "outputs": [
-      "deploy/docker-compose.yml（正式）",
-      "deploy/nginx/",
+      "code/deploy/（按本项目已批准部署方式准备生产配置、脚本与发布包，不要求固定的Compose/Nginx文件）",
       "docs/output/08-上线交付/部署预演.md",
       "docs/output/08-上线交付/备份回滚方案.md"
     ],
@@ -3095,10 +3102,10 @@
     "stepTitle": "生产部署、验收与交付",
     "summary": "开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。",
     "inputs": [
-      "部署预演.md",
-      "备份回滚方案.md",
-      "可发布代码",
-      "上线评审结论.md"
+      "docs/output/08-上线交付/部署预演.md",
+      "docs/output/08-上线交付/备份回滚方案.md",
+      "docs/output/07-系统验收/上线评审结论.md",
+      "待发布Commit/镜像与实际迁移脚本"
     ],
     "outputs": [
       "docs/output/08-上线交付/上线记录.md",
@@ -3457,13 +3464,15 @@
     "stepTitle": "Bug 六阶段诊断与修复（按需）",
     "summary": "严格遵守Matt官方六阶段：构造红灯反馈环、复现最小化、3–5个可证伪假设、针对性插桩、修复/回归测试、清理。",
     "inputs": [
-      "人工测试发现的Bug与复现步骤/证据",
-      "对应Spec、日志和真实执行环境",
-      "相关变更Diff"
+      "docs/output/06-模块迭代/<模块>/任务/<任务标识>/人工测试用例与结果.md（失败记录与证据）",
+      "错误日志/截图/重现步骤（脱敏）",
+      "当前模块Spec/Tickets及实现代码",
+      "项目运行环境和现有自动化反馈环"
     ],
     "outputs": [
-      "Bug根因、复现命令及最小修复证据",
-      "新的回归测试与修复Commit"
+      "docs/output/06-模块迭代/<模块>/任务/<任务标识>/Bug根因与六阶段诊断记录.md",
+      "真实修复、回归测试与原始故障消失的证据",
+      "docs/output/06-模块迭代/<模块>/任务/<任务标识>/人工测试用例与结果.md（复测更新）"
     ],
     "verification": "开发人员验证同一症状先红后绿；必须回到S12实现/代码审查/联调/人工复测。无缺陷则跳过此步骤。",
     "diagram": null,

@@ -109,7 +109,7 @@
             "已有AGENTS.md / CLAUDE.md（如有）"
           ],
           "outputs": [
-            "AGENTS.md（复用或更新）",
+            "AGENTS.md 或 CLAUDE.md（复用或更新现有Agent配置）",
             "docs/agents/issue-tracker.md",
             "docs/agents/domain.md"
           ],
@@ -267,7 +267,7 @@
             "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
             "docs/output/项目总控/项目实施状态.md（初次不存在则初始化）",
             "docs/output/01-项目基线/项目基线.md、02-整体架构/整体架构设计.md、03-数据库总体/数据库总体设计.md",
-            "docs/output/04-开发环境/部署步骤与执行记录.md、当前code/、GLOSSARY.md和ADR"
+            "实际已有的逐环境初次部署配置和部署结果README（若已执行），以及code/、术语和ADR"
           ],
           "outputs": [
             "docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md",
@@ -449,7 +449,7 @@
             "docs/input/需求资料/（已确认PRD）",
             "docs/output/05-模块拆分/项目模块清单.md",
             "docs/output/项目总控/项目实施状态.md",
-            "docs/output/06-模块迭代/<模块>/人工测试用例与结果.md（逐模块验证，无遗漏）",
+            "docs/output/06-模块迭代/<模块>/任务/<任务标识>/人工测试用例与结果.md（按已签收任务逐项关联）",
             "code/",
             "code/",
             "实际联调环境与第三方接入证据"
@@ -500,8 +500,7 @@
             "database/migrations/（已批准迁移）"
           ],
           "outputs": [
-            "deploy/docker-compose.yml（正式）",
-            "deploy/nginx/（按需）",
+            "code/deploy/（按本项目已批准部署方式准备生产配置、脚本与发布包，不要求固定的Compose/Nginx文件）",
             "docs/output/08-上线交付/部署预演.md",
             "docs/output/08-上线交付/备份回滚方案.md"
           ],
