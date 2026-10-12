@@ -11,6 +11,40 @@ jobs:
     steps:
       - name: 检出审查分支
         uses: actions/checkout@v4
+      - name: 全仓文件历史与失效引用扫描
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          from collections import Counter
+          root=Path(".")
+          patterns=[
+              ("retired", re.compile(r"S08|input-readiness|human-acceptance|project-retrospective|iteration-planning|iteration-close|dev-implement-spec")),
+              ("obsolete-output", re.compile(r"docs/output/04-开发环境/部署步骤与执行记录|全流程验收报告\.md|17个菜单|docs/research/skill-sources")),
+              ("history-prose", re.compile(r"(?m)^#{1,4} .*?(?:20[0-9]{2}-[0-9]{2}(?:-[0-9]{2})?|本次更新|本次增强|旧版|改动记录|版本日志)")),
+              ("fixed-example", re.compile(r"code/fld|code/guiwu_ruoyi"))
+          ]
+          skip={".git","dist","node_modules","__pycache__"}
+          scanned=0
+          findings=[]
+          unreadable=[]
+          for f in sorted(root.rglob("*")):
+              if not f.is_file() or set(f.parts)&skip: continue
+              scanned+=1
+              try: text=f.read_text(encoding="utf-8")
+              except (UnicodeError,OSError):
+                  unreadable.append(str(f))
+                  continue
+              for i,line in enumerate(text.splitlines(),1):
+                  for key,rx in patterns:
+                      if rx.search(line):
+                          findings.append((key,str(f),i,line.strip()[:170]))
+          print("SCAN SUMMARY: all_files=",scanned,"unreadable=",len(unreadable),
+              "matches_by_category=",dict(Counter(x[0] for x in findings)),flush=True)
+          for key,path,line,summary in findings[:180]:
+              print(f"SCAN {key} {path}:{line}: {summary}",flush=True)
+          for filename in unreadable[:20]: print("NON-TEXT",filename,flush=True)
+          PY
       - name: 检查脚本语法
         run: |
           python3 -m py_compile scripts/audit_contracts.py scripts/build_site.py
