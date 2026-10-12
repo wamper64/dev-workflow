@@ -50,7 +50,7 @@ function renderStages(){
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
-  const route=p.id==="P01"?"输入读取与检查 → Matt初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 开发环境 → 模块拆分":p.id==="P02"?"<b>选本轮任务 + 依赖校验 + 详细设计（Grill）</b> → Spec → Tickets → <b>Matt原版implement-spec</b> → <b>独立manual-testing：生成→人工执行回填→签收</b> → 按需Bug修复 → <b>Matt原版retro</b> → 下一轮":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
+  const route=p.id==="P01"?"输入读取与检查 → Matt初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 开发环境 → 模块拆分":p.id==="P02"?"<b>选本轮任务 + 依赖校验 + 详细设计（Grill）</b> → Spec → Tickets → <b>Matt原版implement-spec</b> → <b>人工测试 manual-testing：生成→人工执行回填→签收</b> → 按需Bug修复 → <b>Matt原版retro</b> → 下一轮":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
   const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
   $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
  $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
