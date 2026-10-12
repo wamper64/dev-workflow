@@ -196,7 +196,7 @@ require(not (ROOT/"docs/research/skill-sources.md").exists(),"重复旧来源页
 require(not (ROOT/"docs/输入输出契约与对抗性审查.md").exists(),"存在旧版本输入输出契约")
 for source in (ROOT/"README.md",ROOT/"skills/REFERENCES.md",ROOT/"docs/研发流程输入输出与质量门禁.md"):
     text_now=source.read_text(encoding="utf-8")
-    require(not __import__("re").search(r"(?m)^##?\\s+20[0-9]{2}-[0-9]{2}",text_now),"说明文档混入按日期追加的历史章节："+source.name)
+    require(not __import__("re").search(r"(?m)^##?\s+20[0-9]{2}-[0-9]{2}",text_now),"说明文档混入按日期追加的历史章节："+source.name)
 for key in ("inputs","outputs"):
     combined=" ".join(str(s.get(key,[])) for s in steps)+" "+ " ".join(str(x.get(key,[])) for x in catalog)
     require("docs/output/04-开发环境/部署步骤与执行记录.md" not in combined,"虚构的旧开发环境产物被引用")
