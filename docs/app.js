@@ -171,6 +171,23 @@ function renderSkillOverview(skill){
  const a=skill.overview;
  if(!a)return skill.reviewAxes?renderCodeReviewAxes(skill):logicDiagram(skill.diagram);
   const facts=(a.quickFacts||[]).map(x=>'<div class="skill-quick-fact"><b>'+esc(x.label)+'</b><span>'+esc(x.value)+'</span></div>').join("");
+  const pillarCards=(a.pillars||[]).map((p,i)=>{
+    const items=(p.items||[]).map(t=>'<li>'+esc(t)+'</li>').join("");
+    return '<article class="skill-pillar"><div class="skill-pillar-number">核心 '+(i+1)+'</div><h3>'+esc(p.title)+'</h3><p class="skill-pillar-question">'+esc(p.question)+'</p><ul>'+items+'</ul><div class="skill-pillar-result"><b>交付</b>'+esc(p.deliverable)+'</div><div class="skill-pillar-result"><b>通过标准</b>'+esc(p.pass)+'</div></article>';
+  }).join("");
+  const chain=a.chainExample?('<section class="skill-chain"><h3>'+esc(a.chainExample.title)+'</h3><div class="skill-chain-track">'+(a.chainExample.steps||[]).map((stage,i)=>'<div class="skill-chain-step"><span>'+String(i+1).padStart(2,"0")+'</span>'+esc(stage)+'</div>').join('<span class="skill-chain-arrow">→</span>')+'</div><div class="skill-chain-exits"><b>必须包含的分支/失败处理</b><ul>'+(a.chainExample.checkpoints||[]).map(t=>'<li>'+esc(t)+'</li>').join("")+'</ul></div><p class="skill-chain-distinction">'+esc(a.chainExample.distinction||"")+'</p></section>'):"";
+  const groupSets=(a.sectionGroups||[]).map(g=>{
+    const child=(a.sections||[]).filter(s=>s.axis===g.key).map((s,i)=>renderTopicCard(s,i)).join("");
+    return '<section class="skill-overview-group"><div class="skill-overview-title"><h3>'+esc(g.label)+'</h3><span>'+esc(g.description||"")+'</span></div><div class="skill-topic-grid">'+child+'</div></section>';
+  }).join("");
+  function renderTopicCard(x,i){
+    const checks=(x.checks||[]).map(v=>'<li>'+esc(v)+'</li>').join("");
+    const detail=checks?'<div class="skill-topic-details"><b>必须明确的具体项</b><ul>'+checks+'</ul></div>':"";
+    const output=x.deliverable?'<div class="skill-topic-delivery"><b>形成产物</b><span>'+esc(x.deliverable)+'</span></div>':"";
+    const pass=x.pass?'<div class="skill-topic-gate"><b>完成判定</b><span>'+esc(x.pass)+'</span></div>':"";
+    const example=x.sample?'<div class="skill-topic-example"><span>'+esc(a.exampleLabel||"示例（报价项目）")+'</span>'+esc(x.sample)+'</div>':"";
+    return '<article class="skill-topic-card"><span class="skill-topic-index">'+String(i+1).padStart(2,"0")+'</span><h4>'+esc(x.title)+'</h4><p>'+esc(x.summary)+'</p>'+detail+output+pass+example+'</article>';
+  }
   const cards=(a.sections||[]).map((x,i)=>{
     const checks=(x.checks||[]).map(v=>'<li>'+esc(v)+'</li>').join("");
     const detail=checks?'<div class="skill-topic-details"><b>必须明确的具体项</b><ul>'+checks+'</ul></div>':"";
@@ -183,7 +200,10 @@ function renderSkillOverview(skill){
  const exclusions=(a.doesNot||[]).map(x=>'<li>'+esc(x)+'</li>').join("");
  return '<div class="skill-overview"><div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
   +(facts?'<div class="skill-quick-facts">'+facts+'</div>':"")
- +'<div class="skill-overview-title"><h3>'+esc(a.sectionsTitle||"此 Skill 涵盖的关键内容") +'</h3><span>'+(a.sections||[]).length+'个具体板块</span></div><div class="skill-topic-grid">'+cards+'</div>'
+  +(pillarCards?'<div class="skill-pillar-heading"><h3>整体架构的两个核心</h3><p>先从业务链路反推组件，再用组件架构约束处理流程；两个核心必须互相闭合。</p></div><div class="skill-pillars">'+pillarCards+'</div>':"")
+  +chain
+  +'<div class="skill-overview-title"><h3>'+esc(a.sectionsTitle||"此 Skill 涵盖的关键内容") +'</h3><span>'+(a.sections||[]).length+'个具体板块</span></div>'
+  +(groupSets||'<div class="skill-topic-grid">'+cards+'</div>')
  +'<div class="skill-overview-title"><h3>'+esc(a.conversionTitle||"输入信息如何形成关键决定？") +'</h3></div><div class="thinking-grid">'+conversions+'</div>'
  +'<div class="skill-overview-title"><h3>本 Skill 不处理的内容</h3></div><ul class="skill-exclusions">'+exclusions+'</ul>'
  +(skill.outputSampleFile?'<div class="skill-cta"><span>先查看报价项目示例，再决定是否细读SKILL.md</span><button type="button" data-skill-tab="result">查看示例 →</button></div>':'')+'</div>';
