@@ -1632,7 +1632,7 @@
       ],
       "gate": "每个场景都有唯一主责模块、DAG可审查且粒度被确认了吗？",
       "fail": "补漏/去重/合并/重拆模块，修正阻塞边；不发布Tracker Tickets",
-      "pass": "冻结项目模块池，交S08选择本轮模块",
+      "pass": "冻结项目模块池，交S09选择本轮模块",
       "output": "模块清单＋依赖DAG＋审核记录（不是开发Tickets）"
     },
     "referenceLearnings": [

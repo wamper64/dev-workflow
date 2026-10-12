@@ -1,7 +1,5 @@
 {
   "title": "标准项目研发导航",
-  "version": "每轮retro收口·原版implement-spec扩展生成人工测试单",
-  "updated": "2026-10-12",
   "overview": "面向定制前后端项目：输入与工程基线→完整组件交互架构→数据库总体及模块划分→每轮Spec/Tickets→基于Matt原版implement-spec的TDD开发与待人工用例生成→人工测试→Bug修复→本轮验收与retro→下一轮或整体上线。",
   "inputs": {
     "groups": [
