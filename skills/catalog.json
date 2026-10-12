@@ -1555,7 +1555,7 @@
     "maturity": "已补充执行图、失败路径和验收证据",
     "overview": {
       "headline": "场景发现业务能力 → 业务职责和核心对象生命周期决定拆合 → 继承Owner/架构 → 依赖与覆盖审核。",
-      "why": "模块不是页面、菜单、数据库表、Controller 或单张 Ticket；主判据是独立业务目标、同一对象生命周期及可验收结果，辅以权威Owner、已有页面/代码与阻塞依赖。",
+      "why": "借鉴 Matt to-tickets 的 Tracer bullet（纵向可验收业务能力）、Blocking edges（真实阻塞边）和 Quiz（人工审核粒度），但项目模块拆合必须以业务职责、核心对象完整生命周期和唯一Owner为主要依据。业务模块不是菜单、表、Controller、前后端技术层或单张开发Ticket。",
       "result": "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md、模块拆分审核.md",
       "sectionsTitle": "全项目模块划分的6项必须落地内容",
       "conversionTitle": "从业务需求到可分轮交付的模块池",

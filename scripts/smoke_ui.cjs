@@ -38,6 +38,24 @@ async function main(){
  click('[data-step="S01"]');
  assert.equal(doc.querySelectorAll("#step-detail [data-skill]").length,0,"输入检查只用提示词");
  assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/递归阅读 docs\/input\//);
+ // 设计阶段六个Skill的快速理解必须同时显示可视流程与具体缺口清单。
+ const designs=[
+   ["S02","setup-matt-pocock-skills",5,5],
+   ["S03","project-baseline",6,8],
+   ["S04","architecture-baseline",6,9],
+   ["S05","data-architecture",6,8],
+   ["S06","development-environment",6,5],
+   ["S07","module-discovery",6,7]
+ ];
+ for(const [stepId,skillId,minimumRoute,minimumCoverage] of designs){
+   click('[data-step="'+stepId+'"]');
+   click('[data-skill="'+skillId+'"]');
+   assert.ok(doc.querySelectorAll(".quick-route-node").length>=minimumRoute,skillId+" 缺执行流程图");
+   assert.ok(doc.querySelectorAll(".quick-coverage-row").length>=minimumCoverage,skillId+" 缺覆盖速查项");
+   assert.match(doc.getElementById("skill-dialog-content").textContent,/审核关口|未通过/,"快速理解缺少失败退回路径");
+   assert.match(doc.querySelector(".quick-coverage").textContent,/未完成|待确认|缺少|不适用/,"覆盖速查应说明缺项的处理方式");
+   click("[data-skill-close]");
+ }
  click('[data-step="S02"]');
  assert.match(doc.querySelector("#step-detail").textContent,/code\//);
  click('[data-step="S03"]');
