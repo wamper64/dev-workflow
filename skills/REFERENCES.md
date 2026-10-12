@@ -54,8 +54,8 @@
   - 实际学习：以真实连接、版本、命令及健康输出而非主观描述验证开发环境
 
 ### module-discovery（Matt Pocock Tickets 的项目模块级适配）
-- 项目中的实际用途：把完整已确认需求基线按“角色×核心场景 → 可验收纵向业务交付 → 项目模块Owner”划分为模块池，建立真实阻塞依赖DAG，供S08选择本轮模块。
-- 完全引用或改造：**改造而非直接套用原版**。模块与Ticket不是同一个粒度；模块可能包含多个开发Tickets，因此在S07只借鉴原版Process 3、4的机制，不调用Process 5向Tracker发布任务。
+- 项目中的实际用途：从已确认PRD的角色×核心场景发现候选，以**业务职责和核心对象完整生命周期**作为模块拆合主判据，校验权威数据/状态Owner及整体架构，再建立真实阻塞依赖DAG，供S08选择本轮模块。
+- 完全引用或改造：**改造而非直接套用原版**。Matt没有独立的“全项目业务模块划分”Skill；模块与实现Ticket粒度不同，S07仅借鉴原版Process 3、4，不调用Process 5向Tracker发布任务。本仓库自建的拆合判据是业务职责、核心对象生命周期、单一权威Owner、独立验收与既有架构约束；禁止按页面/菜单/表数量机械拆分。
 - **Matt Pocock Skills — to-tickets**：[Matt Pocock Skills — to-tickets](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md)
   - 具体学习：Process 3 tracer-bullet纵向切片、明确blocking edges、宽范围重构的expand–contract思路；Process 4向用户Quiz拆分粒度和阻塞关系。S07在**模块级**做业务覆盖与依赖确认，S11才用官方原版根据本轮Spec生成单上下文开发Tickets。
 - **Addy Osmani Agent Skills — incremental-implementation**：[Addy Osmani Agent Skills — incremental-implementation](https://github.com/addyosmani/agent-skills/blob/main/skills/incremental-implementation/SKILL.md)
