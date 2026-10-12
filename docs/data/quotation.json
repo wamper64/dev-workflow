@@ -448,8 +448,7 @@
             "docs/input/需求资料/（已确认PRD）",
             "docs/output/05-模块拆分/项目模块清单.md",
             "docs/output/项目总控/项目实施状态.md",
-            "docs/output/06-模块迭代/<模块>/人工测试用例与结果.md（逐模块验证，无遗漏）",
-            "code/",
+            "docs/output/06-模块迭代/<模块>/任务/<任务标识>/人工测试用例与结果.md（逐模块验证，无遗漏）",
             "code/",
             "实际联调环境与第三方接入证据"
           ],
@@ -459,7 +458,7 @@
             "docs/output/07-系统验收/缺陷闭环记录.md"
           ],
           "review": "项目经理核对PRD全场景、角色/页面覆盖与真实业务结果；开发人员提供可复现的链路与缺陷证据，未执行不得标通过。",
-          "prompt": "请调用 Skill：system-acceptance（skills/system-acceptance/SKILL.md），执行「系统业务验收」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/项目总控/项目实施状态.md\n- docs/output/06-模块迭代/<模块>/人工测试用例与结果.md（逐模块验证）\n- code/\n- code/\n- 实际联调环境与第三方接入证据\n\n【具体执行方式】\n从项目PRD角色场景而非菜单做跨模块业务链、权限与异常的真实回归。\n\n【真实输出】\n- docs/output/07-系统验收/业务场景覆盖矩阵.md\n- docs/output/07-系统验收/系统验收报告.md\n- docs/output/07-系统验收/缺陷闭环记录.md\n\n【审核/不通过路径】\n项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "请调用 Skill：system-acceptance（skills/system-acceptance/SKILL.md），执行「系统业务验收」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/项目总控/项目实施状态.md\n- docs/output/06-模块迭代/<模块>/任务/<任务标识>/人工测试用例与结果.md（逐模块验证）\n- code/\n- code/\n- 实际联调环境与第三方接入证据\n\n【具体执行方式】\n从项目PRD角色场景而非菜单做跨模块业务链、权限与异常的真实回归。\n\n【真实输出】\n- docs/output/07-系统验收/业务场景覆盖矩阵.md\n- docs/output/07-系统验收/系统验收报告.md\n- docs/output/07-系统验收/缺陷闭环记录.md\n\n【审核/不通过路径】\n项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
           "skillId": "system-acceptance",
           "skillOrigin": "自建"
         },
@@ -499,8 +498,6 @@
             "database/migrations/（已批准迁移）"
           ],
           "outputs": [
-            "deploy/docker-compose.yml（正式）",
-            "deploy/nginx/（按需）",
             "docs/output/08-上线交付/部署预演.md",
             "docs/output/08-上线交付/备份回滚方案.md"
           ],

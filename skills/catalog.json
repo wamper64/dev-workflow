@@ -2922,13 +2922,15 @@
     "stepTitle": "全项目业务链路和权限回归",
     "summary": "按项目PRD、模块覆盖与真实角色权限，回归完整核心业务链路、跨模块集成和异常分支，缺陷返回责任模块。",
     "inputs": [
-      "已确认项目模块清单.md",
-      "所有模块验收记录",
-      "最终可运行代码",
-      "PRD"
+      "docs/input/需求资料/已确认项目PRD及原型",
+      "docs/output/05-模块拆分/项目模块清单.md",
+      "docs/output/项目总控/项目实施状态.md",
+      "各模块任务的真实人工验收记录与code/",
+      "当前可运行环境及第三方/设备接入证据"
     ],
     "outputs": [
-      "docs/output/07-系统验收/全流程验收报告.md",
+      "docs/output/07-系统验收/业务场景覆盖矩阵.md",
+      "docs/output/07-系统验收/系统验收报告.md",
       "docs/output/07-系统验收/缺陷闭环记录.md"
     ],
     "verification": "项目经理核对PRD全场景、角色/页面覆盖与真实业务结果；开发人员提供可复现的链路与缺陷证据，未执行不得标通过。",
@@ -3041,14 +3043,14 @@
     "stepTitle": "生产环境核验、部署预演与回滚准备",
     "summary": "技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。",
     "inputs": [
-      "docs/input/环境资料/",
-      "上线评审结论.md",
-      "code/",
-      "database/migrations/"
+      "docs/input/环境资料/（如有）",
+      "docs/output/01-项目基线/项目基线.md",
+      "docs/output/02-整体架构/整体架构设计.md",
+      "docs/output/07-系统验收/上线评审结论.md",
+      "code/构建产物",
+      "database/migrations/（已批准迁移）"
     ],
     "outputs": [
-      "deploy/docker-compose.yml（正式）",
-      "deploy/nginx/",
       "docs/output/08-上线交付/部署预演.md",
       "docs/output/08-上线交付/备份回滚方案.md"
     ],
