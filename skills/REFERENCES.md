@@ -23,6 +23,8 @@
   - 实际学习：将技术栈、保存年限、CPU/内存/磁盘闭合、并发/P95/RPO/RTO变为必须以数值和证据验收的约束；具体覆盖以此前提供的dev-baseline Skill为基线
 
 ### architecture-baseline（已补充执行图、失败路径和验收证据）
+- **2026-10-12本次增强与具体借鉴机制**：继续借鉴BMAD architecture spine的跨模块组件/Owner/交互不变量、arc42的组件/运行/部署及跨领域视角、Matt codebase-design的真实接缝复用而非重造、Matt grill-with-docs的只询问全局高代价未决决策。本项目自行适配为“真实前后端代码落点/允许依赖”“Web/IoT/Agent/第三方按条件启用”“A/B/C冻结及双关卡”。这三项是本项目的实施规则，不冒充某个上游Skill的原文。
+- **落实位置**：`skills/architecture-baseline/SKILL.md`、`assets/architecture-template.md`、`references/architecture-applicability.md`、`engineering-contract.md`、`freeze-and-change.md`及`architecture-gate.md`；同时同步网站S04与S05/S09/S12。
 - 项目中的实际用途：递归读取全部docs/input，识别全项目所有主要组件/运行单元和跨组件交互，内部Grill补足决策，形成可供下游填充的完整骨架。
 - 完全引用或改造：从原PRD与全部docs/input构建组件清单及交互清单，内部调用Grill并保留必要术语/ADR；借鉴BMAD架构骨架的跨团队一致性契约、arc42的组件/运行/交互视角与Matt的决策依赖树，但按定制前后端/Agent+报价系统扩展到六Worker和人工确认/iframe；非已裁定信息明确标候选。
 - **BMAD Method — bmad-architecture**：[BMAD Method — bmad-architecture](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md)

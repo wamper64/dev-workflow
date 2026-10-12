@@ -86,3 +86,13 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 - `skills/iteration-close/SKILL.md`：本轮完成实际人工验收后**明确调用官方retro**，复盘AI编码会话及自动检查、Agent导航、规范等问题；审核通过的改进可供下一轮使用，取消项目末尾强制复盘阶段。
 - 通用Skill筛选后保留`handoff`、`grilling`、`domain-modeling`、`research`、`wizard`，增加官方`pr`与`to-questionnaire`；删除仅转调grilling的重复`grill-me`入口。
 - 右上角「项目目录树」来自`docs/data/project-directory-tree.txt`：按阶段步骤显示已存在输入、预期输出、模块循环和按需目录，配有中文注释。**这是结构设计，不是已自动生成全部文件。**
+
+## 2026-10-12：S04整体架构冻结和开发约束增强
+
+- 保留原有四阶段、21个步骤、五章正式文档结构；S04仍在内部按需调用 `grill-with-docs`，不新增Skill。
+- 新增 `architecture-applicability.md`：所有项目检查十项架构维度，Web/IoT/Agent/第三方专项仅按真实业务和对接资料启用。
+- 新增 `engineering-contract.md`：扫描实际 `code/` 前后端工程，固定原型/公共能力复用、代码组织、允许和禁止依赖。
+- 新增 `freeze-and-change.md`：A级结构需技术总监审批、B级通用规则保兼容、C级模块细节正常演进；后续变更需更新S04再同步受影响下游。
+- 整体架构模板增加真实工程落点、角色核心场景覆盖和冻结清单；两轮审核分别验证系统业务覆盖和代码可执行性。
+- S05、S09及实现阶段继承架构；跨组件关系使用“发起方→接收方+协议/场景”，不杜撰交互ID；不重复运行Matt原版代码审查。
+- 正式Skill与导航数据同步；示例仍只是案例，客户项目必须基于真实资料审查后才可标“已冻结”。
