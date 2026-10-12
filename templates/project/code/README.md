@@ -1,7 +1,11 @@
-# 现有工程
-应由项目实际既有 code/fld/ 前端原型及 code/guiwu_ruoyi/ 若依后端源码提供；这里不分发客户业务源码。
+# 现有前后端工程
 
+`code/` 用于放置项目实际已有的前端原型、后端框架以及按需的Agent/IoT代码。子目录名称与技术栈以真实项目为准，不假定必须为某个报价项目的文件夹。**前端必须在原型基础上开发，保留已有组件、布局和视觉样式；后端优先复用原有权限与公共框架**。
 
-## 单机 Docker 初次部署配置
+本模板不包含客户业务源码，也不应生成与真实工程平行的第二套应用。
 
-如需使用单机Docker部署包，先从 `templates/project/code/deploy/single-node-docker/` 获取《初次部署配置.md》作为初始化参考；若当前项目 `code/deploy/single-node-docker/初次部署配置.md` 已存在，则以**现有项目文件**为准，不覆盖。该文件仅为配置模板，不包含可以直接部署的全部Docker Compose/SSH/SQL文件。首次部署先按项目环境逐份预填与确认，再由用户授权执行，不启动尚无jar/dist的业务应用。
+## 单机Docker初次部署配置
+
+若项目已有 `code/deploy/single-node-docker/初次部署配置.md`，应直接以其为唯一原始模板，不覆盖。若没有且选择该部署方式，可从 `templates/project/code/deploy/single-node-docker/初次部署配置.md` 初始化；但配置模板不等于可执行的Docker Compose、SSH或SQL部署包。
+
+执行时按真实环境数分别预填与审批，再依据本环境配置第8.1节提示词及实际部署脚本授权执行。首次只安装批准的基础设施，不启动尚未交付的业务应用或Nginx；未执行不得声称已部署。

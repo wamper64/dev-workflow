@@ -253,7 +253,7 @@
       "title": "2. 模块迭代开发",
       "kind": "repeat",
       "owner": "开发人员、项目经理、技术总监（涉及设计变更时）",
-      "description": "本轮模块选择→详细设计→Spec/Tickets→dev-implement-spec（调用Matt原版完成TDD/Review后生成待人工测试单）→人工执行回填→有Bug修复→本轮验收与Matt retro→带改进进入下一轮，全部模块签收后进入项目系统验收。",
+      "description": "从已审核模块池选择本轮真实就绪任务，S09完成依赖门禁和模块详细设计，随后调用Matt原版to-spec、to-tickets和implement-spec；独立manual-testing生成人测单，真实人员执行回填与签收，失败由diagnosing-bugs诊断复测；retro仅复盘编码会话，未完成任务进入下一轮。",
       "steps": [
         {
           "id": "S09",
