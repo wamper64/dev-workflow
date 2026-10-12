@@ -80,6 +80,30 @@ for token in ("skill-topic-details","skill-topic-delivery","skill-topic-gate","s
     require(token in renderer,"快速理解渲染逻辑缺失："+token)
 
 
+# S05数据库总体必须真正完成三核心，S09不得重复构建全局核心表。
+data_skill=(ROOT/"skills/data-architecture/SKILL.md").read_text(encoding="utf-8")
+data_tpl=(ROOT/"skills/data-architecture/assets/data-architecture-template.md").read_text(encoding="utf-8")
+data_gate=(ROOT/"skills/data-architecture/references/data-boundary-gate.md").read_text(encoding="utf-8")
+for ref in ("references/three-core-contract.md","assets/data-architecture-template.md","references/data-boundary-gate.md"):
+    require((ROOT/"skills/data-architecture"/ref).is_file(),"S05缺三核心配套文件："+ref)
+for token in ("整体数据规则","关键数据业务流程","核心表","核心字段","ER图","S09"):
+    require(token in data_skill and token in data_tpl,"S05契约/模板缺少三核心："+token)
+require("grill-with-docs" in data_skill,"S05内部Grill未继承")
+for token in ("第一轮","第二轮","核心字段","S09"):
+    require(token in data_gate,"S05门禁缺少："+token)
+s05_overview=next(x["overview"] for x in catalog if x["id"]=="data-architecture")
+require(len(s05_overview.get("pillars",[]))==3,"S05快速理解缺三个核心")
+require({s.get("axis") for s in s05_overview["sections"]}=={"rule","flow","structure","support"},"S05缺三核心及支撑分组")
+for section in s05_overview["sections"]:
+    require(len(section.get("checks",[]))>=4 and bool(section.get("deliverable")) and bool(section.get("pass")),"S05具体项/产物/判定缺失："+section["title"])
+for token in ("整体数据规则","关键数据业务流程","核心表","核心字段","ER"):
+    require(token in lookup["S05"]["prompt"],"S05网站调用提示词缺少："+token)
+module_skill=(ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8")
+require("S05核心数据骨架" in module_skill and "先返回S05" in module_skill,"S09未继承S05冻结")
+require("S05核心字段" in lookup["S09"]["prompt"],"S09提示词未继承S05核心字段")
+for token in ("pillarsTitle","pillarsDescription","data-count"):
+    require(token in renderer,"三核心快速理解页面缺少："+token)
+
 require("人工测试用例与结果.md" in " ".join(lookup["S12"]["outputs"]),"implement-spec未提供人工测试单")
 require(lookup["S12"]["skillId"]=="dev-implement-spec" and lookup["S12"]["invokes"]==["implement-spec"],"实现步骤必须采用改造Skill内部调用原版")
 require("code-review" in lookup["S12"]["prompt"] and "TDD" in lookup["S12"]["prompt"],"实现缺原版内置能力")
