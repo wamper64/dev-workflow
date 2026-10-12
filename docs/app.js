@@ -50,7 +50,7 @@ function renderStages(){
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
-  const route=p.id==="P01"?"输入读取与检查 → Matt初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 开发环境 → 模块拆分":p.id==="P02"?"选择本轮 → 详细设计（Grill） → Spec → Tickets → <b>dev-implement-spec：原版实现 + 人工测试单</b> → <b>人工回填</b> → 按需Bug修复 → <b>验收 + retro</b> → 下一轮":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
+  const route=p.id==="P01"?"输入读取与检查 → Matt初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 开发环境 → 模块拆分":p.id==="P02"?"<b>选本轮任务 + 依赖校验 + 详细设计（Grill）</b> → Spec → Tickets → <b>Matt原版implement-spec</b> → <b>独立manual-testing：生成→人工执行回填→签收</b> → 按需Bug修复 → <b>Matt原版retro</b> → 下一轮":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
   const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
   $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
  $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
@@ -60,47 +60,6 @@ function renderSteps(){
 }
 
 // 用户填入的是开发环境的事实，而不是AI推断结果；只缓存本浏览器非敏感字段
-const devFields=[
- {id:"os",label:"开发主机与操作系统",placeholder:"例如 Windows 11 + WSL2 / Ubuntu LTS"},
- {id:"resources",label:"CPU / 内存 / 可用磁盘",placeholder:"例如 8 vCPU / 16GiB / 200GB可用"},
- {id:"runtime",label:"Java / Node / Docker / Compose 版本",placeholder:"已安装的真实版本；未验证填待核实"},
- {id:"existing",label:"已有数据库/缓存等服务",placeholder:"MySQL/Redis/消息服务及版本，未安装填无"},
- {id:"ports",label:"端口与运行中服务",placeholder:"MySQL:3306，Redis:6379等；不要填写密码"},
- {id:"paths",label:"允许使用的环境与数据目录",placeholder:"例如本机开发依赖目录、允许写入的目录"},
- {id:"access",label:"访问方式与权限",placeholder:"本机管理员/普通用户，是否可使用Docker/网络"},
- {id:"network",label:"内网/出网/镜像源与第三方",placeholder:"公网或离线、代理、可用第三方接口"},
- {id:"restriction",label:"已存在服务与禁止变更事项",placeholder:"不能停用的数据库、不能覆盖的目录/容器"},
- {id:"goal",label:"本次需要部署的依赖",placeholder:"如MySQL8、Redis7；应以架构/数据库设计为准"}
-];
-const devStorage="dev-workflow:environment-form:v1";
-let devValues={};
-try{devValues=JSON.parse(localStorage.getItem(devStorage)||"{}")||{}}catch(e){devValues={}}
-function environmentForm(){
- return '<section class="detail-section env-form-section"><h3><span class="section-icon">▦</span> ① 用户填写开发环境表</h3>'
- +'<p class="detail-hint">先填写已确认的真实环境事实，未知填“待核实”。不填写账号密码、Token或私钥；填写内容只保存在本浏览器，点击下方下载后放到指定项目目录。</p>'
- +'<table class="env-table"><tbody>'+devFields.map(f=>'<tr><th scope="row"><label for="dev-'+esc(f.id)+'">'+esc(f.label)+'</label></th><td><textarea id="dev-'+esc(f.id)+'" data-dev-field="'+esc(f.id)+'" rows="2" placeholder="'+esc(f.placeholder)+'">'+esc(devValues[f.id]||"")+'</textarea></td></tr>').join("")+'</tbody></table>'
- +'<div class="env-form-actions"><button type="button" data-dev-download>下载填写表（Markdown）</button><button type="button" data-dev-copy>复制表格内容</button></div>'
- +'<p class="detail-hint">② 下载后放到 <code>docs/input/环境资料/开发环境信息.md</code> → ③ 调用下方 development-environment Skill 按实际版本、端口、权限和依赖顺序执行部署及验证。</p></section>';
-}
-function envMd(){
- return '# 开发环境信息（用户填写）\n\n> 本表仅记录已知事实，未确认内容写待核实。请勿填写密码、令牌、SSH私钥。\n\n| 项目 | 用户填写内容 |\n|---|---|\n'+devFields.map(f=>'| '+f.label+' | '+String(devValues[f.id]||"待核实").replaceAll("|","/").replaceAll("\n","；")+' |').join("\n")+'\n\n## 执行规则\n\n请调用 skills/development-environment/SKILL.md：先核对本表和已批准的工程基线/整体架构/数据库总体，列出具体部署步骤；按授权范围执行，附实际命令/健康和业务连通证据。未操作不算部署成功。\n';
-}
-document.addEventListener("input",event=>{
- const area=event.target.closest("[data-dev-field]");if(!area)return;
- devValues[area.dataset.devField]=area.value;
- try{localStorage.setItem(devStorage,JSON.stringify(devValues))}catch(e){/* 私有模式禁用缓存时仍可在当前页面导出 */}
-});
-document.addEventListener("click",async event=>{
- if(event.target.closest("[data-dev-download]")){
-  const blob=new Blob([envMd()],{type:"text/markdown;charset=utf-8"});
-  const url=URL.createObjectURL(blob),a=document.createElement("a");
-  a.href=url;a.download="开发环境信息.md";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
- }else if(event.target.closest("[data-dev-copy]")){
-  const b=event.target.closest("button");
-  try{await navigator.clipboard.writeText(envMd());b.textContent="已复制 Markdown"}catch(e){b.textContent="复制不可用，请点击下载填写表"}
- }
-});
-
 function renderDetails(){
   const p=phase(),s=step(),index=p.steps.indexOf(s)+1;
   if(p.kind==="toolkit"){
@@ -116,7 +75,7 @@ function renderDetails(){
   }
   $("step-position").textContent=String(index).padStart(2,"0")+" / "+String(p.steps.length).padStart(2,"0");
   let html='<h2>'+esc(s.title)+'</h2><p class="step-context">'+esc(p.title)+' · '+esc(s.id)+'</p>';
-  if(p.id==="P01"&&s.id==="S06")html+=environmentForm();
+  
   if((s.skills||[]).length)html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
   else html+='<section class="detail-section"><h3><span class="section-icon">◎</span> 执行方式</h3><div class="review-box">'+(s.id==="S01"?"使用下方提示词直接读取并校验输入，无需安装Skill。":s.id==="S14H"?"人工执行上一步生成的用例，填写真实结果；无独立Skill。":"此步骤仅展示已有输入，不调用Skill。")+'</div></section>';
   if(Array.isArray(s.invokes)&&s.invokes.length){html+='<section class="detail-section"><h3><span class="section-icon">↳</span> 主Skill内部引用</h3><p class="detail-hint">以下原版Skill由当前主Skill内部执行，不另占必经步骤；点击可查看完整原版内容。</p>'+skillList(s.invokes)+'</section>';}

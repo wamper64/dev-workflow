@@ -177,3 +177,10 @@
 - Matt原版 `implement-spec` 已处理TDD和内部code-review，因此不再有单独的review或重复自动联调步骤；此前的 `module-integration-acceptance` 冗余Skill从仓库中清理。
 - `human-acceptance` 只生成“待执行”人工测试用例，再由开发人员在同一张表填结果/证据；不可由AI代填通过。
 - `diagnosing-bugs` 依官方原版六阶段，绝不是通用“定位→修复”的自编步骤。
+
+
+## S06初次部署文档来源与机制
+
+- 用户提供《初次部署配置.md》原始八节，特别引用第8.1节推荐提示词、第8.2节实际部署步骤及第8.3节验收/README要求；此真实文件放在**具体客户项目**的`code/deploy/single-node-docker/`，非本仓库通用实例。
+- 从真实项目资料自动预填、一环境一配置、逐份人审确认后执行，不覆盖原模板/其它环境，不运行ruoyi/nginx。
+- [Superpowers verification-before-completion](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)：借鉴真实命令与结果必须对应，不冒充部署已成功。

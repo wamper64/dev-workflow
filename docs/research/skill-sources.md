@@ -188,3 +188,10 @@
 | Addy Osmani Agent Skills | [constraint-driven-development](https://github.com/addyosmani/agent-skills/blob/main/skills/constraint-driven-development/SKILL.md) | 把已批准性能/安全/覆盖阈值绑定可运行命令，禁止为通过而降低质量门槛 | S17上线非功能验证，继承S03项目基线 |
 
 **引入原则**：优先吸收机制，不复制另一套完整研发框架。Matt官方 `implement-spec` 原文不修改；pstack/Osmani 的运行证据、视觉基线和可验证切片作为工作流调用约束，无法实际运行时交人工测试而不冒充通过。
+
+
+## S06初次部署模板具体参考（2026-10-12）
+
+- **直接参照**用户提供的《单机Docker首次部署配置模板》：第1节部署组件开关、第2节自启、第3节服务器登录及Compose项目名、第4节宿主机端口、第5节DB/Redis/RabbitMQ账号与隔离、第6节FTP、第7节初始化SQL、第8.1节AI推荐提示词、第8.2节部署步骤、第8.3节本机和异机验收及部署结果README。
+- **适配改造**：根据项目当前已批准输入自动填完整配置；一环境一文件；未知给推荐、标待确认；每份文件交用户确认；确认后才执行配置自带提示词，首次不能启动ruoyi/nginx。
+- **实际借鉴开源**：[Superpowers verification-before-completion](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) 的可证明执行结果原则，拒绝将计划/示例命令判为真实成功；未借用它的具体部署方案。
