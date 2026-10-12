@@ -119,7 +119,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         "# 标准项目研发 Skills\n\n"
         "包含19个主Skill和10个通用/执行依赖（共29份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
         "请将 skills/ 目录用于研发Agent工作区；"
-        "把 templates/project/docs/ 下的目录结构复制到真实项目，"
+        "把 templates/project/docs/ 及 templates/project/code/ 的初始化资料复制到真实项目，"
         "实际PRD和已有前后端源码由项目方提供，不包含在下载包中。\n"
         "如部署自有 Skill 运行环境，应按平台要求安置技能目录。"
         "Matt 官方原版所需的版权和许可说明见 skills/LICENSE-Matt-Pocock.txt。\n")
@@ -135,6 +135,7 @@ with ZipFile(archive) as z:
     assert "skills/project-baseline/references/applicability.md" in names
     assert "skills/manual-testing/SKILL.md" in names
     assert "skills/manual-testing/assets/manual-test-template.md" in names
+    assert "templates/project/code/deploy/single-node-docker/初次部署配置.md" in names, "首次部署原始模板未进入安装包"
     assert "skills/pr/SKILL.md" in names and "skills/to-questionnaire/SKILL.md" in names
     assert not any(n.startswith(("skills/grill-me/","skills/project-retrospective/","skills/iteration-planning/","skills/dev-implement-spec/","skills/iteration-close/")) for n in names)
     assert not any("/examples/" in n for n in names), "Skill ZIP不应包含项目示例"

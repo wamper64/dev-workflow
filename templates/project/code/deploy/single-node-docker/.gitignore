@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+remote.env
+remote.env.*
+!remote.env.example
+*.pem
+*.key

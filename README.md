@@ -137,3 +137,8 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 - **每个环境的配置单独交用户确认**，确认后才执行该文件第8.1节「推荐提示词」与第8.2节执行检查。未经确认不能访问/修改服务器。
 - 首次只部署选定基础环境、数据库和中间件，不能启动 `ruoyi`/`nginx`，不能要求jar/dist存在，只预留`package/`目录；实际本机、异机连通验收后在本地按环境分别生成部署结果README。
 - 网站S06不再展示强制人工填写的开发环境表，以已有输入自动预填与逐环境确认取代。
+
+
+### 项目初始化模板补充
+
+安装包中保留了用户提供的原始《单机 Docker 首次部署配置模板》（完整第1–8节及第8.1节提示词），路径为 `templates/project/code/deploy/single-node-docker/初次部署配置.md`。新项目缺少该文件时可复制至 `code/deploy/single-node-docker/初次部署配置.md`；真实项目**已存在的配置不覆盖**。该模板**不是实际可运行的部署包**，仍需读取客户项目自己的Docker Compose、SQL与SSH脚本。配套 `.gitignore` 用于避免提交本地SSH和Compose私有配置。

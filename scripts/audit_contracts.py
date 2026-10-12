@@ -144,6 +144,14 @@ dev=(ROOT/"skills/development-environment/SKILL.md").read_text(encoding="utf-8")
 for word in ("初次部署配置.md","初次部署配置-<环境名称>.md","8.1","确认","nginx"):
     require(word in dev,"S06关键规则缺失："+word)
 require("devFields" not in renderer and "environmentForm()" not in renderer,"S06旧环境手填表未移除")
+# 来自用户的完整八节初次部署模板，在新项目初始化时可用，但不能替代真实部署包。
+seed=(ROOT/"templates/project/code/deploy/single-node-docker/初次部署配置.md")
+require(seed.is_file(),"缺少首次部署的项目初始化配置模板")
+if seed.is_file():
+    raw=seed.read_text(encoding="utf-8")
+    for section in ("## 1. 部署服务清单","## 2. 开机自启动配置","## 3. 服务器连接配置","## 4. 端口配置","## 5. 数据库和中间件账号密码","## 6. FTP 文件存储配置","## 7. 初始化 SQL 配置","## 8. AI 执行要求","### 8.1 推荐提示词","### 8.2 AI 根据本文档执行部署步骤","### 8.3 验收标准及文档"):
+        require(section in raw,"首次部署模板缺失："+section)
+
 
 if errors:
     for m in errors: print("FAIL:",m)
