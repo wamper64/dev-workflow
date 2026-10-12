@@ -184,6 +184,69 @@ if seed.is_file():
         require(section in raw,"首次部署模板缺失："+section)
 
 
+
+# 仓库全量洁净度与一致性检查：涵盖所有已跟踪文件，但不篡改Matt原版。
+import re
+import subprocess
+from urllib.parse import unquote
+tracked_output=subprocess.check_output(["git","ls-files","-z"],cwd=ROOT).decode("utf-8")
+tracked=[Path(p) for p in tracked_output.split("\0") if p]
+require(len(tracked)>120,"仓库已跟踪文件数量异常，可能漏扫文件")
+for rel in tracked:
+    actual=ROOT/rel
+    require(actual.is_file(),"跟踪文件不存在："+str(rel))
+    if actual.is_file() and (rel.suffix.lower() in {".md",".txt",".json",".js",".py",".css",".html",".yaml",".yml",".gitignore"} or rel.name in {".nojekyll",".gitignore"}):
+        try: actual.read_text(encoding="utf-8")
+        except UnicodeDecodeError: require(False,"文本非UTF-8："+str(rel))
+
+known_main={x["id"] for x in catalog}
+main_ids=[s["skillId"] for s in steps if s.get("skillId")]
+require(set(main_ids)==known_main-{"code-review","grill-with-docs"},"导航主Skill与catalog清单不一致")
+for stage_step in steps:
+    id_=stage_step.get("skillId")
+    if not id_: continue
+    entry=next(x for x in catalog if x["id"]==id_)
+    require(entry.get("inputs")==stage_step.get("inputs"),id_+" 输入在网站和目录元数据中不一致")
+    require(entry.get("outputs")==stage_step.get("outputs"),id_+" 输出在网站和目录元数据中不一致")
+
+obsolete=("input-readiness","human-acceptance","iteration-planning","iteration-close",
+          "project-retrospective","dev-implement-spec","module-integration-acceptance")
+official_dirs={x["id"] for x in catalog if x["type"]=="Matt原版"}
+official_dirs.update(x["id"] for x in workspace)
+official_dirs.update(("tdd","grilling","domain-modeling","codebase-design","wizard","writing-for-agents","pr","to-questionnaire"))
+nonofficial_docs=[]
+for rel in tracked:
+    if rel.suffix.lower()!=".md": continue
+    if rel.parts[0]=="skills" and len(rel.parts)>=2 and rel.parts[1] in official_dirs: continue
+    nonofficial_docs.append(rel)
+for rel in nonofficial_docs:
+    body=(ROOT/rel).read_text(encoding="utf-8")
+    for token in obsolete:
+        require(token not in body,"仍含取消的Skill/阶段："+str(rel)+"："+token)
+    require(not re.search(r"(?m)^#{1,3}\s+(?:20\d{2}[-年]|版本变更|更新记录|修订历史)",body),
+            "出现历史追加章节："+str(rel))
+    if rel.as_posix().startswith("docs/examples/") and rel.name.endswith(".md"):
+        require(sum(1 for line in body.splitlines() if line.startswith("# "))==1,
+                "示例文档必须只有一个主标题："+str(rel))
+    for link in re.findall(r"\[[^\]\n]+\]\(([^)\n]+)\)",body):
+        target=link.strip().split()[0]
+        if target.startswith(("https://","http://","mailto:","app://","#")): continue
+        target=unquote(target.split("#")[0].split("?")[0])
+        if not target: continue
+        require((ROOT/rel.parent/target).exists(),"Markdown相对链接失效："+str(rel)+" → "+target)
+require((ROOT/"docs/输入输出契约与质量门禁.md").is_file(),"当前全流程契约缺失")
+require(not (ROOT/"docs/输入输出契约与对抗性审查.md").exists(),"旧版契约仍存在")
+for phase in ("input-readiness","human-acceptance","project-retrospective"):
+    require(not (ROOT/"docs/examples/报价项目"/phase).exists(),"废弃Skill的示例目录仍存在："+phase)
+for old in ROOT.glob("skills/*/templates/输出模板.md"):
+    require(False,"重复输出壳未清理："+str(old.relative_to(ROOT)))
+for ref in ("skills/system-acceptance/SKILL.md","skills/system-acceptance/references/execution-gate.md",
+            "skills/release-readiness/SKILL.md","skills/release-readiness/references/execution-gate.md",
+            "skills/release-preflight/SKILL.md","skills/release-preflight/references/execution-gate.md",
+            "skills/release-delivery/SKILL.md","skills/release-delivery/references/execution-gate.md"):
+    c=(ROOT/ref).read_text(encoding="utf-8")
+    require("code/fld" not in c and "17个菜单" not in c,"通用验收/上线混入案例硬编码："+ref)
+
 if errors:
     for m in errors: print("FAIL:",m)
     raise SystemExit(1)
