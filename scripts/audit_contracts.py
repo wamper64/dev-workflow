@@ -184,6 +184,28 @@ if seed.is_file():
         require(section in raw,"首次部署模板缺失："+section)
 
 
+# 当前有效契约的逆向审查：不让历史流程、示例和错误路径回到正式导航。
+active_skill_text=" ".join((ROOT/"skills"/p/"SKILL.md").read_text(encoding="utf-8")
+    for p in ("module-discovery","module-design","system-acceptance","release-readiness","release-preflight","release-delivery"))
+require("S08" not in active_skill_text,"已合并的S08仍残留在正式Skill")
+require("17个菜单" not in active_skill_text and "17个菜单" not in json.dumps(data,ensure_ascii=False),"案例菜单数泄漏到通用执行流程")
+for retired in ("input-readiness","human-acceptance","project-retrospective"):
+    require(not (ROOT/"docs"/"examples"/"报价项目"/retired).exists(),"已取消步骤的案例目录仍存在："+retired)
+require((ROOT/"docs/研发流程输入输出与质量门禁.md").is_file(),"缺当前输入输出契约文档")
+require(not (ROOT/"docs/research/skill-sources.md").exists(),"重复旧来源页未清理")
+require(not (ROOT/"docs/输入输出契约与对抗性审查.md").exists(),"存在旧版本输入输出契约")
+for source in (ROOT/"README.md",ROOT/"skills/REFERENCES.md",ROOT/"docs/研发流程输入输出与质量门禁.md"):
+    text_now=source.read_text(encoding="utf-8")
+    require(not __import__("re").search(r"(?m)^##?\\s+20[0-9]{2}-[0-9]{2}",text_now),"说明文档混入按日期追加的历史章节："+source.name)
+for key in ("inputs","outputs"):
+    combined=" ".join(str(s.get(key,[])) for s in steps)+" "+ " ".join(str(x.get(key,[])) for x in catalog)
+    require("docs/output/04-开发环境/部署步骤与执行记录.md" not in combined,"虚构的旧开发环境产物被引用")
+expected_sys=set(lookup["S16"]["outputs"])
+declared_sys=(ROOT/"skills/system-acceptance/SKILL.md").read_text(encoding="utf-8")
+require(all(path in declared_sys for path in expected_sys),"系统验收Skill与导航正式产物不一致")
+require(lookup["S09"]["skillId"]=="module-design" and "S09" in (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8"),"S07至S09交接不完整")
+
+
 if errors:
     for m in errors: print("FAIL:",m)
     raise SystemExit(1)
