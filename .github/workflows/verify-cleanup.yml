@@ -1,0 +1,26 @@
+name: 全仓清理验证
+on:
+  push:
+    branches:
+      - audit-clean-current-20261012
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出审查分支
+        uses: actions/checkout@v4
+      - name: 检查脚本语法
+        run: |
+          python3 -m py_compile scripts/audit_contracts.py scripts/build_site.py
+          node --check docs/app.js
+          node --check scripts/smoke_ui.cjs
+      - name: 契约审查与构建
+        run: |
+          python3 scripts/audit_contracts.py
+          python3 scripts/build_site.py
+      - name: 安装页面测试依赖
+        run: npm install --no-save --no-package-lock --prefix /tmp/dev-workflow-ui-test jsdom@26
+      - name: 真正执行页面交互回归
+        run: node scripts/smoke_ui.cjs
