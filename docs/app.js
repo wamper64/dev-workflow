@@ -50,7 +50,7 @@ function renderStages(){
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
-  const route=p.id==="P01"?"输入读取与检查 → Matt初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 开发环境 → 模块拆分":p.id==="P02"?"<b>选本轮任务 + 依赖校验 + 详细设计（Grill）</b> → Spec → Tickets → <b>Matt原版implement-spec</b> → <b>人工测试 manual-testing：生成→人工执行回填→签收</b> → 按需Bug修复 → <b>Matt原版retro</b> → 下一轮":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
+  const route=p.id==="P01"?"输入核验 → Skills初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 初次部署 → 模块拆分":p.id==="P02"?"<b>本轮模块设计（Grill）</b> → Spec → Tickets → <b>TDD实现+Review</b> → <b>人工测试与签收</b> → 按需Bug修复 → <b>Retro</b> → 下一轮":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
   const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
   $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
  $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
@@ -131,9 +131,11 @@ function renderCodeReviewAxes(skill){
 function renderSkillFlow(f){
  if(!f?.steps?.length)return "";
  const nodes=f.steps.map((x,i)=>'<div class="quick-route-node"><span>'+String(i+1).padStart(2,"0")+'</span><b>'+esc(x.title)+'</b><small>'+esc(x.detail||"")+'</small></div>').join('<span class="quick-route-arrow" aria-hidden="true">→</span>');
- const gate=f.gate||{};
+ // 支持部署配置/部署执行两道不同的审核关；普通Skill仍沿用一个审核关。
+ const checkpoints=Array.isArray(f.gates)&&f.gates.length?f.gates:[f.gate||{}];
+ const checkHTML=checkpoints.map((g,i)=>'<div class="quick-route-check"><div class="quick-route-gate"><b>'+esc(g.title||"审核关口")+"："+"</b>"+esc(g.question||"")+'</div><div class="quick-route-branch"><p><b>✓ 通过</b>'+esc(g.pass||"按流程推进")+'</p><p><b>↶ 未通过</b>'+esc(g.fail||"补齐证据后重新检查")+'</p></div></div>').join("");
  return '<section class="quick-route"><div class="skill-overview-title"><h3>'+esc(f.title||"Skill执行流程")+'</h3><span>顺序与退回路径</span></div><div class="quick-route-track">'+nodes+'</div>'
- +'<div class="quick-route-gate"><b>审核关口：</b>'+esc(gate.question||"")+'</div><div class="quick-route-branch"><p><b>✓ 通过</b>'+esc(gate.pass||"")+'</p><p><b>↶ 未通过</b>'+esc(gate.fail||"")+'</p></div></section>';
+ +'<div class="quick-route-checkpoints" data-count="'+checkpoints.length+'">'+checkHTML+'</div></section>';
 }
 function renderSkillCoverage(a){
  const items=a.coverage||[];

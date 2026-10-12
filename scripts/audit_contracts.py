@@ -119,7 +119,7 @@ for helper in ("grilling","domain-modeling","tdd","code-review","codebase-design
 require(lookup["S14H"]["skillId"]=="manual-testing" and "人工测试用例与结果.md" in " ".join(lookup["S14H"]["outputs"]),"S14H应有独立人工测试Skill")
 require("Phase 1" in lookup["S14B"]["prompt"] and "diagnosing-bugs" in lookup["S14B"]["prompt"],"Bug诊断需调用原版六阶段")
 require("初次部署配置.md" in " ".join(lookup["S06"]["inputs"]) and "8.1" in lookup["S06"]["prompt"],"S06应读原模板，确认后按8.1执行")
-require(lookup["S07"]["skillId"]=="module-discovery" and "Matt Tickets" in lookup["S07"]["title"],"模块拆分未采用Matt Tickets项目级适配")
+require(lookup["S07"]["skillId"]=="module-discovery" and "模块拆分" in lookup["S07"]["title"],"模块拆分主Skill或标题不一致")
 require("tracer bullet" in lookup["S07"]["prompt"] and "blocking edges" in lookup["S07"]["prompt"] and "quiz" in lookup["S07"]["prompt"],"模块级Tickets关键机制不完整")
 require("to-tickets" in lookup["S11"]["skills"],"本轮开发任务必须保持Matt原版to-tickets")
 require(not (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8").count("不发布全项目开发Tickets")==0,"模块规划必须禁止提前发布开发Ticket")
@@ -148,6 +148,33 @@ dev=(ROOT/"skills/development-environment/SKILL.md").read_text(encoding="utf-8")
 for word in ("初次部署配置.md","初次部署配置-<环境名称>.md","8.1","确认","nginx"):
     require(word in dev,"S06关键规则缺失："+word)
 require("devFields" not in renderer and "environmentForm()" not in renderer,"S06旧环境手填表未移除")
+
+# 快速理解须按Skill真实契约列流程、具体项、产物、缺失信号与完成判定。
+for skill_id,minimum_sections,minimum_coverage in (
+    ("development-environment",6,12),
+    ("module-design",8,9),
+    ("to-spec",8,7),
+    ("to-tickets",6,7),
+    ("implement-spec",8,8),
+    ("manual-testing",4,8),
+    ("diagnosing-bugs",6,7),
+    ("retro",8,8),
+):
+    item=next(x for x in catalog if x["id"]==skill_id)
+    overview=item.get("overview",{})
+    require(len(overview.get("sections",[]))>=minimum_sections,skill_id+" 快速理解缺实际内容板块")
+    require(len(overview.get("coverage",[]))>=minimum_coverage,skill_id+" 速查项不足")
+    require(len(overview.get("workflow",{}).get("steps",[]))>=5,skill_id+" 缺流程图步骤")
+    for field in overview.get("sections",[]):
+        require(bool(field.get("checks")) and bool(field.get("deliverable")) and bool(field.get("pass")),skill_id+" 缺具体检查、产物或判定")
+    for item2 in overview.get("coverage",[]):
+        require(all(item2.get(key) for key in ("title","must","evidence","gap")),skill_id+" 有空白覆盖维度")
+deployment_overview=next(x["overview"] for x in catalog if x["id"]=="development-environment")
+require(len(deployment_overview.get("workflow",{}).get("gates",[]))==2,"初次部署必须可视化配置审批和执行验收两关")
+require("quick-route-checkpoints" in renderer,"网页未支持多关卡快速理解")
+for step_obj in steps:
+    require(len(step_obj["title"])<=12,"执行步骤标题过长："+step_obj["id"])
+
 # 来自用户的完整八节初次部署模板，在新项目初始化时可用，但不能替代真实部署包。
 seed=(ROOT/"templates/project/code/deploy/single-node-docker/初次部署配置.md")
 require(seed.is_file(),"缺少首次部署的项目初始化配置模板")

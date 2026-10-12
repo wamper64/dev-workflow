@@ -88,6 +88,35 @@ async function main(){
  click('[data-skill-file="scripts/check_inputs.py"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/argparse/);
  click("[data-skill-close]");
+ click('[data-phase="P01"]');
+ assert.equal(doc.querySelector('[data-step="S06"] strong').textContent,"初次部署","初次部署标题过长");
+ click('[data-step="S06"]');
+ click('[data-skill="development-environment"]');
+ assert.equal(doc.querySelectorAll(".quick-route-check").length,2,"初次部署需要两个独立审核关");
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/配置审批/);
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/执行验收/);
+ assert.ok(doc.querySelectorAll(".quick-coverage-row").length>=12,"初次部署缺八节字段或真实验收检查");
+ click("[data-skill-close]");
+ click('[data-phase="P02"]');
+ const required={
+  "S09":["module-design",8,9],
+  "S10":["to-spec",8,7],
+  "S11":["to-tickets",6,7],
+  "S12":["implement-spec",8,8],
+  "S14H":["manual-testing",4,8],
+  "S14B":["diagnosing-bugs",6,7],
+  "S15":["retro",8,8]
+ };
+ for(const [stepId,[id,details,checks]] of Object.entries(required)){
+   click('[data-step="'+stepId+'"]');
+   assert.ok(doc.querySelector("#step-detail h2").textContent.length<=12,"执行步骤标题未精简："+stepId);
+   click('[data-skill="'+id+'"]');
+   assert.ok(doc.querySelectorAll(".quick-route-node").length>=5,id+" 缺执行流程图");
+   assert.ok(doc.querySelectorAll(".quick-coverage-row").length>=checks,id+" 速查遗漏具体交付要求");
+   assert.ok(doc.querySelectorAll(".skill-topic-card").length>=details,id+" 未提供足够的落地板块");
+   assert.match(doc.querySelector("#skill-dialog-content").textContent,/未通过|退回/,id+" 缺失败回路");
+   click("[data-skill-close]");
+ }
  click('[data-phase="P02"]');
  assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"模块开发步骤错误");
  assert.match(doc.querySelector("#phase-route").textContent,/Grill/,"模块流程速览必须显示Grill");

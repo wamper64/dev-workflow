@@ -302,3 +302,11 @@
  .quick-coverage-row{grid-template-columns:1fr}
  .quick-coverage-name,.quick-coverage-risk{grid-column:auto}
 }
+
+/* 快速理解：为初次部署等两关口Skill单独呈现配置确认与执行验收 */
+.quick-route-checkpoints{display:grid;grid-template-columns:1fr;gap:10px;margin-top:2px}
+.quick-route-checkpoints[data-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}
+.quick-route-check{min-width:0}
+.quick-route-check .quick-route-gate{height:100%;box-sizing:border-box}
+.quick-route-check .quick-route-branch{margin-top:8px}
+@media(max-width:890px){.quick-route-checkpoints[data-count="2"]{grid-template-columns:1fr}}
