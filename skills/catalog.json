@@ -2158,7 +2158,193 @@
       }
     ],
     "maturity": "官方原版，未改动",
-    "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。"
+    "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
+    "overview": {
+      "headline": "将本轮已确认的设计与讨论直接综合为一个可实施、可测试的 Spec，原版不重新访谈需求。",
+      "why": "仅覆盖本次独立开发任务；读取现有代码、GLOSSARY、ADR、范围与依赖结论，优先选择高层真实测试接缝并与用户确认。发布到既定Issue Tracker（本地Markdown只是其中一种方式），历史Spec不覆盖。",
+      "result": "本任务单独Spec：问题/方案、角色故事、实现决定、测试决定、非目标及进一步说明；发布到已配置Tracker。",
+      "sectionsTitle": "官方 to-spec 模板及发布门禁：8项具体内容",
+      "sections": [
+        {
+          "title": "01 问题陈述（Problem Statement）",
+          "summary": "从用户视角写清待解决的实际问题",
+          "checks": [
+            "指定本任务角色、发生场景与当前痛点",
+            "说明当前已存在的能力与此次增量区别",
+            "引用已确认PRD/原型/本轮范围，不能凭空补新业务需求"
+          ],
+          "deliverable": "本任务的问题陈述",
+          "pass": "读者可判断为什么做此任务，且没有重复已验收范围"
+        },
+        {
+          "title": "02 方案（Solution）",
+          "summary": "说明用户实际得到什么，不写无依据的底层代码",
+          "checks": [
+            "逐场景描述预期业务结果和成功反馈",
+            "只覆盖本次独立任务，保留现有原型及架构约束",
+            "特殊失败、权限拒绝及回退行为与已定设计一致"
+          ],
+          "deliverable": "方案说明与用户可见结果",
+          "pass": "能与问题和验收场景互相对应"
+        },
+        {
+          "title": "03 用户故事（User Stories）",
+          "summary": "按角色逐条表达触发、行为和收益",
+          "checks": [
+            "故事包含角色、希望完成的动作、产生的业务价值",
+            "覆盖正常/异常分支及授权差异，有依据才列",
+            "每个故事可追溯PRD/原型，并有可观察行为"
+          ],
+          "deliverable": "编号的用户故事清单",
+          "pass": "核心角色场景无缺漏/无重复"
+        },
+        {
+          "title": "04 实现决定（Implementation Decisions）",
+          "summary": "综合已裁定的模块、接口及数据方案",
+          "checks": [
+            "引用模块最新有效设计及S04/S05已批准交互与数据Owner",
+            "包含模块变更、接口/Schema/状态等确定的实施契约",
+            "不写容易过时的代码路径和长代码片段，除非原型片段精确表达既定决定",
+            "待决策事项不能伪造已批准结论"
+          ],
+          "deliverable": "实现决定清单",
+          "pass": "实现范围与冻结架构一致"
+        },
+        {
+          "title": "05 测试决定（Testing Decisions）",
+          "summary": "先明确验证外部行为的最合适接缝",
+          "checks": [
+            "先核查已有测试接缝，优先高层可测边界",
+            "向用户确认测试接缝符合预期",
+            "说明测试覆盖的模块、场景、现有相似测试与可观察判据",
+            "明确自动化不能证实的真实外部/人工条件"
+          ],
+          "deliverable": "测试接缝与验证决策",
+          "pass": "可由下游Tickets/TDD落地，未确认接缝先补决策"
+        },
+        {
+          "title": "06 非目标（Out of Scope）",
+          "summary": "防止Spec扩到全项目与其它模块",
+          "checks": [
+            "列明本任务不改的页面、业务流程与组件",
+            "保留已完成Spec/Tickets的历史记录",
+            "不超出本轮任务依赖门禁许可的范围"
+          ],
+          "deliverable": "明确非目标及边界",
+          "pass": "本轮开发不会因为Spec自行重开完整项目"
+        },
+        {
+          "title": "07 进一步说明（Further Notes）",
+          "summary": "只补必要的外部条件、注意事项和引用",
+          "checks": [
+            "列已批准ADR、风险、依赖及相关来源指针",
+            "外部设备/数据和真实验收边界写清",
+            "没有相关内容可省略，不复制整份PRD"
+          ],
+          "deliverable": "简洁可定位的补充说明",
+          "pass": "后续开发能找到依据而非重问已知问题"
+        },
+        {
+          "title": "08 发布至已配置Tracker",
+          "summary": "不绕过setup约定，也不强制重复triage",
+          "checks": [
+            "读取docs/agents/issue-tracker.md定位GitHub/GitLab/本地Markdown等真实Tracker",
+            "发布为独立Spec，按原版设置ready-for-agent；无需再分诊一次",
+            "本地形式遵守当前任务路径，外部Tracker使用真实链接",
+            "发布后供to-tickets引用，旧Spec不覆盖"
+          ],
+          "deliverable": "独立Spec文件或Issue引用",
+          "pass": "Spec可被下一步真实检索，状态正确"
+        }
+      ],
+      "thinking": [
+        {
+          "given": "已有PRD及模块详细设计，但当前任务仅做某一页面的新增数据交互",
+          "answer": "直接综合已确认范围和测试接缝成独立Spec，不额外重新访谈全项目业务。"
+        }
+      ],
+      "doesNot": [
+        "不在to-spec重新召开一轮需求访谈；必要的测试接缝确认不等于重做PRD",
+        "不直接发开发Tickets或执行代码",
+        "不替代S09模块详细设计，也不覆盖已验收历史Spec",
+        "不向原版Spec填未经裁决的架构或新功能"
+      ],
+      "workflow": {
+        "title": "执行流程与失败退回",
+        "steps": [
+          {
+            "title": "读取任务上下文",
+            "detail": "本轮范围、模块设计、已存在代码、GLOSSARY/ADR"
+          },
+          {
+            "title": "选测试接缝",
+            "detail": "复用高层既有测试接口，与用户核对"
+          },
+          {
+            "title": "综合七段Spec",
+            "detail": "问题/方案/故事/实现/测试/非目标/说明"
+          },
+          {
+            "title": "检查范围一致性",
+            "detail": "只围绕本任务，继承S04/S05冻结"
+          },
+          {
+            "title": "发布Spec",
+            "detail": "Tracker就绪后标ready-for-agent，交to-tickets"
+          }
+        ],
+        "gate": {
+          "question": "测试接缝、增量边界和已批准实现决定是否完整明确？",
+          "pass": "发布本轮独立Spec并交to-tickets",
+          "fail": "有真实缺口先确认测试边界/回S09修订，不能造假并发布"
+        }
+      },
+      "coverage": [
+        {
+          "title": "任务边界",
+          "must": "首次/续做/新增区别，本轮角色与PRD/原型对应",
+          "evidence": "范围与依赖检查、独立Spec",
+          "gap": "覆盖所有模块而非本任务"
+        },
+        {
+          "title": "问题与方案",
+          "must": "用户痛点、可观察交付、失败与权限分支",
+          "evidence": "Problem/Solution",
+          "gap": "只有开发技术清单"
+        },
+        {
+          "title": "用户故事",
+          "must": "角色、业务行为及利益，正常/异常场景",
+          "evidence": "编号User Stories",
+          "gap": "遗漏角色验收"
+        },
+        {
+          "title": "实现契约",
+          "must": "已定组件、API、状态、关键字段及ADR",
+          "evidence": "Implementation Decisions",
+          "gap": "私改S04/S05冻结"
+        },
+        {
+          "title": "测试接缝",
+          "must": "优先真实高层测试、现有先例、用户确认",
+          "evidence": "Testing Decisions",
+          "gap": "只有空泛“写单元测试”"
+        },
+        {
+          "title": "非目标与说明",
+          "must": "不做范围、风险、外部条件和依赖引用",
+          "evidence": "Out of Scope/Further Notes",
+          "gap": "无边界导致越权扩展"
+        },
+        {
+          "title": "发布可追溯",
+          "must": "既定Tracker、ready-for-agent、历史不覆盖",
+          "evidence": "Spec文件/Issue链接",
+          "gap": "自造Tracker或未经确认就发布"
+        }
+      ],
+      "coverageNote": "本清单表示Skill必须落实的内容，而非已经在真实项目中通过。实际无证据时标待确认、受阻或不适用，不能臆测完成。"
+    }
   },
   {
     "id": "to-tickets",
@@ -2209,7 +2395,177 @@
       }
     ],
     "maturity": "官方原版，未改动",
-    "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。"
+    "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
+    "overview": {
+      "headline": "把已确认的本轮 Spec 拆为单上下文可完成、独立验证的纵向开发 Tickets，并标注真实阻塞依赖。",
+      "why": "原版 Matt to-tickets 的核心是 tracer bullet（完整端到端切片）、blocking edges（任务DAG）、用户Quiz审核，再按Tracker约定一张Ticket一条记录发布；不是再拆一次项目模块。",
+      "result": "逐张可领取的开发Tickets及其Blocked by依赖关系（.scratch任务目录或外部Issue Tracker）。",
+      "sectionsTitle": "从Spec到可直接领取的Tickets：6项具体工作",
+      "sections": [
+        {
+          "title": "① 读取Spec与已有代码",
+          "summary": "先理解任务目标、代码接缝及既有职责",
+          "checks": [
+            "读取本轮Spec的全部正文、相关评论和已批准决定",
+            "核查真实代码与领域术语GLOSSARY/ADR（尚未探索时）",
+            "识别必要前置重构prefactoring，避免横向重复建设"
+          ],
+          "deliverable": "Spec场景→候选开发切片依据",
+          "pass": "每张Ticket能关联Spec的真实业务结果"
+        },
+        {
+          "title": "② 纵向Tracer Bullet切片",
+          "summary": "每票打通窄而完整的用户业务路径",
+          "checks": [
+            "覆盖该切片实际需要的Schema、后端API、前端UI、自动测试等层",
+            "完成后可以单独演示或验证，不是纯前端/纯后端层堆积",
+            "任务体量适合一个新的AI上下文独立完成",
+            "必要前置重构先做，使后续变更简单"
+          ],
+          "deliverable": "纵向Ticket候选清单与交付行为",
+          "pass": "单张完成后能观察完整行为"
+        },
+        {
+          "title": "③ 宽范围机械重构例外",
+          "summary": "只有不能保持小切片绿色时使用expand–contract",
+          "checks": [
+            "区分一般业务实现和改名/全局类型迁移等宽改动",
+            "先Expand并行支持新旧形式，再分批迁移调用方，最后Contract删除旧形式",
+            "迁移批次根据爆炸半径分割，逐步保持CI通过",
+            "必要时以集成分支与最后整体验证Ticket承接不可独立绿色的迁移"
+          ],
+          "deliverable": "宽重构分阶段Ticket图（仅适用时）",
+          "pass": "不能为了使用纵向切片而强制把全局机械修改拆碎"
+        },
+        {
+          "title": "④ 定义Blocked by关系",
+          "summary": "用真正阻塞边决定可调度的任务前沿",
+          "checks": [
+            "每张标实际必须完成的上游Ticket，没有则明确无依赖",
+            "写清前置产物与原因，建议顺序不等于阻塞",
+            "保证已解锁Ticket可开始，必要时先处理prefactoring",
+            "依赖不存在错误循环和假串行"
+          ],
+          "deliverable": "Ticket级依赖DAG/Blocked by清单",
+          "pass": "前沿任务和必需顺序一眼可识别"
+        },
+        {
+          "title": "⑤ 用户Quiz审核粒度",
+          "summary": "未批准前不发布Tracker任务",
+          "checks": [
+            "向用户按顺序展示标题、Blocked by和纵向交付结果",
+            "分别问是否太大/太小、阻塞边是否必要、是否合并/拆开",
+            "用户不同意则修订并重新审查",
+            "本阶段审核的是实现Ticket粒度，不重新审核整个业务模块池"
+          ],
+          "deliverable": "用户确认的任务拆分及裁定理由",
+          "pass": "粒度、依赖和交付均已确认"
+        },
+        {
+          "title": "⑥ 单Ticket发布并可领取",
+          "summary": "按现有Tracker输出真实可执行记录",
+          "checks": [
+            "本地每张一个NN-*.md；外部Issue逐条创建/使用原生阻塞关系",
+            "填写What to build、Blocked by、状态ready-for-agent及验收标准",
+            "阻塞者先发布，关联当前Spec及父Issue",
+            "不关闭/修改父Issue；不写过时文件路径或大段代码片段"
+          ],
+          "deliverable": "独立Tickets文件或Issue、依赖关系与可领取前沿",
+          "pass": "当前任务有可被implement-spec读取的真实任务图"
+        }
+      ],
+      "thinking": [
+        {
+          "given": "需要设备告警管理模块的规则配置、告警触发与关闭闭环",
+          "answer": "按可独立验收的业务纵向切片拆Tickets，而不是先做所有表再做全部页面。"
+        }
+      ],
+      "doesNot": [
+        "不以菜单、数据库表或后端/前端层机械拆Tickets",
+        "不将S07全项目模块清单直接转成全项目Tickets",
+        "不跳过用户对粒度和阻塞边的Quiz确认",
+        "不替代implement-spec编码或关闭父Issue"
+      ],
+      "workflow": {
+        "title": "执行流程与失败退回",
+        "steps": [
+          {
+            "title": "读取Spec与现状",
+            "detail": "按本轮已批准Spec定位真实业务结果/实现接缝"
+          },
+          {
+            "title": "划分纵向切片",
+            "detail": "每Ticket端到端、可验证、单上下文"
+          },
+          {
+            "title": "决定重构例外",
+            "detail": "宽范围机械变更才用expand–contract"
+          },
+          {
+            "title": "建立阻塞DAG",
+            "detail": "标真实Blocked by及已解锁前沿"
+          },
+          {
+            "title": "向用户Quiz确认",
+            "detail": "审核粒度/交付/合并拆分及依赖"
+          },
+          {
+            "title": "按Tracker发布",
+            "detail": "一张Ticket一条记录，ready-for-agent"
+          }
+        ],
+        "gate": {
+          "question": "每票可单独演示、单上下文完成，阻塞关系真实并获用户批准了吗？",
+          "pass": "发布任务DAG并交原版implement-spec按前沿执行",
+          "fail": "重新调整切片/重构顺序或阻塞边，未确认不发布"
+        }
+      },
+      "coverage": [
+        {
+          "title": "业务纵向切片",
+          "must": "Schema/API/UI/测试组成可观察结果，单上下文",
+          "evidence": "每票What to build",
+          "gap": "先做完全部后端再做前端"
+        },
+        {
+          "title": "独立验收",
+          "must": "每个Ticket有具体可运行验收标准",
+          "evidence": "Acceptance criteria",
+          "gap": "完成了代码但无法证明结果"
+        },
+        {
+          "title": "依赖DAG",
+          "must": "真正的Blocked by与无阻塞前沿",
+          "evidence": "Ticket阻塞边",
+          "gap": "人为强制串行或错误依赖"
+        },
+        {
+          "title": "宽重构例外",
+          "must": "按expand→migrate→contract，必要时集成验证",
+          "evidence": "重构专属Ticket链（按需）",
+          "gap": "硬套纵向导致CI长期红灯"
+        },
+        {
+          "title": "用户确认",
+          "must": "标题、交付、依赖、拆合/粒度Quiz",
+          "evidence": "批准后的候选列表",
+          "gap": "AI擅自发布任务"
+        },
+        {
+          "title": "逐张持久化",
+          "must": "本地NN-*.md或Tracker Issues；ready-for-agent",
+          "evidence": "一Ticket一文件/Issue",
+          "gap": "全部Ticket挤在一个文件里"
+        },
+        {
+          "title": "与Spec保持关联",
+          "must": "当前独立任务/父Issue及历史不覆盖",
+          "evidence": "Spec链接与实际记录",
+          "gap": "修改/关闭原始父Issue"
+        }
+      ],
+      "coverageNote": "本清单表示Skill必须落实的内容，而非已经在真实项目中通过。实际无证据时标待确认、受阻或不适用，不能臆测完成。"
+    }
   },
   {
     "id": "implement-spec",
@@ -2277,7 +2633,206 @@
       }
     ],
     "maturity": "官方原版，未改动",
-    "adaptation": "原版未改；当前直接作为S12主Skill，不包装也不额外做人工测试。"
+    "adaptation": "原版未改；当前直接作为S12主Skill，不包装也不额外做人工测试。",
+    "overview": {
+      "headline": "按 Ticket 阻塞DAG调度实现：独立工作区逐票TDD → 集成分支合并 → 完整Spec最终Code Review。",
+      "why": "直接使用 Matt 官方 implement-spec：Ticket是依赖任务图而非普通步骤列表。由可解锁前沿启动实施；每票工作区基于集成分支，内调原版tdd；最后统一调用code-review并处理问题。人工验收不在本Skill里。",
+      "result": "现有原型及后端框架上的增量代码、集成分支、完成的Ticket、真实TDD结果、最终code-review结论；涉及数据库时有真实版本化SQL。",
+      "sectionsTitle": "官方 implement-spec：8项真实执行关口",
+      "sections": [
+        {
+          "title": "① 读取Spec及Ticket依赖图",
+          "summary": "确认前沿Ticket和真实代码、任务跟踪约定",
+          "checks": [
+            "读取已发布Spec、Tickets及Blocked by边，核实Issue状态",
+            "确定哪些Ticket无前置阻塞，可并行领取",
+            "必要探索由独立Agent保存上下文指针，不复制大量资料",
+            "沿用已批准模块设计/现有Vue原型/若依代码"
+          ],
+          "deliverable": "可执行前沿与上下文索引",
+          "pass": "不跳过未完成阻塞票"
+        },
+        {
+          "title": "② 建立唯一集成分支",
+          "summary": "整份Spec所有Ticket的合并目标一致",
+          "checks": [
+            "创建专属integration branch并记录基准",
+            "需要PR或Tracker要求PR时，首次合入后才创建draft PR",
+            "历史Spec/已验收代码保持独立，禁止在无集成基线上跨分支实现"
+          ],
+          "deliverable": "集成分支与按需draft PR",
+          "pass": "所有后续票有共同集成目标"
+        },
+        {
+          "title": "③ 逐票工作区和实施Agent",
+          "summary": "每张已解锁Ticket在自己的分支/工作树",
+          "checks": [
+            "每个implementer工作树基于最新集成分支",
+            "仅领取前沿票，引用Spec/研究笔记/上次Commit等上下文指针",
+            "实施完成前先同步最新集成分支",
+            "按依赖变化及时启动新解锁任务"
+          ],
+          "deliverable": "真实Ticket工作分支和执行状态",
+          "pass": "票之间的并行不会破坏依赖关系"
+        },
+        {
+          "title": "④ 内部调用TDD",
+          "summary": "对Ticket真实业务行为进行红→绿→重构",
+          "checks": [
+            "调用Matt原版tdd，不额外自定义替代TDD步骤",
+            "用可观察行为建立失败测试再实施代码",
+            "实现涉及页面时继续原型组件/样式，不另建体系",
+            "数据库变更在实现阶段产生真实版本化SQL，并与草案差异回写设计"
+          ],
+          "deliverable": "真实测试命令、失败/通过证据及实现Commit",
+          "pass": "不能靠只展示修改文件证明通过"
+        },
+        {
+          "title": "⑤ Merger合入与推进DAG",
+          "summary": "实施票经集成合并后才解锁下游任务",
+          "checks": [
+            "由合并Agent把已完成Ticket合入单一集成分支",
+            "检查冲突及必要测试、更新票完成状态",
+            "刷新任务前沿并按需要并行推进下一批",
+            "持续到所有Tickets都实际完成"
+          ],
+          "deliverable": "集成分支上的完整可追溯实现和Ticket状态",
+          "pass": "没有跳票、未解决冲突或悬空提交"
+        },
+        {
+          "title": "⑥ 整份Spec最终Code Review",
+          "summary": "所有Ticket完成后进行一次官方双轴审查",
+          "checks": [
+            "在集成分支调用原版code-review",
+            "核查标准/Spec两个审查轴及真正代码Diff",
+            "用单个implementer修复审查指出的问题",
+            "复查修复后的实际测试与审查结论"
+          ],
+          "deliverable": "最终code-review与修复/复测证据",
+          "pass": "不得把每票测试当作整Spec最终审查"
+        },
+        {
+          "title": "⑦ 关闭票与清理工作树",
+          "summary": "保持Tracker和真实代码结果同步",
+          "checks": [
+            "存在draft PR则标为ready；否则按Tracker约定关闭工作项",
+            "报告集成分支和任务完成情况",
+            "清理implementer worktree，保留正式Commit与测试证据"
+          ],
+          "deliverable": "集成分支、关闭状态和可复用仓库",
+          "pass": "没有残留未清理工作树或伪完成状态"
+        },
+        {
+          "title": "⑧ 向人工测试交接",
+          "summary": "交出自动化覆盖边界而非代填业务签收",
+          "checks": [
+            "告知本轮Spec/Tickets、实际自动测试证据和代码审查结论",
+            "标注视觉、第三方/设备、真实角色流程等自动化不能证实的部分",
+            "由下一步manual-testing判断人测，不在此生成或签收人工单",
+            "代码受阻时保留失败证据，不能报告整份Spec完成"
+          ],
+          "deliverable": "供manual-testing读取的代码与真实验证资料",
+          "pass": "自动验证通过不冒充人测已通过"
+        }
+      ],
+      "thinking": [
+        {
+          "given": "两张Tickets都依赖前置设备身份能力，后续告警规则与告警列表可并行",
+          "answer": "只有前置票合入集成分支后，才允许各Agent在独立worktree领取已解锁任务。"
+        }
+      ],
+      "doesNot": [
+        "不自己生成整个项目新Spec/Tickets",
+        "不省略官方TDD或最终原版code-review",
+        "不将浏览器/设备/客户人工业务验收伪装成自动完成",
+        "不替人工测试Skill生成真实结果与签收，不更换已有原型视觉框架"
+      ],
+      "workflow": {
+        "title": "执行流程与失败退回",
+        "steps": [
+          {
+            "title": "载入Ticket DAG",
+            "detail": "读取Spec及阻塞关系，找可解锁前沿"
+          },
+          {
+            "title": "建立集成分支",
+            "detail": "独立分支/按需draft PR"
+          },
+          {
+            "title": "逐票Agent执行TDD",
+            "detail": "各自worktree基于集成分支，提交实现/测试"
+          },
+          {
+            "title": "合入并刷新前沿",
+            "detail": "Merger合并，解锁后续票直到全部完成"
+          },
+          {
+            "title": "最终Code Review",
+            "detail": "整份Spec审查与问题修复"
+          },
+          {
+            "title": "收口与交人测",
+            "detail": "PR/Issue状态、工作树清理、自动证据移交"
+          }
+        ],
+        "gate": {
+          "question": "全部Ticket完成、集成分支结果和原版TDD/最终Review均有证据？",
+          "pass": "结束implement-spec，由manual-testing核对真实人工覆盖",
+          "fail": "退回相关Ticket继续TDD、合并或评审核验，不能宣布Spec实现完成"
+        }
+      },
+      "coverage": [
+        {
+          "title": "Spec依赖图",
+          "must": "票状态、Blocked by、可启动前沿",
+          "evidence": "完整任务DAG及状态",
+          "gap": "把票当顺序列表强行串行"
+        },
+        {
+          "title": "集成分支",
+          "must": "唯一integration branch、独立工作树、按需draft PR",
+          "evidence": "Git分支/commit记录",
+          "gap": "不同Agent代码散落各处"
+        },
+        {
+          "title": "逐票TDD",
+          "must": "每票实际失败→通过及可观察验证",
+          "evidence": "TDD真实命令/输出",
+          "gap": "只写代码未运行测试"
+        },
+        {
+          "title": "增量工程复用",
+          "must": "沿现有前端原型/后端框架开发、迁移SQL版本化",
+          "evidence": "变更Diff及migration",
+          "gap": "新建另一套界面或伪造SQL"
+        },
+        {
+          "title": "合并与前沿",
+          "must": "Merger合入后更新解锁关系、无漏票冲突",
+          "evidence": "Ticket完成/合并状态",
+          "gap": "依赖未完成就实现下游"
+        },
+        {
+          "title": "最终评审",
+          "must": "全部票后原版code-review，修复复查",
+          "evidence": "最终Standards/Spec审查证据",
+          "gap": "用TDD结果代替代码审查"
+        },
+        {
+          "title": "关闭和清理",
+          "must": "Draft PR转ready或Tracker闭票、清理worktrees",
+          "evidence": "集成分支与状态记录",
+          "gap": "无记录宣称整Spec完成"
+        },
+        {
+          "title": "人工交接",
+          "must": "自动化可验证边界与真正需人测的前置条件",
+          "evidence": "实际测试/审查证据",
+          "gap": "替人工填写业务通过"
+        }
+      ],
+      "coverageNote": "本清单表示Skill必须落实的内容，而非已经在真实项目中通过。实际无证据时标待确认、受阻或不适用，不能臆测完成。"
+    }
   },
   {
     "id": "code-review",
@@ -2622,7 +3177,204 @@
       }
     ],
     "maturity": "官方原版，未改动",
-    "adaptation": "原版未改；S15直接执行，不承担S14H中的人工验收签收。"
+    "adaptation": "原版未改；S15直接执行，不承担S14H中的人工验收签收。",
+    "overview": {
+      "headline": "只复盘本次真实AI编码会话，寻找工程环境与自动守卫的可证实改进；不重新验收业务。",
+      "why": "Matt原版retro先调用writing-for-agents，读取会话与Git/CI等一手证据，按导航、自动检查、代码规范、AGENTS、工具效率、无效指令和信息访问提出按严重度排序的建议。未经明确批准不自动改CI或Skill。",
+      "result": "按优先级排列的、有真实来源的Agent工程环境改进建议；获用户批准时再实施（官方不强制固定复盘文件）。",
+      "sectionsTitle": "原版 Retro：8个实际核查维度",
+      "sections": [
+        {
+          "title": "01 一手会话与写作规范",
+          "summary": "不凭笼统感觉复盘",
+          "checks": [
+            "调用官方writing-for-agents以明确Agent指令写作要求",
+            "读取当前或指定编码会话、Git Diff/提交、真实测试和CI日志",
+            "区分实际失败、已存在守卫和主观猜测",
+            "为每个发现记录证据链接/命令/可观察行为"
+          ],
+          "deliverable": "原始证据清单及评审口径",
+          "pass": "所有复盘建议能定位真实会话或仓库"
+        },
+        {
+          "title": "02 导航与隐藏依赖",
+          "summary": "Agent是否花很多时间找文件或重复摸索",
+          "checks": [
+            "检查错误或耗时的目录/模块定位",
+            "核实有无文档导航指针、GLOSSARY/ADR缺口",
+            "优先建议短入口指针而不是复制大型文档"
+          ],
+          "deliverable": "导航问题与最小索引建议",
+          "pass": "改善方案能减少下一次查找成本"
+        },
+        {
+          "title": "03 自动守卫与CI",
+          "summary": "优先阻止可机械发现的重复错误",
+          "checks": [
+            "读取仓库真实lint/check/test命令及CI工作流",
+            "检查已有检查项未接入/失效，不重复造检查",
+            "针对可检测问题优先增加linter、precommit或CI",
+            "没有任何守卫也是潜在改进"
+          ],
+          "deliverable": "现有命令和守卫缺口、最小自动检查方案",
+          "pass": "建议可机器验证，失败能提前变红"
+        },
+        {
+          "title": "04 编码标准与Review规则",
+          "summary": "机械规则交静态检查，判断性规则交Reviewer",
+          "checks": [
+            "按错误属于机械还是主观判断分类",
+            "机械规则优先写确定性检查而非只写CODING_STANDARDS.md",
+            "只把跨文件一致性等判断问题交代码Review",
+            "识别应删减的旧标准"
+          ],
+          "deliverable": "机械检查/人工Review职责归属",
+          "pass": "不通过“再提醒AI注意”代替可运行检查"
+        },
+        {
+          "title": "05 AGENTS与上下文压力",
+          "summary": "避免全局Agent文件变成冗长复制文档",
+          "checks": [
+            "核查CLAUDE/AGENTS过长和重复规则",
+            "把需要详细阅读的资料改为导航指针",
+            "Reviewer负责施加代码标准，Implementer避免过多上下文"
+          ],
+          "deliverable": "最小Agent导航入口或规则迁移建议",
+          "pass": "修改有明确收益而非新增文字负担"
+        },
+        {
+          "title": "06 工具效率与无效指令",
+          "summary": "识别无收益的工具调用和无效指令",
+          "checks": [
+            "查重试过多、无意义的大量文件读取/Token占用",
+            "查AGENTS中没有实际改变行为的no-op内容",
+            "提出更节省上下文、可量化的工具/脚本变化"
+          ],
+          "deliverable": "工具开销与指令收敛建议",
+          "pass": "建议有可重复评估的效果判据"
+        },
+        {
+          "title": "07 信息访问缺口",
+          "summary": "Agent是否因缺少可观测性而错误猜测",
+          "checks": [
+            "查开发日志、只读接口或调试材料不可访问的实际影响",
+            "推荐低风险的信息读取/日志tee方案",
+            "明确权限/脱敏与数据安全边界"
+          ],
+          "deliverable": "信息获取改进与安全条件",
+          "pass": "不为效率要求绕过访问权限"
+        },
+        {
+          "title": "08 优先级与人工批准",
+          "summary": "将复盘变成可追踪且不擅改的行动建议",
+          "checks": [
+            "每项写严重度、真实证据、最小变更与下一次如何验证",
+            "按优先级向用户呈现，不堆空泛“优化开发流程”",
+            "规则/CI/Skill只在用户明确批准后更新",
+            "不替代人工测试或业务任务签收"
+          ],
+          "deliverable": "有证据的优先改进建议及批准状态",
+          "pass": "未批准事项保留建议而不擅自写仓库"
+        }
+      ],
+      "thinking": [
+        {
+          "given": "本轮AI三次犯同一类接口命名错误，而CI里已有lint命令但未执行",
+          "answer": "优先提出接入已有lint而不是新增一段冗长的AGENTS提醒。"
+        }
+      ],
+      "doesNot": [
+        "不替代manual-testing任务签收或模块验收",
+        "不做与本轮真实会话无关的公司级流程改造",
+        "不凭感觉批量修改全局Skill、AGENTS、代码规范与CI",
+        "不强制生成固定复盘md；遵循原版输出建议"
+      ],
+      "workflow": {
+        "title": "执行流程与失败退回",
+        "steps": [
+          {
+            "title": "写作规范＋读会话",
+            "detail": "调用writing-for-agents，读取真实会话/Git/CI"
+          },
+          {
+            "title": "定位工程摩擦",
+            "detail": "导航、自动守卫、规范、工具、可观测性"
+          },
+          {
+            "title": "查现有保护措施",
+            "detail": "确认lint/test/CI是否已经存在或未接线"
+          },
+          {
+            "title": "提出最小改进",
+            "detail": "机械问题优先确定性自动检查"
+          },
+          {
+            "title": "分严重度报告",
+            "detail": "证据/建议/成本/验证方法"
+          },
+          {
+            "title": "用户决定是否实施",
+            "detail": "只落地明确批准的工程环境变更"
+          }
+        ],
+        "gate": {
+          "question": "每条建议都有本轮证据、最小行动及下轮验证方法，并得到必要批准？",
+          "pass": "输出Retro结论；有明确批准才执行相应CI/规范调整",
+          "fail": "删除空泛/无证据建议；未批准不自动改仓库"
+        }
+      },
+      "coverage": [
+        {
+          "title": "一手来源",
+          "must": "指定编码会话、Git Diff、工具日志与CI实测",
+          "evidence": "证据索引",
+          "gap": "凭印象复盘"
+        },
+        {
+          "title": "文件导航",
+          "must": "目录/接口找不到、隐藏依赖及入口指针",
+          "evidence": "导航候选",
+          "gap": "把全文再写进AGENTS"
+        },
+        {
+          "title": "自动守卫",
+          "must": "检查真实lint/check/test/CI，优先接已有命令",
+          "evidence": "可执行自动检查建议",
+          "gap": "只要求AI“下次注意”"
+        },
+        {
+          "title": "代码标准",
+          "must": "机械规则用linter，判断规则给Reviewer",
+          "evidence": "标准职责与验证方式",
+          "gap": "机械规则只写文档"
+        },
+        {
+          "title": "AGENTS上下文",
+          "must": "全局指令冗余与精简导航",
+          "evidence": "可读性/Token改进建议",
+          "gap": "堆积重复规则"
+        },
+        {
+          "title": "工具与no-op",
+          "must": "昂贵调用、无效指令、重复读取",
+          "evidence": "缩减开销措施",
+          "gap": "无证据自称提效"
+        },
+        {
+          "title": "信息访问",
+          "must": "日志可见性、只读外部数据、权限和脱敏",
+          "evidence": "访问缺口及安全方案",
+          "gap": "通过泄密换便利"
+        },
+        {
+          "title": "人工决策",
+          "must": "严重度排序、证据、最小行动与下轮验证",
+          "evidence": "已批准/候选建议",
+          "gap": "未经批准改CI或全局Skill"
+        }
+      ],
+      "coverageNote": "本清单表示Skill必须落实的内容，而非已经在真实项目中通过。实际无证据时标待确认、受阻或不适用，不能臆测完成。"
+    }
   },
   {
     "id": "grill-with-docs",
@@ -2732,32 +3484,80 @@
         {
           "title": "Phase 1 · Build a feedback loop",
           "summary": "优先投入精力建立能对原始Bug变红、修复后变绿的快速确定性执行命令；没有反馈环就停止，不能猜测",
-          "sample": "按实际症状选失败测试、curl脚本、Playwright、回放录制请求等；展示已执行命令及脱敏输出"
+          "sample": "按实际症状选失败测试、curl脚本、Playwright、回放录制请求等；展示已执行命令及脱敏输出",
+          "checks": [
+            "构建真实可重复执行的红灯命令（测试/curl/浏览器/回放等）",
+            "确保捕获的症状与用户报告完全一致",
+            "在可能时缩短耗时、消除随机与环境噪声",
+            "所有日志/HTTP头/截图先脱敏，不能暴露Token"
+          ],
+          "deliverable": "可以失败/恢复验证的反馈环命令和脱敏输出",
+          "pass": "原始Bug能被这个反馈环抓住；无有效反馈环不进入猜因"
         },
         {
           "title": "Phase 2 · Reproduce + minimise",
           "summary": "用反馈环真实复现**同一个用户症状**，持续减少输入、配置和调用环节，直到所有剩余因素都必需",
-          "sample": "从完整报价审批链缩到能稳定触发错误的最小流程"
+          "sample": "从完整报价审批链缩到能稳定触发错误的最小流程",
+          "checks": [
+            "用Phase 1反馈环实际复现原始症状，而非附近报错",
+            "一项项删除无关数据、配置、请求和执行步骤",
+            "每次裁剪都执行反馈环验证仍为红灯",
+            "非确定性Bug应显著提高可复现频率"
+          ],
+          "deliverable": "最小可复现输入/操作与失败证据",
+          "pass": "剩余步骤均对复现必需"
         },
         {
           "title": "Phase 3 · Hypothesise",
           "summary": "一次提出3–5个按可能性排序、能被实验推翻的根因假设，先向用户展示列表",
-          "sample": "每个假设明确“改变X会使错误消失/加重”的可检验预测"
+          "sample": "每个假设明确“改变X会使错误消失/加重”的可检验预测",
+          "checks": [
+            "一次先给出3–5个按可能性排序的假设",
+            "每个假设写具体可证伪预测及验证条件",
+            "先向用户展示假设列表，允许根据领域经验重新排序",
+            "不把第一印象视为确定根因"
+          ],
+          "deliverable": "假设及预测矩阵",
+          "pass": "每个假设都能被单个实验否定或支持"
         },
         {
           "title": "Phase 4 · Instrument",
           "summary": "逐项使用调试器/REPL或定点日志验证假设，一次只改变一个变量；性能问题先测基线",
-          "sample": "临时日志必须打唯一[DEBUG-...]标记，不能全量乱打日志"
+          "sample": "临时日志必须打唯一[DEBUG-...]标记，不能全量乱打日志",
+          "checks": [
+            "优先调试器/REPL，其次定点日志，不“全量打日志”",
+            "每次实验只改变一个变量并记录验证结果",
+            "临时调试日志添加唯一[DEBUG-...]前缀",
+            "性能问题先量测基线、profiling/query plan再修改"
+          ],
+          "deliverable": "针对性实验记录与根因证据",
+          "pass": "可以说出支持/排除每个主要假设的证据"
         },
         {
           "title": "Phase 5 · Fix + regression test",
           "summary": "若有正确测试接缝，先把最小复现转为红灯回归测试，再修复变绿；重跑Phase 1原始完整症状",
-          "sample": "如果没有能真实触发Bug的测试接口，明确记录测试接缝不足"
+          "sample": "如果没有能真实触发Bug的测试接口，明确记录测试接缝不足",
+          "checks": [
+            "有正确测试接缝时先把最小复现写成失败回归测试",
+            "实施最小修复并见证测试变绿",
+            "重新执行Phase 1原始完整故障反馈环",
+            "如无正确接缝，明确记录架构测试缺口不做伪回归"
+          ],
+          "deliverable": "修复提交、回归测试及原始故障消失证据",
+          "pass": "不是仅某个浅层测试绿了，原始症状仍复现"
         },
         {
           "title": "Phase 6 · Cleanup",
           "summary": "重跑原始反馈环、确认回归测试及清理调试日志与临时工具；提交信息写明真实根因",
-          "sample": "确认[DEBUG-...]已经清除、无遗留诊断脚本干扰正式运行"
+          "sample": "确认[DEBUG-...]已经清除、无遗留诊断脚本干扰正式运行",
+          "checks": [
+            "确认反馈环不再失败及回归测试通过",
+            "清理全部临时日志、原型和测试脚手架（按需保留标记）",
+            "提交/PR记录实际根因",
+            "人工缺陷原用例ID复测并保留原失败事实"
+          ],
+          "deliverable": "清理证明、根因、原用例复测记录",
+          "pass": "修复真实覆盖原Bug且没有遗留调试设施"
         }
       ],
       "thinking": [
@@ -2771,7 +3571,86 @@
         "不能将“有6种工具造反馈环”误解为六个阶段",
         "不能只修一个表象而不重跑原始失败路径"
       ],
-      "result": "失败反馈环命令+假设证据+最小修复+回归与人工复测"
+      "result": "原始Bug反馈环/最小复现/假设与根因/修复与回归证据；回到人工测试同用例复测",
+      "workflow": {
+        "title": "执行流程与失败退回",
+        "steps": [
+          {
+            "title": "1 建红灯反馈环",
+            "detail": "能捕获用户原始Bug的真实快速命令"
+          },
+          {
+            "title": "2 复现并最小化",
+            "detail": "保留真正触发异常的最小数据/路径"
+          },
+          {
+            "title": "3 列3–5个假设",
+            "detail": "排序、可证伪预测并先展示给用户"
+          },
+          {
+            "title": "4 单变量插桩",
+            "detail": "调试器/定点日志，性能先测量"
+          },
+          {
+            "title": "5 最小修复与回归",
+            "detail": "正确接缝红→绿，并重跑最初反馈环"
+          },
+          {
+            "title": "6 清理与复测",
+            "detail": "删调试痕迹，记录根因，按人工原用例复测"
+          }
+        ],
+        "gate": {
+          "question": "原始故障反馈环转绿、回归成立且所有调试痕迹已清理？",
+          "pass": "记录根因与修复证据，返回原人工用例复测",
+          "fail": "反馈环未建立/复现不一致时停止猜因；失败继续实验与修复"
+        }
+      },
+      "coverage": [
+        {
+          "title": "原始红灯",
+          "must": "真正捕获用户报告症状、真实命令/脱敏日志",
+          "evidence": "Phase 1反馈环",
+          "gap": "只是读代码猜原因"
+        },
+        {
+          "title": "最小复现",
+          "must": "可重复失败的最小输入/环境、频率",
+          "evidence": "Phase 2复现证据",
+          "gap": "修了另一个相似Bug"
+        },
+        {
+          "title": "排序假设",
+          "must": "3–5个可证伪预测、向用户展示",
+          "evidence": "Phase 3假设矩阵",
+          "gap": "单一拍脑袋假设"
+        },
+        {
+          "title": "实验排除",
+          "must": "一次一个变量、定点日志/调试器与测量",
+          "evidence": "Phase 4实验记录",
+          "gap": "全局日志污染"
+        },
+        {
+          "title": "回归红→绿",
+          "must": "正确测试接缝和原始反馈环均验证",
+          "evidence": "Phase 5实际输出",
+          "gap": "只改代码没重跑原Bug"
+        },
+        {
+          "title": "清理根因",
+          "must": "消除临时工具、DEBUG前缀、描述确定根因",
+          "evidence": "Phase 6清理与Git记录",
+          "gap": "调试日志留在生产"
+        },
+        {
+          "title": "人测原用例复测",
+          "must": "保留第一次失败，按同用例ID更新结果",
+          "evidence": "人工测试表与Bug证据",
+          "gap": "修复后AI代填通过"
+        }
+      ],
+      "coverageNote": "Matt原版六阶段是严格的调试顺序；回归与人工复测均以真实执行证据为准，不代表当前故障已解决。"
     }
   },
   {
@@ -2840,10 +3719,10 @@
     "maturity": "自建可执行初版，需真实项目演练",
     "adaptation": "独立填补人工验收，Matt原版implement-spec和retro正文不改动。",
     "overview": {
-      "headline": "按本轮角色×场景分析真实自动测试证据，再生成必要人工测试单，人工执行同表回填后签收。",
+      "headline": "真实自动化证据→四类覆盖判定→只生成人工必要用例→人实际执行→同用例复测→双角色签收。",
       "why": "Matt原版implement-spec负责开发与代码评审；本Skill单独负责自动验证边界之外的真实人工验收。",
       "result": "人工测试用例与结果.md、模块验收与状态记录.md、项目实施状态.md（签收后）",
-      "sectionsTitle": "从自动证据到真实人工验收",
+      "sectionsTitle": "人工验收4项具体环节（生成与执行不能混淆）",
       "sections": [
         {
           "title": "逐场景核对自动测试证据",
@@ -2909,6 +3788,90 @@
         "不重复自动化TDD/代码审查",
         "不替人填写实际结果和签收",
         "不覆盖已完成任务证据"
+      ],
+      "workflow": {
+        "title": "执行流程与失败退回",
+        "steps": [
+          {
+            "title": "核对自动证据",
+            "detail": "读取本任务场景、TDD/API/浏览器/Review实际输出"
+          },
+          {
+            "title": "四类覆盖分类",
+            "detail": "已自动覆盖/应补自动化/必须人测/受阻"
+          },
+          {
+            "title": "生成待测单",
+            "detail": "角色/前置数据/步骤/通过标准；实际结果留空"
+          },
+          {
+            "title": "人执行并回填",
+            "detail": "开发/测试人员在真实环境验证并填写证据"
+          },
+          {
+            "title": "失败→Bug→原用例复测",
+            "detail": "按原版diagnosing-bugs修复，保留首次失败记录"
+          },
+          {
+            "title": "签收与状态更新",
+            "detail": "技术+业务签收后增量更新项目总控"
+          }
+        ],
+        "gate": {
+          "question": "每个关键场景有真实自动覆盖或人工通过证据，失败/受阻已经解决？",
+          "pass": "签收本任务并更新项目状态，再调用Matt retro",
+          "fail": "漏自动测试退回S12；实际失败转Bug；未测/受阻不得签收"
+        }
+      },
+      "coverage": [
+        {
+          "title": "场景与自动证据",
+          "must": "逐本任务角色×核心场景、真实TDD/API/浏览器及最终review输出",
+          "evidence": "自动覆盖证据矩阵",
+          "gap": "代码写了就填已通过"
+        },
+        {
+          "title": "四类覆盖判定",
+          "must": "自动已通过/应补自动化/必须人工/环境受阻",
+          "evidence": "覆盖缺口分类表",
+          "gap": "把应自动测的交人工凑数"
+        },
+        {
+          "title": "真实设备/权限判断",
+          "must": "视觉/多角色/外部设备与真实第三方（按需）",
+          "evidence": "必要人工测试场景",
+          "gap": "Mock冒充真实现场"
+        },
+        {
+          "title": "可执行人工单",
+          "must": "用例ID、角色、账号、前置数据、操作步骤及可观察判定",
+          "evidence": "人工测试用例与结果.md",
+          "gap": "只写“人工验证通过”无步骤"
+        },
+        {
+          "title": "结果初始空白",
+          "must": "初始状态待执行，实际结果/执行人/日期/证据均空",
+          "evidence": "可人工填写的同一张测试表",
+          "gap": "AI代填完成结果"
+        },
+        {
+          "title": "失败闭环",
+          "must": "Bug进入原版diagnosing-bugs；修复后按原用例ID复测并留历史",
+          "evidence": "Bug与复测关联证据",
+          "gap": "覆盖首次失败记录"
+        },
+        {
+          "title": "真实签收",
+          "must": "开发技术签收+项目经理业务签收，受阻失败未测不得完成",
+          "evidence": "模块验收与状态记录.md",
+          "gap": "技术自测替业务验收"
+        },
+        {
+          "title": "总控增量更新",
+          "must": "仅对本任务签收更新，保留历史；任务通过不等于模块全部通过",
+          "evidence": "项目实施状态.md",
+          "gap": "一个任务通过就宣称全项目完成"
+        }
       ]
     },
     "outputSampleFile": "docs/examples/报价项目/manual-testing/报价模块人工测试示例.md",

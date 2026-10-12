@@ -42,7 +42,7 @@
       "steps": [
         {
           "id": "S00A",
-          "title": "input：已有项目资料",
+          "title": "项目资料",
           "inputs": [
             "docs/input/需求资料/（已确认的项目PRD、模块PRD）",
             "docs/input/工程资料/（已有方案、选型及约束，可为空）",
@@ -59,7 +59,7 @@
         },
         {
           "id": "S00B",
-          "title": "code：已有代码",
+          "title": "现有代码",
           "inputs": [
             "code/（全部既有前端原型、后端框架与其他已有工程；子目录按项目实际结构识别）"
           ],
@@ -83,7 +83,7 @@
       "steps": [
         {
           "id": "S01",
-          "title": "读取并校验项目输入",
+          "title": "项目输入核验",
           "skills": [],
           "inputs": [
             "docs/input/（递归读取全部已提供资料，含需求、工程、环境、对接与新增类别）",
@@ -100,7 +100,7 @@
         },
         {
           "id": "S02",
-          "title": "初始化项目",
+          "title": "Skills 初始化",
           "skills": [
             "setup-matt-pocock-skills"
           ],
@@ -168,7 +168,7 @@
         },
         {
           "id": "S05",
-          "title": "数据库设计（总体）",
+          "title": "数据库总体设计",
           "skills": [
             "data-architecture"
           ],
@@ -190,7 +190,7 @@
         },
         {
           "id": "S06",
-          "title": "初次部署配置：逐环境预填、确认后执行",
+          "title": "初次部署",
           "skills": [
             "development-environment"
           ],
@@ -213,7 +213,7 @@
         },
         {
           "id": "S07",
-          "title": "模块拆分（Matt Tickets 适配）",
+          "title": "业务模块拆分",
           "skills": [
             "module-discovery"
           ],
@@ -259,7 +259,7 @@
       "steps": [
         {
           "id": "S09",
-          "title": "选择本轮模块、校验依赖并完成详细设计（内部Grill）",
+          "title": "本轮模块设计",
           "skills": [
             "module-design"
           ],
@@ -286,7 +286,7 @@
         },
         {
           "id": "S10",
-          "title": "生成本次独立开发任务的 Spec",
+          "title": "编写 Spec",
           "skills": [
             "to-spec"
           ],
@@ -306,7 +306,7 @@
         },
         {
           "id": "S11",
-          "title": "拆分纵向 Tickets 和依赖",
+          "title": "拆分 Tickets",
           "skills": [
             "to-tickets"
           ],
@@ -326,7 +326,7 @@
         },
         {
           "id": "S12",
-          "title": "直接调用 Matt 原版 implement-spec 开发实现",
+          "title": "TDD 实现与审查",
           "skills": [
             "implement-spec"
           ],
@@ -348,7 +348,7 @@
         },
         {
           "id": "S14H",
-          "title": "独立生成测试单、人工执行回填及任务签收",
+          "title": "人工测试与签收",
           "skills": [
             "manual-testing"
           ],
@@ -374,7 +374,7 @@
         },
         {
           "id": "S14B",
-          "title": "诊断与修复 Bug（按需，官方六阶段）",
+          "title": "Bug 诊断与修复",
           "skills": [
             "diagnosing-bugs"
           ],
@@ -397,7 +397,7 @@
         },
         {
           "id": "S15",
-          "title": "直接使用 Matt 原版 retro 复盘开发会话",
+          "title": "开发会话复盘",
           "skills": [
             "retro"
           ],
@@ -442,7 +442,7 @@
       "steps": [
         {
           "id": "S16",
-          "title": "全项目业务链路和权限回归",
+          "title": "系统业务验收",
           "skills": [
             "system-acceptance"
           ],
@@ -467,7 +467,7 @@
         },
         {
           "id": "S17",
-          "title": "非功能指标及上线评审",
+          "title": "上线就绪评审",
           "skills": [
             "release-readiness"
           ],
@@ -488,7 +488,7 @@
         },
         {
           "id": "S18",
-          "title": "生产环境核验、部署预演与回滚准备",
+          "title": "上线预检与预演",
           "skills": [
             "release-preflight"
           ],
@@ -513,7 +513,7 @@
         },
         {
           "id": "S19",
-          "title": "生产部署、验收与交付",
+          "title": "生产部署与交付",
           "skills": [
             "release-delivery"
           ],
@@ -571,7 +571,7 @@
   "iterationFlow": [
     {
       "id": "S09",
-      "title": "选择本轮模块、校验依赖并完成详细设计（内部Grill）",
+      "title": "本轮模块设计",
       "skills": [
         "module-design"
       ],
@@ -594,7 +594,7 @@
     },
     {
       "id": "S10",
-      "title": "生成本次独立开发任务的 Spec",
+      "title": "编写 Spec",
       "skills": [
         "to-spec"
       ],
@@ -613,7 +613,7 @@
     },
     {
       "id": "S11",
-      "title": "拆分纵向 Tickets 和依赖",
+      "title": "拆分 Tickets",
       "skills": [
         "to-tickets"
       ],
@@ -632,7 +632,7 @@
     },
     {
       "id": "S12",
-      "title": "直接调用 Matt 原版 implement-spec 开发实现",
+      "title": "TDD 实现与审查",
       "skills": [
         "implement-spec"
       ],
@@ -652,7 +652,7 @@
     },
     {
       "id": "S14H",
-      "title": "独立生成测试单、人工执行回填及任务签收",
+      "title": "人工测试与签收",
       "skills": [
         "manual-testing"
       ],
@@ -674,7 +674,7 @@
     },
     {
       "id": "S14B",
-      "title": "诊断与修复 Bug（按需，官方六阶段）",
+      "title": "Bug 诊断与修复",
       "skills": [
         "diagnosing-bugs"
       ],
@@ -695,7 +695,7 @@
     },
     {
       "id": "S15",
-      "title": "直接使用 Matt 原版 retro 复盘开发会话",
+      "title": "开发会话复盘",
       "skills": [
         "retro"
       ],
