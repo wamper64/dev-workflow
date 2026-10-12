@@ -1,50 +1,47 @@
-# Skill 采用与来源说明
+# Skill 来源与采用说明
 
-此文档只描述**当前仓库实际采用的Skill及参考机制**，不是改动日志。Matt官方原版文件保持原文，自建/改造部分明确区分“借鉴机制”和“本项目自行制定的规则”。
+本仓库区分 **Matt官方原版**、**参考现有开源机制的自建Skill** 和 **项目级适配**。Skill类型与用途以当前目录为准。原版SKILL.md及其配套文件不修改，参考来源不能替代真实项目的审核证据。
 
-## 一、研发主流程与内部Skills
+## 1. 主流程与内部 Skills
 
-| Skill | 类型 | 参考来源 | 具体学习的机制 / 当前使用方式 |
-|---|---|---|---|
-| `setup-matt-pocock-skills` | Matt原版 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/SKILL.md) | 先探测已有AGENTS.md、GLOSSARY、ADR、issue tracker，再让用户确认；初始化配置要和项目已有结构合并，而不是覆盖；本仓库采用：完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。 |
-| `project-baseline` | 自建 | [来源](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | 借鉴交付前必须有证据的验证门禁，把基线约束的数值/口径和禁止边界变为可审查检查项；项目分类、前置表和资料提取为本项目工作流适配，不是原仓库自带功能；本仓库采用：将原直接形成定量基线改为『自动提取→动态前置确认→裁定→正式约束』；区分需求/约束/设计；整机边界在S03、组件预算在S04；按需专项和项目独有禁止事项覆盖Web、IoT、Agent混合项目。 |
-| `architecture-baseline` | 基于Matt改造 | [来源](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md) | 学习architecture spine：专门锁定后续独立开发单元必须共同遵守的系统级职责、数据Owner和交互不变量，而不是重复每个模块的具体实现。；参考架构沟通应覆盖多种视角，拆开整体组件、运行/部署、质量约束与关键交互，不以单张基础设施图替代系统设计。；在架构设计内部调用grilling决策树与domain-modeling术语/ADR；只追问真正影响全局的未决问题。；复用真实已有代码和接口接缝，避免只为理论架构新增薄包装组件或重复实现。；本仓库采用：PRD与全部docs/input构建组件清单及交互清单，内部调用Grill并保留必要术语/ADR；借鉴BMAD架构骨架的跨团队一致性契约、arc42的组件/运行/交互视角与Matt的决策依赖树，但按定制前后端/Agent+报价系统扩展到六Worker和人工确认/iframe；非已裁定信息明确标候选。；本次在已有全局组件设计基础上，增加真实工程接缝与复用依赖、专项适用性判定、A/B/C冻结及业务覆盖/代码可落地双关卡，不增加步骤或重写Matt原版。 |
-| `data-architecture` | 基于Matt改造 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md) | 学习领域术语歧义澄清、不变量与具体边界场景验证，转化为核心对象、字段语义、状态及关系定义；上游并未提供这套数据库总体三核心模板；学习跨模块统一的架构spine、Owner与契约思想；具体核心数据流程、ER字段契约和S05/S09边界为本仓库自建；本仓库采用：从Matt domain-modeling借鉴术语/不变量澄清，从BMAD借鉴跨模块共享契约；本仓库自行改造为三核心：全局规则→数据生命周期→核心表字段与ER。S05锁跨模块身份/版本/引用，S09补模块细节，S12执行SQL。 |
-| `development-environment` | 自建 | [来源](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | 只有真实运行命令、健康和连通检查有证据才能声称初次部署完成，配置生成不算执行。；本仓库采用：依据用户提供的单机Docker首次部署配置八节模板：自动预填项目事实、逐环境独立配置、未决推荐与人工确认、确认后使用8.1原有提示词，首次不部署应用。借鉴Superpowers真实验证，不照搬外部部署技术栈。 |
-| `module-discovery` | Matt适配 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md) | 研究原版Process 3 Tracer bullet纵向切片、blocking edges、Process 4 Quiz粒度/依赖审核及Process 5发布Tracker的边界：S07复用前三者用于模块级规划，不在模块划分阶段提前发布单上下文开发Ticket；S11才完整使用原版。；借鉴可验收端到端能力和小批量交付原则，使项目模块可以按依赖在不同轮次中交付，不复制另一套Tracker或强制一次性生成全部Tickets。；本仓库采用：以Matt Pocock Skills官方to-tickets为主参考，**明确做项目模块级适配**：采用tracer-bullet纵向交付、blocking edges/依赖DAG、quiz人工粒度审核；原版单上下文Ticket、Issue Tracker发布属于S11而不在S07执行。进一步保留当前工作区必需的项目PRD角色×场景覆盖、既有原型/代码映射和整体架构组件及数据Owner约束。 |
-| `module-design` | 基于Matt改造 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md) | 实现前以现有代码接缝确定接口和职责，必要的领域术语按GLOSSARY继承，模块详细设计只细化本轮模块；将Grill嵌入模块设计内部，只对本轮未决的接口、业务状态和模块边界提问；跨全局变更返回整体架构审核。；学习先追踪既有系统的真实调用与状态责任，再对模块接口/类型/模块边界作有代价的设计草图，并在实现中发现错误时重新设计；用于模块级设计，不替代整体组件及交互架构。；本仓库采用：运用Matt深模块、Interface/Seam的设计原则，以已有原型/若依为约束详化业务状态、页面动作、REST、表字段、迁移设计草案。 已内置Grill并要求每个模块设计引用总体组件及交互ID，禁止越过已批准骨架。 |
-| `to-spec` | Matt原版 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-spec/SKILL.md) | 对已经讨论清楚的设计进行综合，重点包含用户故事、实施/测试决定和排除项；本Skill本身不再次发起访谈，所以Grill必须提前；本仓库采用：完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。 |
-| `to-tickets` | Matt原版 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md) | Ticket按可演示的跨数据库/API/UI/测试垂直切片拆分，并声明阻塞边和批准粒度；拒绝只拆前端、只拆后端的横向任务；本仓库采用：完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。 |
-| `implement-spec` | Matt原版 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md) | 由implement-spec内部完成TDD与code-review并返回真实代码及通过证据，后续只衔接人工未覆盖场景。；学习先识别真实系统启动、健康、用户操作路径、证据和退出/清理，再用能真实运行的浏览器/API脚本验证用户可观察结果；这里只借鉴验证标准，不强制生成额外Skill。；学习把现有页面当视觉基线，在可运行的浏览器上固定相同状态、尺寸并做截图差异，禁止修改原始基线以让比较通过；有截图/真实浏览器环境才声称视觉校验完成。；学习真实浏览器DOM、console、Network、截图与页面互动测试，不用源码静态推断冒充用户可见行为；工具不可用则将场景留入待人工测试单。；本仓库采用：原版未改；当前直接作为S12主Skill，不包装也不额外做人工测试。 |
-| `code-review` | Matt原版 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/code-review/SKILL.md) | Matt原版明确只有Standards和Spec双轴并行评审，并非完整原型视觉验收；最终UI交互由后续联调/人工测试负责；本仓库采用：完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。 |
-| `system-acceptance` | 自建 | [来源](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md) | 验证系统业务链的角色场景和既有回归，区分测试生成、真实执行与最终业务签收；学习使用真实用户触发路径证明业务结果，并保留接口、页面与持久化状态的证据；不能只运行mock或内部setter便宣布端到端通过。；学习用实际浏览器状态和网络请求证实页面行为；当工具/现场系统不可用时标人工待测试或受阻，不冒充实际通过。；本仓库采用：采用BMAD交付后测试的角色/场景视角，但由项目PRD反向生成跨模块主/异常链和权限的系统级验收矩阵。 |
-| `release-readiness` | 自建 | [来源](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | 目标和实测分离，逐项查证性能、安全及回滚是否达到已批准基线；学习把已确认项目基线中的质量阈值变成可执行检查契约；未达标不得通过削弱阈值或跳过测试获得假绿灯。；本仓库采用：将Fresh Evidence规则落实为基线目标对实测值、负载条件、CPU/RSS/并发/P95、恢复指标的逐项放行。 |
-| `release-preflight` | 自建 | [来源](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | 发布前必须实测备份可恢复、迁移可预演和回滚可执行，不拿脚本代替验证；本仓库采用：将执行前证据验证应用于生产机资源、数据库迁移预演、备份恢复和回滚演练，明确不可逆SQL的阻断。 |
-| `release-delivery` | 自建 | [来源](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | 上线成功须有部署日志、版本、冒烟结果和真实服务可用的证据；本仓库采用：将验证前审计应用于真实客户服务器的发布版本、生产冒烟、监控观察和交付签收，未授权不宣称上线。 |
-| `retro` | Matt原版 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md) | 复盘AI编码会话应落到Agent导航、自动检查、规范、工具成本等可实际改动的执行环境，机械错误优先写CI/linters而不是加空泛规则；本仓库采用：原版未改；S15直接执行，不承担S14H中的人工验收签收。 |
-| `grill-with-docs` | Matt原版 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md) | 问题按决策依赖树的前沿分轮提出、每项给推荐，事实由Agent调查，用户裁定后再行动；随讨论澄清术语，仅真实高代价取舍记录ADR；本仓库采用：完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。 |
-| `diagnosing-bugs` | Matt原版 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md) | 逐字对齐六阶段：反馈环→复现最小化→3–5个排序假设→针对性插桩→修复回归→清理，第一阶段需真实执行过能捕捉原始症状的命令。；本仓库采用：完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。 |
-| `manual-testing` | 自建 | [来源](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md) | 区分ready-for-agent和ready-for-human：手工测试、外部访问和判断型工作应明确交还人，不在Agent内部虚构；以真实观察和HITL反馈构造可复现闭环，修复后用同一症状验证；真实运行用户路径与可定位证据，无法真实执行的验证需要显式登记；本仓库采用：独立填补人工验收，Matt原版implement-spec和retro正文不改动。 |
+| Skill | 类型 | 来源与参考 | 学到的机制 | 当前职责 |
+|---|---|---|---|---|
+| `setup-matt-pocock-skills` | Matt原版 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/SKILL.md) | 沿用官方扫描现有Agent/Tracker/Glossary/ADR、用户确认后安全写入的初始化步骤。 | 直接采用Matt官方原版，初始化Agent约定、Issue Tracker与领域文档导航；保留既有配置，按实际情况增量写入。 |
+| `project-baseline` | 自建 | [主参考](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | 借鉴 verification-before-completion 的可观察证据与放行约束；基线分类、自动预填和量化口径由本仓库定义。 | 自建工程约束基线：资料自动提取→仅针对缺口的前置确认→用户裁定→正式基线；要求所有指标量化或可判定，专项按实际Web/IoT/Agent场景启用。 |
+| `architecture-baseline` | 基于Matt改造 | [主参考](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md)、[参考1](https://github.com/arc42/arc42-template/blob/master/README.adoc)、[参考2](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md)、[参考3](https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md) | BMAD的组件/数据Owner不变量、arc42多视角架构描述、Matt codebase-design真实代码接缝以及grill-with-docs决策澄清。 | 自建项目总体架构流程，参考BMAD组件/Owner契约、arc42架构视图、Matt代码接缝与Grill，锁定组件及交互、关键端到端业务链路、工程复用、部署资源和架构冻结；专项按项目证据启用。 |
+| `data-architecture` | 基于Matt改造 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md)、[参考1](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md) | Matt domain-modeling的术语/不变量及BMAD跨模块契约；三核心数据库规则、数据生命周期、表字段及ER设计由本仓库定义。 | 自建数据库总体三核心：整体数据规则→关键数据生命周期→核心表/字段与ER关联，继承领域不变量及跨模块权威Owner；S05冻结核心契约，S09设计模块局部字段，S12实施迁移SQL。 |
+| `development-environment` | 自建 | [主参考](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | 借鉴 verification-before-completion 的实际运行和验收证据；部署依据是真实八节模板而非外部默认环境。 | 自建逐环境初次部署：保留真实项目八节配置模板，依据已确认基线自动预填、处理冲突、逐环境取得配置/执行授权，按模板8.1执行基础服务部署并记录真实本机及异机验收证据。 |
+| `module-discovery` | Matt适配 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md)、[参考1](https://github.com/addyosmani/agent-skills/blob/main/skills/incremental-implementation/SKILL.md) | Matt to-tickets的Tracer bullets、Blocked by依赖和Quiz粒度审查；用于业务模块层级，不在S07发布开发Tickets。 | 项目级适配Matt纵向交付、真实Blocked by与Quiz；以业务职责和核心对象生命周期决定模块拆合，明确独立验收、唯一Owner及模块DAG。S07只输出模块池；S11才用原版to-tickets发布实现任务。 |
+| `module-design` | 基于Matt改造 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md)、[参考1](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md)、[参考2](https://github.com/backnotprop/pstack/blob/main/skills/architect/SKILL.md) | Matt codebase-design的深模块/接口接缝、grill-with-docs的有依据澄清；本仓库细化模块状态/API/局部数据和迁移草案。 | 自建本轮选择、依赖门禁和模块详细设计：借鉴Matt深模块、界面/接口接缝、代码复用与内部Grill；继承既有前端原型和后端框架，细化状态、页面动作、API、局部表字段及迁移设计草案。 |
+| `to-spec` | Matt原版 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-spec/SKILL.md) | Matt原版的问题、方案、用户故事、实现与测试决定、非目标及Tracker发布。 | 直接采用Matt官方原版，为已经澄清的独立任务生成Spec，包含业务故事、实现/测试决定与非目标。 |
+| `to-tickets` | Matt原版 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/to-tickets/SKILL.md) | Matt原版纵向可演示切片、单上下文Ticket、阻塞关系、人工Quiz与逐票发布。 | 直接采用Matt官方原版，将本任务Spec拆成纵向可验收、单上下文可实施的Tickets，声明真实阻塞边并经Quiz确认后发布。 |
+| `implement-spec` | Matt原版 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/implement-spec/SKILL.md)、[参考1](https://github.com/backnotprop/pstack/blob/main/skills/create-verification-skill/SKILL.md)、[参考2](https://github.com/backnotprop/pstack/blob/main/skills/poteto-mode/playbooks/visual-parity.md)、[参考3](https://github.com/addyosmani/agent-skills/blob/main/skills/browser-testing-with-devtools/SKILL.md) | Matt原版Ticket DAG调度、独立worktree、TDD、集成合并与最终Code Review。 | 直接采用Matt官方原版，依Ticket阻塞图实施，内含TDD、合并与最终Code Review；人工测试由后续独立Skill执行。 |
+| `code-review` | Matt原版 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/code-review/SKILL.md) | Matt原版Standards和Spec双轴审查，不把代码评审当作人工业务签收。 | 直接采用Matt官方原版，执行Standards与Spec双轴代码审查；真实业务/视觉验收由专门测试覆盖。 |
+| `system-acceptance` | 自建 | [主参考](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/docs/build/test-completed-work.md)、[参考1](https://github.com/backnotprop/pstack/blob/main/skills/create-verification-skill/SKILL.md)、[参考2](https://github.com/addyosmani/agent-skills/blob/main/skills/browser-testing-with-devtools/SKILL.md) | BMAD角色/场景的交付测试思路与真实端到端证据；覆盖范围来自当前项目PRD。 | 自建全项目系统验收：按已确认PRD的角色×核心场景生成矩阵，在实际触发入口验证跨模块主/异常链、权限、权威状态及缺陷复测。 |
+| `release-readiness` | 自建 | [主参考](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)、[参考1](https://github.com/addyosmani/agent-skills/blob/main/skills/constraint-driven-development/SKILL.md) | verification-before-completion 的验收证据原则；性能/恢复/安全阈值来自已批准项目基线。 | 自建非功能与上线就绪评审：将项目基线中已批准的性能、安全、容量、保留和恢复指标映射到实际测量数据与放行门禁。 |
+| `release-preflight` | 自建 | [主参考](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | verification-before-completion 的可重复放行检查；业务迁移/备份/回滚必须有真实预演证据。 | 自建生产预检：核对真实环境、迁移预演、备份与恢复、回滚及不可逆操作；未具备真实证据则阻断。 |
+| `release-delivery` | 自建 | [主参考](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) | verification-before-completion 的部署结果证据；版本、健康、生产冒烟、观察与客户交付真实留痕。 | 自建真实生产部署和交付：基于批准发布范围验证版本、生产冒烟、监控观察、交接与授权签收。 |
+| `retro` | Matt原版 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/retro/SKILL.md) | Matt原版读取会话、Git/CI/工具成本，优先将重复机械错误转化成可执行守卫。 | 直接采用Matt官方原版，依据编码会话、Git和CI证据提出工程环境/工具/指令改进建议；不代替人工业务签收。 |
+| `grill-with-docs` | Matt原版 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/grill-with-docs/SKILL.md)、[参考1](https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md)、[参考2](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md) | Matt原版调研事实、构建决策依赖树、逐轮向用户提交高影响取舍与ADR。 | 直接采用Matt官方原版，以代码和领域资料为上下文按决策依赖树逐轮提问；高影响决定经用户裁定后记录。 |
+| `diagnosing-bugs` | Matt原版 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md) | Matt原版六阶段红灯反馈、最小复现、可证伪假设、精确实验、回归与清理。 | 直接采用Matt官方原版，遵循红灯反馈环、最小复现、排序假设、定点实验、回归修复和清理的六阶段。 |
+| `manual-testing` | 自建 | [主参考](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md)、[参考1](https://github.com/mattpocock/skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md)、[参考2](https://github.com/backnotprop/pstack/blob/main/skills/create-verification-skill/SKILL.md) | 借鉴真实测试证据、角色场景验收和最小必要人测，结果只由执行者填写。 | 自建独立人工验收：依据真实自动测试结果筛选必须人测的角色×场景，生成待执行用例，真实人员回填、失败同用例复测并签收。 |
 
-## 二、跨阶段按需工具
+## 2. 按需通用 Skills
 
-| 原版 Skill | 官方来源 | 具体借鉴与用途 |
+| Skill | 原版来源 | 具体作用及边界 |
 |---|---|---|
-| `grill-me` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) | 原版仅转调grilling；适用于无工作目录的讨论，避免和工程内置Grill重复。 |
-| `improve-codebase-architecture` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md) | 原版优先热点与深模块设计，复用codebase-design参考；不是自动大规模重构。 |
-| `handoff` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md) | 只在跨工具/目录/协作者或fork副任务时形成文件，且保存到系统临时目录而非工作区；复用现有Spec/ADR链接并脱敏 |
-| `triage` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md) | 五种状态角色和分类，核实原始报告；仅处理新来需求或外部PR而非to-tickets产物。 |
-| `prototype` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/prototype/SKILL.md) | 原版分LOGIC/ UI两类，原型为试验代码，不直接合入正式业务代码。 |
-| `implement` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/implement/SKILL.md) | 原版implement适合按一个Ticket/小变更实施；主流程的implement-spec按任务图实现整份Spec。 |
-| `wayfinder` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/wayfinder/SKILL.md) | 决策票不同于实现票，Map只做规划；完成后转to-spec而非直接开发。 |
-| `research` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/research/SKILL.md) | 调研以官方文档、源码和规范为主，每条关键主张能追溯到归属原始来源 |
+| `grill-me` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md) | 无工程目录的决策追问入口，直接使用grilling；有工程上下文时使用主流程的grill-with-docs。 |
+| `improve-codebase-architecture` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md) | 依据真实Git热点及深模块接缝输出HTML候选报告；需codebase-design支持，不默认执行重构。 |
+| `handoff` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md) | 跨会话、协作者与工具保存准确上下文指针、尚未完成的决定与交接边界。 |
+| `triage` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md) | 对外部Issue/PR检查重复、复现证据和状态；不重复分诊to-tickets自身创建的实现票。 |
+| `prototype` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/prototype/SKILL.md) | 用单次临时交互式逻辑或UI原型验证明确问题，不替换已批准正式原型。 |
+| `implement` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/implement/SKILL.md) | 执行单个Ticket的TDD和Review；整份Spec的任务图使用implement-spec。 |
+| `wayfinder` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/wayfinder/SKILL.md) | 复杂目标跨会话的决策Map、阻塞前沿与逐条决策，不代替业务模块划分。 |
+| `research` | [Matt原版](https://github.com/mattpocock/skills/blob/main/skills/engineering/research/SKILL.md) | 优先一手资料与真实源码调研，结论给来源、边界与证据。 |
 
-## 三、研究参考与当前项目化边界
+## 3. 适用边界
 
-- [Matt Pocock Skills](https://github.com/mattpocock/skills)：原版 `grilling`、`grill-with-docs`、`to-spec`、`to-tickets`、`implement-spec`、`tdd`、`code-review`、`retro` 等用于相应步骤；借鉴拆票的纵向可验证与真实依赖，不声称Matt自带全项目模块规划或完整数据库总体模板。
-- [BMAD Method](https://github.com/bmad-code-org/BMAD-METHOD)：借鉴整体架构不变量（组件职责、Owner和交互）及交付检查，具体Skill/实现参见表格；项目三核心数据库与两级设计边界由本仓库确定。
-- [arc42](https://arc42.org/)：借鉴多视角架构沟通，区别组件、关键行为链路、部署和质量要求；不是直接使用其成品代码。
-- [Superpowers](https://github.com/obra/superpowers)：借鉴verification-before-completion真实证据原则，用在环境、测试与上线放行；不是将它当成项目基线的现成模板。
-- [Addy Osmani Agent Skills](https://github.com/addyosmani/agent-skills)：借鉴增量纵向交付及可执行验证，实际模块边界仍按业务职责/对象生命周期确定。
-
-**审查原则**：来源只能证明设计借鉴的机制，不能证明自建Skill已经在真实客户环境中通过验收。
+- **项目模块与开发Tickets不同**：S07按业务职责、对象生命周期、场景和Owner形成模块池，S11依据当前任务Spec生成实现级Tickets。
+- **全局设计与模块细化不同**：S03定义硬约束，S04定义组件及业务链路，S05定义核心数据规则/对象/表字段/ER，S09仅细化本轮并尊重上游冻结。
+- **规划、执行与验收不同**：Spec/Tickets是实施计划，implement-spec负责真实TDD/Review，manual-testing由人工回填结果；部署配置不代表真实执行成功。
+- **案例不是通用默认值**：报价、IoT、Agent、审批、六Worker等都必须由当前项目PRD、实际代码或正式架构确认后才能启用。
