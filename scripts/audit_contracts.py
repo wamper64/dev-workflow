@@ -188,6 +188,7 @@ if seed.is_file():
 active_skill_text=" ".join((ROOT/"skills"/p/"SKILL.md").read_text(encoding="utf-8")
     for p in ("module-discovery","module-design","system-acceptance","release-readiness","release-preflight","release-delivery"))
 require("S08" not in active_skill_text,"已合并的S08仍残留在正式Skill")
+require("S08" not in json.dumps(data,ensure_ascii=False) and "S08" not in json.dumps(catalog,ensure_ascii=False),"已取消步骤S08仍在导航或快速理解中出现")
 require("17个菜单" not in active_skill_text and "17个菜单" not in json.dumps(data,ensure_ascii=False),"案例菜单数泄漏到通用执行流程")
 for retired in ("input-readiness","human-acceptance","project-retrospective"):
     require(not (ROOT/"docs"/"examples"/"报价项目"/retired).exists(),"已取消步骤的案例目录仍存在："+retired)
@@ -204,6 +205,29 @@ expected_sys=set(lookup["S16"]["outputs"])
 declared_sys=(ROOT/"skills/system-acceptance/SKILL.md").read_text(encoding="utf-8")
 require(all(path in declared_sys for path in expected_sys),"系统验收Skill与导航正式产物不一致")
 require(lookup["S09"]["skillId"]=="module-design" and "S09" in (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8"),"S07至S09交接不完整")
+
+
+# 全部自建文档、当前模板与网站配置不得继续引用已失效的步骤或产物。
+stale_terms=(
+    "S08", "dev-implement-spec", "docs/output/04-开发环境/部署步骤与执行记录.md",
+    "全流程验收报告.md", "17个菜单", "docs/research/skill-sources.md",
+)
+active_documents=[ROOT/"README.md", ROOT/"skills/REFERENCES.md",
+    ROOT/"docs/data/quotation.json", ROOT/"skills/catalog.json",
+    ROOT/"docs/data/project-directory-tree.txt"]
+active_documents+=list((ROOT/"docs").rglob("*.md"))
+active_documents+=list((ROOT/"templates").rglob("*.md"))
+for name in ("architecture-baseline","data-architecture","development-environment",
+             "manual-testing","module-design","module-discovery","project-baseline",
+             "release-delivery","release-preflight","release-readiness","system-acceptance"):
+    active_documents+=list((ROOT/"skills"/name).rglob("*.md"))
+active_documents=list(dict.fromkeys(active_documents))
+for doc in active_documents:
+    content=doc.read_text(encoding="utf-8")
+    for term in stale_terms:
+        require(term not in content,"过时引用出现在现行文档："+str(doc.relative_to(ROOT))+" -> "+term)
+    require(not __import__("re").search(r"(?m)^#{1,4}\s+20[0-9]{2}-[0-9]{2}",content),
+            "文档不应按日期追加版本历史："+str(doc.relative_to(ROOT)))
 
 
 if errors:
