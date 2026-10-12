@@ -257,3 +257,48 @@
 .skill-pillars[data-count="3"] .skill-pillar{padding:14px 12px}
 .skill-pillars[data-count="3"] .skill-pillar:nth-child(3){background:#fdfbf7;border-color:#eadfc8}
 @media(max-width:1150px){.skill-pillars[data-count="3"]{grid-template-columns:1fr}}
+
+/* 设计阶段Skill的执行流程及落地覆盖速查 */
+.quick-route{margin:18px 0 12px}
+.quick-route-track{display:flex;align-items:stretch;gap:6px;overflow-x:auto;padding:3px 2px 10px;scrollbar-width:thin}
+.quick-route-node{min-width:128px;flex:1 0 128px;padding:11px 12px;border:1px solid #dbe7f3;border-top:3px solid #739ec5;border-radius:9px;background:#f6faff;box-sizing:border-box}
+.quick-route-node span{display:block;font-size:10px;font-weight:800;color:#83a5c3}
+.quick-route-node b{display:block;color:#294f74;font-size:12px;line-height:1.45;margin:4px 0}
+.quick-route-node small{display:block;color:#687e97;font-size:11px;line-height:1.55}
+.quick-route-arrow{flex:0 0 12px;display:flex;align-items:center;color:#96a9ba;font-weight:700}
+.quick-route-gate{border-radius:8px;border:1px solid #dbe7f1;background:#fff;padding:10px 12px;color:#385879;font-size:12px;line-height:1.5}
+.quick-route-gate b{color:#285c8b;margin-right:5px}
+.quick-route-branch{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.quick-route-branch p{margin:0;padding:9px 11px;border-radius:8px;border:1px solid #e1eadc;background:#f7faf5;color:#43654d;font-size:11px;line-height:1.6}
+.quick-route-branch p:last-child{border-color:#ebdfd1;background:#fcf8f2;color:#856241}
+.quick-route-branch b{display:block;margin-bottom:2px}
+.quick-coverage{margin:14px 0 21px}
+.quick-coverage-note{font-size:11px;color:#788ca2;line-height:1.6;margin:0 0 10px}
+.quick-coverage-grid{border:1px solid #dee8f3;border-radius:10px;overflow:hidden;background:#fff}
+.quick-coverage-header,.quick-coverage-row{display:grid;grid-template-columns:minmax(95px,.9fr) minmax(160px,2fr) minmax(125px,1.4fr) minmax(125px,1.3fr)}
+.quick-coverage-header{background:#edf4fb;color:#3c6286;font-size:11px}
+.quick-coverage-header b{padding:9px 10px}
+.quick-coverage-row{border-top:1px solid #e7eef5;align-items:start}
+.quick-coverage-row:nth-child(odd){background:#fcfdff}
+.quick-coverage-row>div{padding:10px;font-size:11px;line-height:1.58;color:#516780;overflow-wrap:anywhere;min-width:0}
+.quick-coverage-row>div+div{border-left:1px solid #edf2f7}
+.quick-coverage-name{display:flex;align-items:flex-start;gap:7px}
+.quick-coverage-name small{font-size:10px;color:#93aac0;font-weight:800}
+.quick-coverage-name b{font-size:12px;color:#315977}
+.quick-coverage-row em{display:none;font-size:10px;font-style:normal;color:#8b9eaf;margin-bottom:3px}
+.quick-coverage-row .quick-coverage-risk{color:#936947}
+@media(max-width:800px){
+ .quick-route-node{flex-basis:144px}
+ .quick-route-branch{grid-template-columns:1fr}
+ .quick-coverage-header{display:none}
+ .quick-coverage-row{grid-template-columns:1fr 1fr;padding:5px}
+ .quick-coverage-row>div{padding:8px}
+ .quick-coverage-row>div+div{border-left:0}
+ .quick-coverage-name{grid-column:1/-1;border-bottom:1px dashed #e7edf4}
+ .quick-coverage-row em{display:block}
+ .quick-coverage-risk{grid-column:1/-1}
+}
+@media(max-width:470px){
+ .quick-coverage-row{grid-template-columns:1fr}
+ .quick-coverage-name,.quick-coverage-risk{grid-column:auto}
+}

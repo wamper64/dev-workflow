@@ -167,6 +167,21 @@ function renderCodeReviewAxes(skill){
  +'<div class="skill-topic-grid">'+parts.map((x,i)=>'<article class="skill-topic-card"><span class="skill-topic-index">'+String(i+1).padStart(2,"0")+'</span><h4>'+esc(x.title)+'</h4><p>'+esc(x.detail)+'</p></article>').join("")+'</div><p class="flow-note">流程：固定比较基准与Spec → Standards/Spec双轴审查 → 修复并复审 → 真实联调/原型与人工验证</p></div>';
 }
 
+
+/* 设计阶段快速理解：流程先于具体落地项，帮助审核人定位未覆盖范围。 */
+function renderSkillFlow(f){
+ if(!f?.steps?.length)return "";
+ const nodes=f.steps.map((x,i)=>'<div class="quick-route-node"><span>'+String(i+1).padStart(2,"0")+'</span><b>'+esc(x.title)+'</b><small>'+esc(x.detail||"")+'</small></div>').join('<span class="quick-route-arrow" aria-hidden="true">→</span>');
+ const gate=f.gate||{};
+ return '<section class="quick-route"><div class="skill-overview-title"><h3>'+esc(f.title||"Skill执行流程")+'</h3><span>顺序与退回路径</span></div><div class="quick-route-track">'+nodes+'</div>'
+ +'<div class="quick-route-gate"><b>审核关口：</b>'+esc(gate.question||"")+'</div><div class="quick-route-branch"><p><b>✓ 通过</b>'+esc(gate.pass||"")+'</p><p><b>↶ 未通过</b>'+esc(gate.fail||"")+'</p></div></section>';
+}
+function renderSkillCoverage(a){
+ const items=a.coverage||[];
+ if(!items.length)return "";
+ const entries=items.map((x,i)=>'<div class="quick-coverage-row"><div class="quick-coverage-name"><small>'+String(i+1).padStart(2,"0")+'</small><b>'+esc(x.title)+'</b></div><div><em>必须包含</em>'+esc(x.must)+'</div><div><em>应有产物</em>'+esc(x.evidence)+'</div><div class="quick-coverage-risk"><em>缺失信号</em>'+esc(x.gap)+'</div></div>').join("");
+ return '<section class="quick-coverage"><div class="skill-overview-title"><h3>内容覆盖速查：缺什么一眼可见</h3><span>'+items.length+'个核对维度</span></div><p class="quick-coverage-note">'+esc(a.coverageNote||"这里展示应有内容，并不表示实际已完成。")+'</p><div class="quick-coverage-grid"><div class="quick-coverage-header"><b>维度</b><b>必须明确的具体项</b><b>产物/证据</b><b>常见遗漏</b></div>'+entries+'</div></section>';
+}
 function renderSkillOverview(skill){
  const a=skill.overview;
  if(!a)return skill.reviewAxes?renderCodeReviewAxes(skill):logicDiagram(skill.diagram);
@@ -201,10 +216,12 @@ function renderSkillOverview(skill){
  return '<div class="skill-overview"><div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
   +(facts?'<div class="skill-quick-facts">'+facts+'</div>':"")
   +(pillarCards?'<div class="skill-pillar-heading"><h3>'+esc(a.pillarsTitle||"整体架构的两个核心")+'</h3><p>'+esc(a.pillarsDescription||"先从业务链路反推组件，再用组件架构约束处理流程；两个核心必须互相闭合。")+'</p></div><div class="skill-pillars" data-count="'+(a.pillars||[]).length+'">'+pillarCards+'</div>':"")
+  +renderSkillFlow(a.workflow)
+  +renderSkillCoverage(a)
   +chain
   +'<div class="skill-overview-title"><h3>'+esc(a.sectionsTitle||"此 Skill 涵盖的关键内容") +'</h3><span>'+(a.sections||[]).length+'个具体板块</span></div>'
   +(groupSets||'<div class="skill-topic-grid">'+cards+'</div>')
- +'<div class="skill-overview-title"><h3>'+esc(a.conversionTitle||"输入信息如何形成关键决定？") +'</h3></div><div class="thinking-grid">'+conversions+'</div>'
+ +(conversions?'<div class="skill-overview-title"><h3>'+esc(a.conversionTitle||"输入信息如何形成关键决定？") +'</h3></div><div class="thinking-grid">'+conversions+'</div>':"")
  +'<div class="skill-overview-title"><h3>本 Skill 不处理的内容</h3></div><ul class="skill-exclusions">'+exclusions+'</ul>'
  +(skill.outputSampleFile?'<div class="skill-cta"><span>先查看报价项目示例，再决定是否细读SKILL.md</span><button type="button" data-skill-tab="result">查看示例 →</button></div>':'')+'</div>';
 }
