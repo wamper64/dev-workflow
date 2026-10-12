@@ -45,6 +45,17 @@ for token in ("2.1.3 工程组织","业务场景架构覆盖","A/B/C架构冻结
     require(token in architecture_template,"S04正式模板缺失："+token)
 require("专项" in lookup["S04"]["prompt"] and "冻结" in lookup["S04"]["prompt"],"导航S04提示词未同步新规则")
 require("冻结" in (ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8"),"S09未继承架构冻结规则")
+# S04快速理解不允许只有笼统分类；必须列出具体决策项、产物及可判断的完成条件。
+s04_overview=next(x["overview"] for x in catalog if x["id"]=="architecture-baseline")
+require(len(s04_overview["sections"])==11,"S04快速理解板块数量异常")
+for section in s04_overview["sections"]:
+    require(len(section.get("checks",[]))>=4,"S04具体项不够："+section["title"])
+    require(bool(section.get("deliverable")) and bool(section.get("pass")),"S04交付/完成判定缺失："+section["title"])
+require(len(s04_overview.get("quickFacts",[]))==4,"S04总览缺检查/专项/冻结/审核")
+renderer=(ROOT/"docs/app.js").read_text(encoding="utf-8")
+for token in ("skill-topic-details","skill-topic-delivery","skill-topic-gate","skill-quick-facts"):
+    require(token in renderer,"快速理解渲染逻辑缺失："+token)
+
 
 require("人工测试用例与结果.md" in " ".join(lookup["S12"]["outputs"]),"implement-spec未提供人工测试单")
 require(lookup["S12"]["skillId"]=="dev-implement-spec" and lookup["S12"]["invokes"]==["implement-spec"],"实现步骤必须采用改造Skill内部调用原版")

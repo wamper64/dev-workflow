@@ -205,3 +205,19 @@
 .tree-dialog-tools button{font:inherit;cursor:pointer;border:1px solid #a5c2e2;border-radius:7px;background:#eaf4ff;color:#286298;padding:7px 12px;font-weight:700;white-space:nowrap}
 .project-tree-text{margin:0;padding:16px 22px 24px;overflow:auto;font:12px/1.8 Consolas,"Cascadia Mono","Microsoft Yahei",monospace;tab-size:4;white-space:pre;color:#34536b}
 @media(max-width:850px){.site-header{flex-wrap:wrap;gap:7px}.project-tree-open{padding:8px}.tree-dialog-head{padding:14px}.project-tree-text{font-size:11px;padding:12px}.tree-dialog-tools{flex-wrap:wrap}}
+/* S04快速理解具体项：有checks/deliverable/pass的卡片才显示这些内容 */
+.skill-quick-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:11px 0 4px}
+.skill-quick-fact{display:flex;flex-direction:column;gap:3px;background:#f5f8fd;border:1px solid #e3eaf4;border-radius:9px;padding:10px 12px}
+.skill-quick-fact b{font-size:12px;color:#345675}
+.skill-quick-fact span{font-size:11px;color:#637a93;line-height:1.5}
+.skill-topic-card{min-width:0}.skill-topic-card h4{line-height:1.45}
+.skill-topic-details{padding:10px 0 8px;border-top:1px solid #eef2f7}
+.skill-topic-details>b{display:block;font-size:11px;color:#315f8e;margin-bottom:7px}
+.skill-topic-details ul{list-style:disc;margin:0;padding-left:18px}
+.skill-topic-details li{font-size:12px;color:#455c75;line-height:1.65;margin-bottom:5px}
+.skill-topic-delivery,.skill-topic-gate{display:grid;grid-template-columns:58px minmax(0,1fr);gap:6px;padding:8px 0;border-top:1px dashed #e1e8f1;font-size:11px;line-height:1.65;overflow-wrap:anywhere}
+.skill-topic-delivery b{color:#2c6b8f}.skill-topic-gate b{color:#487257}
+.skill-topic-delivery span,.skill-topic-gate span{color:#4c6179}
+.skill-topic-card .skill-topic-example{margin-top:6px}
+@media(max-width:800px){.skill-quick-facts{grid-template-columns:1fr}}
+
