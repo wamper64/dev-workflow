@@ -190,26 +190,24 @@
         },
         {
           "id": "S06",
-          "title": "开发环境部署",
+          "title": "初次部署配置：逐环境预填、确认后执行",
           "skills": [
             "development-environment"
           ],
           "inputs": [
-            "右侧《开发环境信息表》（用户填写后导出为docs/input/环境资料/开发环境信息.md）",
-            "docs/input/环境资料/（服务器、现存服务、连接权限与网络）",
-            "docs/input/工程资料/（已确定的技术栈与版本）",
-            "docs/output/01-项目基线/项目基线.md",
-            "docs/output/02-整体架构/整体架构设计.md",
-            "docs/output/03-数据库总体/数据库总体设计.md",
-            "code/（可复用的部署脚本和项目代码）"
+            "code/deploy/single-node-docker/初次部署配置.md（现有八节模板，第8.1节内置部署提示词）",
+            "code/deploy/single-node-docker/（真实Compose/SSH/SQL、部署脚本与组件支持）",
+            "docs/input/需求资料/、工程资料/、环境资料/、对接资料/（预填已确认事实）",
+            "docs/output/01-项目基线/项目基线.md、02-整体架构/整体架构设计.md、03-数据库总体/数据库总体设计.md",
+            "当前项目已有code/、环境清单和已验证部署事实"
           ],
           "outputs": [
-            "docs/input/环境资料/开发环境信息.md（用户填写）",
-            "docs/output/04-开发环境/部署步骤与执行记录.md",
-            "必要时：deploy/dev/docker-compose.yml、.env.example（不含凭据）"
+            "code/deploy/single-node-docker/初次部署配置-<环境名称>.md（每个实际环境一份，保留原模板）",
+            "待确认问题、推荐理由与用户对每套配置的明确确认记录",
+            "获批准执行后：本地部署结果README-<环境名称>.md、脱敏运行与本机/异机验收证据"
           ],
-          "review": "用户先完成右侧环境表，记录真实已有环境、连接权限、端口与存储，不填写密码；开发人员按表逐条复用/部署数据库和依赖，执行真实健康及前后端联通验证，未授权或未实际执行不得写通过。",
-          "prompt": "请调用 development-environment（skills/development-environment/SKILL.md），先读取用户在右侧填写并放入docs/input/环境资料/开发环境信息.md的真实信息，结合docs/input/全部资料及工程基线、整体架构、数据库总体设计确定需要部署的MySQL/Redis/消息/文件等实际依赖。首先按模板输出有顺序的部署操作清单和检查命令，区分已有可复用、需安装、不能操作三类；必须在用户允许的环境和权限范围内逐项执行，保存实际退出码、版本、端口、DB/API和前后端联通结果。未完成的操作为待执行，不凭模板推断部署成功。",
+          "review": "先读原有模板并从已有项目资料自动预填，未知值给推荐与待确认，密钥只通过本地私有配置注入。用户逐环境确认完整配置后才按该环境第8.1节提示词执行；一套环境一套独立Compose项目/目录/端口/数据卷。首次只部署基础设施、数据库和中间件，不启动ruoyi和nginx，也不要求jar/dist存在。",
+          "prompt": "调用development-environment（skills/development-environment/SKILL.md）。完整读取code/deploy/single-node-docker/初次部署配置.md（第1～8节及8.1推荐提示词）和真实部署包；从docs/input/全部相关资料、项目基线/整体架构/数据库总体与现有代码自动预填该八节模板。先识别项目有几套首次部署环境；开发、测试两个环境就分别生成初次部署配置-开发环境.md、初次部署配置-测试环境.md，不能共用一个文件覆盖。每套环境必须有独立远程部署目录、Docker Compose项目名、端口、数据卷和账号数据域；未知IP/密码/服务版本/端口占用标待确认并给推荐及依据，秘钥只写私有未提交文件。按每套配置展示填好文档及缺口，由用户逐份确认。【未经当前环境配置确认，不得执行SSH/Docker部署】。确认后才以该环境配置第8.1节推荐提示词为入口执行第8.2节安全检查与首次部署；只启动配置选定且部署包真实支持的数据库/缓存/消息/FTP等基础组件，不检查jar/dist、不启动ruoyi和nginx，预留package目录；按第8.3节真实健康与异机IP/端口验证，各环境分别生成部署结果README，未执行/受阻绝不声称成功。Git提交信息中文且不提交密码/Token。",
           "skillId": "development-environment",
           "skillOrigin": "自建"
         },
