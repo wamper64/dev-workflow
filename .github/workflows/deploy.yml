@@ -8,6 +8,7 @@ on:
       - 'skills/**'
       - 'templates/project/**'
       - 'scripts/build_site.py'
+      - 'scripts/audit_contracts.py'
       - 'scripts/smoke_ui.cjs'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
