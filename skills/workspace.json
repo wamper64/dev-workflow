@@ -1,5 +1,67 @@
 [
   {
+    "id": "grill-me",
+    "name": "无代码目录的深度追问",
+    "summary": "在没有代码工作目录的想法讨论中，按决策树逐轮询问并给建议；有仓库时主流程用grill-with-docs。",
+    "type": "Matt原版",
+    "stepTitle": "通用工具 · 无代码目录的深度追问",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/productivity/grill-me/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md"
+    },
+    "diagram": {
+      "outcome": "在没有代码工作目录的想法讨论中，按决策树逐轮询问并给建议；有仓库时主流程用grill-with-docs。",
+      "input": "真实项目资料、仓库或当前明确任务",
+      "work": [
+        "调用grilling梳理当前未决问题",
+        "按依赖前沿向用户提问并给推荐",
+        "用户裁定后更新下一轮问题"
+      ],
+      "gate": "关键问题均已由用户实际裁定？",
+      "fail": "没有足够事实或用户决定时保留未决，不冒充完成",
+      "pass": "记录结果与依据并交还当前研发阶段",
+      "output": "确认后的设计或计划结论"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md",
+        "learned": "原版仅转调grilling；适用于无工作目录的讨论，避免和工程内置Grill重复。"
+      }
+    ]
+  },
+  {
+    "id": "improve-codebase-architecture",
+    "name": "代码架构改善机会",
+    "summary": "从真实代码热点寻找浅模块和接口接缝问题，生成HTML候选报告，选定后才进入具体改造。",
+    "type": "Matt原版",
+    "stepTitle": "通用工具 · 代码架构改善机会",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/improve-codebase-architecture/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md"
+    },
+    "diagram": {
+      "outcome": "从真实代码热点寻找浅模块和接口接缝问题，生成HTML候选报告，选定后才进入具体改造。",
+      "input": "真实项目资料、仓库或当前明确任务",
+      "work": [
+        "浏览近期Git修改与GLOSSARY/ADR",
+        "根据codebase-design定位模块深度与测试接缝问题",
+        "出具HTML候选报告，用户选择并Grill一项"
+      ],
+      "gate": "候选具备实际代码证据并取得用户选择？",
+      "fail": "没有足够事实或用户决定时保留未决，不冒充完成",
+      "pass": "记录结果与依据并交还当前研发阶段",
+      "output": "架构优化候选HTML报告及已确认决定"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md",
+        "learned": "原版优先热点与深模块设计，复用codebase-design参考；不是自动大规模重构。"
+      }
+    ]
+  },
+  {
     "id": "handoff",
     "name": "会话交接",
     "summary": "跨Harness/目录/协作者切换时保存去敏的上下文接力；同会话一般不必调用",
@@ -32,66 +94,129 @@
     ]
   },
   {
-    "id": "grilling",
-    "name": "决策树逐轮追问",
-    "summary": "按依赖树决定当前可问的问题，给推荐；事实由Agent查，决策由用户确认",
+    "id": "triage",
+    "name": "新需求/Bug Issue分诊",
+    "summary": "对外部Issue/PR验证、去重、分类、状态流转与补充Agent Brief；不分诊本流程自动创建的Tickets。",
+    "type": "Matt原版",
+    "stepTitle": "通用工具 · 新需求/Bug Issue分诊",
     "source": {
       "repo": "mattpocock/skills",
-      "path": "skills/productivity/grilling/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md"
+      "path": "skills/engineering/triage/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md"
     },
-    "type": "Matt原版",
-    "stepTitle": "工作区通用 · 决策树逐轮追问",
     "diagram": {
-      "outcome": "使未决问题按依赖顺序被真正裁决",
-      "input": "由当前任务或用户直接发起",
+      "outcome": "对外部Issue/PR验证、去重、分类、状态流转与补充Agent Brief；不分诊本流程自动创建的Tickets。",
+      "input": "真实项目资料、仓库或当前明确任务",
       "work": [
-        "建立决策树",
-        "找当前前沿可答问题",
-        "一次呈现问题及推荐",
-        "获得答复后更新树并继续"
+        "读取Tracker中的未分诊Issue/外部PR",
+        "核对代码是否已有实现与历史拒绝项",
+        "复现Bug或验证PR，必要时逐轮追问",
+        "请维护者确认分类与状态，再记录Brief"
       ],
-      "gate": "前沿问题是否全部解决？",
-      "fail": "不可假设依赖尚未解决的问题",
-      "pass": "用户确认共享理解",
-      "output": "用户确认共享理解"
+      "gate": "维护者确认分诊状态及证据？",
+      "fail": "没有足够事实或用户决定时保留未决，不冒充完成",
+      "pass": "记录结果与依据并交还当前研发阶段",
+      "output": "Issue标签状态、处理Brief或拒绝理由"
     },
     "referenceLearnings": [
       {
-        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/grilling/SKILL.md",
-        "learned": "按依赖树的frontier分轮提问，每轮给推荐；找事实是Agent的任务，做决策是用户的任务"
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md",
+        "learned": "五种状态角色和分类，核实原始报告；仅处理新来需求或外部PR而非to-tickets产物。"
       }
     ]
   },
   {
-    "id": "domain-modeling",
-    "name": "术语与ADR",
-    "summary": "术语冲突现场澄清；仅不可逆、非显然、真实取舍时记录ADR",
+    "id": "prototype",
+    "name": "临时逻辑/UI原型验证",
+    "summary": "对难以仅凭讨论判断的逻辑状态或UI决策生成可运行临时原型，不改动已确认正式原型样式。",
+    "type": "Matt原版",
+    "stepTitle": "通用工具 · 临时逻辑/UI原型验证",
     "source": {
       "repo": "mattpocock/skills",
-      "path": "skills/engineering/domain-modeling/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md"
+      "path": "skills/engineering/prototype/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/prototype/SKILL.md"
     },
-    "type": "Matt原版",
-    "stepTitle": "工作区通用 · 术语与ADR",
     "diagram": {
-      "outcome": "在设计过程中统一业务术语与必要架构决策",
-      "input": "由当前任务或用户直接发起",
+      "outcome": "对难以仅凭讨论判断的逻辑状态或UI决策生成可运行临时原型，不改动已确认正式原型样式。",
+      "input": "真实项目资料、仓库或当前明确任务",
       "work": [
-        "发现模糊/冲突术语",
-        "结合真实业务场景澄清",
-        "确认后立即更新GLOSSARY",
-        "仅必要时记录高代价ADR"
+        "明确待验证的一个具体问题",
+        "按逻辑状态或UI视觉分支选择原型形式",
+        "让用户实际体验并给出裁定",
+        "在临时分支保留来源，正式设计只继承结论"
       ],
-      "gate": "属于难逆、令人疑惑且有真实取舍的决定？",
-      "fail": "只更新术语或不产文档",
-      "pass": "更新ADR",
-      "output": "更新ADR"
+      "gate": "目标问题已被验证并记录结论？",
+      "fail": "没有足够事实或用户决定时保留未决，不冒充完成",
+      "pass": "记录结果与依据并交还当前研发阶段",
+      "output": "可交互一次性原型和验证结论"
     },
     "referenceLearnings": [
       {
-        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md",
-        "learned": "术语现场澄清、GLOSSARY只记录概念不放实现；ADR要求难以逆转、非显然、真实取舍三个条件全部满足"
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/prototype/SKILL.md",
+        "learned": "原版分LOGIC/ UI两类，原型为试验代码，不直接合入正式业务代码。"
+      }
+    ]
+  },
+  {
+    "id": "implement",
+    "name": "单Ticket实现",
+    "summary": "单张Ticket或小范围明确需求可直接调用Matt原版implement，采用TDD并做Code Review；整份Spec仍用implement-spec。",
+    "type": "Matt原版",
+    "stepTitle": "通用工具 · 单Ticket实现",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/implement/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement/SKILL.md"
+    },
+    "diagram": {
+      "outcome": "单张Ticket或小范围明确需求可直接调用Matt原版implement，采用TDD并做Code Review；整份Spec仍用implement-spec。",
+      "input": "真实项目资料、仓库或当前明确任务",
+      "work": [
+        "读取当前Ticket和验收条件",
+        "按TDD红灯→绿灯→重构实施",
+        "执行代码审查并按反馈修复"
+      ],
+      "gate": "实现、测试与审查均有真实证据？",
+      "fail": "没有足够事实或用户决定时保留未决，不冒充完成",
+      "pass": "记录结果与依据并交还当前研发阶段",
+      "output": "单Ticket代码变更、测试及评审结果"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/implement/SKILL.md",
+        "learned": "原版implement适合按一个Ticket/小变更实施；主流程的implement-spec按任务图实现整份Spec。"
+      }
+    ]
+  },
+  {
+    "id": "wayfinder",
+    "name": "大型未知项目决策地图",
+    "summary": "目标清楚但路线不明确、跨多会话的大型工作，建立Map并逐张解决决策Ticket；不取代模块拆分。",
+    "type": "Matt原版",
+    "stepTitle": "通用工具 · 大型未知项目决策地图",
+    "source": {
+      "repo": "mattpocock/skills",
+      "path": "skills/engineering/wayfinder/SKILL.md",
+      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/wayfinder/SKILL.md"
+    },
+    "diagram": {
+      "outcome": "目标清楚但路线不明确、跨多会话的大型工作，建立Map并逐张解决决策Ticket；不取代模块拆分。",
+      "input": "真实项目资料、仓库或当前明确任务",
+      "work": [
+        "确定最终Destination与规划边界",
+        "建立Map和Research/Prototype/Grilling/Task决策票及阻塞",
+        "每个会话解决一张决策票并扩展可见前沿",
+        "全部决策清晰时交给to-spec"
+      ],
+      "gate": "抵达目标前的关键决策是否已全部解决？",
+      "fail": "没有足够事实或用户决定时保留未决，不冒充完成",
+      "pass": "记录结果与依据并交还当前研发阶段",
+      "output": "决策Map、阻塞前沿和逐票决定"
+    },
+    "referenceLearnings": [
+      {
+        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/wayfinder/SKILL.md",
+        "learned": "决策票不同于实现票，Map只做规划；完成后转to-spec而非直接开发。"
       }
     ]
   },
@@ -124,102 +249,6 @@
       {
         "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/research/SKILL.md",
         "learned": "调研以官方文档、源码和规范为主，每条关键主张能追溯到归属原始来源"
-      }
-    ]
-  },
-  {
-    "id": "wizard",
-    "name": "人工环境操作指引",
-    "summary": "只对AI无法自动完成的环境配置逐步引导人操作",
-    "source": {
-      "repo": "mattpocock/skills",
-      "path": "skills/engineering/wizard/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/SKILL.md"
-    },
-    "type": "Matt原版",
-    "stepTitle": "工作区通用 · 人工环境操作指引",
-    "diagram": {
-      "outcome": "指导人完成AI无权或不能自动操作的环境步骤",
-      "input": "由当前任务或用户直接发起",
-      "work": [
-        "识别必须由人完成的操作",
-        "说明安全、前置条件和风险",
-        "一步一步指导并等待真实结果",
-        "校验状态再继续"
-      ],
-      "gate": "人已实际完成并有反馈证据？",
-      "fail": "停止，指导检查而非编造结果",
-      "pass": "记录为已核验的前置依赖",
-      "output": "记录为已核验的前置依赖"
-    },
-    "referenceLearnings": [
-      {
-        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/wizard/SKILL.md",
-        "learned": "面向无法自动完成的人工环境配置，而不是绕过权限或假称已执行"
-      }
-    ]
-  },
-  {
-    "id": "pr",
-    "name": "PR交付说明",
-    "summary": "把代码变更以最小图示/文件树说明，给出前后验证证据及合并风险；仅在需要PR或变更审核时调用",
-    "source": {
-      "repo": "mattpocock/skills",
-      "path": "skills/engineering/pr/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/pr/SKILL.md"
-    },
-    "type": "Matt原版",
-    "stepTitle": "通用工具 · PR交付说明",
-    "diagram": {
-      "outcome": "让审核人迅速了解实际修改、验证证据和合并风险",
-      "input": "当前实际Git Diff、测试截图/命令或提交",
-      "work": [
-        "选最能说明改动的图示、diff或文件树",
-        "整理修改前后的真实测试证据",
-        "评估可回滚性与影响范围",
-        "生成简洁PR说明"
-      ],
-      "gate": "是否有真实Diff和验证证据？",
-      "fail": "缺失证据时标注受阻，不伪造通过",
-      "pass": "提交有证据和风险提示的PR正文",
-      "output": "PR Summary / Evidence / Merge Danger"
-    },
-    "referenceLearnings": [
-      {
-        "url": "https://github.com/mattpocock/skills/blob/main/skills/engineering/pr/SKILL.md",
-        "learned": "以Summary、Evidence、Merge Danger三部分生成审阅友好的PR正文，结构表达优先使用图/树/diff。"
-      }
-    ]
-  },
-  {
-    "id": "to-questionnaire",
-    "name": "生成外部确认问卷",
-    "summary": "开发/PM无法决定而客户、第三方或技术负责人掌握答案时，把缺失的事实/决策转成可填写Markdown问卷",
-    "source": {
-      "repo": "mattpocock/skills",
-      "path": "skills/productivity/to-questionnaire/SKILL.md",
-      "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/to-questionnaire/SKILL.md"
-    },
-    "type": "Matt原版",
-    "stepTitle": "通用工具 · 外部问卷",
-    "diagram": {
-      "outcome": "让掌握信息的相关方一次性提供真实可用的决定或数据",
-      "input": "接收方的角色和需要其回答的事实/决策",
-      "work": [
-        "明确问卷发给谁与其知识背景",
-        "只询问用户能解释的交付目标",
-        "按重要性生成简洁可填写问题和回答栏",
-        "收回真实答复再输入原研发步骤"
-      ],
-      "gate": "每个问题都有接收人且对应实际未知事项吗？",
-      "fail": "信息由代码/文档可查时先查，不强制向客户提问",
-      "pass": "导出供相关方填写的Markdown问卷",
-      "output": "to-questionnaire-<slug>.md"
-    },
-    "referenceLearnings": [
-      {
-        "url": "https://github.com/mattpocock/skills/blob/main/skills/productivity/to-questionnaire/SKILL.md",
-        "learned": "只先核实问卷发给谁、需要什么答案，随后针对外部知识缺口写问题，允许部分回答。"
       }
     ]
   }

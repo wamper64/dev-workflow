@@ -713,12 +713,13 @@
     }
   ],
   "workspaceSkills": [
+    "grill-me",
+    "improve-codebase-architecture",
     "handoff",
-    "grilling",
-    "domain-modeling",
-    "research",
-    "wizard",
-    "pr",
-    "to-questionnaire"
+    "triage",
+    "prototype",
+    "implement",
+    "wayfinder",
+    "research"
   ]
 }

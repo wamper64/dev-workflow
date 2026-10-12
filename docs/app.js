@@ -6,7 +6,7 @@ const toolkitPhase=()=>({
  title:"通用 Skills",
  kind:"toolkit",
  owner:"按需使用的开发人员、项目经理或技术总监",
- description:"贯穿所有研发阶段的辅助能力。选择 Skill 后查看用途、调用时机和完整文件；它们不是强制研发步骤，也不改变主流程的先后顺序。",
+ description:"仅显示用户指定、且没有在项目准备与设计和模块迭代开发中直接或内部固定调用的Matt工具。它们按需调用，不新增强制研发阶段。",
  steps:(skillData?.workspace||[]).map(w=>({
    id:"T_"+w.id,
    title:w.name,
