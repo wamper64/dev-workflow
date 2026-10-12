@@ -70,8 +70,8 @@ for s in payload["skills"]:
         ):
             assert required in s["files"], required
 assert custom_count == 11
-assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 29
-assert len(workspace) == 7
+assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 35
+assert len(workspace) == 8
 assert not any((ROOT / "skills" / old).exists() for old in ("input-readiness", "human-acceptance")), "旧的步骤型Skill应移除"
 assert all(x["source"]["url"].startswith("https://github.com/mattpocock/skills/") for x in workspace)
 assert set(x["id"] for x in workspace).isdisjoint(known)
@@ -101,7 +101,9 @@ assert not any((ROOT / "skills").glob("*/examples")), "示例目录必须与安�
 
 # 交付检查覆盖全部技能与官方依赖。
 for needed in ("grill-with-docs", "grilling", "domain-modeling", "handoff",
-               "diagnosing-bugs", "implement-spec", "research", "wizard"):
+               "diagnosing-bugs", "implement-spec", "research", "wizard",
+               "grill-me", "improve-codebase-architecture", "triage",
+               "prototype", "implement", "wayfinder", "codebase-design"):
     assert (ROOT / "skills" / needed / "SKILL.md").is_file(), needed
 
 
@@ -117,7 +119,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
             z.write(f, f.relative_to(ROOT).as_posix())
     z.writestr("安装说明.md",
         "# 标准项目研发 Skills\n\n"
-        "包含19个主Skill和10个通用/执行依赖（共29份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
+        "包含19个主Skill、8个通用入口与8个其它内置/执行依赖（共35份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
         "请将 skills/ 目录用于研发Agent工作区；"
         "把 templates/project/docs/ 及 templates/project/code/ 的初始化资料复制到真实项目，"
         "实际PRD和已有前后端源码由项目方提供，不包含在下载包中。\n"
@@ -125,7 +127,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         "Matt 官方原版所需的版权和许可说明见 skills/LICENSE-Matt-Pocock.txt。\n")
 with ZipFile(archive) as z:
     names = z.namelist()
-    assert len([n for n in names if n.endswith("/SKILL.md")]) == 29
+    assert len([n for n in names if n.endswith("/SKILL.md")]) == 35
     assert not any(n.endswith(("REFERENCES.md", "catalog.json", "workspace.json")) for n in names)
     assert "skills/project-baseline/scripts/check_inputs.py" in names
     assert "skills/setup-matt-pocock-skills/issue-tracker-local.md" in names
@@ -136,8 +138,9 @@ with ZipFile(archive) as z:
     assert "skills/manual-testing/SKILL.md" in names
     assert "skills/manual-testing/assets/manual-test-template.md" in names
     assert "templates/project/code/deploy/single-node-docker/初次部署配置.md" in names, "首次部署原始模板未进入安装包"
+    assert all("skills/"+s+"/SKILL.md" in names for s in ("grill-me","improve-codebase-architecture","triage","prototype","implement","wayfinder","codebase-design"))
     assert "skills/pr/SKILL.md" in names and "skills/to-questionnaire/SKILL.md" in names
-    assert not any(n.startswith(("skills/grill-me/","skills/project-retrospective/","skills/iteration-planning/","skills/dev-implement-spec/","skills/iteration-close/")) for n in names)
+    assert not any(n.startswith(("skills/project-retrospective/","skills/iteration-planning/","skills/dev-implement-spec/","skills/iteration-close/")) for n in names)
     assert not any("/examples/" in n for n in names), "Skill ZIP不应包含项目示例"
     assert not any(n.startswith(("skills/input-readiness/", "skills/human-acceptance/")) for n in names), "已取消的步骤Skill不应包含在ZIP"
 

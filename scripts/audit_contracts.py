@@ -13,7 +13,7 @@ errors=[]
 def require(v,msg):
     if not v: errors.append(msg)
 require(len(lookup)==len(steps)==20 and len(data["phases"])==4,"阶段或步骤数量不一致")
-require(len(catalog)==19 and len(workspace)==7,"主Skill或工具箱数量错误")
+require(len(catalog)==19 and len(workspace)==8,"主Skill或工具箱数量错误")
 require(data["title"]=="标准项目研发导航","导航标题未标准化")
 require(not data.get("modules"),"标准导航不可预设报价项目模块")
 require(len(data["iterationFlow"])==len(data["phases"][2]["steps"])==7,"模块迭代流程长度不同步")
@@ -110,8 +110,12 @@ require("code-review" in lookup["S12"]["prompt"] and "TDD" in lookup["S12"]["pro
 require(lookup["S15"]["skillId"]=="retro" and not lookup["S15"].get("invokes"),"S15须直接使用Matt原版retro")
 require(all(p["id"] != "P04" for p in data["phases"]),"最后不应有重复retro阶段")
 require("project-retrospective" not in skills and not (ROOT/"skills/project-retrospective").exists(),"旧最终复盘Skill仍存在")
-require({x["id"] for x in workspace}=={"handoff","grilling","domain-modeling","research","wizard","pr","to-questionnaire"},"通用Skills去重与清单不一致")
-require(not (ROOT/"skills/grill-me").exists(),"轻量Grill冗余入口未移除")
+expected_workspace=["grill-me","improve-codebase-architecture","handoff","triage","prototype","implement","wayfinder","research"]
+require([x["id"] for x in workspace]==expected_workspace,"通用Skills名单或排序错误")
+for duplicate in ("grill-with-docs","tdd","grilling","domain-modeling","diagnosing-bugs","code-review","to-spec","to-tickets"):
+    require(duplicate not in expected_workspace,"通用入口重复主流程："+duplicate)
+for helper in ("grilling","domain-modeling","tdd","code-review","codebase-design"):
+    require((ROOT/"skills"/helper/"SKILL.md").is_file(),"Matt依赖缺失："+helper)
 require(lookup["S14H"]["skillId"]=="manual-testing" and "人工测试用例与结果.md" in " ".join(lookup["S14H"]["outputs"]),"S14H应有独立人工测试Skill")
 require("Phase 1" in lookup["S14B"]["prompt"] and "diagnosing-bugs" in lookup["S14B"]["prompt"],"Bug诊断需调用原版六阶段")
 require("初次部署配置.md" in " ".join(lookup["S06"]["inputs"]) and "8.1" in lookup["S06"]["prompt"],"S06应读原模板，确认后按8.1执行")

@@ -31,7 +31,7 @@ async function main(){
    return element;
  };
  assert.equal(doc.querySelectorAll("#stage-list button[data-phase]").length,5,"四个工作阶段加通用工具应可点击");
- assert.match(doc.querySelector("#project-stats").textContent,/4 个阶段.*7 个通用Skill/);
+ assert.match(doc.querySelector("#project-stats").textContent,/4 个阶段.*8 个通用Skill/);
  assert.ok(!doc.getElementById("project-stats").textContent.includes("正在载入"),"JS未完成初始化");
  click('[data-phase="P01"]');
  assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"准备设计步骤错误");
@@ -168,31 +168,32 @@ async function main(){
  assert.match(doc.querySelector("#step-detail").textContent,/grill-with-docs/,"模块详细设计内必须包含Grill");
  click('[data-phase="P01"]');
  click('[data-phase="PTOOLS"]');
- assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"通用Skill应展示7个");
+ assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,8,"通用Skill应展示8个");
  assert.match(doc.querySelector("#stage-intro").textContent,/通用 Skills/);
  assert.match(doc.querySelector("#step-heading-title").textContent,/通用 Skill/);
+ const toolboxExpected=["grill-me","improve-codebase-architecture","handoff","triage","prototype","implement","wayfinder","research"];
+ const toolboxActual=[...doc.querySelectorAll("#step-list button[data-step]")].map(x=>x.dataset.step.slice(2));
+ assert.deepEqual(toolboxActual,toolboxExpected,"工具箱顺序或去重不符");
+ for(const removed of ["grill-with-docs","tdd","grilling","domain-modeling","diagnosing-bugs","code-review","to-spec","to-tickets","wizard","pr","to-questionnaire"]){
+  assert.equal(doc.querySelectorAll("[data-step=\"T_"+removed+"\"]").length,0,"应从通用入口去除："+removed);
+ }
+ for(const id of toolboxExpected){
+  click('[data-step="T_'+id+'"]');
+  assert.ok(doc.querySelector('#step-detail [data-skill="'+id+'"]'),"没有对应的Skill预览按钮："+id);
+  click('[data-skill="'+id+'"]');
+  click('[data-skill-tab="files"]');
+  click('[data-skill-file="SKILL.md"]');
+  assert.ok(doc.getElementById("skill-dialog-content").textContent.length>50,"原版SKILL文件未呈现："+id);
+  click("[data-skill-close]");
+ }
  click('[data-step="T_handoff"]');
- assert.match(doc.querySelector("#step-detail").textContent,/跨阶段通用工具/);
- assert.match(doc.querySelector("#step-detail").textContent,/跨Harness|协作者|交接/);
  assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/\/handoff/);
- click('[data-skill="handoff"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/跨工具|跨目录|交接/);
- click('[data-skill-tab="files"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/temporary directory/);
- click("[data-skill-close]");
  click('[data-step="T_research"]');
- assert.match(doc.querySelector("#step-detail").textContent,/一手来源|原始资料/);
  assert.equal(dom.window.location.hash,"#phase=PTOOLS&step=T_research");
- click('[data-step="T_wizard"]');
- assert.match(doc.querySelector("#step-detail").textContent,/人工|配置/);
- click('[data-step="T_pr"]');
- assert.match(doc.querySelector("#step-detail").textContent,/PR|合并风险/);
- click('[data-skill="pr"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/证据|合并风险|PR/);
- click("[data-skill-close]");
- click('[data-step="T_to-questionnaire"]');
- assert.match(doc.querySelector("#step-detail").textContent,/填写|问卷/);
- assert.equal(doc.querySelectorAll('[data-step="T_grill-me"]').length,0,"不应重复展示Grill入口");
+ click('[data-step="T_wayfinder"]');
+ assert.match(doc.querySelector("#step-detail").textContent,/决策|Map/);
+ click('[data-step="T_implement"]');
+ assert.match(doc.querySelector("#step-detail").textContent,/Ticket/);
  click("#tree-open");
  assert.equal(doc.getElementById("tree-dialog").open,true,"目录树未打开");
  assert.match(doc.getElementById("tree-content").textContent,/项目根目录/);
@@ -208,7 +209,7 @@ async function main(){
  const all=fs.readFileSync(path.join(root,"scripts","build_site.py"),"utf8");
  assert.match(all,/skills-bundle\.zip|ZipFile/,"必须生成实际Skills压缩包");
  assert.equal(errors.length,0,"浏览器脚本异常："+errors.join("\n"));
- console.log("交互回归通过：标准项目导航、输入提示词、外置案例、原版开发与独立人工测试、人工测试独立Skill、Bug诊断、工具箱与29份Skill ZIP");
+ console.log("交互回归通过：标准项目导航、输入提示词、外置案例、原版开发与独立人工测试、人工测试独立Skill、Bug诊断、8个通用工具与35份Skill ZIP");
  dom.window.close();
 }
 main().catch(err=>{console.error(err);process.exitCode=1;dom.window.close()});
