@@ -58,7 +58,7 @@ for ref in ("architecture-applicability.md","engineering-contract.md","freeze-an
     require((ROOT/"skills/architecture-baseline/references"/ref).is_file(),"S04缺参考文件："+ref)
 for token in ("工程组织","允许依赖","架构冻结","角色×核心场景","grill-with-docs"):
     require(token in architecture or token in architecture_template,"S04契约缺失："+token)
-for token in ("2.1.3 工程组织","业务场景架构覆盖","A/B/C架构冻结清单"):
+for token in ("2.1.3 工程组织","2.3.1 核心链路目录", "2.5 双核心互检","A/B/C架构冻结清单"):
     require(token in architecture_template,"S04正式模板缺失："+token)
 require("专项" in lookup["S04"]["prompt"] and "冻结" in lookup["S04"]["prompt"],"导航S04提示词未同步新规则")
 require("冻结" in (ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8"),"S09未继承架构冻结规则")
