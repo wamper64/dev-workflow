@@ -22,7 +22,9 @@
 - **本仓库自行改造内容**：新增 constraint-discovery（需求/约束/设计三分法和需求量化抽取）、applicability（8个通用维度及条件专项）、preconfirmation-template（AI已知自动预填、只问缺口）；调整基线模板、量化标准、禁止/责任边界和整机资源上限与S04组件预算的边界。
 - **对应实现文件**：`skills/project-baseline/SKILL.md`、`assets/preconfirmation-template.md`、`assets/baseline-template.md`、`references/constraint-discovery.md`、`references/applicability.md`及各审核规则。报价示例和网站S03同步更新，但示例数字均非真实项目事实。
 
-### architecture-baseline（已补充执行图、失败路径和验收证据）
+### architecture-baseline（组件架构与核心业务链路双核心）
+- **本次双核心增强**：延续BMAD architecture spine中跨模块组件/Owner/交互约束、arc42多视角、Matt codebase-design对已有代码接缝的复用；自建“关键业务链路目录→架构级处理流程→状态/异常→组件与链路双向核验”的落地规则，供定制Web、IoT、Agent与第三方集成项目复用。以上链路规则为本项目适配，不声称上游Skill要求固定告警/MQ流程。
+- **落实文件**：`skills/architecture-baseline/SKILL.md`、`assets/architecture-template.md`、`references/core-business-flows.md`、`references/architecture-gate.md`、`docs/data/quotation.json`、`skills/catalog.json`、`docs/app.js`，及模块详细设计继承约束。
 - **2026-10-12本次增强与具体借鉴机制**：继续借鉴BMAD architecture spine的跨模块组件/Owner/交互不变量、arc42的组件/运行/部署及跨领域视角、Matt codebase-design的真实接缝复用而非重造、Matt grill-with-docs的只询问全局高代价未决决策。本项目自行适配为“真实前后端代码落点/允许依赖”“Web/IoT/Agent/第三方按条件启用”“A/B/C冻结及双关卡”。这三项是本项目的实施规则，不冒充某个上游Skill的原文。
 - **落实位置**：`skills/architecture-baseline/SKILL.md`、`assets/architecture-template.md`、`references/architecture-applicability.md`、`engineering-contract.md`、`freeze-and-change.md`及`architecture-gate.md`；同时同步网站S04与S05/S09/S12。
 - 项目中的实际用途：递归读取全部docs/input，识别全项目所有主要组件/运行单元和跨组件交互，内部Grill补足决策，形成可供下游填充的完整骨架。
