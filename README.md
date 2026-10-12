@@ -25,7 +25,7 @@
 
 左栏为工作阶段，中栏为步骤，右栏为所用Skill、输入、输出、审核和可复制中文提示词。点击Skill可以选择按其特点设计的快速理解、报价项目示例、完整目录文件以及**逐文件开源研究来源与实际借鉴机制**。
 
-左侧「工作阶段」下方独立展示「通用 Skills」入口（共7项，含handoff、grilling、research、domain-modeling、wizard、pr和to-questionnaire）；右侧可查看用途、执行方式与官方全部文件。右上角新增「项目目录树」：按当前四阶段、每个步骤的预期产物绘制完整树并加中文注释，支持复制；另可下载全部Skills ZIP。
+左侧「工作阶段」下方独立展示「通用 Skills」入口（共8项：grill-me、improve-codebase-architecture、handoff、triage、prototype、implement、wayfinder、research）；右侧可查看用途、执行方式与官方全部文件。右上角新增「项目目录树」：按当前四阶段、每个步骤的预期产物绘制完整树并加中文注释，支持复制；另可下载全部Skills ZIP。
 
 ## 当前流程
 
@@ -36,7 +36,7 @@
 | 2 模块迭代开发 | **module-design选择/依赖/详细设计**→Matt to-spec→to-tickets→**原版implement-spec**→**独立manual-testing**生成用例/人工回填/签收→按需diagnosing-bugs→**原版retro**→下一轮 |
 | 3 全项目验收与部署 | 系统业务验收→非功能上线评审→生产预演与回滚→正式部署交接 |
 
-共**4个阶段、20个导航步骤**，其中准备工作2项只展示输入，S01无独立Skill。Skill目录含**19份主流程/内部调用Skill**，另有7个通用工具与3个官方依赖，共**29份SKILL.md**。实际模块数量须从PRD识别；报价项目的案例单独放在 `docs/examples/报价项目/`。
+共**4个阶段、20个导航步骤**，其中准备工作2项只展示输入，S01无独立Skill。Skill目录含**19份主流程/内部调用Skill**，另有8个通用入口与8个内置/执行依赖，共**35份SKILL.md**。实际模块数量须从PRD识别；报价项目的案例单独放在 `docs/examples/报价项目/`。
 
 ## Skill质量与采用原则
 
@@ -142,3 +142,10 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 ### 项目初始化模板补充
 
 安装包中保留了用户提供的原始《单机 Docker 首次部署配置模板》（完整第1–8节及第8.1节提示词），路径为 `templates/project/code/deploy/single-node-docker/初次部署配置.md`。新项目缺少该文件时可复制至 `code/deploy/single-node-docker/初次部署配置.md`；真实项目**已存在的配置不覆盖**。该模板**不是实际可运行的部署包**，仍需读取客户项目自己的Docker Compose、SQL与SSH脚本。配套 `.gitignore` 用于避免提交本地SSH和Compose私有配置。
+
+## 2026-10-12：通用 Skills 按指定名单去重
+
+- 仅展示图片指定且未在项目准备与设计、模块迭代开发直接或内部使用的8项：`grill-me`、`improve-codebase-architecture`、`handoff`、`triage`、`prototype`、`implement`、`wayfinder`、`research`。
+- `grill-with-docs`、`grilling`、`domain-modeling`、`tdd`、`code-review`、`diagnosing-bugs`、`to-spec`、`to-tickets` 已由前两个阶段直接或内置调用，不在通用菜单重复列出。
+- `implement` 用于单Ticket或小规模明确改动；既有S12使用`implement-spec`处理整份Spec任务图，二者职责不同。`wayfinder`的Map用于多会话决策规划，不替代S07的全项目业务模块识别。`grill-me`仅在无仓库的普通讨论中使用。
+- 补入缺失的Matt原版技能、附带文件及`improve-codebase-architecture`必需的`codebase-design`参考。原仓库已有其它技能仍可用于具体任务，但不作为本次通用导航入口。

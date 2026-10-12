@@ -184,3 +184,16 @@
 - 用户提供《初次部署配置.md》原始八节，特别引用第8.1节推荐提示词、第8.2节实际部署步骤及第8.3节验收/README要求；此真实文件放在**具体客户项目**的`code/deploy/single-node-docker/`，非本仓库通用实例。
 - 从真实项目资料自动预填、一环境一配置、逐份人审确认后执行，不覆盖原模板/其它环境，不运行ruoyi/nginx。
 - [Superpowers verification-before-completion](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)：借鉴真实命令与结果必须对应，不冒充部署已成功。
+
+## 2026-10-12 通用 Skill 去重与直接引用
+
+本轮仅调整网站按需调用入口，主流程已有的直接/内部Skill仍保留。以下全部采用Matt官方原版，不改写其指令文件：
+
+- [grill-me](https://github.com/mattpocock/skills/blob/main/skills/productivity/grill-me/SKILL.md)：无工作目录讨论转调grilling；避免重复S04/S09的grill-with-docs。
+- [improve-codebase-architecture](https://github.com/mattpocock/skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md)：围绕代码热点/深模块/接缝审计，输出HTML机会报告、再选一项Grill；需原版codebase-design。
+- [handoff](https://github.com/mattpocock/skills/blob/main/skills/productivity/handoff/SKILL.md)：跨工具/协作者/目录的上下文交接，复用现有文档来源指针。
+- [triage](https://github.com/mattpocock/skills/blob/main/skills/engineering/triage/SKILL.md)：外部Issue/PR状态分诊、核验与Agent Brief；不再分诊to-tickets自动发布的任务。
+- [prototype](https://github.com/mattpocock/skills/blob/main/skills/engineering/prototype/SKILL.md)：按逻辑状态或UI选择一次性原型验证；不得覆盖已确认前端原型。
+- [implement](https://github.com/mattpocock/skills/blob/main/skills/engineering/implement/SKILL.md)：单Ticket的TDD+Review；主流程S12的implement-spec是完整任务图执行。
+- [wayfinder](https://github.com/mattpocock/skills/blob/main/skills/engineering/wayfinder/SKILL.md)：多会话复杂目标的决策Map与frontier；规划完成后交to-spec，不替代S07业务模块划分。
+- [research](https://github.com/mattpocock/skills/blob/main/skills/engineering/research/SKILL.md)：以官方文档、代码等一手证据输出可引用调研材料。
