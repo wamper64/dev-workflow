@@ -451,7 +451,7 @@
       }
     ],
     "maturity": "量化工程基线成熟逻辑上改造，新增前置确认与条件化约束（待真实项目验证）",
-    "adaptation": "将原直接形成定量基线改为『自动提取→动态前置确认→裁定→正式约束』；区分需求/约束/设计；整机边界在S03、组件预算在S04；按需专项和项目独有禁止事项覆盖Web、IoT、Agent混合项目。"
+    "adaptation": "从真实PRD、原型、代码和环境提取可量化、可判定的工程约束；自动预填只问缺口，批准后定稿，不重新定义业务需求或技术设计。"
   },
   {
     "id": "architecture-baseline",
@@ -893,7 +893,7 @@
     },
     "outputSampleFile": "docs/examples/报价项目/architecture-baseline/报价整体架构示例.md",
     "sampleTitle": "报价系统六Worker组件与交互骨架示例（非已审批设计）",
-    "adaptation": "从原PRD与全部docs/input构建组件清单及交互清单，内部调用Grill并保留必要术语/ADR；借鉴BMAD架构骨架的跨团队一致性契约、arc42的组件/运行/交互视角与Matt的决策依赖树，但按定制前后端/Agent+报价系统扩展到六Worker和人工确认/iframe；非已裁定信息明确标候选。。"
+    "adaptation": "形成总体组件/工程结构及关键端到端业务链路双核心；结合架构骨架、多视角、现有代码接缝与Grill，仅按真实Web/IoT/Agent/第三方需求启用组件，并冻结Owner和交互契约。"
   },
   {
     "id": "data-architecture",
@@ -1309,7 +1309,7 @@
     },
     "outputSampleFile": "docs/examples/报价项目/data-architecture/报价业务数据域示例.md",
     "sampleTitle": "报价系统数据域划分示例",
-    "adaptation": "从Matt domain-modeling借鉴术语/不变量澄清，从BMAD借鉴跨模块共享契约；本仓库自行改造为三核心：全局规则→数据生命周期→核心表字段与ER。S05锁跨模块身份/版本/引用，S09补模块细节，S12执行SQL。"
+    "adaptation": "围绕整体数据规则、关键数据生命周期、核心表/字段/ER确定跨模块数据契约；模块细节交S09、DDL执行交S12。"
   },
   {
     "id": "development-environment",
@@ -1365,7 +1365,7 @@
       }
     ],
     "maturity": "可执行模板（需实际项目核验）",
-    "adaptation": "依据用户提供的单机Docker首次部署配置八节模板：自动预填项目事实、逐环境独立配置、未决推荐与人工确认、确认后使用8.1原有提示词，首次不部署应用。借鉴Superpowers真实验证，不照搬外部部署技术栈。",
+    "adaptation": "读取项目原有单机Docker八节配置，逐环境自动预填、提出待确认项，分别获批后按8.1执行，真实验收只启动授权基础服务。",
     "overview": {
       "headline": "先读取既有八节配置 → 各环境自动预填 → 分别确认 → 只部署基础服务 → 各环境实测与记录。",
       "why": "唯一模板在 code/deploy/single-node-docker/初次部署配置.md。先读S03/S04/S05与真实部署包，环境数量依项目事实决定；每环境保留自己的配置、Compose、端口、数据卷、账户、授权与结果。配置生成不等于远程部署。",
@@ -1824,7 +1824,7 @@
     },
     "outputSampleFile": "docs/examples/报价项目/module-discovery/报价模块拆分示例.md",
     "sampleTitle": "报价系统模块候选拆分示例",
-    "adaptation": "以Matt Pocock Skills官方to-tickets为主参考，**明确做项目模块级适配**：采用tracer-bullet纵向交付、blocking edges/依赖DAG、quiz人工粒度审核；原版单上下文Ticket、Issue Tracker发布属于S11而不在S07执行。进一步保留当前工作区必需的项目PRD角色×场景覆盖、既有原型/代码映射和整体架构组件及数据Owner约束。"
+    "adaptation": "以业务职责、核心对象生命周期和独立验收划分全项目模块；借鉴tracer bullet、阻塞边与Quiz，不在此提前发布开发Tickets。"
   },
   {
     "id": "module-design",
@@ -2106,7 +2106,7 @@
     },
     "outputSampleFile": "docs/examples/报价项目/module-design/报价需求核对模块设计示例.md",
     "sampleTitle": "报价需求核对模块详细设计片段",
-    "adaptation": "运用Matt深模块、Interface/Seam的设计原则，以已有原型/若依为约束详化业务状态、页面动作、REST、表字段、迁移设计草案。 已内置Grill并要求每个模块设计引用总体组件及交互ID，禁止越过已批准骨架。"
+    "adaptation": "选择本轮独立任务并核验依赖，继承整体组件、核心字段/ER和已有前后端代码，深化业务状态、页面、API、局部数据字段与迁移设计草案；按需内部Grill。"
   },
   {
     "id": "to-spec",
@@ -2158,7 +2158,7 @@
       }
     ],
     "maturity": "官方原版（按需调用）",
-    "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
+    "adaptation": "直接使用Matt原版to-spec，综合已确认任务的用户故事、实施及测试决定和非目标。",
     "overview": {
       "headline": "将本轮已确认的设计与讨论直接综合为一个可实施、可测试的 Spec，原版不重新访谈需求。",
       "why": "仅覆盖本次独立开发任务；读取现有代码、GLOSSARY、ADR、范围与依赖结论，优先选择高层真实测试接缝并与用户确认。发布到既定Issue Tracker（本地Markdown只是其中一种方式），历史Spec不覆盖。",
@@ -2395,7 +2395,7 @@
       }
     ],
     "maturity": "官方原版（按需调用）",
-    "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
+    "adaptation": "直接使用Matt原版to-tickets，按已确认Spec生成可验证的纵向Tickets及真实阻塞依赖。",
     "overview": {
       "headline": "把已确认的本轮 Spec 拆为单上下文可完成、独立验证的纵向开发 Tickets，并标注真实阻塞依赖。",
       "why": "原版 Matt to-tickets 的核心是 tracer bullet（完整端到端切片）、blocking edges（任务DAG）、用户Quiz审核，再按Tracker约定一张Ticket一条记录发布；不是再拆一次项目模块。",
@@ -2633,7 +2633,7 @@
       }
     ],
     "maturity": "官方原版（按需调用）",
-    "adaptation": "原版未改；当前直接作为S12主Skill，不包装也不额外做人工测试。",
+    "adaptation": "直接使用Matt原版implement-spec：Ticket任务图、TDD、集成分支与最终代码审查。",
     "overview": {
       "headline": "按 Ticket 阻塞DAG调度实现：独立工作区逐票TDD → 集成分支合并 → 完整Spec最终Code Review。",
       "why": "直接使用 Matt 官方 implement-spec：Ticket是依赖任务图而非普通步骤列表。由可解锁前沿启动实施；每票工作区基于集成分支，内调原版tdd；最后统一调用code-review并处理问题。人工验收不在本Skill里。",
@@ -2962,7 +2962,7 @@
       }
     ],
     "maturity": "可执行模板（需实际项目核验）",
-    "adaptation": "采用BMAD交付后测试的角色/场景视角，但由项目PRD反向生成跨模块主/异常链和权限的系统级验收矩阵。"
+    "adaptation": "依真实项目PRD的角色×核心场景组织跨模块主/异常链、权限、状态与业务签收，不使用固定报价菜单验收。"
   },
   {
     "id": "release-readiness",
@@ -3019,7 +3019,7 @@
       }
     ],
     "maturity": "可执行模板（需实际项目核验）",
-    "adaptation": "将Fresh Evidence规则落实为基线目标对实测值、负载条件、CPU/RSS/并发/P95、恢复指标的逐项放行。"
+    "adaptation": "以真实项目基线的负载、资源、安全、留存和恢复目标对照实测证据做上线评审。"
   },
   {
     "id": "release-preflight",
@@ -3073,7 +3073,7 @@
       }
     ],
     "maturity": "可执行模板（需实际项目核验）",
-    "adaptation": "将执行前证据验证应用于生产机资源、数据库迁移预演、备份恢复和回滚演练，明确不可逆SQL的阻断。"
+    "adaptation": "核验真实目标机、不可变版本和发布包，演练迁移、备份恢复、回滚或前向修复并留可核验结果。"
   },
   {
     "id": "release-delivery",
@@ -3125,7 +3125,7 @@
       }
     ],
     "maturity": "可执行模板（需实际项目核验）",
-    "adaptation": "将验证前审计应用于真实客户服务器的发布版本、生产冒烟、监控观察和交付签收，未授权不宣称上线。"
+    "adaptation": "按已批准发布版本与预演执行生产部署，以本项目核心场景冒烟、监控、恢复与交付签收收口。"
   },
   {
     "id": "retro",
@@ -3177,7 +3177,7 @@
       }
     ],
     "maturity": "官方原版（按需调用）",
-    "adaptation": "原版未改；S15直接执行，不承担S14H中的人工验收签收。",
+    "adaptation": "直接使用Matt原版retro复盘编码Agent环境，不替代人工业务签收。",
     "overview": {
       "headline": "只复盘本次真实AI编码会话，寻找工程环境与自动守卫的可证实改进；不重新验收业务。",
       "why": "Matt原版retro先调用writing-for-agents，读取会话与Git/CI等一手证据，按导航、自动检查、代码规范、AGENTS、工具效率、无效指令和信息访问提出按严重度排序的建议。未经明确批准不自动改CI或Skill。",
@@ -3717,7 +3717,7 @@
       }
     ],
     "maturity": "自建可执行初版，需真实项目演练",
-    "adaptation": "独立填补人工验收，Matt原版implement-spec和retro正文不改动。",
+    "adaptation": "基于implement-spec真实自动化和代码审查证据识别必要人测，AI只生成待执行用例，人员实际回填、复测和签收。",
     "overview": {
       "headline": "真实自动化证据→四类覆盖判定→只生成人工必要用例→人实际执行→同用例复测→双角色签收。",
       "why": "Matt原版implement-spec负责开发与代码评审；本Skill单独负责自动验证边界之外的真实人工验收。",
