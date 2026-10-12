@@ -56,7 +56,7 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 ## 2026-10-10：对抗式审计与来源学习
 - 项目基线Skill与Matt原版正文未改；其余14个主流程定制Skill完善执行图/失败处理/证据机制。
 - S04整体架构设计内部调用Grill，S09模块详细设计内部按需调用Grill，保持项目准备与设计7步不额外加独立节点；Matt to-spec只综合已确认内容。
-- Matt code-review仅**Standards + Spec**；S12调用自建dev-implement-spec，其中完整调用Matt原版implement-spec执行TDD与Standards/Spec双轴代码审查；完成后生成待执行人工测试单，S14H只由人工执行和回填，S14B以官方六阶段诊断Bug。
+- Matt code-review仅进行**Standards + Spec**双轴审查；S12直接使用未修改的Matt原版implement-spec执行TDD、集成分支与最终代码审查。S14H独立manual-testing生成必要人工测试用例，由实际人员执行、回填并签收；S14B按需调用官方diagnosing-bugs。
 - 整体架构需要全部四类docs/input、基线及既有代码；数据总体与模块详细设计也必须读取项目基线。
 - 环境部署不要求固定的个人电脑目录。模块详细设计只输出SQL迁移设计草案，TDD编码阶段才产生正式版本化迁移。
 - 详细来源见 `skills/REFERENCES.md` 和 `docs/research/skill-sources.md`：标明具体项目及Skill名称、学习机制和项目采用/改造，不进入可安装Skill正文。
@@ -82,14 +82,13 @@ GitHub Pages源设置为 **GitHub Actions**。每次提交`main`后，`.github/w
 
 ## 2026-10-10：每轮retro、扩展实现Skill与通用工具筛选
 
-- `skills/dev-implement-spec/SKILL.md`：先调用未修改的官方`implement-spec`，再新增需求基线角色×场景与真实自动化覆盖对比，生成`人工测试用例与结果.md`供下一步人工回填；不新增重复Review。
-- `skills/iteration-close/SKILL.md`：本轮完成实际人工验收后**明确调用官方retro**，复盘AI编码会话及自动检查、Agent导航、规范等问题；审核通过的改进可供下一轮使用，取消项目末尾强制复盘阶段。
+- **现行替代规则（2026-10-12）**：删除包装版dev-implement-spec与iteration-close，直接调用Matt原版implement-spec和retro；人工测试使用独立manual-testing。
 - 通用Skill筛选后保留`handoff`、`grilling`、`domain-modeling`、`research`、`wizard`，增加官方`pr`与`to-questionnaire`；删除仅转调grilling的重复`grill-me`入口。
 - 右上角「项目目录树」来自`docs/data/project-directory-tree.txt`：按阶段步骤显示已存在输入、预期输出、模块循环和按需目录，配有中文注释。**这是结构设计，不是已自动生成全部文件。**
 
 ## 2026-10-12：S04整体架构冻结和开发约束增强
 
-- 保留原有四阶段、21个步骤、五章正式文档结构；S04仍在内部按需调用 `grill-with-docs`，不新增Skill。
+- 保留四阶段、项目整体架构正式文档的五章结构；当前导航共20个步骤。S04仍内部按需调用 `grill-with-docs`，不新增Skill。
 - 新增 `architecture-applicability.md`：所有项目检查十项架构维度，Web/IoT/Agent/第三方专项仅按真实业务和对接资料启用。
 - 新增 `engineering-contract.md`：扫描实际 `code/` 前后端工程，固定原型/公共能力复用、代码组织、允许和禁止依赖。
 - 新增 `freeze-and-change.md`：A级结构需技术总监审批、B级通用规则保兼容、C级模块细节正常演进；后续变更需更新S04再同步受影响下游。
