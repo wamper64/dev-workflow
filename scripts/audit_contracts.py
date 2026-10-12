@@ -12,14 +12,14 @@ skills={s["id"] for s in catalog}
 errors=[]
 def require(v,msg):
     if not v: errors.append(msg)
-require(len(lookup)==len(steps)==21 and len(data["phases"])==4,"阶段或步骤数量不一致")
-require(len(catalog)==21 and len(workspace)==7,"主Skill或工具箱数量错误")
+require(len(lookup)==len(steps)==20 and len(data["phases"])==4,"阶段或步骤数量不一致")
+require(len(catalog)==19 and len(workspace)==7,"主Skill或工具箱数量错误")
 require(data["title"]=="标准项目研发导航","导航标题未标准化")
 require(not data.get("modules"),"标准导航不可预设报价项目模块")
-require(len(data["iterationFlow"])==len(data["phases"][2]["steps"])==8,"模块迭代流程长度不同步")
+require(len(data["iterationFlow"])==len(data["phases"][2]["steps"])==7,"模块迭代流程长度不同步")
 for s in steps:
     if s["id"].startswith("S00"): continue
-    manual=s["id"] in ("S01","S14H")
+    manual=s["id"]=="S01"
     require(bool(s.get("manual"))==manual,s["id"]+" 手工/提示词标记错误")
     if manual:
         require(not s.get("skillId") and not s.get("skills"),s["id"]+" 不能拥有独立Skill")
@@ -100,21 +100,21 @@ for token in ("整体数据规则","关键数据业务流程","核心表","核�
     require(token in lookup["S05"]["prompt"],"S05网站调用提示词缺少："+token)
 module_skill=(ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8")
 require("S05核心数据骨架" in module_skill and "先返回S05" in module_skill,"S09未继承S05冻结")
-require("S05核心字段" in lookup["S09"]["prompt"],"S09提示词未继承S05核心字段")
+require("S04/S05" in lookup["S09"]["prompt"],"S09必须继承总体架构和数据库冻结契约")
 for token in ("pillarsTitle","pillarsDescription","data-count"):
     require(token in renderer,"三核心快速理解页面缺少："+token)
 
-require("人工测试用例与结果.md" in " ".join(lookup["S12"]["outputs"]),"implement-spec未提供人工测试单")
-require(lookup["S12"]["skillId"]=="dev-implement-spec" and lookup["S12"]["invokes"]==["implement-spec"],"实现步骤必须采用改造Skill内部调用原版")
+require("人工测试用例与结果.md" not in " ".join(lookup["S12"]["outputs"]),"S12原版不生成人工测试单")
+require(lookup["S12"]["skillId"]=="implement-spec" and not lookup["S12"].get("invokes"),"S12须直接用Matt原版")
 require("code-review" in lookup["S12"]["prompt"] and "TDD" in lookup["S12"]["prompt"],"实现缺原版内置能力")
-require("retro" in lookup["S15"].get("invokes",[]) and "retro" in lookup["S15"]["prompt"],"本轮收口必须内置retro")
+require(lookup["S15"]["skillId"]=="retro" and not lookup["S15"].get("invokes"),"S15须直接使用Matt原版retro")
 require(all(p["id"] != "P04" for p in data["phases"]),"最后不应有重复retro阶段")
 require("project-retrospective" not in skills and not (ROOT/"skills/project-retrospective").exists(),"旧最终复盘Skill仍存在")
 require({x["id"] for x in workspace}=={"handoff","grilling","domain-modeling","research","wizard","pr","to-questionnaire"},"通用Skills去重与清单不一致")
 require(not (ROOT/"skills/grill-me").exists(),"轻量Grill冗余入口未移除")
-require("人工测试用例与结果.md" in " ".join(lookup["S14H"]["inputs"]),"人工执行未复用前序单据")
-require("Phase 6" in lookup["S14B"]["prompt"],"Bug诊断没有对应六阶段")
-require("开发环境信息.md" in " ".join(lookup["S06"]["inputs"]),"开发环境未从用户填表开始")
+require(lookup["S14H"]["skillId"]=="manual-testing" and "人工测试用例与结果.md" in " ".join(lookup["S14H"]["outputs"]),"S14H应有独立人工测试Skill")
+require("Phase 1" in lookup["S14B"]["prompt"] and "diagnosing-bugs" in lookup["S14B"]["prompt"],"Bug诊断需调用原版六阶段")
+require("初次部署配置.md" in " ".join(lookup["S06"]["inputs"]) and "8.1" in lookup["S06"]["prompt"],"S06应读原模板，确认后按8.1执行")
 require(lookup["S07"]["skillId"]=="module-discovery" and "Matt Tickets" in lookup["S07"]["title"],"模块拆分未采用Matt Tickets项目级适配")
 require("tracer bullet" in lookup["S07"]["prompt"] and "blocking edges" in lookup["S07"]["prompt"] and "quiz" in lookup["S07"]["prompt"],"模块级Tickets关键机制不完整")
 require("to-tickets" in lookup["S11"]["skills"],"本轮开发任务必须保持Matt原版to-tickets")
@@ -129,11 +129,23 @@ for skill in catalog:
         if loc: require(loc.startswith("docs/examples/报价项目/") and (ROOT/loc).is_file(),skill["id"]+" 独立示例路径错误")
     require(bool(skill.get("referenceLearnings")) and bool(skill.get("adaptation")),skill["id"]+" 缺来源机制/采用说明")
 tree=(ROOT/"docs/data/project-directory-tree.txt").read_text(encoding="utf-8")
-for expected in ("本轮retro改进建议.md","人工测试用例与结果.md","项目基线.md","上线记录.md","code/","docs/"):
+for expected in ("模块验收与状态记录.md","人工测试用例与结果.md","初次部署配置-开发环境.md","项目基线.md","上线记录.md","code/","docs/"):
     require(expected in tree,"项目目录树遗漏："+expected)
 for utility in workspace:
     require((ROOT/"skills"/utility["id"]/"SKILL.md").is_file(),utility["id"]+" 工具箱Skill丢失")
+# 当前七步迭代和双关卡初次部署
+require([s["id"] for s in data["phases"][2]["steps"]]==["S09","S10","S11","S12","S14H","S14B","S15"],"模块迭代步骤顺序错误")
+for old in ("iteration-planning","dev-implement-spec","iteration-close"):
+    require(not (ROOT/"skills"/old).exists(),"旧包装Skill仍存在："+old)
+require((ROOT/"skills/manual-testing/SKILL.md").is_file(),"缺少人工测试Skill")
+require("模块验收与状态记录.md" in " ".join(lookup["S14H"]["outputs"]),"缺人工签收")
+require(".scratch/<模块>/<任务标识>/spec.md" in " ".join(lookup["S10"]["outputs"]),"新任务缺独立Spec")
+dev=(ROOT/"skills/development-environment/SKILL.md").read_text(encoding="utf-8")
+for word in ("初次部署配置.md","初次部署配置-<环境名称>.md","8.1","确认","nginx"):
+    require(word in dev,"S06关键规则缺失："+word)
+require("devFields" not in renderer and "environmentForm()" not in renderer,"S06旧环境手填表未移除")
+
 if errors:
     for m in errors: print("FAIL:",m)
     raise SystemExit(1)
-print(f"PASS: {len(data['phases'])}阶段、{len(steps)}步骤、{len(catalog)}主Skill、{len(workspace)}通用Skill；复盘内置、目录树完整。")
+print(f"PASS: {len(data['phases'])}阶段、{len(steps)}步骤、{len(catalog)}主Skill、{len(workspace)}通用Skill；原版实现/复盘与独立人测、首次部署完整。")

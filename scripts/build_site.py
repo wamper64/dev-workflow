@@ -25,10 +25,10 @@ subprocess.run(["python3", str(ROOT / "scripts" / "audit_contracts.py")], check=
 assert len(data["phases"]) == 4
 assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})
 assert len(data["phases"][1]["steps"]) == 7
-assert len(data["phases"][2]["steps"]) == 8
+assert len(data["phases"][2]["steps"]) == 7
 assert isinstance(data["modules"], list) and len(data["modules"]) == 0
-assert len(catalog) == 21
-assert len({x["id"] for x in catalog}) == 21
+assert len(catalog) == 19
+assert len({x["id"] for x in catalog}) == 19
 known = {x["id"] for x in catalog}
 for p in data["phases"][1:]:
     for step in p["steps"]:
@@ -40,7 +40,7 @@ for p in data["phases"][1:]:
 
 payload = {"skills": [], "examples": {}}
 project_tree = (DOCS / "data/project-directory-tree.txt").read_text(encoding="utf-8")
-assert "本轮retro改进建议.md" in project_tree and "人工测试用例与结果.md" in project_tree
+assert "模块验收与状态记录.md" in project_tree and "人工测试用例与结果.md" in project_tree
 for skill in catalog:
     folder = ROOT / "skills" / skill["id"]
     contents = {}
@@ -69,8 +69,8 @@ for s in payload["skills"]:
             "assets/preconfirmation-template.md",
         ):
             assert required in s["files"], required
-assert custom_count == 13
-assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 31
+assert custom_count == 11
+assert len(list((ROOT / "skills").glob("*/SKILL.md"))) == 29
 assert len(workspace) == 7
 assert not any((ROOT / "skills" / old).exists() for old in ("input-readiness", "human-acceptance")), "旧的步骤型Skill应移除"
 assert all(x["source"]["url"].startswith("https://github.com/mattpocock/skills/") for x in workspace)
@@ -117,7 +117,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
             z.write(f, f.relative_to(ROOT).as_posix())
     z.writestr("安装说明.md",
         "# 标准项目研发 Skills\n\n"
-        "包含21个主Skill和10个通用/执行依赖（共31份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
+        "包含19个主Skill和10个通用/执行依赖（共29份SKILL.md），并覆盖Grill、人工测试与Bug闭环。\n\n"
         "请将 skills/ 目录用于研发Agent工作区；"
         "把 templates/project/docs/ 下的目录结构复制到真实项目，"
         "实际PRD和已有前后端源码由项目方提供，不包含在下载包中。\n"
@@ -125,7 +125,7 @@ with ZipFile(archive, "w", ZIP_DEFLATED) as z:
         "Matt 官方原版所需的版权和许可说明见 skills/LICENSE-Matt-Pocock.txt。\n")
 with ZipFile(archive) as z:
     names = z.namelist()
-    assert len([n for n in names if n.endswith("/SKILL.md")]) == 31
+    assert len([n for n in names if n.endswith("/SKILL.md")]) == 29
     assert not any(n.endswith(("REFERENCES.md", "catalog.json", "workspace.json")) for n in names)
     assert "skills/project-baseline/scripts/check_inputs.py" in names
     assert "skills/setup-matt-pocock-skills/issue-tracker-local.md" in names
@@ -133,10 +133,10 @@ with ZipFile(archive) as z:
     assert "skills/project-baseline/assets/preconfirmation-template.md" in names
     assert "skills/project-baseline/references/constraint-discovery.md" in names
     assert "skills/project-baseline/references/applicability.md" in names
-    assert "skills/dev-implement-spec/SKILL.md" in names
-    assert "skills/dev-implement-spec/assets/manual-test-template.md" in names
+    assert "skills/manual-testing/SKILL.md" in names
+    assert "skills/manual-testing/assets/manual-test-template.md" in names
     assert "skills/pr/SKILL.md" in names and "skills/to-questionnaire/SKILL.md" in names
-    assert not any(n.startswith(("skills/grill-me/","skills/project-retrospective/")) for n in names)
+    assert not any(n.startswith(("skills/grill-me/","skills/project-retrospective/","skills/iteration-planning/","skills/dev-implement-spec/","skills/iteration-close/")) for n in names)
     assert not any("/examples/" in n for n in names), "Skill ZIP不应包含项目示例"
     assert not any(n.startswith(("skills/input-readiness/", "skills/human-acceptance/")) for n in names), "已取消的步骤Skill不应包含在ZIP"
 
