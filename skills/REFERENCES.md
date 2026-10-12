@@ -16,11 +16,11 @@
 - **Matt Pocock Skills — setup-matt-pocock-skills**：[Matt Pocock Skills — setup-matt-pocock-skills](https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/SKILL.md)
   - 实际学习：先探测已有AGENTS.md、GLOSSARY、ADR、issue tracker，再让用户确认；初始化配置要和项目已有结构合并，而不是覆盖
 
-### project-baseline（既有成熟实现保留）
-- 项目中的实际用途：项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。
-- 完全引用或改造：只借用证据门禁原则。成熟的项目基线Skill及其量化模板、澄清过程、结构化验证维持不变。
-- **Superpowers — verification-before-completion**：[Superpowers — verification-before-completion](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)
-  - 实际学习：将技术栈、保存年限、CPU/内存/磁盘闭合、并发/P95/RPO/RTO变为必须以数值和证据验收的约束；具体覆盖以此前提供的dev-baseline Skill为基线
+### project-baseline（量化约束提取 + 前置动态确认，保留原证据门禁原则）
+- 项目中的实际用途：在已确认PRD与整体架构之间，将真实项目输入转成可量化或可客观判定的工程约束；先预填前置确认表，仅问用户关键缺口。正式基线不写需求、不做设计。
+- **具体借鉴的上游机制**：来自 [Superpowers — verification-before-completion](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) 的「无真实验证证据不得宣布完成」门禁思想；保留本仓库既有的指标数值/口径、约束一致性和完成审核规则。**上游没有直接提供本项目前置表或条件化基线方案。**
+- **本仓库自行改造内容**：新增 constraint-discovery（需求/约束/设计三分法和需求量化抽取）、applicability（8个通用维度及条件专项）、preconfirmation-template（AI已知自动预填、只问缺口）；调整基线模板、量化标准、禁止/责任边界和整机资源上限与S04组件预算的边界。
+- **对应实现文件**：`skills/project-baseline/SKILL.md`、`assets/preconfirmation-template.md`、`assets/baseline-template.md`、`references/constraint-discovery.md`、`references/applicability.md`及各审核规则。报价示例和网站S03同步更新，但示例数字均非真实项目事实。
 
 ### architecture-baseline（已补充执行图、失败路径和验收证据）
 - **2026-10-12本次增强与具体借鉴机制**：继续借鉴BMAD architecture spine的跨模块组件/Owner/交互不变量、arc42的组件/运行/部署及跨领域视角、Matt codebase-design的真实接缝复用而非重造、Matt grill-with-docs的只询问全局高代价未决决策。本项目自行适配为“真实前后端代码落点/允许依赖”“Web/IoT/Agent/第三方按条件启用”“A/B/C冻结及双关卡”。这三项是本项目的实施规则，不冒充某个上游Skill的原文。

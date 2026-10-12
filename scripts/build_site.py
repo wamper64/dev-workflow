@@ -65,6 +65,8 @@ for s in payload["skills"]:
             "assets/baseline-template.md", "references/checklist.md",
             "references/consistency.md", "references/editorial-standard.md",
             "scripts/check_inputs.py", "templates/澄清矩阵.md",
+            "references/constraint-discovery.md", "references/applicability.md",
+            "assets/preconfirmation-template.md",
         ):
             assert required in s["files"], required
 assert custom_count == 13
@@ -128,6 +130,9 @@ with ZipFile(archive) as z:
     assert "skills/project-baseline/scripts/check_inputs.py" in names
     assert "skills/setup-matt-pocock-skills/issue-tracker-local.md" in names
     assert "skills/project-baseline/references/checklist.md" in names
+    assert "skills/project-baseline/assets/preconfirmation-template.md" in names
+    assert "skills/project-baseline/references/constraint-discovery.md" in names
+    assert "skills/project-baseline/references/applicability.md" in names
     assert "skills/dev-implement-spec/SKILL.md" in names
     assert "skills/dev-implement-spec/assets/manual-test-template.md" in names
     assert "skills/pr/SKILL.md" in names and "skills/to-questionnaire/SKILL.md" in names

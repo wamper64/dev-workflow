@@ -33,6 +33,23 @@ for s in steps:
 for key in ("input-readiness","human-acceptance"):
     require(key not in skills and not (ROOT/"skills"/key).exists(),key+" 旧Skill应删除")
 require("docs/input/" in " ".join(lookup["S01"]["inputs"]) and "code/" in " ".join(lookup["S01"]["inputs"]),"输入核对没覆盖原始目录")
+# S03项目基线只能定义约束；先动态前置确认，所有从需求抽取的可量化目标要有数值/单位/口径。
+baseline=(ROOT/"skills/project-baseline/SKILL.md").read_text(encoding="utf-8")
+baseline_dir=ROOT/"skills/project-baseline"
+for ref in ("references/constraint-discovery.md", "references/applicability.md",
+            "assets/preconfirmation-template.md", "assets/baseline-template.md",
+            "references/checklist.md", "references/quantification-standard.md"):
+    require((baseline_dir/ref).is_file(),"S03缺配套文件："+ref)
+for token in ("不写需求", "不做设计", "可量化", "可判定", "项目特有约束", "前置约束确认表"):
+    require(token in baseline,"S03边界/前置流程缺失："+token)
+require("项目基线前置约束确认表.md" in " ".join(lookup["S03"]["outputs"]), "S03导航未输出前置表")
+require("项目基线前置约束确认表.md" in lookup["S03"]["prompt"],"S03导航提示词未同步")
+require("项目基线前置约束确认表.md" in " ".join(next(x for x in catalog if x["id"]=="project-baseline")["outputs"]), "S03快速理解未同步")
+require("项目基线前置约束确认表.md" in (ROOT/"docs/data/project-directory-tree.txt").read_text(encoding="utf-8"),"项目目录树未同步S03")
+inputs_check=(baseline_dir/"scripts/check_inputs.py").read_text(encoding="utf-8")
+require('root / "code"' in inputs_check and "code/fld" not in inputs_check and "guiwu_ruoyi" not in inputs_check,"S03输入检查不能限定报价项目路径")
+require("用户只填" in lookup["S03"]["prompt"] or "只填写缺失" in lookup["S03"]["prompt"], "S03未声明只询问输入缺口")
+
 require("grill-with-docs" in lookup["S04"]["prompt"] and "grill-with-docs" in lookup["S09"]["prompt"],"Grill应内嵌")
 # S04须能真正约束后续工程结构及模块开发；不允许网站内容与正式模板分裂。
 architecture=(ROOT/"skills/architecture-baseline/SKILL.md").read_text(encoding="utf-8")

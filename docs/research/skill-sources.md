@@ -16,11 +16,11 @@
 - **Matt Pocock Skills — setup-matt-pocock-skills**：[Matt Pocock Skills — setup-matt-pocock-skills](https://github.com/mattpocock/skills/blob/main/skills/engineering/setup-matt-pocock-skills/SKILL.md)
   - 实际学习：先探测已有AGENTS.md、GLOSSARY、ADR、issue tracker，再让用户确认；初始化配置要和项目已有结构合并，而不是覆盖
 
-### project-baseline（既有成熟实现保留）
-- 项目中的实际用途：项目经理确认业务交付边界；开发人员确认已选技术栈、原型复用和部署约束有据可依。
-- 完全引用或改造：只借用证据门禁原则。成熟的项目基线Skill及其量化模板、澄清过程、结构化验证维持不变。
-- **Superpowers — verification-before-completion**：[Superpowers — verification-before-completion](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md)
-  - 实际学习：将技术栈、保存年限、CPU/内存/磁盘闭合、并发/P95/RPO/RTO变为必须以数值和证据验收的约束；具体覆盖以此前提供的dev-baseline Skill为基线
+### project-baseline（基于既有量化基线改造）
+- **已有机制继续保留**：量化工程指标、交叉核对及关键约束的人工裁定，不允许推荐值冒充已确认事实。
+- **借鉴什么**：[Superpowers — verification-before-completion](https://github.com/obra/superpowers/blob/main/skills/verification-before-completion/SKILL.md) 的完成前真实证据验证；借鉴的是验证门禁思想，不是其产出项目基线模板，也不是前置问卷能力。
+- **本项目自行新增**：从PRD/原型/code/中提取有证据的可量化工程事实；严格分离需求/约束/设计；按项目触发IoT、计量、第三方、异步/定时/审批、Agent、多租户等专项；识别项目特有禁止事项。新增动态前置确认表并只提问缺口，整机约束由S03定义，逐服务资源分配由S04确定。
+- **可验证落点**：`skills/project-baseline/SKILL.md`、`references/constraint-discovery.md`、`references/applicability.md`、`assets/preconfirmation-template.md`、`assets/baseline-template.md`、`scripts/check_inputs.py`。不会把报价项目作为通用目录或量化目标的真实来源。
 
 ### architecture-baseline（已补充执行图、失败路径和验收证据）
 - 项目中的实际用途：递归读取全部docs/input，识别全项目所有主要组件/运行单元和跨组件交互，内部Grill补足决策，形成可供下游填充的完整骨架。
