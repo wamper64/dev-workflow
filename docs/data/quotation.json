@@ -220,7 +220,7 @@
             "docs/output/01-项目基线/项目基线.md",
             "docs/output/02-整体架构/整体架构设计.md（组件职责、交互与Owner）",
             "docs/output/03-数据库总体/数据库总体设计.md（数据规则、关键数据流程、核心表/字段/ER及存储边界）",
-            "docs/output/04-开发环境/部署步骤与执行记录.md",
+            "code/deploy/single-node-docker/初次部署配置-<环境名称>.md 与 部署结果README-<环境名称>.md（按真实环境，未执行只提供确认配置）",
             "code/（实际原型页面与已有业务代码）"
           ],
           "outputs": [
@@ -242,7 +242,7 @@
         "docs/output/02-整体架构/架构评审记录.md",
         "docs/output/03-数据库总体/数据库总体设计.md",
         "docs/output/03-数据库总体/数据库设计审核.md",
-        "docs/output/04-开发环境/部署步骤与执行记录.md",
+        "code/deploy/single-node-docker/初次部署配置-<环境名称>.md 与 部署结果README-<环境名称>.md（按真实环境，未执行只提供确认配置）",
         "docs/output/05-模块拆分/项目模块清单.md",
         "docs/output/05-模块拆分/模块依赖关系.md",
         "docs/output/05-模块拆分/模块拆分审核.md"
@@ -266,7 +266,7 @@
             "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
             "docs/output/项目总控/项目实施状态.md（初次不存在则初始化）",
             "docs/output/01-项目基线/项目基线.md、02-整体架构/整体架构设计.md、03-数据库总体/数据库总体设计.md",
-            "docs/output/04-开发环境/部署步骤与执行记录.md、当前code/、GLOSSARY.md和ADR"
+            "code/deploy/single-node-docker/初次部署配置-<环境名称>.md 与 部署结果README-<环境名称>.md（按真实环境，未执行只提供确认配置）、当前code/、GLOSSARY.md和ADR"
           ],
           "outputs": [
             "docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md",
@@ -578,7 +578,7 @@
         "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
         "docs/output/项目总控/项目实施状态.md（初次不存在则初始化）",
         "docs/output/01-项目基线/项目基线.md、02-整体架构/整体架构设计.md、03-数据库总体/数据库总体设计.md",
-        "docs/output/04-开发环境/部署步骤与执行记录.md、当前code/、GLOSSARY.md和ADR"
+        "code/deploy/single-node-docker/初次部署配置-<环境名称>.md 与 部署结果README-<环境名称>.md（按真实环境，未执行只提供确认配置）、当前code/、GLOSSARY.md和ADR"
       ],
       "outputs": [
         "docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md",
