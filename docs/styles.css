@@ -251,3 +251,9 @@
 .skill-overview-group .skill-overview-title span{max-width:55%;text-align:right}
 @media(max-width:800px){.skill-pillars{grid-template-columns:1fr}.skill-chain-step{max-width:none}.skill-overview-group .skill-overview-title{align-items:start;flex-direction:column}}
 
+
+/* 适配S05数据库三核心快速理解展示，S04原有两核心不变。 */
+.skill-pillars[data-count="3"]{grid-template-columns:repeat(3,minmax(0,1fr))}
+.skill-pillars[data-count="3"] .skill-pillar{padding:14px 12px}
+.skill-pillars[data-count="3"] .skill-pillar:nth-child(3){background:#fdfbf7;border-color:#eadfc8}
+@media(max-width:1150px){.skill-pillars[data-count="3"]{grid-template-columns:1fr}}

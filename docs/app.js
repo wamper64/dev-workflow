@@ -200,7 +200,7 @@ function renderSkillOverview(skill){
  const exclusions=(a.doesNot||[]).map(x=>'<li>'+esc(x)+'</li>').join("");
  return '<div class="skill-overview"><div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
   +(facts?'<div class="skill-quick-facts">'+facts+'</div>':"")
-  +(pillarCards?'<div class="skill-pillar-heading"><h3>整体架构的两个核心</h3><p>先从业务链路反推组件，再用组件架构约束处理流程；两个核心必须互相闭合。</p></div><div class="skill-pillars">'+pillarCards+'</div>':"")
+  +(pillarCards?'<div class="skill-pillar-heading"><h3>'+esc(a.pillarsTitle||"整体架构的两个核心")+'</h3><p>'+esc(a.pillarsDescription||"先从业务链路反推组件，再用组件架构约束处理流程；两个核心必须互相闭合。")+'</p></div><div class="skill-pillars" data-count="'+(a.pillars||[]).length+'">'+pillarCards+'</div>':"")
   +chain
   +'<div class="skill-overview-title"><h3>'+esc(a.sectionsTitle||"此 Skill 涵盖的关键内容") +'</h3><span>'+(a.sections||[]).length+'个具体板块</span></div>'
   +(groupSets||'<div class="skill-topic-grid">'+cards+'</div>')
