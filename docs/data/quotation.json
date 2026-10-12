@@ -229,7 +229,7 @@
             "docs/output/05-模块拆分/模块拆分审核.md（Matt式粒度提问、项目经理/技术总监确认）"
           ],
           "review": "模块以职责与核心对象生命周期为主判据：项目经理核对角色×场景覆盖、业务边界和独立验收；技术总监核对唯一权威Owner、整体架构与模块强/契约依赖。补遗漏、删冗余、改冲突并确认拆合理由后发布模块池。",
-          "prompt": "请调用【基于 Matt Pocock 官方 to-tickets 方法改造的模块拆分 Skill】module-discovery（skills/module-discovery/SKILL.md），这是项目级模块规划，**不是提前拆全项目开发Tickets**。\n\n请递归读取docs/input/中已确认的需求基线（项目/模块PRD、角色×核心业务场景、原型/页面映射等），并继承项目基线、整体架构的所有主要组件与交互、数据库总体中的数据Owner与存储边界，核对实际code/中的可复用代码。\n\n按Matt Tickets的三个核心机制操作：\n1）tracer bullet：把PRD场景变成贯穿实际前后端及数据Owner、可供角色验收的纵向交付切片，以业务职责和核心对象完整生命周期作为模块拆合主判据，检查独立业务结果、状态Owner、职责与非职责；**不得按菜单、页面、表、Controller、前后端层或预设模块数机械拆分**。\n2）blocking edges：给每个模块写清Blocked by强依赖、只需接口冻结的契约依赖、真实第三方或环境阻塞，并画模块级依赖DAG，确认没有循环依赖和假阻塞。\n3）quiz：把模块名称、交付的真实业务结果、角色×场景和阻塞边交项目经理与技术总监逐项确认过大/过小、合并/拆分及依赖是否真的成立；未经确认只称候选。\n\n产物仅有 docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md、模块拆分审核.md。完成后S08才选择本轮模块、S09详细设计、S10生成本轮Spec，**S11再直接运行不修改的Matt原版to-tickets**，发布适合单个Agent上下文执行的纵向开发Tickets。不要在S07产生全项目Spec、.scratch/*/issues/或提交Tracker可执行Tickets。",
+          "prompt": "请调用【基于 Matt to-tickets 的纵向交付/阻塞边/Quiz机制适配的模块拆分 Skill】module-discovery（skills/module-discovery/SKILL.md），这是项目级模块规划，**不是提前拆全项目开发Tickets**。\n\n请递归读取docs/input/中已确认的需求基线（项目/模块PRD、角色×核心业务场景、原型/页面映射等），并继承项目基线、整体架构的所有主要组件与交互、数据库总体中的数据Owner与存储边界，核对实际code/中的可复用代码。\n\n按Matt Tickets的三个核心机制操作：\n1）tracer bullet：把PRD场景变成贯穿实际前后端及数据Owner、可供角色验收的纵向交付切片，以业务职责和核心对象完整生命周期作为模块拆合主判据，检查独立业务结果、状态Owner、职责与非职责；**不得按菜单、页面、表、Controller、前后端层或预设模块数机械拆分**。\n2）blocking edges：给每个模块写清Blocked by强依赖、只需接口冻结的契约依赖、真实第三方或环境阻塞，并画模块级依赖DAG，确认没有循环依赖和假阻塞。\n3）quiz：把模块名称、交付的真实业务结果、角色×场景和阻塞边交项目经理与技术总监逐项确认过大/过小、合并/拆分及依赖是否真的成立；未经确认只称候选。\n\n产物仅有 docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md、模块拆分审核.md。完成后S08才选择本轮模块、S09详细设计、S10生成本轮Spec，**S11再直接运行不修改的Matt原版to-tickets**，发布适合单个Agent上下文执行的纵向开发Tickets。不要在S07产生全项目Spec、.scratch/*/issues/或提交Tracker可执行Tickets。",
           "skillId": "module-discovery",
           "skillOrigin": "Matt适配"
         }
@@ -339,7 +339,7 @@
             "真实集成分支、完成的Tickets、TDD测试和原版最终code-review结论（以实际结果为准）"
           ],
           "review": "按真实原版implement-spec的提交/任务状态/TDD命令/最终code-review证据确认实现完成；人工用例由下一步独立Skill生成。",
-          "prompt": "请直接使用未修改的Matt原版implement-spec（skills/implement-spec/SKILL.md），基于本次独立Spec/Tickets依赖图执行TDD、分支与工作树合并、最终一次Standards+Spec code-review及问题修复。不得调用dev-implement-spec，也不要在实现步骤生成或伪造人工测试单。必须复用已有原型/后端和批准的架构/数据契约；必要的详细设计及迁移草案差异依法审核更新；无法运行的检查明确标受阻，Git提交消息使用中文。",
+          "prompt": "请直接使用未修改的Matt原版implement-spec（skills/implement-spec/SKILL.md），基于本次独立Spec/Tickets依赖图执行TDD、分支与工作树合并、最终一次Standards+Spec code-review及问题修复。本步骤只运行原版implement-spec，人工测试用例和签收由后续独立Skill负责，不可伪造。必须复用已有原型/后端和批准的架构/数据契约；必要的详细设计及迁移草案差异依法审核更新；无法运行的检查明确标受阻，Git提交消息使用中文。",
           "skillId": "implement-spec",
           "skillOrigin": "Matt原版",
           "invokes": []
@@ -409,7 +409,7 @@
             "用户明确批准后才实际调整Agent约定/CI/规则（按需）"
           ],
           "review": "仅按Matt官方retro流程评估有证据的AI工程环境改进建议，未经批准不修改全局Skill/CI；业务签收不由retro完成。",
-          "prompt": "请直接使用未修改的Matt原版retro（skills/retro/SKILL.md），复盘本轮真实AI编码会话，识别导航、自动守卫、编码规范、AGENTS及工具效率的实际改进机会，按严重度给出建议。不要运行iteration-close，也不要用retro执行验收/项目状态更新，这些已经由S14H人工签收完成。缺少会话证据时说明限制，不虚构结果。若还有未完成任务进入下一轮S09，全部模块已签收则进入全项目验收。",
+          "prompt": "请直接使用Matt原版retro（skills/retro/SKILL.md），基于本轮真实AI编码会话、Git Diff、CI与工具日志，检查导航路径、自动守卫、规范、AGENTS指令和信息访问等工程环境改进点；按严重度输出有证据、有可执行措施和验证办法的建议。未经用户明确批准不修改全局Skill/CI/规范。业务签收及项目状态只由人工测试与签收步骤负责；缺少会话证据时说明限制，不虚构结果。有未完成任务则返回S09选择下一轮，全部模块签收后才进入全项目验收。",
           "skillId": "retro",
           "skillOrigin": "Matt原版",
           "invokes": []
@@ -458,8 +458,8 @@
             "docs/output/07-系统验收/系统验收报告.md",
             "docs/output/07-系统验收/缺陷闭环记录.md"
           ],
-          "review": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。",
-          "prompt": "请调用 Skill：system-acceptance（skills/system-acceptance/SKILL.md），执行「全项目业务链路和权限回归」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/项目总控/项目实施状态.md\n- docs/output/06-模块迭代/<模块>/人工测试用例与结果.md（逐模块验证）\n- code/\n- code/\n- 实际联调环境与第三方接入证据\n\n【具体执行方式】\n从项目PRD角色场景而非菜单做跨模块业务链、权限与异常的真实回归。\n\n【真实输出】\n- docs/output/07-系统验收/业务场景覆盖矩阵.md\n- docs/output/07-系统验收/系统验收报告.md\n- docs/output/07-系统验收/缺陷闭环记录.md\n\n【审核/不通过路径】\n项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "review": "项目经理核对PRD全场景、角色/页面覆盖与真实业务结果；开发人员提供可复现的链路与缺陷证据，未执行不得标通过。",
+          "prompt": "请调用 Skill：system-acceptance（skills/system-acceptance/SKILL.md），执行「系统业务验收」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/项目总控/项目实施状态.md\n- docs/output/06-模块迭代/<模块>/人工测试用例与结果.md（逐模块验证）\n- code/\n- code/\n- 实际联调环境与第三方接入证据\n\n【具体执行方式】\n从项目PRD角色场景而非菜单做跨模块业务链、权限与异常的真实回归。\n\n【真实输出】\n- docs/output/07-系统验收/业务场景覆盖矩阵.md\n- docs/output/07-系统验收/系统验收报告.md\n- docs/output/07-系统验收/缺陷闭环记录.md\n\n【审核/不通过路径】\n项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
           "skillId": "system-acceptance",
           "skillOrigin": "自建"
         },
