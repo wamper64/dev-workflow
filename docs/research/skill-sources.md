@@ -34,13 +34,14 @@
 - **Matt Pocock Skills — codebase-design**：[Matt Pocock Skills — codebase-design](https://github.com/mattpocock/skills/blob/main/skills/engineering/codebase-design/SKILL.md)
   - 实际学习：复用真实已有代码和接口接缝，避免只为理论架构新增薄包装组件或重复实现。
 
-### data-architecture（已补充执行图、失败路径和验收证据）
-- 项目中的实际用途：在整体架构已确定的组件/交互骨架下细化数据域、权威与分库分表/容量策略；关键未决存储边界可内部Grill，绝不反向新造服务。
-- 完全引用或改造：使用领域术语与写入Owner的职责界定法，做总体数据域/一致性/容量/留存设计，模块字段索引及SQL延迟到详细设计。
-- **Matt Pocock Skills — domain-modeling**：[Matt Pocock Skills — domain-modeling](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md)
-  - 实际学习：先澄清业务术语和领域责任，数据域按权威归属与不变量划分，而非菜单或表名
-- **BMAD Method — bmad-architecture**：[BMAD Method — bmad-architecture](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md)
-  - 实际学习：确定跨模块必须共享的数据边界，把可以推迟的字段/索引等实现决定留到模块详细设计
+### data-architecture（整体规则→关键数据业务流程→核心表/字段/ER 三核心）
+- **本项目用途**：S04审批后、S07模块拆分前建立跨模块数据骨架：统一身份、精度、权限/Owner、版本与历史规则；沿S04批准的业务链画数据生命周期；最终定义具体全局核心表、必要核心字段及其类型/唯一/状态/版本/引用约束和核心ER关系图。物理存储、容量、备份和迁移作为支撑。
+- **S05/S09边界**：S05必须提前锁定跨模块关键身份、核心状态版本、关联字段和Owner；S09补非核心字段、普通辅助表、索引及迁移草案；S12产生正式版本化SQL。A级变更先重审S05，牵动组件或关键业务链路再审S04。
+- **Matt Pocock Skills — domain-modeling**：[官方Skill](https://github.com/mattpocock/skills/blob/main/skills/engineering/domain-modeling/SKILL.md)
+  - 具体学习：主动澄清术语、提炼不变量、用边界场景挑战概念关系；借鉴用于全局核心对象、身份、版本和关键关系。**官方原版并未提供这套三核心数据库总体设计模板**。
+- **BMAD Method — bmad-architecture**：[官方Skill](https://github.com/bmad-code-org/BMAD-METHOD/blob/main/skills/bmad-architecture/SKILL.md)
+  - 具体学习：架构spine/跨模块共享契约的思想；应用于数据Owner、统一数据结构及变更审核。**三核心顺序、核心字段ER契约、S05与S09的冻结分工是本项目自行设计**，不能当作BMAD原有机制。
+- **具体落点**：`skills/data-architecture/SKILL.md`、`assets/data-architecture-template.md`、`references/three-core-contract.md`、`references/data-boundary-gate.md`、`docs/examples/报价项目/data-architecture/`、`skills/module-design/`、`skills/catalog.json`与`docs/data/quotation.json`。
 
 ### development-environment（已补充执行图、失败路径和验收证据）
 - 项目中的实际用途：右侧用户填写真实环境信息表，导出docs/input/环境资料/开发环境信息.md，Skill按表和整体架构有序部署依赖，并记录实际执行结果。
