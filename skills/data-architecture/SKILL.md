@@ -82,6 +82,5 @@ description: 在项目基线及已批准整体架构之下，以“整体数据�
 - [三核心落地与边界](references/three-core-contract.md)
 - [正式六章模板](assets/data-architecture-template.md)
 - [两轮审核关卡](references/data-boundary-gate.md)
-- [通用输出定位](templates/输出模板.md)
 
 **不做**：在S05重新定需求、修改S04已批准运行组件/业务流程、设计全部模块内部字段和辅助表、输出可执行DDL/索引SQL或宣称未经真实验证的性能/备份结果。

@@ -77,7 +77,7 @@ function renderDetails(){
   let html='<h2>'+esc(s.title)+'</h2><p class="step-context">'+esc(p.title)+' · '+esc(s.id)+'</p>';
   
   if((s.skills||[]).length)html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
-  else html+='<section class="detail-section"><h3><span class="section-icon">◎</span> 执行方式</h3><div class="review-box">'+(s.id==="S01"?"使用下方提示词直接读取并校验输入，无需安装Skill。":s.id==="S14H"?"人工执行上一步生成的用例，填写真实结果；无独立Skill。":"此步骤仅展示已有输入，不调用Skill。")+'</div></section>';
+  else html+='<section class="detail-section"><h3><span class="section-icon">◎</span> 执行方式</h3><div class="review-box">'+(s.id==="S01"?"使用下方提示词直接读取并校验输入，无需安装Skill。":"此步骤仅展示已有输入，不调用Skill。")+'</div></section>';
   if(Array.isArray(s.invokes)&&s.invokes.length){html+='<section class="detail-section"><h3><span class="section-icon">↳</span> 主Skill内部引用</h3><p class="detail-hint">以下原版Skill由当前主Skill内部执行，不另占必经步骤；点击可查看完整原版内容。</p>'+skillList(s.invokes)+'</section>';}
   html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';

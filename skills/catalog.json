@@ -48,7 +48,7 @@
         "name": "Matt Pocock Skills — setup-matt-pocock-skills"
       }
     ],
-    "maturity": "官方原版，未改动",
+    "maturity": "官方原版（按需调用）",
     "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
     "overview": {
       "headline": "先扫描已有仓库约定，再确认 Tracker、领域文档与可选标签，审核后增量写入；不是重建项目。",
@@ -520,7 +520,7 @@
         "learned": "复用真实已有代码和接口接缝，避免只为理论架构新增薄包装组件或重复实现。"
       }
     ],
-    "maturity": "已补充执行图、失败路径和验收证据",
+    "maturity": "可执行模板（需实际项目核验）",
     "overview": {
       "headline": "整体架构设计 = ①系统由什么组件构成 + ②核心业务在这些组件里怎样完整跑通",
       "why": "不能只把第三方、后端、消息队列、数据库连起来。要同时明确系统总体组件/工程/接口架构，以及设备告警等业务的实际处理步骤：上报、校验、队列（按需）、规则判断、持久化、通知、确认和异常恢复。两个核心互相核验，权限、容量、部署及冻结是配套约束。",
@@ -893,7 +893,7 @@
     },
     "outputSampleFile": "docs/examples/报价项目/architecture-baseline/报价整体架构示例.md",
     "sampleTitle": "报价系统六Worker组件与交互骨架示例（非已审批设计）",
-    "adaptation": "从原PRD与全部docs/input构建组件清单及交互清单，内部调用Grill并保留必要术语/ADR；借鉴BMAD架构骨架的跨团队一致性契约、arc42的组件/运行/交互视角与Matt的决策依赖树，但按定制前后端/Agent+报价系统扩展到六Worker和人工确认/iframe；非已裁定信息明确标候选。；本次在已有全局组件设计基础上，增加真实工程接缝与复用依赖、专项适用性判定、A/B/C冻结及业务覆盖/代码可落地双关卡，不增加步骤或重写Matt原版。"
+    "adaptation": "从原PRD与全部docs/input构建组件清单及交互清单，内部调用Grill并保留必要术语/ADR；借鉴BMAD架构骨架的跨团队一致性契约、arc42的组件/运行/交互视角与Matt的决策依赖树，但按定制前后端/Agent+报价系统扩展到六Worker和人工确认/iframe；非已裁定信息明确标候选。。"
   },
   {
     "id": "data-architecture",
@@ -1364,7 +1364,7 @@
         "name": "Superpowers — verification-before-completion"
       }
     ],
-    "maturity": "已补充执行图、失败路径和验收证据",
+    "maturity": "可执行模板（需实际项目核验）",
     "adaptation": "依据用户提供的单机Docker首次部署配置八节模板：自动预填项目事实、逐环境独立配置、未决推荐与人工确认、确认后使用8.1原有提示词，首次不部署应用。借鉴Superpowers真实验证，不照搬外部部署技术栈。",
     "overview": {
       "headline": "先读取既有八节配置 → 各环境自动预填 → 分别确认 → 只部署基础服务 → 各环境实测与记录。",
@@ -1647,7 +1647,7 @@
         "learned": "借鉴可验收端到端能力和小批量交付原则，使项目模块可以按依赖在不同轮次中交付，不复制另一套Tracker或强制一次性生成全部Tickets。"
       }
     ],
-    "maturity": "已补充执行图、失败路径和验收证据",
+    "maturity": "可执行模板（需实际项目核验）",
     "overview": {
       "headline": "场景发现业务能力 → 业务职责和核心对象生命周期决定拆合 → 继承Owner/架构 → 依赖与覆盖审核。",
       "why": "借鉴 Matt to-tickets 的 Tracer bullet（纵向可验收业务能力）、Blocking edges（真实阻塞边）和 Quiz（人工审核粒度），但项目模块拆合必须以业务职责、核心对象完整生命周期和唯一Owner为主要依据。业务模块不是菜单、表、Controller、前后端技术层或单张开发Ticket。",
@@ -1889,7 +1889,7 @@
         "learned": "学习先追踪既有系统的真实调用与状态责任，再对模块接口/类型/模块边界作有代价的设计草图，并在实现中发现错误时重新设计；用于模块级设计，不替代整体组件及交互架构。"
       }
     ],
-    "maturity": "已补充执行图、失败路径和验收证据",
+    "maturity": "可执行模板（需实际项目核验）",
     "overview": {
       "headline": "先选本轮独立任务并校验真实依赖，再在已批准架构和核心数据骨架中完成模块详细设计。",
       "why": "本 Skill 合并了本轮选择与依赖检查；模块设计长期维护，Spec/Tickets按独立任务留历史。内部Grill仅解决本轮阻断决策，不重问PRD或重画总体架构。",
@@ -2157,7 +2157,7 @@
         "name": "Matt Pocock Skills — to-spec"
       }
     ],
-    "maturity": "官方原版，未改动",
+    "maturity": "官方原版（按需调用）",
     "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
     "overview": {
       "headline": "将本轮已确认的设计与讨论直接综合为一个可实施、可测试的 Spec，原版不重新访谈需求。",
@@ -2394,7 +2394,7 @@
         "name": "Matt Pocock Skills — to-tickets"
       }
     ],
-    "maturity": "官方原版，未改动",
+    "maturity": "官方原版（按需调用）",
     "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
     "overview": {
       "headline": "把已确认的本轮 Spec 拆为单上下文可完成、独立验证的纵向开发 Tickets，并标注真实阻塞依赖。",
@@ -2632,7 +2632,7 @@
         "learned": "学习真实浏览器DOM、console、Network、截图与页面互动测试，不用源码静态推断冒充用户可见行为；工具不可用则将场景留入待人工测试单。"
       }
     ],
-    "maturity": "官方原版，未改动",
+    "maturity": "官方原版（按需调用）",
     "adaptation": "原版未改；当前直接作为S12主Skill，不包装也不额外做人工测试。",
     "overview": {
       "headline": "按 Ticket 阻塞DAG调度实现：独立工作区逐票TDD → 集成分支合并 → 完整Spec最终Code Review。",
@@ -2885,7 +2885,7 @@
         "name": "Matt Pocock Skills — code-review"
       }
     ],
-    "maturity": "官方原版，未改动",
+    "maturity": "官方原版（按需调用）",
     "reviewAxes": [
       {
         "title": "Standards / 代码规范",
@@ -2920,7 +2920,7 @@
     ],
     "stepId": "S16",
     "stepTitle": "全项目业务链路和权限回归",
-    "summary": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。",
+    "summary": "项目经理按已确认PRD的角色×核心场景验证真实跨模块链路和权限，缺陷返回责任模块并保留复测证据。",
     "inputs": [
       "已确认项目模块清单.md",
       "所有模块验收记录",
@@ -2931,7 +2931,7 @@
       "docs/output/07-系统验收/全流程验收报告.md",
       "docs/output/07-系统验收/缺陷闭环记录.md"
     ],
-    "verification": "项目经理确认登录、17个菜单和完整报价主流程；缺陷返回关联模块。",
+    "verification": "项目经理按已确认PRD的角色×核心场景验证真实跨模块链路和权限，缺陷返回责任模块并保留复测证据。",
     "diagram": {
       "outcome": "验证端到端项目而非单独模块",
       "input": "已批准PRD + 所有模块 + 登录权限",
@@ -2961,7 +2961,7 @@
         "learned": "学习用实际浏览器状态和网络请求证实页面行为；当工具/现场系统不可用时标人工待测试或受阻，不冒充实际通过。"
       }
     ],
-    "maturity": "已补充执行图、失败路径和验收证据",
+    "maturity": "可执行模板（需实际项目核验）",
     "adaptation": "采用BMAD交付后测试的角色/场景视角，但由项目PRD反向生成跨模块主/异常链和权限的系统级验收矩阵。"
   },
   {
@@ -3018,7 +3018,7 @@
         "learned": "学习把已确认项目基线中的质量阈值变成可执行检查契约；未达标不得通过削弱阈值或跳过测试获得假绿灯。"
       }
     ],
-    "maturity": "已补充执行图、失败路径和验收证据",
+    "maturity": "可执行模板（需实际项目核验）",
     "adaptation": "将Fresh Evidence规则落实为基线目标对实测值、负载条件、CPU/RSS/并发/P95、恢复指标的逐项放行。"
   },
   {
@@ -3072,7 +3072,7 @@
         "name": "Superpowers — verification-before-completion"
       }
     ],
-    "maturity": "已补充执行图、失败路径和验收证据",
+    "maturity": "可执行模板（需实际项目核验）",
     "adaptation": "将执行前证据验证应用于生产机资源、数据库迁移预演、备份恢复和回滚演练，明确不可逆SQL的阻断。"
   },
   {
@@ -3124,7 +3124,7 @@
         "name": "Superpowers — verification-before-completion"
       }
     ],
-    "maturity": "已补充执行图、失败路径和验收证据",
+    "maturity": "可执行模板（需实际项目核验）",
     "adaptation": "将验证前审计应用于真实客户服务器的发布版本、生产冒烟、监控观察和交付签收，未授权不宣称上线。"
   },
   {
@@ -3176,7 +3176,7 @@
         "name": "Matt Pocock Skills — retro"
       }
     ],
-    "maturity": "官方原版，未改动",
+    "maturity": "官方原版（按需调用）",
     "adaptation": "原版未改；S15直接执行，不承担S14H中的人工验收签收。",
     "overview": {
       "headline": "只复盘本次真实AI编码会话，寻找工程环境与自动守卫的可证实改进；不重新验收业务。",
@@ -3432,7 +3432,7 @@
         "name": "Matt Pocock Skills — domain-modeling"
       }
     ],
-    "maturity": "官方原版，未改动",
+    "maturity": "官方原版（按需调用）",
     "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。"
   },
   {
@@ -3474,7 +3474,7 @@
         "learned": "逐字对齐六阶段：反馈环→复现最小化→3–5个排序假设→针对性插桩→修复回归→清理，第一阶段需真实执行过能捕捉原始症状的命令。"
       }
     ],
-    "maturity": "官方原版，未改动",
+    "maturity": "官方原版（按需调用）",
     "adaptation": "完整保留上游官方SKILL.md及触发边界；本仓库只映射研发导航步骤。",
     "overview": {
       "headline": "先用一个能抓住用户原始症状的快速红灯反馈环，再分六阶段诊断，不能靠读代码猜Bug。",
