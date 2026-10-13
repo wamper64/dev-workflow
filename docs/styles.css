@@ -310,3 +310,9 @@
 .quick-route-check .quick-route-gate{height:100%;box-sizing:border-box}
 .quick-route-check .quick-route-branch{margin-top:8px}
 @media(max-width:890px){.quick-route-checkpoints[data-count="2"]{grid-template-columns:1fr}}
+
+/* 提示词示例按真实任务场景切换，复制当前版本 */
+.prompt-choices{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 12px}
+.prompt-choice{font-size:12px;line-height:1.45;border:1px solid #dce4ef;border-radius:8px;background:#f8faff;color:#49617f;padding:8px 10px;text-align:left}
+.prompt-choice:hover{border-color:#93b3df;background:#eef5ff}
+.prompt-choice.active{border-color:#77a0d8;background:#e5f0ff;color:#1b5b9f;font-weight:700}

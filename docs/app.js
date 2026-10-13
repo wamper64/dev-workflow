@@ -1,4 +1,4 @@
-const ui={data:null,phase:"P01",step:"S01"};
+const ui={data:null,phase:"P01",step:"S01",promptChoice:0};
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const toolkitTaskPrompts={
@@ -49,6 +49,18 @@ document.addEventListener("click",async event=>{
  }
 });
 const fileList=files=>'<div class="file-list">'+(files||[]).map(f=>'<code class="file-item">'+esc(f.trim())+'</code>').join("")+'</div>';
+function activePrompt(s){
+ const choices=Array.isArray(s.promptExamples)?s.promptExamples:[];
+ return choices[ui.promptChoice]?.prompt||s.prompt||"";
+}
+function promptSection(s,title){
+ const examples=Array.isArray(s.promptExamples)?s.promptExamples:[];
+ const buttons=examples.length>1?'<div class="prompt-choices" role="group" aria-label="选择提示词示例">'+examples.map((x,i)=>
+   '<button type="button" class="prompt-choice '+(i===ui.promptChoice?'active':'')+'" data-prompt-example="'+i+'" aria-pressed="'+String(i===ui.promptChoice)+'">'+esc(x.label)+'</button>').join("")+'</div>':"";
+ const chosen=examples[ui.promptChoice];
+ const tip=chosen?.example?'这是演示情景，复制后先替换为真实问题、环境与证据。':examples.length>1?'选择适用情景，把 <...> 中的内容替换成当前项目事实。':'请根据当前任务的实际信息执行。';
+ return '<section class="detail-section prompt-section"><div class="prompt-heading"><h3><span class="section-icon">✎</span> '+esc(title)+'</h3><button type="button" class="copy-prompt" data-copy-prompt>复制当前提示词</button></div>'+buttons+'<div class="prompt-text">'+esc(activePrompt(s))+'</div><p class="detail-hint">'+esc(tip)+'</p></section>';
+}
 const skillList=skills=>!(skills||[]).length?'<div class="review-box">这里只展示已有输入，无需调用Skill。</div>':'<div class="skill-grid">'+(skills||[]).map(id=>{const sk=skillData?.skills?.find(x=>x.id===id);const origin=sk?.type||"类型未登记";return '<button type="button" class="skill-pill '+(origin==="Matt原版"?"":"custom")+'" data-skill="'+esc(id)+'" title="点击查看SKILL.md、逻辑流程、示例与模板">'+esc(id)+' <span class="skill-kind">'+esc(origin)+'</span> ↗</button>'}).join("")+'</div>';
 function renderStages(){
   $("project-stats").textContent=ui.data.phases.length+" 个阶段 · "+ui.data.phases.reduce((n,p)=>n+p.steps.length,0)+" 个步骤 · "+(skillData?.workspace.length||0)+" 个通用Skill";
@@ -80,7 +92,7 @@ function renderDetails(){
     content+='<section class="detail-section"><h3><span class="section-icon">↘</span> 使用上下文</h3>'+fileList([s.input])+'</section>';
     content+='<section class="detail-section"><h3><span class="section-icon">↗</span> 可能的结果</h3>'+fileList([s.output])+'</section>';
     content+='<section class="detail-section"><h3><span class="section-icon">✓</span> 核心执行方式</h3><div class="toolkit-steps">'+s.workflow.map((t,i)=>'<div class="toolkit-activity"><span>'+String(i+1)+'</span><p>'+esc(t)+'</p></div>').join("")+'</div><p class="detail-hint">适用边界：'+esc(s.limitation)+'</p></section>';
-    content+='<section class="detail-section prompt-section"><div class="prompt-heading"><h3><span class="section-icon">✎</span> 调用提示词</h3><button type="button" class="copy-prompt" data-copy-prompt>复制提示词</button></div><div class="prompt-text">'+esc(s.prompt)+'</div></section>';
+    content+=promptSection(s,"调用提示词");
     $("step-detail").innerHTML=content;return;
   }
   $("step-position").textContent=String(index).padStart(2,"0")+" / "+String(p.steps.length).padStart(2,"0");
@@ -92,7 +104,7 @@ function renderDetails(){
   html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">✓</span> 审核要求</h3><div class="review-box">'+esc(s.review)+'</div><p class="owner">审核及参与角色：'+esc(p.owner)+'</p></section>';
-  if(p.id!=="P00"&&s.prompt){html+='<section class="detail-section prompt-section"><div class="prompt-heading"><h3><span class="section-icon">✎</span> 执行提示词</h3><button type="button" class="copy-prompt" data-copy-prompt aria-label="复制当前步骤提示词">复制提示词</button></div><div class="prompt-text">'+esc(s.prompt||"执行提示词待确认")+'</div><p class="detail-hint">提示词引用本步骤唯一主Skill，执行前仍需读取真实输入并进行必要验证。</p></section>';}
+   if(p.id!=="P00"&&s.prompt){html+=promptSection(s,"执行提示词");}
   if(p.id==="P01"&&s.id==="S07"&&ui.data.modules?.length){
     html+='<details class="extra-disclosure"><summary>查看本项目13个候选模块与菜单映射</summary>';
     html+=ui.data.modules.map(m=>'<div class="module-record"><b>'+esc(m.id+" · "+m.title)+'</b><p>'+esc([...m.menus,...(m.additional?[m.additional]:[])].join("、"))+'</p></div>').join("");
@@ -105,7 +117,9 @@ function setSelection(phaseId,stepId,moveFocus=false){
   const next=allPhases().find(p=>p.id===phaseId);
   if(!next)return;
   ui.phase=next.id;
-  ui.step=next.steps.some(s=>s.id===stepId)?stepId:next.steps[0].id;
+  const selected=next.steps.some(s=>s.id===stepId)?stepId:next.steps[0].id;
+  if(ui.phase!==next.id||ui.step!==selected)ui.promptChoice=0;
+  ui.step=selected;
   const params=new URLSearchParams({phase:ui.phase,step:ui.step});
   history.replaceState(null,"","#"+params.toString());
   renderStages();renderSteps();renderDetails();
@@ -304,10 +318,18 @@ document.addEventListener("click",event=>{
  if(event.target.closest("[data-skill-close]")){$("skill-dialog").close()}
 });
 
+document.addEventListener("click",event=>{
+ const option=event.target.closest("button[data-prompt-example]");
+ if(!option)return;
+ const i=Number(option.dataset.promptExample);
+ if(!Number.isInteger(i)||!(step().promptExamples||[])[i])return;
+ ui.promptChoice=i;
+ renderDetails();
+});
 document.addEventListener("click",async event=>{
   const button=event.target.closest("[data-copy-prompt]");
   if(!button||!ui.data)return;
-  const content=step().prompt||"";
+  const content=activePrompt(step());
   if(!content)return;
   const original=button.textContent;
   try{
