@@ -177,7 +177,7 @@ async function main(){
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/数据域/);
  click("[data-skill-close]");
  click('[data-step="S07"]');
- assert.match(doc.querySelector("#step-detail").textContent,/Matt Tickets/);
+ assert.match(doc.querySelector("#step-detail").textContent,/模块池|模块级/,"模块拆分产物应为模块池");
  click('[data-skill="module-discovery"]');
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/Blocking edges|纵向|Tracer bullet/);
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/模块级/);
@@ -246,7 +246,9 @@ async function main(){
  click("[data-skill-close]");
   click('[data-phase="P01"]');
  click('[data-step="S04"]');
- assert.match(doc.querySelector("#step-detail").textContent,/grill-with-docs/,"整体架构内必须包含Grill");
+ click('[data-skill="architecture-baseline"]');
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/grill-with-docs/,"整体架构Skill须内嵌Grill");
+ click("[data-skill-close]");
  click('[data-phase="P02"]');
  click('[data-step="S09"]');
  assert.match(doc.querySelector("#step-detail").textContent,/grill-with-docs/,"模块详细设计内必须包含Grill");
