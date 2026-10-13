@@ -282,8 +282,11 @@ async function main(){
  click("[data-skill-close]");
  click('[data-step="S14B"]');
  const defectPrompt=doc.querySelector("#step-detail .prompt-text").textContent;
- for(const term of ["CI","开发调试","联调","人工测试","生产","设备"])
-   assert.ok(defectPrompt.includes(term),"故障入口不足："+term);
+ for(const term of ["实际现象","正常预期","复现方式","现有证据"])
+   assert.ok(defectPrompt.includes(term),"Bug提示词没有要求描述真实问题："+term);
+ const cases=[...doc.querySelectorAll("[data-prompt-example]")].map(x=>x.textContent).join(" ");
+ for(const term of ["CI","页面","设备","生产"])
+   assert.ok(cases.includes(term),"Bug缺对应场景示例："+term);
  assert.match(doc.querySelector("#step-detail").textContent,/不要求所有故障都有人工用例/,"不能把人测单作为必须产物");
  click('[data-skill="diagnosing-bugs"]');
  const defectOverview=doc.querySelector("#skill-dialog-content").textContent;
