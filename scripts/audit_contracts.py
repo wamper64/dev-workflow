@@ -40,7 +40,7 @@ prompt_intents={
     "S11":("Spec","Tickets","发布前"),
     "S12":("Spec","前端原型","TDD"),
     "S14H":("必须由人","自动","人工回填"),
-    "S14B":("失败用例","原用例 ID","复测"),
+    "S14B":("故障","CI","联调","人工测试","生产","按来源"),
     "S15":("AI 编码会话","Git Diff","未经我批准"),
     "S16":("整个项目","PRD","项目经理"),
     "S17":("上线条件","项目基线","测量证据"),
@@ -48,6 +48,21 @@ prompt_intents={
     "S19":("生产发布","实际命令","交付清单"),
 }
 require(set(prompt_intents)=={x["id"] for x in steps if x.get("skillId")},"目标校验清单与正式技能步骤不一致")
+
+# 入口位置不得缩窄Matt诊断Skill：检查至少四类独立来源和回归去向。
+diagnosis=lookup["S14B"]
+diagnosis_skill=next(x for x in catalog if x["id"]=="diagnosing-bugs")
+for label in ("CI","联调","人工测试","生产"):
+    require(label in diagnosis["prompt"],"Bug委托漏故障入口："+label)
+require("不必等人工测试单" in data["phases"][2]["description"],"模块迭代阶段未声明Bug诊断可独立触发")
+require("仅故障来自人工测试时" in " ".join(diagnosis["inputs"]),"人工测试单应是Bug诊断可选输入")
+require("不要求所有故障都有人工用例" in " ".join(diagnosis["outputs"]),"Bug诊断产物错误绑定人工用例")
+diagnosis_overview=diagnosis_skill.get("overview",{})
+require(len(diagnosis_overview.get("quickFacts",[]))>=4,"Bug快速理解未展示多来源和返回路径")
+require(len(diagnosis_overview.get("thinking",[]))>=4,"Bug快速理解未覆盖CI、设备、人工及生产场景")
+require(len(diagnosis_overview.get("sections",[]))==6,"官方六阶段不能被改写或增加成专属工作流")
+require("若" not in diagnosis["prompt"] or "人工测试" in diagnosis["prompt"],"Bug委托缺按来源条件分支")
+
 for step_id,keywords in prompt_intents.items():
     require(all(word in lookup[step_id]["prompt"] for word in keywords),
             step_id+" 执行提示词缺少本步骤目标、边界或交付语义")

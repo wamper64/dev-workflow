@@ -63,7 +63,7 @@ async function main(){
     S06:["逐环境","部署授权"],S07:["业务模块池","生命周期"],
     S09:["本轮","现有前端原型"],S10:["独立开发任务","Spec"],
     S11:["Tickets","发布前"],S12:["前端原型","TDD"],
-    S14H:["必须由人","人工回填"],S14B:["失败用例","原用例 ID"],
+    S14H:["必须由人","人工回填"],S14B:["CI","联调","人工测试","生产","按来源"],
     S15:["AI 编码会话","Git Diff"],S16:["整个项目","PRD"],
     S17:["上线条件","测量证据"],S18:["目标生产环境","回滚"],
     S19:["生产发布","交付清单"]
@@ -253,7 +253,15 @@ async function main(){
  assert.match(doc.getElementById("skill-dialog-content").textContent,/覆盖|证据/);
  click("[data-skill-close]");
  click('[data-step="S14B"]');
+ const defectPrompt=doc.querySelector("#step-detail .prompt-text").textContent;
+ for(const term of ["CI","开发调试","联调","人工测试","生产","设备"])
+   assert.ok(defectPrompt.includes(term),"故障入口不足："+term);
+ assert.match(doc.querySelector("#step-detail").textContent,/不要求所有故障都有人工用例/,"不能把人测单作为必须产物");
  click('[data-skill="diagnosing-bugs"]');
+ const defectOverview=doc.querySelector("#skill-dialog-content").textContent;
+ for(const source of ["CI","用户反馈","人工测试","生产"])
+   assert.ok(defectOverview.includes(source),"快速理解漏掉故障来源："+source);
+ assert.match(defectOverview,/人工测试用例不是必填/,"快速理解仍限定人工测试前提");
  assert.equal(doc.querySelectorAll(".skill-topic-card").length,6,"官方diagnosing-bugs必须六个阶段");
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/Phase 1/);
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/Phase 6/);
