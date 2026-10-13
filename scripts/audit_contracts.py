@@ -65,7 +65,7 @@ require("项目基线前置约束确认表.md" in " ".join(next(x for x in catal
 require("项目基线前置约束确认表.md" in (ROOT/"docs/data/project-directory-tree.txt").read_text(encoding="utf-8"),"项目目录树未同步S03")
 inputs_check=(baseline_dir/"scripts/check_inputs.py").read_text(encoding="utf-8")
 require('root / "code"' in inputs_check and "code/fld" not in inputs_check and "guiwu_ruoyi" not in inputs_check,"S03输入检查不能限定报价项目路径")
-require(any(t in baseline for t in ("只填","只填写缺失","仅询问")),"S03主Skill没有限定只处理输入缺口")
+require("只让用户填写缺失" in baseline and "自动预填" in baseline,"S03主Skill没有限定自动预填和只处理输入缺口")
 
 require("grill-with-docs" in (ROOT/"skills/architecture-baseline/SKILL.md").read_text(encoding="utf-8") and "grill-with-docs" in (ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8"),"S04和S09主Skill缺内部Grill")
 # S04须能真正约束后续工程结构及模块开发；不允许网站内容与正式模板分裂。
