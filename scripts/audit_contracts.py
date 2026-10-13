@@ -20,12 +20,37 @@ for item in steps:
     prompt=item.get("prompt","")
     if skill_id:
         require(prompt.startswith("/"+skill_id),item["id"]+" 不是Slash调用")
-        require(len(prompt)<=180,item["id"]+" 提示词冗长，重复了Skill执行规则")
+        require(75<=len(prompt)<850,item["id"]+" 执行提示词缺任务目的或过长")
+        require(prompt.split("\n",1)[0].strip()=="/"+skill_id,item["id"]+" 第一行应为准确的Skill调用")
         require("SKILL.md" not in prompt and "【真实输出】" not in prompt and "【审核/不通过路径】" not in prompt,
                 item["id"]+" 提示词重复Skill/网页栏目")
         require((ROOT/"skills"/skill_id/"SKILL.md").is_file(),item["id"]+" 找不到主Skill")
     elif item["id"]=="S01":
         require(bool(prompt) and not prompt.startswith("/"),"S01独立只读核验保留自然语言提示词")
+# 根据每个步骤实际职责审核委托信息，不强制统一标题或相同字数。
+prompt_intents={
+    "S02":("研发协作入口","Tracker","沿用默认五标签"),
+    "S03":("工程约束","自动预填","确认"),
+    "S04":("总体组件","关键端到端业务链路","判断规则"),
+    "S05":("数据骨架","核心表","ER 图"),
+    "S06":("初次部署配置.md","逐环境","部署授权"),
+    "S07":("业务模块池","生命周期","依赖"),
+    "S09":("本轮","任务","现有前端原型"),
+    "S10":("独立开发任务","Spec","当前任务"),
+    "S11":("Spec","Tickets","发布前"),
+    "S12":("Spec","前端原型","TDD"),
+    "S14H":("必须由人","自动","人工回填"),
+    "S14B":("失败用例","原用例 ID","复测"),
+    "S15":("AI 编码会话","Git Diff","未经我批准"),
+    "S16":("整个项目","PRD","项目经理"),
+    "S17":("上线条件","项目基线","测量证据"),
+    "S18":("目标生产环境","回滚","不直接发布"),
+    "S19":("生产发布","实际命令","交付清单"),
+}
+require(set(prompt_intents)=={x["id"] for x in steps if x.get("skillId")},"目标校验清单与正式技能步骤不一致")
+for step_id,keywords in prompt_intents.items():
+    require(all(word in lookup[step_id]["prompt"] for word in keywords),
+            step_id+" 执行提示词缺少本步骤目标、边界或交付语义")
 renderer_source=(ROOT/"docs/app.js").read_text(encoding="utf-8")
 require('prompt:"/"+w.id+' in renderer_source and "toolkitTaskPrompts" in renderer_source,
         "通用工具缺简短Slash任务提示")

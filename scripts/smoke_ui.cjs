@@ -52,9 +52,30 @@ async function main(){
         continue;
       }
       assert.ok(text.startsWith("/"+skill.dataset.skill+"\n"),"未使用 /Skill 作为提示词开头："+id);
-      assert.ok(text.length<=180,"主流程执行提示词重复了Skill："+id);
+      assert.ok(text.length>=75 && text.length<850,"步骤提示词没有交代任务目标或内容过长："+id);
       assert.doesNotMatch(text,/SKILL\.md|【真实输出】|【审核\/不通过路径】/,"提示词复写了Skill内容："+id);
       assert.doesNotMatch(text,/请调用\s*Skill：|调用Skill：/,"有旧式Skill调用："+id);
+    }
+  }
+  const specific={
+    S02:["研发协作入口","默认五标签"],S03:["工程约束","自动预填"],
+    S04:["总体组件","关键端到端业务链路"],S05:["核心表","ER 图"],
+    S06:["逐环境","部署授权"],S07:["业务模块池","生命周期"],
+    S09:["本轮","现有前端原型"],S10:["独立开发任务","Spec"],
+    S11:["Tickets","发布前"],S12:["前端原型","TDD"],
+    S14H:["必须由人","人工回填"],S14B:["失败用例","原用例 ID"],
+    S15:["AI 编码会话","Git Diff"],S16:["整个项目","PRD"],
+    S17:["上线条件","测量证据"],S18:["目标生产环境","回滚"],
+    S19:["生产发布","交付清单"]
+  };
+  for(const section of ["P01","P02","P03"]){
+    click('[data-phase="'+section+'"]');
+    for(const stepId of Object.keys(specific)){
+      if(!doc.querySelector('[data-step="'+stepId+'"]'))continue;
+      click('[data-step="'+stepId+'"]');
+      const prompt=doc.querySelector(".prompt-text").textContent;
+      for(const keyword of specific[stepId])
+        assert.ok(prompt.includes(keyword),stepId+" 缺当前任务信息："+keyword);
     }
   }
   click('[data-phase="P01"]');
@@ -279,7 +300,7 @@ async function main(){
     click('[data-step="T_'+id+'"]');
     const text=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
     assert.ok(text.startsWith("/"+id+"\n"),"通用Skill未使用Slash命令："+id);
-    assert.ok(text.length<=160,"通用Skill提示词过长："+id);
+    assert.ok(text.length>=65 && text.length<400,"通用Skill应根据实际用途写出目标及必要上下文："+id);
   }
  click('[data-step="T_handoff"]');
  assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/\/handoff/);
