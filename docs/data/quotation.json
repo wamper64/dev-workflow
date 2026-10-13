@@ -110,10 +110,11 @@
           "outputs": [
             "AGENTS.md（复用或更新）",
             "docs/agents/issue-tracker.md",
-            "docs/agents/domain.md"
+            "docs/agents/domain.md",
+            "docs/agents/triage-labels.md（仅安装 /triage 时）"
           ],
-          "review": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
-          "prompt": "/setup-matt-pocock-skills\n\n按 `skills/setup-matt-pocock-skills/SKILL.md` 的要求执行。\n执行「初始化项目」。\n\n【必须读取的输入】\n- 已有code/\n- docs/input/工程资料/\n- 已存在的AGENTS.md/CLAUDE.md（如有）\n\n【具体执行方式】\n初始化Matt本地Tracker及AGENTS.md前先检查现有文件，合并而不覆盖。\n\n【真实输出】\n- AGENTS.md（复用或更新）\n- docs/agents/issue-tracker.md\n- docs/agents/domain.md\n\n【审核/不通过路径】\n开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "review": "开发人员确认所选 Issue Tracker、已有AGENTS/CLAUDE和领域文档兼容；已安装 /triage 时沿用默认五标签并核对映射，不把这些标签视为人工验收或签收。",
+          "prompt": "/setup-matt-pocock-skills\n\n按 `skills/setup-matt-pocock-skills/SKILL.md` 的要求执行。\n执行「初始化项目」。\n\n【必须读取的输入】\n- 已有code/\n- docs/input/工程资料/\n- 已存在的AGENTS.md/CLAUDE.md（如有）\n\n【具体执行方式】\n先扫描现有Issue Tracker、AGENTS.md/CLAUDE.md和领域文档，按已确认配置增量合并，不默认强制使用本地Markdown。\n\n【五标签决策：已确认选择「是」】\n若检测到已安装 /triage，沿用Matt默认五标签：needs-triage（待分诊）、needs-info（待补信息）、ready-for-agent（可交AI）、ready-for-human（需人工处理）、wontfix（不予处理）。仅用于Issue分诊，不代表业务测试、审批和签收完成。\nGitHub/GitLab Tracker核对并补建缺失标签；Local Markdown仅按原版管理本地标签映射。若未安装 /triage，跳过整个标签配置，不额外创建文件或标签。\n\n【真实输出】\n- 已有 AGENTS.md 或 CLAUDE.md 的Agent配置（按实际复用）\n- docs/agents/issue-tracker.md\n- docs/agents/domain.md\n- docs/agents/triage-labels.md（仅安装 /triage 时）\n\n【审核/不通过路径】\n确认选定Tracker、原有Agent配置和条件化标签映射与当前仓库一致；缺配置或有命名冲突先提问，不覆盖原工程。\n\n当前仅配置工程协作约定；项目基线将在S03确认，本步骤不开展业务开发或重建前端原型。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
           "skillId": "setup-matt-pocock-skills",
           "skillOrigin": "Matt原版"
         },

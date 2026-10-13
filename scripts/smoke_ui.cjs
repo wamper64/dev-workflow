@@ -76,6 +76,17 @@ async function main(){
    click("[data-skill-close]");
  }
  click('[data-step="S02"]');
+ assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/沿用Matt默认五标签/,"初始化提示词缺默认五标签选择");
+ click('[data-skill="setup-matt-pocock-skills"]');
+ const overviewText=doc.querySelector(".skill-overview").textContent;
+ for(const label of ["needs-triage","needs-info","ready-for-agent","ready-for-human","wontfix"]){
+   assert.ok(overviewText.includes(label),"初始化快速理解未说明标签："+label);
+ }
+ assert.match(overviewText,/推荐选择.{0,12}是，沿用默认五标签/,"缺默认推荐选择");
+ assert.match(overviewText,/仅安装 \/triage 时|仅安装 \/triage 时/,"标签适用性不明");
+ assert.match(overviewText,/人工测试签收|业务验收状态/,"未区分人工测试与Issue分诊");
+ click("[data-skill-close]");
+ click('[data-step="S02"]');
  assert.match(doc.querySelector("#step-detail").textContent,/code\//);
  click('[data-step="S03"]');
  assert.match(doc.getElementById("step-detail").textContent,/项目基线前置约束确认表/);

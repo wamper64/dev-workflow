@@ -190,6 +190,13 @@ for skill_id,minimum_sections,minimum_coverage in (
 deployment_overview=next(x["overview"] for x in catalog if x["id"]=="development-environment")
 require(len(deployment_overview.get("workflow",{}).get("gates",[]))==2,"初次部署必须可视化配置审批和执行验收两关")
 require("quick-route-checkpoints" in renderer,"网页未支持多关卡快速理解")
+setup_overview=next(x["overview"] for x in catalog if x["id"]=="setup-matt-pocock-skills")
+setup_text=json.dumps(setup_overview,ensure_ascii=False)
+for label in ("needs-triage","needs-info","ready-for-agent","ready-for-human","wontfix"):
+    require(label in setup_text,"初始化快速理解缺标签定义："+label)
+require("是，沿用默认五标签" in setup_text,"初始化快速理解未提示推荐选择")
+require("/triage" in setup_text and "人工测试签收" in setup_text,"五标签的生效条件或业务测试边界不清")
+require("沿用Matt默认五标签" in lookup["S02"]["prompt"],"初始化调用提示词未继承已确认的五标签选择")
 for step_obj in steps:
     require(len(step_obj["title"])<=12,"执行步骤标题过长："+step_obj["id"])
 

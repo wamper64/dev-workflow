@@ -17,7 +17,7 @@
     ],
     "stepId": "S02",
     "stepTitle": "初始化项目",
-    "summary": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
+    "summary": "初始化Matt工程协作配置：复用既有Agent约定，确认任务跟踪器，按需沿用 /triage 默认五标签和领域文档入口。",
     "inputs": [
       "已有code/",
       "docs/input/工程资料/",
@@ -26,9 +26,10 @@
     "outputs": [
       "AGENTS.md（复用或更新）",
       "docs/agents/issue-tracker.md",
-      "docs/agents/domain.md"
+      "docs/agents/domain.md",
+      "docs/agents/triage-labels.md（仅安装 /triage 时）"
     ],
-    "verification": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
+    "verification": "确认Tracker与AGENTS/CLAUDE的现有约定兼容；若安装 /triage，检查默认五标签映射和创建结果，不把它们当成人工测试签收。",
     "diagram": {
       "outcome": "为整个项目建立可复用的Agent与任务约定",
       "input": "已有仓库 / AGENTS.md / 本地任务目录",
@@ -52,9 +53,9 @@
     "adaptation": "直接采用Matt官方原版，初始化Agent约定、Issue Tracker与领域文档导航；保留既有配置，按实际情况增量写入。",
     "overview": {
       "headline": "先扫描已有仓库约定，再确认 Tracker、领域文档与可选标签，审核后增量写入；不是重建项目。",
-      "why": "Matt 官方 setup Skill 只初始化后续 Spec/Tickets/Agent 协作的配置。先发现现有 AGENTS.md/CLAUDE.md、术语/ADR和 Tracker，冲突时必须先确认，不覆盖人工规则。",
+      "why": "先扫描AGENTS.md/CLAUDE.md、Tracker和领域文档，避免覆盖已有配置。若已安装 /triage，推荐选择「是，沿用默认五标签」，用来判断 Issue 等待补资料、交AI、交人工或不处理；这些不是业务验收状态。",
       "result": "既有 AGENTS.md 或 CLAUDE.md 的 Agent skills 区块；docs/agents/issue-tracker.md、domain.md；安装 triage 时才写 triage-labels.md。",
-      "sectionsTitle": "官方原版必须落地的配置内容",
+      "sectionsTitle": "初始化配置与默认五标签：具体内容",
       "sections": [
         {
           "title": "仓库现状与冲突扫描",
@@ -79,15 +80,30 @@
           "pass": "能够明确写入与检索 Spec/Tickets"
         },
         {
-          "title": "领域文档与条件标签",
-          "summary": "统一术语、ADR；triage 装了才启用标签",
+          "title": "默认五标签：建议选择「是」",
+          "summary": "只供 /triage 管理 Issue 的分诊流转；名称沿用官方规则可减少维护与重复创建",
           "checks": [
-            "默认单仓 GLOSSARY.md＋docs/adr；真实 monorepo 才考虑多上下文",
-            "定义 docs/agents/domain.md 的发现与读取约定",
-            "仅安装 triage 时确认五种状态标签，并写 triage-labels.md"
+            "`needs-triage`（待分诊）：新提交的 Bug、需求或外部 Issue/PR，需要维护者先评估",
+            "`needs-info`（待补充信息）：描述、复现或其他关键依据不足，等提交者补充",
+            "`ready-for-agent`（可交 AI）：任务已经明确，可以安排 AI 处理；不等于已实现或测试通过",
+            "`ready-for-human`（交人工处理）：问题须由人实现或处理；不是项目的人工测试签收状态",
+            "`wontfix`（不予处理）：经判断为重复、已实现、不采纳等决定不处理",
+            "若已安装 /triage，选择「是」直接保留五个名称；只有已有 Tracker 采用不同命名时才选「否」并映射现有标签，避免重复创建",
+            "GitHub/GitLab Tracker：补建缺少的标签；Local Markdown Tracker：保留本地映射，不要求创建 GitHub 标签；未安装 /triage：跳过整个标签环节"
           ],
-          "deliverable": "domain.md 与可选标签映射",
-          "pass": "路径可定位，不强制创建无关文件"
+          "deliverable": "仅安装 /triage 时：docs/agents/triage-labels.md（五种角色→实际标签名的映射）；GitHub/GitLab 下补建缺失标签",
+          "pass": "五个标签的用途和映射清晰，按真实 Tracker 配置；不混淆开发任务状态与人工业务签收"
+        },
+        {
+          "title": "领域文档与布局",
+          "summary": "建立GLOSSARY和ADR的查找入口，不改写已存在的项目约定",
+          "checks": [
+            "默认使用单仓 GLOSSARY.md 与 docs/adr/；只有真实 monorepo 才考虑多上下文",
+            "确定 docs/agents/domain.md 的术语和架构决策文档读取约定",
+            "保留现有领域文档与人工配置，避免重复文件和冲突"
+          ],
+          "deliverable": "docs/agents/domain.md 与现有领域文档入口",
+          "pass": "领域术语和决策路径可定位，不强制创建无关文档"
         },
         {
           "title": "审核草稿、增量写入与验证",
@@ -104,6 +120,10 @@
       ],
       "thinking": [
         {
+          "given": "初始化询问“是否沿用默认五标签？”（本项目已选择“是”）",
+          "answer": "推荐并采用“是”：使用 needs-triage、needs-info、ready-for-agent、ready-for-human、wontfix；只在检测到 /triage 已安装时生效。"
+        },
+        {
           "given": "已有 CLAUDE.md 及 GitHub remote",
           "answer": "检查原内容，建议 GitHub Tracker；只更新 CLAUDE.md 对应区块，不另建 AGENTS.md。"
         },
@@ -115,7 +135,8 @@
       "doesNot": [
         "不执行项目业务开发、不预先拆业务模块",
         "不把 GitHub Issues 设为唯一选择",
-        "不覆盖旧文件或未获确认的规则"
+        "不覆盖旧文件或未获确认的规则",
+        "默认五标签不代表开发已完成、人工测试通过或项目经理已签收，也不改变项目的 Spec → Tickets → 实现 → 人测流程"
       ],
       "workflow": {
         "title": "实际执行流程与审核回路",
@@ -130,7 +151,7 @@
           },
           {
             "title": "逐项确认",
-            "detail": "跟踪器→triage 标签（按需）→领域布局"
+            "detail": "先确认 Tracker；检测到 /triage 后建议选「是」沿用五标签；再确认领域文档布局"
           },
           {
             "title": "审核写入草稿",
@@ -167,10 +188,10 @@
           "gap": "无法定位术语/决策记录"
         },
         {
-          "title": "标签（按需）",
-          "must": "triage 安装时才确认 5 种标签",
-          "evidence": "triage-labels.md 或不适用",
-          "gap": "无 triage 却强制建标签"
+          "title": "默认五标签（建议是）",
+          "must": "只在安装 /triage 时配置：needs-triage待分诊、needs-info待补信息、ready-for-agent交AI、ready-for-human交人工、wontfix不处理；默认沿用原名",
+          "evidence": "docs/agents/triage-labels.md；选GitHub/GitLab时检查并补建缺少标签",
+          "gap": "误以为标签就是审批/人工测试签收；未安装 /triage 却创建标签；与Tracker现有标签重复"
         },
         {
           "title": "安全修改",
@@ -179,7 +200,21 @@
           "gap": "重复建入口/覆盖人工内容"
         }
       ],
-      "coverageNote": "逐项核对该 Skill 是否要求这些具体内容；这里是应有的内容清单，并非本项目已通过的执行结果。缺少依据的项须标明“待确认/不适用”，不可伪造完成。"
+      "coverageNote": "逐项核对该 Skill 是否要求这些具体内容；这里是应有的内容清单，并非本项目已通过的执行结果。缺少依据的项须标明“待确认/不适用”，不可伪造完成。",
+      "quickFacts": [
+        {
+          "label": "推荐选择",
+          "value": "是，沿用默认五标签"
+        },
+        {
+          "label": "何时配置",
+          "value": "仅安装 /triage 时；未安装则跳过"
+        },
+        {
+          "label": "管理对象",
+          "value": "Issue / 外部 PR 的分诊状态，不是业务验收状态"
+        }
+      ]
     }
   },
   {
