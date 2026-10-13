@@ -60,11 +60,11 @@ async function main(){
   const specific={
     S02:["研发协作入口","默认五标签"],S03:["工程约束","自动预填"],
     S04:["总体组件","关键端到端业务链路"],S05:["核心表","ER 图"],
-    S06:["逐环境","部署授权"],S07:["业务模块池","生命周期"],
-    S09:["本轮","现有前端原型"],S10:["独立开发任务","Spec"],
+    S06:["逐环境","尚未授权"],S07:["业务模块池","生命周期"],
+    S09:["本轮","现有原型"],S10:["业务目标","Spec"],
     S11:["Tickets","发布前"],S12:["前端原型","TDD"],
-    S14H:["必须由人","待人工填写"],S14B:["CI","联调","人工测试","生产","故障来源"],
-    S15:["AI 编码工作","Git Diff"],S16:["整个项目","PRD"],
+    S14H:["人工验收","待执行"],S14B:["具体问题","实际现象","正常预期","现有证据"],
+    S15:["AI 编码工作","关联证据"],S16:["整个项目","已确认PRD"],
     S17:["上线条件","测量证据"],S18:["目标生产环境","回滚"],
     S19:["生产发布","交付清单"]
   };
@@ -77,6 +77,34 @@ async function main(){
       for(const keyword of specific[stepId])
         assert.ok(prompt.includes(keyword),stepId+" 缺当前任务信息："+keyword);
     }
+  }
+  // 选择场景时，显示和复制的必须是当前用户选中的那个具体问题。
+  click('[data-phase="P02"]');
+  click('[data-step="S14B"]');
+  assert.equal(doc.querySelectorAll('[data-prompt-example]').length,5,"诊断提示词应有多个问题实例");
+  assert.match(doc.querySelector('.prompt-text').textContent,/实际现象/);
+  assert.doesNotMatch(doc.querySelector('.prompt-text').textContent,/问题来源不限于/);
+  click('[data-prompt-example="1"]');
+  assert.match(doc.querySelector('.prompt-text').textContent,/设备告警列表选择/);
+  assert.equal(doc.querySelector('[data-prompt-example="1"]').getAttribute('aria-pressed'),"true");
+  assert.match(doc.querySelector('.prompt-section .detail-hint').textContent,/演示情景/);
+  let copied=null;
+  Object.defineProperty(dom.window.navigator,"clipboard",{configurable:true,value:{writeText:async value=>{copied=value}}});
+  click('[data-copy-prompt]');
+  await Promise.resolve();
+  assert.match(copied||"",/设备告警列表选择/,"复制内容未随提示词切换");
+  click('[data-prompt-example="2"]');
+  assert.match(doc.querySelector('.prompt-text').textContent,/CI 的设备报文解析集成测试失败/);
+  click('[data-step="S15"]');
+  click('[data-step="S14B"]');
+  assert.match(doc.querySelector('.prompt-text').textContent,/本次要解决的具体问题/,"换步骤后未恢复默认提示词");
+  for(const [stepId,n] of [["S06",2],["S09",3],["S10",2],["S14H",2],["S15",2],["S16",2]]){
+    const phase=stepId==="S06"?"P01":stepId==="S16"?"P03":"P02";
+    click('[data-phase="'+phase+'"]');click('[data-step="'+stepId+'"]');
+    assert.equal(doc.querySelectorAll('[data-prompt-example]').length,n,stepId+" 缺场景示例");
+    click('[data-prompt-example="1"]');
+    const cmd="/"+doc.querySelector('#step-detail [data-skill]').dataset.skill;
+    assert.ok(doc.querySelector('.prompt-text').textContent.startsWith(cmd+"\n"),stepId+" 切换示例后Slash调用错误");
   }
   click('[data-phase="P01"]');
   click('[data-step="S01"]');

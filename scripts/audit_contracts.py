@@ -33,27 +33,47 @@ prompt_intents={
     "S03":("工程约束","自动预填","确认"),
     "S04":("总体组件","关键端到端业务链路","判断规则"),
     "S05":("数据骨架","核心表","ER 图"),
-    "S06":("初次部署配置.md","逐环境","部署授权"),
+    "S06":("初次部署配置.md","逐环境","尚未授权"),
     "S07":("业务模块池","生命周期","依赖"),
-    "S09":("本轮","任务","现有前端原型"),
-    "S10":("独立开发任务","Spec","当前任务"),
+    "S09":("本轮","依赖","现有原型"),
+    "S10":("任务","业务目标","Spec"),
     "S11":("Spec","Tickets","发布前"),
     "S12":("Spec","前端原型","TDD"),
-    "S14H":("必须由人","自动","待人工填写"),
-    "S14B":("故障","CI","联调","人工测试","生产","故障来源"),
-    "S15":("AI 编码工作","Git Diff","未经我批准"),
-    "S16":("整个项目","PRD","项目经理"),
+    "S14H":("人工验收","自动测试","待执行"),
+    "S14B":("具体问题","实际现象","正常预期","现有证据"),
+    "S15":("AI 编码工作","关联证据","我批准"),
+    "S16":("整个项目","已确认PRD","已覆盖"),
     "S17":("上线条件","项目基线","测量证据"),
     "S18":("目标生产环境","回滚","不直接发布"),
     "S19":("生产发布","实际命令","交付清单"),
 }
 require(set(prompt_intents)=={x["id"] for x in steps if x.get("skillId")},"目标校验清单与正式技能步骤不一致")
 
+# 根据真实适用情形使用多份示例，不机械要求每个Skill都有相同的格式。
+expected_variants={"S06":2,"S09":3,"S10":2,"S14H":2,"S14B":5,"S15":2,"S16":2}
+for step_id,count in expected_variants.items():
+    item=lookup[step_id]
+    variants=item.get("promptExamples",[])
+    require(len(variants)==count,step_id+" 的提示词场景数不匹配")
+    require(bool(variants) and item["prompt"]==variants[0]["prompt"],step_id+" 默认场景与主提示词不一致")
+    names=[v["label"] for v in variants]
+    require(len(names)==len(set(names)),step_id+" 示例标签重复")
+    for v in variants:
+        require(v.get("prompt","").startswith("/"+item["skillId"]+"\n\n"),step_id+" 示例缺准确的Slash调用")
+        require(90<=len(v.get("prompt",""))<=1400,step_id+" 示例缺问题或过长")
+        require("SKILL.md" not in v.get("prompt",""),step_id+" 示例不应复制Skill内部规则")
+require(not lookup["S11"].get("promptExamples"),"没有真正场景分支时无须机械增加多份提示词")
+
+
 # 入口位置不得缩窄Matt诊断Skill：检查至少四类独立来源和回归去向。
 diagnosis=lookup["S14B"]
 diagnosis_skill=next(x for x in catalog if x["id"]=="diagnosing-bugs")
-for label in ("CI","联调","人工测试","生产"):
-    require(label in diagnosis["prompt"],"Bug委托漏故障入口："+label)
+bug_variants=diagnosis.get("promptExamples",[])
+require(len(bug_variants)>=5,"Bug诊断应提供故障描述模板及多场景示例")
+for term in ("CI","页面业务功能","设备","生产"):
+    require(any(term in x["label"] or term in x["prompt"] for x in bug_variants),"Bug诊断缺具体场景："+term)
+for term in ("实际现象","正常预期","复现方式","现有证据"):
+    require(term in diagnosis["prompt"],"默认Bug提示词未描述实际问题："+term)
 require("不必等人工测试单" in data["phases"][2]["description"],"模块迭代阶段未声明Bug诊断可独立触发")
 require("仅故障来自人工测试时" in " ".join(diagnosis["inputs"]),"人工测试单应是Bug诊断可选输入")
 require("不要求所有故障都有人工用例" in " ".join(diagnosis["outputs"]),"Bug诊断产物错误绑定人工用例")
@@ -61,7 +81,7 @@ diagnosis_overview=diagnosis_skill.get("overview",{})
 require(len(diagnosis_overview.get("quickFacts",[]))>=4,"Bug快速理解未展示多来源和返回路径")
 require(len(diagnosis_overview.get("thinking",[]))>=4,"Bug快速理解未覆盖CI、设备、人工及生产场景")
 require(len(diagnosis_overview.get("sections",[]))==6,"官方六阶段不能被改写或增加成专属工作流")
-require("若" not in diagnosis["prompt"] or "人工测试" in diagnosis["prompt"],"Bug委托缺按来源条件分支")
+require("问题来源不限于" not in diagnosis["prompt"],"提示词不应罗列Skill支持的场景来替代故障描述")
 
 for step_id,keywords in prompt_intents.items():
     require(all(word in lookup[step_id]["prompt"] for word in keywords),
