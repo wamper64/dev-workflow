@@ -88,17 +88,24 @@ for utility in workspace:
     assert "SKILL.md" in files
     payload["skills"].append({**utility, "category": "workspace", "files": files})
 
-# 将流程SVG内嵌进交付HTML，使单文件离线可读并避免部署时丢失图片。
+# 将用户指定的原始图片按二进制嵌入单文件HTML，在线与离线一致。
 for record in payload["skills"]:
     visual = record.get("overview", {}).get("visual")
     if visual:
         src = visual["src"]
-        assert src.startswith("./images/") and src.endswith(".svg"), src
+        assert src.startswith("./images/"), src
         asset = DOCS / src[2:]
         assert asset.is_file(), f"Skill图片缺失：{src}"
-        contents = asset.read_text(encoding="utf-8")
-        assert "<svg" in contents and "</svg>" in contents and "<script" not in contents.lower()
-        visual["src"] = "data:image/svg+xml;base64," + base64.b64encode(contents.encode("utf-8")).decode("ascii")
+        ext = asset.suffix.lower()
+        assert ext in (".png", ".svg"), f"图片类型不受支持：{src}"
+        contents = asset.read_bytes()
+        if ext == ".png":
+            assert contents[:4] == bytes([137, 80, 78, 71]), "PNG文件签名不正确"
+            mime = "image/png"
+        else:
+            assert b"<svg" in contents and b"</svg>" in contents and b"<script" not in contents.lower()
+            mime = "image/svg+xml"
+        visual["src"] = f"data:{mime};base64," + base64.b64encode(contents).decode("ascii")
 
 # 项目案例仅供网站预览，绝不能写入skills目录或安装ZIP。
 for record in catalog:

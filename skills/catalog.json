@@ -926,9 +926,9 @@
       ],
       "coverageNote": "逐项核对该 Skill 是否要求这些具体内容；这里是应有的内容清单，并非本项目已通过的执行结果。缺少依据的项须标明“待确认/不适用”，不可伪造完成。",
       "visual": {
-        "src": "./images/architecture-baseline.svg",
-        "alt": "整体架构设计Skill的两个核心、六步执行流程及两轮架构审核流程图",
-        "caption": "整体架构设计执行全景图 · 点击可查看大图。图中是方法要求，并非特定项目的已审核架构。"
+        "src": "./images/architecture-baseline.png",
+        "alt": "整体架构设计 Skill 双核心 S1-S6 设计和评审流程原始中文信息图",
+        "caption": "你指定的整体架构设计 Skill 原始信息图（PNG，1484×1060），点击查看大图。"
       }
     },
     "outputSampleFile": "docs/examples/报价项目/architecture-baseline/报价整体架构示例.md",

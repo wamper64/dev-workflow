@@ -141,6 +141,10 @@ require("专项" in architecture and "冻结" in architecture,"S04主Skill未定
 require("冻结" in (ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8"),"S09未继承架构冻结规则")
 # S04快速理解不允许只有笼统分类；必须列出具体决策项、产物及可判断的完成条件。
 s04_overview=next(x["overview"] for x in catalog if x["id"]=="architecture-baseline")
+require(s04_overview.get("visual", {}).get("src")=="./images/architecture-baseline.png", "S04必须使用上传的原始PNG")
+s04_png = ROOT/"docs/images/architecture-baseline.png"
+require(s04_png.is_file(), "S04原始PNG缺失")
+require(__import__("hashlib").sha256(s04_png.read_bytes()).hexdigest()=="aaab1523bf4e3c003defc65549f9436036ac246c57747c70c3d5ba2dfee5d0a9", "S04原图被替换或压缩")
 require(len(s04_overview["sections"])==11,"S04快速理解板块数量异常")
 for section in s04_overview["sections"]:
     require(len(section.get("checks",[]))>=4,"S04具体项不够："+section["title"])

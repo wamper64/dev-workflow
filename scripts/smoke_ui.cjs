@@ -204,7 +204,11 @@ async function main(){
  assert.match(doc.querySelector("#phase-route").textContent,/人工测试/,"模块流程速览必须显示人工测试");
  click('[data-phase="P01"]');
  click('[data-step="S04"]');
+ assert.ok(doc.querySelector('#step-detail .architecture-step-preview img[src^="data:image/png;base64,"]'),"S04页面未显示原始PNG");
  click('[data-skill="architecture-baseline"]');
+ const architectureImage=doc.querySelector('#skill-dialog-content .architecture-overview-visual img[src^="data:image/png;base64,"]');
+ assert.ok(architectureImage,"S04快速理解未显示原始PNG");
+ assert.equal(require("node:crypto").createHash("sha256").update(Buffer.from(architectureImage.getAttribute("src").split(",")[1],"base64")).digest("hex"),"aaab1523bf4e3c003defc65549f9436036ac246c57747c70c3d5ba2dfee5d0a9","HTML中的图片不是用户上传的原图");
  assert.ok(doc.querySelectorAll(".skill-topic-card").length>=5,"整体架构须展示组件与交互的多个内容板块，而非空壳");
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/运行单元/);
  click('[data-skill-tab="files"]');
