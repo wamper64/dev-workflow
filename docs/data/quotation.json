@@ -114,7 +114,7 @@
             "docs/agents/triage-labels.md（仅安装 /triage 时）"
           ],
           "review": "开发人员确认所选 Issue Tracker、已有AGENTS/CLAUDE和领域文档兼容；已安装 /triage 时沿用默认五标签并核对映射，不把这些标签视为人工验收或签收。",
-          "prompt": "/setup-matt-pocock-skills\n\n按 `skills/setup-matt-pocock-skills/SKILL.md` 的要求执行。\n执行「初始化项目」。\n\n【必须读取的输入】\n- 已有code/\n- docs/input/工程资料/\n- 已存在的AGENTS.md/CLAUDE.md（如有）\n\n【具体执行方式】\n先扫描现有Issue Tracker、AGENTS.md/CLAUDE.md和领域文档，按已确认配置增量合并，不默认强制使用本地Markdown。\n\n【五标签决策：已确认选择「是」】\n若检测到已安装 /triage，沿用Matt默认五标签：needs-triage（待分诊）、needs-info（待补信息）、ready-for-agent（可交AI）、ready-for-human（需人工处理）、wontfix（不予处理）。仅用于Issue分诊，不代表业务测试、审批和签收完成。\nGitHub/GitLab Tracker核对并补建缺失标签；Local Markdown仅按原版管理本地标签映射。若未安装 /triage，跳过整个标签配置，不额外创建文件或标签。\n\n【真实输出】\n- 已有 AGENTS.md 或 CLAUDE.md 的Agent配置（按实际复用）\n- docs/agents/issue-tracker.md\n- docs/agents/domain.md\n- docs/agents/triage-labels.md（仅安装 /triage 时）\n\n【审核/不通过路径】\n确认选定Tracker、原有Agent配置和条件化标签映射与当前仓库一致；缺配置或有命名冲突先提问，不覆盖原工程。\n\n当前仅配置工程协作约定；项目基线将在S03确认，本步骤不开展业务开发或重建前端原型。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "/setup-matt-pocock-skills\n\n若已安装 /triage，沿用默认五标签；Issue Tracker 根据实际仓库选择。",
           "skillId": "setup-matt-pocock-skills",
           "skillOrigin": "Matt原版"
         },
@@ -136,7 +136,7 @@
             "docs/output/01-项目基线/项目基线.md（关键约束裁定后）"
           ],
           "review": "项目经理审核职责、禁止边界与业务量化事实；技术总监审核技术/规模/性能/恢复约束。关键未裁定不可进入架构。",
-          "prompt": "/project-baseline\n\n按 `skills/project-baseline/SKILL.md` 的要求执行。\n必须先读取其全部 references、assets，尤其是 constraint-discovery.md、applicability.md 和 preconfirmation-template.md。\n \n原则：项目基线只定义工程约束，不重写PRD、不提前做架构/数据库/模块设计，也不把本期不做功能清单当工程禁止项。\n \n输入：递归读取 docs/input/ 下已确认PRD、原型及工程、环境、对接资料；只读分析 code/ 真实工程，不假设子目录名和技术版本。\n \n先从需求中自动提取可量化事实（规模、数量、频率、精度、期限、增长、时效等），记录对象、数值、单位、统计与来源；禁止/责任/复用等非数值约束必须能客观判定是否违反。代码现状不自动等于必须沿用的硬约束。\n \n先按8项通用核心维度+实际触发的IoT、计量、第三方、异步长任务、定时、审批、Agent、远控、多租户、信创专项以及本项目独有规则，生成 docs/output/01-项目基线/项目基线前置约束确认表.md。自动预填已确认项，用户只填写缺失/冲突/必须裁定的工程限制；一次最多追问3组关键问题。业务用户给用户规模、任务数据量和等待容忍；AI计算可核实的RPS、候选并发、容量等并标注公式/前提，技术负责人裁定。不询问有哪些功能或指定队列/Worker等设计。\n \n补齐后交叉核验技术兼容、环境资源上限及余量、数据增长与保留、负载与性能、RPO/RTO及真实备份、禁止事项与项目特殊边界。整机资源上限在基线确认，逐服务CPU/内存分配由整体架构设计完成。\n \n输出 docs/output/01-项目基线/项目基线.md：只列经过确认的项目级约束，量化指标有单位与测量边界，禁止事项有客观判据；未知关键值不得伪称已定稿。",
+          "prompt": "/project-baseline\n\n项目输入位于 docs/input/，现有工程位于 code/。",
           "skillId": "project-baseline",
           "skillOrigin": "自建"
         },
@@ -158,7 +158,7 @@
             "按需：GLOSSARY.md、docs/adr/（内部Grill形成必要术语与决策）"
           ],
           "review": "双核心门禁：一审全组件及关键业务链路完整性（流程必须有实际判断、写入、后续动作和异常出口），二审开发人员按真实流程逐步核验组件Owner、代码落点、交互与状态。",
-          "prompt": "/architecture-baseline\n\n按 `skills/architecture-baseline/SKILL.md` 的要求执行。\n由本Skill内部按需调用官方 /grill-with-docs（skills/grill-with-docs/SKILL.md），不额外先跑一次独立Grill。\n\n必须递归阅读 docs/input/ 下**所有**实际项目文件，包括已确认PRD、工程、环境、对接和新增目录；继承 docs/output/01-项目基线/项目基线.md 的技术、服务器、并发、保存/恢复边界，并实际检查 code/ 原型与 code/ 现成能力。\n\n本步骤唯一目标：梳理全项目所有主要逻辑组件与真实运行单元、组件责任和所属边界、相互通信/鉴权、主要业务链与Worker/HITL/审批交互、异常恢复与部署拓扑，形成**完整整体架构骨架**，不是简单的Web→API→DB示意图。所有主要组件必须登记来源与部署状态；每条主要跨组件连线必须有交互矩阵支持（触发场景、协议、授权、请求/进度/结果、超时/取消/失败、状态Owner）。尤其要按真实对接资料核实统一编排、实际对接组件、知识库、iframe/REST/gRPC等组件是否存在且如何交互，不能把候选协议视为事实。\n\n对输入未裁定的高成本结构性问题，在本Skill内部调用 /grill-with-docs，按依赖决策树逐轮给推荐并等待确认，必要时记录GLOSSARY/ADR。PRD/基线已定事项不重问，未确认的边界不生成“已完成”架构。输出 docs/output/02-整体架构/整体架构设计.md 和真实评审记录。项目经理核对业务覆盖，技术总监核对组件完整性、交互责任与部署可落地。后续数据库总体/模块拆分/模块详细设计只能在这份架构骨架上补充，变更全局组件与通信必须返回本关卡审核。\n\n必须补齐：①扫描code/现有前后端工程（真实路由、原型组件、公共权限与业务模块）并确定新增代码目录/复用/允许和禁止依赖；②按实际证据启用Web、IoT、Agent及第三方专项（可叠加，不强制MQ或Worker）；③逐个核心角色×场景反查主责组件、代码落点、跨组件协议、数据Owner、部署与异常边界；④列出A级架构冻结、B级全局兼容、C级模块内部可变事项及S05/S06/S07/S09/S12变更路线；⑤开发人员抽取真实场景演练，技术总监只在两轮审核及关键阻塞关闭后批准。架构文档仍为原五章，不新增独立Skill。\n\n本次调整为**两个同等重要的核心**：①总体组件架构：全局组件、前后端代码组织与复用、职责、接口、依赖和部署；②关键端到端业务链路：先选出真实的主业务/数据事件/审批/第三方/长任务等重要链路，逐条画从触发、接入、【队列按需】、规则判断或业务处理、权威数据状态写入、下游通知/动作、反馈到正常和异常闭环的**业务处理流程图**，跨组件复杂交接再画时序图。比如设备告警不能只画‘第三方→后端→MQ→数据库’，必须画出是否触发告警、入库、通知、处理，以及重复、超时、通知失败的恢复。链路每步引用组件Owner/真实代码/关系与状态权威；组件反向证明其流程或基础运维必要性，形成双向映射矩阵。权限、资源、部署及A/B/C冻结作为两核心支撑；不得固定套用MQ、OSS、通知、微服务，也不提前写字段级业务设计。",
+          "prompt": "/architecture-baseline\n\n基于已确认的项目基线、PRD和现有 code/ 设计。",
           "skillId": "architecture-baseline",
           "skillOrigin": "基于Matt改造",
           "invokes": [
@@ -183,7 +183,7 @@
             "docs/output/03-数据库总体/数据库设计审核.md"
           ],
           "review": "两轮审核：第一轮项目经理/技术负责人检查整体规则、关键数据生命周期、核心表/字段/ER；第二轮技术总监按规则→数据流程→核心表/字段→引用/Owner→存储与S09继承逐项验收。S05定义必要全局核心字段，不产完整DDL。",
-          "prompt": "/data-architecture\n\n按 `skills/data-architecture/SKILL.md` 的要求执行。\n读取docs/input/全部真实资料、已批准S03/S04（尤其关键业务链路、数据Owner、冻结约束）、code/已有Schema/Mapper/迁移（可读时）。按三核心开展：①整体数据规则：全局身份与命名、业务唯一、精度与时间、Owner/一致性、状态/版本、权限、历史及存储演进；②关键数据业务流程：从S04实际核心业务链提取数据来源→读写/校验→状态版本变化→跨域引用→归档追溯与异常恢复，出数据流图和动作矩阵，不重复S04技术组件链路；③核心表、核心字段和ER关联：给出真实核心表清单、字段名/必要类型/精度/唯一/身份/状态/版本/关键业务与引用约束、关系基数与Owner、复用现有表的依据。补充存储/容量/备份/安全/迁移支撑以及规则→流程→字段关系双向核验。内部按需调用 /grill-with-docs澄清关键缺口，涉及改变已批准S04运行组件/关键业务链路先回S04。两轮审核并冻结A级跨模块契约；S09再设计模块完整字段、辅助表、索引与迁移草案，S12产生实际DDL。不得把报价示例或未读取的旧库表当成事实。",
+          "prompt": "/data-architecture\n\n基于已批准的总体架构及实际数据库现状设计。",
           "skillId": "data-architecture",
           "skillOrigin": "基于Matt改造"
         },
@@ -206,7 +206,7 @@
             "获批准执行后：本地部署结果README-<环境名称>.md、脱敏运行与本机/异机验收证据"
           ],
           "review": "先读原有模板并从已有项目资料自动预填，未知值给推荐与待确认，密钥只通过本地私有配置注入。用户逐环境确认完整配置后才按该环境第8.1节提示词执行；一套环境一套独立Compose项目/目录/端口/数据卷。首次只部署基础设施、数据库和中间件，不启动ruoyi和nginx，也不要求jar/dist存在。",
-          "prompt": "/development-environment\n\n按 `skills/development-environment/SKILL.md` 的要求执行。\n完整读取code/deploy/single-node-docker/初次部署配置.md（第1～8节及8.1推荐提示词）和真实部署包；从docs/input/全部相关资料、项目基线/整体架构/数据库总体与现有代码自动预填该八节模板。先识别项目有几套首次部署环境；开发、测试两个环境就分别生成初次部署配置-开发环境.md、初次部署配置-测试环境.md，不能共用一个文件覆盖。每套环境必须有独立远程部署目录、Docker Compose项目名、端口、数据卷和账号数据域；未知IP/密码/服务版本/端口占用标待确认并给推荐及依据，秘钥只写私有未提交文件。按每套配置展示填好文档及缺口，由用户逐份确认。【未经当前环境配置确认，不得执行SSH/Docker部署】。确认后才以该环境配置第8.1节推荐提示词为入口执行第8.2节安全检查与首次部署；只启动配置选定且部署包真实支持的数据库/缓存/消息/FTP等基础组件，不检查jar/dist、不启动ruoyi和nginx，预留package目录；按第8.3节真实健康与异机IP/端口验证，各环境分别生成部署结果README，未执行/受阻绝不声称成功。Git提交信息中文且不提交密码/Token。",
+          "prompt": "/development-environment\n\n以 code/deploy/single-node-docker/初次部署配置.md 为模板，按实际环境逐份确认。",
           "skillId": "development-environment",
           "skillOrigin": "自建"
         },
@@ -230,7 +230,7 @@
             "docs/output/05-模块拆分/模块拆分审核.md（Matt式粒度提问、项目经理/技术总监确认）"
           ],
           "review": "模块以职责与核心对象生命周期为主判据：项目经理核对角色×场景覆盖、业务边界和独立验收；技术总监核对唯一权威Owner、整体架构与模块强/契约依赖。补遗漏、删冗余、改冲突并确认拆合理由后发布模块池。",
-          "prompt": "/module-discovery\n\n按 `skills/module-discovery/SKILL.md` 的要求执行。\n这是项目级模块规划，**不是提前拆全项目开发Tickets**。\n\n请递归读取docs/input/中已确认的需求基线（项目/模块PRD、角色×核心业务场景、原型/页面映射等），并继承项目基线、整体架构的所有主要组件与交互、数据库总体中的数据Owner与存储边界，核对实际code/中的可复用代码。\n\n按Matt Tickets的三个核心机制操作：\n1）tracer bullet：把PRD场景变成贯穿实际前后端及数据Owner、可供角色验收的纵向交付切片，以业务职责和核心对象完整生命周期作为模块拆合主判据，检查独立业务结果、状态Owner、职责与非职责；**不得按菜单、页面、表、Controller、前后端层或预设模块数机械拆分**。\n2）blocking edges：给每个模块写清Blocked by强依赖、只需接口冻结的契约依赖、真实第三方或环境阻塞，并画模块级依赖DAG，确认没有循环依赖和假阻塞。\n3）quiz：把模块名称、交付的真实业务结果、角色×场景和阻塞边交项目经理与技术总监逐项确认过大/过小、合并/拆分及依赖是否真的成立；未经确认只称候选。\n\n产物仅有 docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md、模块拆分审核.md。完成后S09负责选择本轮任务、检查依赖并完成模块详细设计，S10生成本轮独立Spec，**S11再调用未修改的Matt原版 /to-tickets**，发布适合单个Agent上下文执行的纵向开发Tickets。不要在S07产生全项目Spec、.scratch/*/issues/或提交Tracker可执行Tickets。",
+          "prompt": "/module-discovery\n\n基于项目PRD、原型、整体架构与数据库总体形成模块池。",
           "skillId": "module-discovery",
           "skillOrigin": "Matt适配"
         }
@@ -276,7 +276,7 @@
             "docs/output/项目总控/项目实施状态.md（首次初始化，后续保留历史）"
           ],
           "review": "先由项目经理确认本轮任务和验收场景、开发人员确认前置依赖与真实环境；然后审查详细设计是否继承S04/S05冻结约束、既有原型与代码。阻塞则不进入Spec。",
-          "prompt": "/module-design\n\n按 `skills/module-design/SKILL.md` 的要求执行。\n先基于已审核模块清单/依赖图/实施状态选择本轮独立开发任务，区分首次开发、同一未完成任务继续、新需求独立开发；检查上游模块、权限、字典、核心数据、第三方和测试环境，按已就绪/稳定契约可并行/受阻作出开发判定，不能将Mock宣称真实通过。明确角色×核心场景、页面/后端范围、不做事项和验收人，生成本次任务范围与依赖检查并由项目经理确认。通过门禁后按S04/S05批准边界和现有前后端原型代码完善模块详细设计、迁移设计草案，内部按需调用 /grill-with-docs。模块详细设计长期维护最新有效状态，已完成独立任务的Spec/Tickets/人测证据不覆盖；重大变更返回S04/S05审核。首次初始化项目实施状态，不能把规划标记成验收。Git提交内容采用中文。",
+          "prompt": "/module-design\n\n本轮模块/任务：<填写；未确定则从已审核模块池中选择>。",
           "skillId": "module-design",
           "skillOrigin": "基于Matt改造",
           "invokes": [
@@ -299,7 +299,7 @@
             ".scratch/<模块>/<任务标识>/spec.md（或Issue Tracker中的独立Spec）"
           ],
           "review": "Spec仅覆盖当前独立任务，明确已有功能与增量范围，历史已验收Spec保留；测试接缝已确认。",
-          "prompt": "/to-spec\n\n按 `skills/to-spec/SKILL.md` 的要求执行。\n结合本轮范围与已确认的最新模块设计、PRD、真实代码及术语/ADR形成可开发Spec，明确最高层测试接缝。已验收模块的新独立任务新建Spec，不覆盖旧Spec；尚未完成的同一任务需要澄清时更新当前Spec。未决问题先返回 /module-design 内部Grill。Git提交内容采用中文。",
+          "prompt": "/to-spec\n\n依据本轮已确认的任务范围和模块设计编写 Spec。",
           "skillId": "to-spec",
           "skillOrigin": "Matt原版"
         },
@@ -319,7 +319,7 @@
             ".scratch/<模块>/<任务标识>/issues/NN-*.md（或Tracker对应关联Tickets）"
           ],
           "review": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
-          "prompt": "/to-tickets\n\n按 `skills/to-tickets/SKILL.md` 的要求执行。\n仅针对本次独立Spec拆分可独立演示的纵向Tracer bullet Tickets，标注Blocking edges，询问用户粒度与依赖，按已配置Tracker发布。不能将其他已完成开发任务的Tickets混入本次。Git提交内容采用中文。",
+          "prompt": "/to-tickets\n\n请处理本轮已确认的 Spec。",
           "skillId": "to-tickets",
           "skillOrigin": "Matt原版"
         },
@@ -340,7 +340,7 @@
             "真实集成分支、完成的Tickets、TDD测试和原版最终code-review结论（以实际结果为准）"
           ],
           "review": "按真实原版implement-spec的提交/任务状态/TDD命令/最终code-review证据确认实现完成；人工用例由下一步独立Skill生成。",
-          "prompt": "/implement-spec\n\n按 `skills/implement-spec/SKILL.md` 的要求执行。\n基于本次独立Spec/Tickets依赖图执行TDD、分支与工作树合并、最终一次Standards+Spec code-review及问题修复。本步骤只运行原版 /implement-spec，人工测试用例和签收由后续独立Skill负责，不可伪造。必须复用已有原型/后端和批准的架构/数据契约；必要的详细设计及迁移草案差异依法审核更新；无法运行的检查明确标受阻，Git提交消息使用中文。",
+          "prompt": "/implement-spec\n\n请实现本轮 Spec 及其 Tickets。",
           "skillId": "implement-spec",
           "skillOrigin": "Matt原版",
           "invokes": []
@@ -364,7 +364,7 @@
             "docs/output/项目总控/项目实施状态.md（仅真实签收后增量更新）"
           ],
           "review": "人工测试执行及填写必须由实际人员完成；失败/受阻/未测不可算通过；仅真实业务签收后更新项目状态，不能把Mock/未验证视为完成。",
-          "prompt": "/manual-testing\n\n按 `skills/manual-testing/SKILL.md` 的要求执行。\n按本轮角色×核心场景比对Matt原版implement-spec的真实自动化证据；已自动验证不重复测，本可自动而遗漏的退回补测，人工判断/现场设备/真实第三方生成待人工用例，环境不足标受阻。AI只生成带角色、前提、步骤、可观察预期的人工测试单，所有实际结果/测试人/日期/证据留空。人员实际执行并同表回填；失败转S14B诊断，修复后原用例复测。开发人员/项目经理凭真实证据签收，签收后更新本任务和总控状态、历史不覆盖；一个任务完成不代表整个模块完成。随后可调用Matt原版 /retro；未完成任务下轮从S09重新选择。",
+          "prompt": "/manual-testing\n\n请针对本轮已完成的实现准备人工测试，实际结果由人员回填。",
           "optional": false,
           "manual": false,
           "invokes": [],
@@ -391,7 +391,7 @@
             "docs/output/06-模块迭代/<模块>/任务/<任务标识>/人工测试用例与结果.md（复测更新）"
           ],
           "review": "严格执行Matt官方六阶段：1反馈环→2复现最小化→3提出3–5个可证伪假设→4逐个实验/定点插桩→5修复回归→6清理；不能没构造red-capable反馈环就猜原因，修复后按人工用例复测，不再额外拆独立代码审查与自动联调。",
-          "prompt": "/diagnosing-bugs\n\n按 `skills/diagnosing-bugs/SKILL.md` 的要求执行。\n按Phase 1→6构造可抓住实际症状的红灯、复现最小化、提出3—5个可证伪假设、插桩、修复回归与清理。修复需真实自动回归，人工按原测试单复测并同表回填。无Bug跳过。Git提交消息使用中文。",
+          "prompt": "/diagnosing-bugs\n\n请处理本轮人工测试中失败的用例；如没有失败用例则跳过。",
           "optional": true
         },
         {
@@ -410,7 +410,7 @@
             "用户明确批准后才实际调整Agent约定/CI/规则（按需）"
           ],
           "review": "仅按Matt官方retro流程评估有证据的AI工程环境改进建议，未经批准不修改全局Skill/CI；业务签收不由retro完成。",
-          "prompt": "/retro\n\n按 `skills/retro/SKILL.md` 的要求执行。\n基于本轮真实AI编码会话、Git Diff、CI与工具日志，检查导航路径、自动守卫、规范、AGENTS指令和信息访问等工程环境改进点；按严重度输出有证据、有可执行措施和验证办法的建议。未经用户明确批准不修改全局Skill/CI/规范。业务签收及项目状态只由人工测试与签收步骤负责；缺少会话证据时说明限制，不虚构结果。有未完成任务则返回S09选择下一轮，全部模块签收后才进入全项目验收。",
+          "prompt": "/retro\n\n复盘本轮真实 AI 编码会话。",
           "skillId": "retro",
           "skillOrigin": "Matt原版",
           "invokes": []
@@ -459,7 +459,7 @@
             "docs/output/07-系统验收/缺陷闭环记录.md"
           ],
           "review": "项目经理核对PRD全场景、角色/页面覆盖与真实业务结果；开发人员提供可复现的链路与缺陷证据，未执行不得标通过。",
-          "prompt": "/system-acceptance\n\n按 `skills/system-acceptance/SKILL.md` 的要求执行。\n执行「系统业务验收」。\n\n【必须读取的输入】\n- docs/input/需求资料/（已确认PRD）\n- docs/output/05-模块拆分/项目模块清单.md\n- docs/output/项目总控/项目实施状态.md\n- docs/output/06-模块迭代/<模块>/任务/<任务标识>/人工测试用例与结果.md（逐模块验证）\n- code/\n- code/\n- 实际联调环境与第三方接入证据\n\n【具体执行方式】\n从项目PRD角色场景而非菜单做跨模块业务链、权限与异常的真实回归。\n\n【真实输出】\n- docs/output/07-系统验收/业务场景覆盖矩阵.md\n- docs/output/07-系统验收/系统验收报告.md\n- docs/output/07-系统验收/缺陷闭环记录.md\n\n【审核/不通过路径】\n项目经理按当前项目PRD确认全部角色×核心场景、菜单/页面与跨模块链路；缺陷返回实际责任模块，并使用原场景真实复测。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "/system-acceptance\n\n验收范围：当前项目已确认PRD中的角色×核心业务场景。",
           "skillId": "system-acceptance",
           "skillOrigin": "自建"
         },
@@ -480,7 +480,7 @@
             "docs/output/07-系统验收/上线评审结论.md"
           ],
           "review": "技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。",
-          "prompt": "/release-readiness\n\n按 `skills/release-readiness/SKILL.md` 的要求执行。\n执行「非功能指标及上线评审」。\n\n【必须读取的输入】\n- docs/output/01-项目基线/项目基线.md\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/07-系统验收/系统验收报告.md\n- 真实性能/安全/容量/备份恢复证据\n\n【具体执行方式】\n对照基线目标/负载/实测值、资源和RPO/RTO，技术总监判断是否可上线。\n\n【真实输出】\n- docs/output/07-系统验收/性能安全检查.md\n- docs/output/07-系统验收/上线评审结论.md\n\n【审核/不通过路径】\n技术总监评审性能/可用性/备份/安全与发布风险；没有实测不能填通过。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "/release-readiness\n\n根据已批准的项目基线和真实测试证据进行上线评审。",
           "skillId": "release-readiness",
           "skillOrigin": "自建"
         },
@@ -503,7 +503,7 @@
             "docs/output/08-上线交付/备份回滚方案.md"
           ],
           "review": "技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。",
-          "prompt": "/release-preflight\n\n按 `skills/release-preflight/SKILL.md` 的要求执行。\n执行「生产环境核验、部署预演与回滚准备」。\n\n【必须读取的输入】\n- docs/input/环境资料/（如有）\n- docs/output/01-项目基线/项目基线.md\n- docs/output/02-整体架构/整体架构设计.md\n- docs/output/07-系统验收/上线评审结论.md\n- code/构建产物\n- database/migrations/（已批准迁移）\n\n【具体执行方式】\n核验实际生产机、演练备份恢复/迁移/部署/回滚，不拿计划当通过证据。\n\n【真实输出】\n- deploy/docker-compose.yml（正式）\n- deploy/nginx/（按需）\n- docs/output/08-上线交付/部署预演.md\n- docs/output/08-上线交付/备份回滚方案.md\n\n【审核/不通过路径】\n技术总监确认目标环境与预演结果；有破坏性SQL或无法回滚不得贸然上线。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "/release-preflight\n\n针对本次实际生产环境及待发布版本进行预检。",
           "skillId": "release-preflight",
           "skillOrigin": "自建"
         },
@@ -524,7 +524,7 @@
             "docs/output/08-上线交付/交付清单.md"
           ],
           "review": "开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。",
-          "prompt": "/release-delivery\n\n按 `skills/release-delivery/SKILL.md` 的要求执行。\n执行「生产部署、验收与交付」。\n\n【必须读取的输入】\n- docs/output/08-上线交付/部署预演.md\n- docs/output/08-上线交付/备份回滚方案.md\n- docs/output/07-系统验收/上线评审结论.md\n- 待发布Commit/镜像与实际迁移脚本\n\n【具体执行方式】\n按批准版本上线，记录实际结果、生产冒烟和签收，没有权限则标待执行。\n\n【真实输出】\n- docs/output/08-上线交付/上线记录.md\n- docs/output/08-上线交付/交付清单.md\n\n【审核/不通过路径】\n开发人员实际操作并留证；项目经理确认业务可用，技术总监确认正式上线结果。\n\n必须继承已确认项目基线，在现有code/原型、code/上开发。不准重建整套UI；不能把计划/Mock/草案当成实测通过。Git提交采用中文。",
+          "prompt": "/release-delivery\n\n发布范围：已批准的版本；必须基于真实执行结果交付。",
           "skillId": "release-delivery",
           "skillOrigin": "自建"
         }

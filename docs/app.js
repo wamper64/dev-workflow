@@ -1,6 +1,16 @@
 const ui={data:null,phase:"P01",step:"S01"};
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const toolkitTaskPrompts={
+ "grill-me":"需要澄清的问题：<填写>",
+ "improve-codebase-architecture":"请检查当前代码库的架构优化机会。",
+ "handoff":"请交接当前工作进展、上下文与未决事项。",
+ "triage":"待分诊 Issue 或 PR：<编号/链接>",
+ "prototype":"需要验证的问题：<填写>",
+ "implement":"待实现 Ticket：<编号/链接>",
+ "wayfinder":"需要规划的目标：<填写>",
+ "research":"需要调研的问题：<填写>"
+};
 const toolkitPhase=()=>({
  id:"PTOOLS",
  title:"通用 Skills",
@@ -17,7 +27,7 @@ const toolkitPhase=()=>({
    output:w.diagram?.output||"依据调用目标确定",
    workflow:w.diagram?.work||[],
    limitation:w.diagram?.fail||"由具体任务决定是否需要",
-   prompt:"/"+w.id+"\n\n请按 `skills/"+w.id+"/SKILL.md` 的要求执行。"+w.summary+"。先读取该Skill适用文件并结合真实项目上下文；通用工具按需调用，不视作固定研发步骤。",
+   prompt:"/"+w.id+"\n\n"+(toolkitTaskPrompts[w.id]||"请根据当前任务执行。"),
    source:w.source?.url||""
  }))
 });

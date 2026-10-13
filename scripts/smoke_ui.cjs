@@ -52,6 +52,8 @@ async function main(){
         continue;
       }
       assert.ok(text.startsWith("/"+skill.dataset.skill+"\n"),"未使用 /Skill 作为提示词开头："+id);
+      assert.ok(text.length<=180,"主流程执行提示词重复了Skill："+id);
+      assert.doesNotMatch(text,/SKILL\.md|【真实输出】|【审核\/不通过路径】/,"提示词复写了Skill内容："+id);
       assert.doesNotMatch(text,/请调用\s*Skill：|调用Skill：/,"有旧式Skill调用："+id);
     }
   }
@@ -76,7 +78,7 @@ async function main(){
    click("[data-skill-close]");
  }
  click('[data-step="S02"]');
- assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/沿用Matt默认五标签/,"初始化提示词缺默认五标签选择");
+ assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/沿用默认五标签/,"初始化提示词缺默认五标签选择");
  click('[data-skill="setup-matt-pocock-skills"]');
  const overviewText=doc.querySelector(".skill-overview").textContent;
  for(const label of ["needs-triage","needs-info","ready-for-agent","ready-for-human","wontfix"]){
@@ -166,7 +168,7 @@ async function main(){
  click('[data-step="S06"]');
  assert.match(doc.querySelector("#step-detail").textContent,/初次部署配置/);
  assert.equal(doc.querySelectorAll("[data-dev-field]").length,0,"旧环境信息强制填写表应移除");
- assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/8\.1|初次部署配置-<环境名称>/);
+ assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/初次部署配置\.md/);
  click('[data-skill="development-environment"]');
  assert.match(doc.querySelector("#skill-dialog-content").textContent,/环境|配置|确认/);
  click("[data-skill-close]");
@@ -273,6 +275,7 @@ async function main(){
     click('[data-step="T_'+id+'"]');
     const text=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
     assert.ok(text.startsWith("/"+id+"\n"),"通用Skill未使用Slash命令："+id);
+    assert.ok(text.length<=160,"通用Skill提示词过长："+id);
   }
  click('[data-step="T_handoff"]');
  assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/\/handoff/);

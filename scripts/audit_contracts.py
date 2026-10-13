@@ -14,22 +14,21 @@ def require(v,msg):
     if not v: errors.append(msg)
 require(len(lookup)==len(steps)==20 and len(data["phases"])==4,"阶段或步骤数量不一致")
 
-# 复制到Agent的Skill提示词必须以Slash命令开头，内部/后续调用同样须有Slash前缀。
+# 复制提示词只指定Skill和当前任务；具体规则与验收条件应由Skill及其模板维护。
 for item in steps:
     skill_id=item.get("skillId")
     prompt=item.get("prompt","")
     if skill_id:
-        require(prompt.startswith("/"+skill_id+"\n\n"),item["id"]+" 提示词未以 /skill-id 开头")
-        require("skills/"+skill_id+"/SKILL.md" in prompt,item["id"]+" 缺主Skill文件引用")
-        require("请调用 Skill：" not in prompt and "调用Skill：" not in prompt,item["id"]+" 残留旧式调用")
+        require(prompt.startswith("/"+skill_id),item["id"]+" 不是Slash调用")
+        require(len(prompt)<=180,item["id"]+" 提示词冗长，重复了Skill执行规则")
+        require("SKILL.md" not in prompt and "【真实输出】" not in prompt and "【审核/不通过路径】" not in prompt,
+                item["id"]+" 提示词重复Skill/网页栏目")
+        require((ROOT/"skills"/skill_id/"SKILL.md").is_file(),item["id"]+" 找不到主Skill")
     elif item["id"]=="S01":
-        require(not prompt.startswith("/"),"S01没有主Skill，不应强制Slash调用")
-for step_id,slash in (("S04","/grill-with-docs"),("S05","/grill-with-docs"),
-                      ("S07","/to-tickets"),("S09","/grill-with-docs"),
-                      ("S10","/module-design"),("S14H","/retro")):
-    require(slash in lookup[step_id].get("prompt",""),step_id+" 的内部或后续调用缺Slash形式")
+        require(bool(prompt) and not prompt.startswith("/"),"S01独立只读核验保留自然语言提示词")
 renderer_source=(ROOT/"docs/app.js").read_text(encoding="utf-8")
-require('prompt:"/"+w.id+' in renderer_source,"通用Skill提示词未使用Slash命令开头")
+require('prompt:"/"+w.id+' in renderer_source and "toolkitTaskPrompts" in renderer_source,
+        "通用工具缺简短Slash任务提示")
 
 require(len(catalog)==19 and len(workspace)==8,"主Skill或工具箱数量错误")
 require(data["title"]=="标准项目研发导航","导航标题未标准化")
@@ -61,14 +60,14 @@ for ref in ("references/constraint-discovery.md", "references/applicability.md",
 for token in ("不写需求", "不做设计", "可量化", "可判定", "项目特有约束", "前置约束确认表"):
     require(token in baseline,"S03边界/前置流程缺失："+token)
 require("项目基线前置约束确认表.md" in " ".join(lookup["S03"]["outputs"]), "S03导航未输出前置表")
-require("项目基线前置约束确认表.md" in lookup["S03"]["prompt"],"S03导航提示词未同步")
+require("项目基线前置约束确认表.md" in baseline,"S03主Skill未定义前置确认表")
 require("项目基线前置约束确认表.md" in " ".join(next(x for x in catalog if x["id"]=="project-baseline")["outputs"]), "S03快速理解未同步")
 require("项目基线前置约束确认表.md" in (ROOT/"docs/data/project-directory-tree.txt").read_text(encoding="utf-8"),"项目目录树未同步S03")
 inputs_check=(baseline_dir/"scripts/check_inputs.py").read_text(encoding="utf-8")
 require('root / "code"' in inputs_check and "code/fld" not in inputs_check and "guiwu_ruoyi" not in inputs_check,"S03输入检查不能限定报价项目路径")
-require("用户只填" in lookup["S03"]["prompt"] or "只填写缺失" in lookup["S03"]["prompt"], "S03未声明只询问输入缺口")
+require(any(t in baseline for t in ("只填","只填写缺失","仅询问")),"S03主Skill没有限定只处理输入缺口")
 
-require("grill-with-docs" in lookup["S04"]["prompt"] and "grill-with-docs" in lookup["S09"]["prompt"],"Grill应内嵌")
+require("grill-with-docs" in architecture and "grill-with-docs" in (ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8"),"S04和S09主Skill缺内部Grill")
 # S04须能真正约束后续工程结构及模块开发；不允许网站内容与正式模板分裂。
 architecture=(ROOT/"skills/architecture-baseline/SKILL.md").read_text(encoding="utf-8")
 architecture_template=(ROOT/"skills/architecture-baseline/assets/architecture-template.md").read_text(encoding="utf-8")
@@ -78,7 +77,7 @@ for token in ("工程组织","允许依赖","架构冻结","角色×核心场景
     require(token in architecture or token in architecture_template,"S04契约缺失："+token)
 for token in ("2.1.3 工程组织","2.3.1 核心链路目录", "2.5 双核心互检","A/B/C架构冻结清单"):
     require(token in architecture_template,"S04正式模板缺失："+token)
-require("专项" in lookup["S04"]["prompt"] and "冻结" in lookup["S04"]["prompt"],"导航S04提示词未同步新规则")
+require("专项" in architecture and "冻结" in architecture,"S04主Skill未定义专项及冻结")
 require("冻结" in (ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8"),"S09未继承架构冻结规则")
 # S04快速理解不允许只有笼统分类；必须列出具体决策项、产物及可判断的完成条件。
 s04_overview=next(x["overview"] for x in catalog if x["id"]=="architecture-baseline")
@@ -92,7 +91,7 @@ require(len(s04_overview.get("chainExample",{}).get("steps",[]))>=6,"S04快速�
 require({s.get("axis") for s in s04_overview["sections"]}=={"component","flow","support"},"S04没有将11个具体项按双核心和支撑约束分组")
 flows=(ROOT/"skills/architecture-baseline/references/core-business-flows.md").read_text(encoding="utf-8")
 require("链路→组件" in flows and "组件→链路" in flows,"S04核心业务链与组件双向核验标准缺失")
-require("关键端到端业务链路" in lookup["S04"]["prompt"] and "处理流程图" in lookup["S04"]["prompt"],"网站S04调用提示词没有落实两大核心")
+require("关键端到端业务链路" in architecture and "处理流程图" in architecture_template,"S04主Skill和模板未落实两大核心")
 renderer=(ROOT/"docs/app.js").read_text(encoding="utf-8")
 for token in ("skill-topic-details","skill-topic-delivery","skill-topic-gate","skill-quick-facts"):
     require(token in renderer,"快速理解渲染逻辑缺失："+token)
@@ -115,16 +114,16 @@ require({s.get("axis") for s in s05_overview["sections"]}=={"rule","flow","struc
 for section in s05_overview["sections"]:
     require(len(section.get("checks",[]))>=4 and bool(section.get("deliverable")) and bool(section.get("pass")),"S05具体项/产物/判定缺失："+section["title"])
 for token in ("整体数据规则","关键数据业务流程","核心表","核心字段","ER"):
-    require(token in lookup["S05"]["prompt"],"S05网站调用提示词缺少："+token)
+    require(token in data_skill or token in data_tpl,"S05主Skill或模板缺少："+token)
 module_skill=(ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8")
 require("S05核心数据骨架" in module_skill and "先返回S05" in module_skill,"S09未继承S05冻结")
-require("S04/S05" in lookup["S09"]["prompt"],"S09必须继承总体架构和数据库冻结契约")
+require("S04" in module_skill and "S05" in module_skill,"S09主Skill未继承总体架构和数据库契约")
 for token in ("pillarsTitle","pillarsDescription","data-count"):
     require(token in renderer,"三核心快速理解页面缺少："+token)
 
 require("人工测试用例与结果.md" not in " ".join(lookup["S12"]["outputs"]),"S12原版不生成人工测试单")
 require(lookup["S12"]["skillId"]=="implement-spec" and not lookup["S12"].get("invokes"),"S12须直接用Matt原版")
-require("code-review" in lookup["S12"]["prompt"] and "TDD" in lookup["S12"]["prompt"],"实现缺原版内置能力")
+require("code-review" in (ROOT/"skills/implement-spec/SKILL.md").read_text(encoding="utf-8") and "tdd" in (ROOT/"skills/implement-spec/SKILL.md").read_text(encoding="utf-8").lower(),"原版implement-spec缺TDD或Code Review")
 require(lookup["S15"]["skillId"]=="retro" and not lookup["S15"].get("invokes"),"S15须直接使用Matt原版retro")
 require(all(p["id"] != "P04" for p in data["phases"]),"最后不应有重复retro阶段")
 require("project-retrospective" not in skills and not (ROOT/"skills/project-retrospective").exists(),"旧最终复盘Skill仍存在")
@@ -135,10 +134,10 @@ for duplicate in ("grill-with-docs","tdd","grilling","domain-modeling","diagnosi
 for helper in ("grilling","domain-modeling","tdd","code-review","codebase-design"):
     require((ROOT/"skills"/helper/"SKILL.md").is_file(),"Matt依赖缺失："+helper)
 require(lookup["S14H"]["skillId"]=="manual-testing" and "人工测试用例与结果.md" in " ".join(lookup["S14H"]["outputs"]),"S14H应有独立人工测试Skill")
-require("Phase 1" in lookup["S14B"]["prompt"] and "diagnosing-bugs" in lookup["S14B"]["prompt"],"Bug诊断需调用原版六阶段")
-require("初次部署配置.md" in " ".join(lookup["S06"]["inputs"]) and "8.1" in lookup["S06"]["prompt"],"S06应读原模板，确认后按8.1执行")
+require("Phase 1" in (ROOT/"skills/diagnosing-bugs/SKILL.md").read_text(encoding="utf-8"),"官方Bug诊断缺六阶段")
+require("初次部署配置.md" in " ".join(lookup["S06"]["inputs"]) and "8.1" in (ROOT/"skills/development-environment/SKILL.md").read_text(encoding="utf-8"),"S06主Skill未定义配置模板及8.1执行")
 require(lookup["S07"]["skillId"]=="module-discovery" and "模块拆分" in lookup["S07"]["title"],"模块拆分主Skill或标题不一致")
-require("tracer bullet" in lookup["S07"]["prompt"] and "blocking edges" in lookup["S07"]["prompt"] and "quiz" in lookup["S07"]["prompt"],"模块级Tickets关键机制不完整")
+require(all(x in (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8").lower() for x in ("tracer bullet","blocking edges","quiz")),"S07主Skill缺模块拆分来源与审核机制")
 require("to-tickets" in lookup["S11"]["skills"],"本轮开发任务必须保持Matt原版to-tickets")
 require(not (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8").count("不发布全项目开发Tickets")==0,"模块规划必须禁止提前发布开发Ticket")
 
@@ -196,7 +195,7 @@ for label in ("needs-triage","needs-info","ready-for-agent","ready-for-human","w
     require(label in setup_text,"初始化快速理解缺标签定义："+label)
 require("是，沿用默认五标签" in setup_text,"初始化快速理解未提示推荐选择")
 require("/triage" in setup_text and "人工测试签收" in setup_text,"五标签的生效条件或业务测试边界不清")
-require("沿用Matt默认五标签" in lookup["S02"]["prompt"],"初始化调用提示词未继承已确认的五标签选择")
+require("沿用默认五标签" in lookup["S02"]["prompt"],"初始化提示词未保留已确认的五标签选择")
 for step_obj in steps:
     require(len(step_obj["title"])<=12,"执行步骤标题过长："+step_obj["id"])
 
