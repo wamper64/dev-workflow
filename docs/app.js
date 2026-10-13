@@ -100,6 +100,10 @@ function renderDetails(){
   
   if((s.skills||[]).length)html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
   else html+='<section class="detail-section"><h3><span class="section-icon">◎</span> 执行方式</h3><div class="review-box">'+(s.id==="S01"?"使用下方提示词直接读取并校验输入，无需安装Skill。":s.id==="S14H"?"人工执行上一步生成的用例，填写真实结果；无独立Skill。":"此步骤仅展示已有输入，不调用Skill。")+'</div></section>';
+  if(s.id==="S04"){
+    const picture=skillData?.skills?.find(x=>x.id==="architecture-baseline")?.overview?.visual;
+    if(picture)html+='<section class="detail-section architecture-step-preview"><h3><span class="section-icon">▧</span> 整体架构设计流程图</h3><button type="button" class="architecture-preview-button" data-skill="architecture-baseline" aria-label="打开架构Skill流程图片与说明"><img src="'+esc(picture.src)+'" alt="'+esc(picture.alt)+'" loading="lazy"><span>查看完整双核心架构设计图 ↗</span></button></section>';
+  }
   if(Array.isArray(s.invokes)&&s.invokes.length){html+='<section class="detail-section"><h3><span class="section-icon">↳</span> 主Skill内部引用</h3><p class="detail-hint">以下原版Skill由当前主Skill内部执行，不另占必经步骤；点击可查看完整原版内容。</p>'+skillList(s.invokes)+'</section>';}
   html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
@@ -198,7 +202,8 @@ function renderSkillOverview(skill){
   }).join("");
  const conversions=(a.thinking||[]).map(x=>'<div class="thinking-row"><div><span class="thinking-label">资料中有什么</span><p>'+esc(x.given)+'</p></div><span class="thinking-arrow">→</span><div><span class="thinking-label">Skill 提炼什么</span><p>'+esc(x.answer)+'</p></div></div>').join("");
  const exclusions=(a.doesNot||[]).map(x=>'<li>'+esc(x)+'</li>').join("");
- return '<div class="skill-overview"><div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
+ const visual=a.visual?'<figure class="architecture-overview-visual"><a href="'+esc(a.visual.src)+'" target="_blank" rel="noopener noreferrer" aria-label="查看架构流程大图"><img src="'+esc(a.visual.src)+'" alt="'+esc(a.visual.alt)+'" loading="lazy"></a><figcaption>'+esc(a.visual.caption)+'</figcaption></figure>':"";
+ return '<div class="skill-overview">'+visual+'<div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
   +(facts?'<div class="skill-quick-facts">'+facts+'</div>':"")
   +(pillarCards?'<div class="skill-pillar-heading"><h3>'+esc(a.pillarsTitle||"整体架构的两个核心")+'</h3><p>'+esc(a.pillarsDescription||"先从业务链路反推组件，再用组件架构约束处理流程；两个核心必须互相闭合。")+'</p></div><div class="skill-pillars" data-count="'+(a.pillars||[]).length+'">'+pillarCards+'</div>':"")
   +renderSkillFlow(a.workflow)

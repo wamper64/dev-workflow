@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1480 1130" role="img" aria-labelledby="title desc">
+<title id="title">整体架构设计 Skill：总体组件架构与关键端到端业务链路双核心流程图</title>
+<desc id="desc">从需求、基线、代码输入，到关键链路筛选、反推组件、内部Grill、深化与双向校验、资源部署及A/B/C架构冻结和两轮审核。</desc>
+<defs><linearGradient id="hd" x2="1" y2="1"><stop stop-color="#103a6a"/><stop offset="1" stop-color="#2d70ad"/></linearGradient><marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="#618ebf"/></marker></defs>
+<rect width="1480" height="1130" rx="0" fill="#f3f7fc"/><rect width="1480" height="126" fill="url(#hd)"/>
+<g font-family="'Microsoft YaHei','Noto Sans CJK SC',sans-serif">
+<text x="64" y="67" fill="#fff" font-size="46" font-weight="800">整体架构设计 Skill</text>
+<text x="66" y="103" fill="#e0efff" font-size="20">双核心：系统由什么组件构成 × 核心业务如何端到端跑通</text>
+<rect x="64" y="146" width="641" height="170" rx="17" fill="#e7f2ff" stroke="#9fc1ec" stroke-width="2"/>
+<rect x="775" y="146" width="641" height="170" rx="17" fill="#e7f8f4" stroke="#a0d9d1" stroke-width="2"/>
+<text x="92" y="196" fill="#155b9a" font-size="29" font-weight="800">核心一 · 总体组件架构</text>
+<text x="92" y="234" fill="#2f577e" font-size="19">确定全项目真正需要的组件、职责与非职责</text>
+<text x="92" y="268" fill="#496c91" font-size="18">代码落点 / 组件交互 / 数据和状态 Owner</text>
+<text x="92" y="298" fill="#496c91" font-size="18">复用、依赖、协议、运行部署边界</text>
+<text x="803" y="196" fill="#06766b" font-size="29" font-weight="800">核心二 · 关键端到端业务链路</text>
+<text x="803" y="234" fill="#366f68" font-size="19">从触发到正常结果、失败恢复与业务闭环</text>
+<text x="803" y="268" fill="#467c75" font-size="18">校验 → 判断 → 持久化 → 通知/后续动作</text>
+<text x="803" y="298" fill="#467c75" font-size="18">跨组件时序 / 状态权威 / 重试与人工处理</text>
+<rect x="64" y="330" width="1352" height="60" rx="14" fill="#fff0ce" stroke="#ebc984" stroke-width="2"/>
+<text x="740" y="369" fill="#815817" font-size="22" text-anchor="middle" font-weight="750">双向闭环：关键链路反推组件；组件职责与接口反向校验真实业务处理步骤</text>
+<text x="64" y="435" fill="#1e4468" font-size="29" font-weight="800">执行过程 · 六步形成开发前架构骨架</text>
+<rect x="64" y="466" width="427" height="203" rx="16" fill="#fff" stroke="#d6e4f0" stroke-width="2"/>
+ <rect x="64" y="466" width="427" height="57" rx="16" fill="#2268ae"/><rect x="64" y="506" width="427" height="17" fill="#2268ae"/>
+ <text x="89" y="504" fill="#fff" font-size="24" font-weight="800">S1　输入事实核验</text><circle cx="92" cy="554" r="4" fill="#2268ae"/><text x="108" y="561" fill="#385875" font-size="17">完整阅读PRD、项目基线及全部输入</text><circle cx="92" cy="585" r="4" fill="#2268ae"/><text x="108" y="592" fill="#385875" font-size="17">扫描真实前端原型和既有代码</text><circle cx="92" cy="616" r="4" fill="#2268ae"/><text x="108" y="623" fill="#385875" font-size="17">发现缺口与冲突，禁止猜测架构</text><rect x="526" y="466" width="427" height="203" rx="16" fill="#fff" stroke="#d6e4f0" stroke-width="2"/>
+ <rect x="526" y="466" width="427" height="57" rx="16" fill="#2268ae"/><rect x="526" y="506" width="427" height="17" fill="#2268ae"/>
+ <text x="551" y="504" fill="#fff" font-size="24" font-weight="800">S2　筛选关键链路</text><circle cx="554" cy="554" r="4" fill="#2268ae"/><text x="570" y="561" fill="#385875" font-size="17">按角色×场景识别关键业务闭环</text><circle cx="554" cy="585" r="4" fill="#2268ae"/><text x="570" y="592" fill="#385875" font-size="17">明确触发、判断、状态迁移草图</text><circle cx="554" cy="616" r="4" fill="#2268ae"/><text x="570" y="623" fill="#385875" font-size="17">覆盖异常、失败及恢复出口</text><rect x="988" y="466" width="427" height="203" rx="16" fill="#fff" stroke="#d6e4f0" stroke-width="2"/>
+ <rect x="988" y="466" width="427" height="57" rx="16" fill="#2268ae"/><rect x="988" y="506" width="427" height="17" fill="#2268ae"/>
+ <text x="1013" y="504" fill="#fff" font-size="24" font-weight="800">S3　反推组件骨架</text><circle cx="1016" cy="554" r="4" fill="#2268ae"/><text x="1032" y="561" fill="#385875" font-size="17">决定复用、新建、可选与不适用</text><circle cx="1016" cy="585" r="4" fill="#2268ae"/><text x="1032" y="592" fill="#385875" font-size="17">明确职责、代码落点、协议及依赖</text><circle cx="1016" cy="616" r="4" fill="#2268ae"/><text x="1032" y="623" fill="#385875" font-size="17">区分逻辑组件与独立运行单元</text><g fill="none" stroke="#618ebf" stroke-width="4" marker-end="url(#arr)"><path d="M494 564h25"/><path d="M956 564h25"/><path d="M1201 669v61"/></g><rect x="64" y="733" width="427" height="203" rx="16" fill="#fff" stroke="#d6e4f0" stroke-width="2"/>
+ <rect x="64" y="733" width="427" height="57" rx="16" fill="#24609d"/><rect x="64" y="773" width="427" height="17" fill="#24609d"/>
+ <text x="89" y="771" fill="#fff" font-size="24" font-weight="800">S6　部署冻结与评审</text><circle cx="92" cy="821" r="4" fill="#24609d"/><text x="108" y="828" fill="#385875" font-size="17">适配资源、安全、运维及备份恢复</text><circle cx="92" cy="852" r="4" fill="#24609d"/><text x="108" y="859" fill="#385875" font-size="17">固化A/B/C级架构变化审批规则</text><circle cx="92" cy="883" r="4" fill="#24609d"/><text x="108" y="890" fill="#385875" font-size="17">完成两轮审核与正式交付</text><rect x="526" y="733" width="427" height="203" rx="16" fill="#fff" stroke="#d6e4f0" stroke-width="2"/>
+ <rect x="526" y="733" width="427" height="57" rx="16" fill="#18828a"/><rect x="526" y="773" width="427" height="17" fill="#18828a"/>
+ <text x="551" y="771" fill="#fff" font-size="24" font-weight="800">S5　链路深化与互检</text><circle cx="554" cy="821" r="4" fill="#18828a"/><text x="570" y="828" fill="#385875" font-size="17">逐条补全流程图、时序与失败处理</text><circle cx="554" cy="852" r="4" fill="#18828a"/><text x="570" y="859" fill="#385875" font-size="17">步骤→组件→接口→状态 Owner</text><circle cx="554" cy="883" r="4" fill="#18828a"/><text x="570" y="890" fill="#385875" font-size="17">反向排除无实际依据的冗余组件</text><rect x="988" y="733" width="427" height="203" rx="16" fill="#fff" stroke="#d6e4f0" stroke-width="2"/>
+ <rect x="988" y="733" width="427" height="57" rx="16" fill="#775db0"/><rect x="988" y="773" width="427" height="17" fill="#775db0"/>
+ <text x="1013" y="771" fill="#fff" font-size="24" font-weight="800">S4　内部Grill决策</text><circle cx="1016" cy="821" r="4" fill="#775db0"/><text x="1032" y="828" fill="#385875" font-size="17">只提问重大、难逆转的未决问题</text><circle cx="1016" cy="852" r="4" fill="#775db0"/><text x="1032" y="859" fill="#385875" font-size="17">明确建议方案、备选方案与取舍</text><circle cx="1016" cy="883" r="4" fill="#775db0"/><text x="1032" y="890" fill="#385875" font-size="17">必要时新增术语或ADR决策记录</text><g fill="none" stroke="#618ebf" stroke-width="4" marker-end="url(#arr)"><path d="M986 837h-26"/><path d="M524 837h-26"/></g>
+<rect x="64" y="955" width="655" height="112" rx="15" fill="#e8f2ff" stroke="#b3cff1" stroke-width="2"/>
+<rect x="728" y="955" width="688" height="112" rx="15" fill="#e7f7f2" stroke="#a9dcd0" stroke-width="2"/>
+<text x="89" y="990" fill="#155c9d" font-size="23" font-weight="800">第一轮 · 双核心完整性</text>
+<text x="89" y="1025" fill="#466987" font-size="17">场景、组件、代码Owner与链路正常/异常终态</text>
+<text x="89" y="1051" fill="#466987" font-size="17">不通过则补流程、补职责、删无依据组件</text>
+<text x="752" y="990" fill="#0c776b" font-size="23" font-weight="800">第二轮 · 链路可实施性</text>
+<text x="752" y="1025" fill="#427970" font-size="17">让开发人员逐步追溯代码、接口、状态及部署</text>
+<text x="752" y="1051" fill="#427970" font-size="17">重大架构分歧须再次Grill和审批</text>
+<rect x="64" y="1083" width="1352" height="39" rx="9" fill="#234f80"/>
+<text x="740" y="1109" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">交付：整体架构设计.md ＋ 架构评审记录.md ＋ 必要GLOSSARY / ADR</text>
+</g></svg>

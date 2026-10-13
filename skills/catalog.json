@@ -924,7 +924,12 @@
           "gap": "S09能私改协议、Owner"
         }
       ],
-      "coverageNote": "逐项核对该 Skill 是否要求这些具体内容；这里是应有的内容清单，并非本项目已通过的执行结果。缺少依据的项须标明“待确认/不适用”，不可伪造完成。"
+      "coverageNote": "逐项核对该 Skill 是否要求这些具体内容；这里是应有的内容清单，并非本项目已通过的执行结果。缺少依据的项须标明“待确认/不适用”，不可伪造完成。",
+      "visual": {
+        "src": "./images/architecture-baseline.svg",
+        "alt": "整体架构设计Skill的两个核心、六步执行流程及两轮架构审核流程图",
+        "caption": "整体架构设计执行全景图 · 点击可查看大图。图中是方法要求，并非特定项目的已审核架构。"
+      }
     },
     "outputSampleFile": "docs/examples/报价项目/architecture-baseline/报价整体架构示例.md",
     "sampleTitle": "报价系统六Worker组件与交互骨架示例（非已审批设计）",

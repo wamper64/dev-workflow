@@ -5,6 +5,7 @@ from html import escape
 from html.parser import HTMLParser
 from zipfile import ZipFile, ZIP_DEFLATED
 import json
+import base64
 import subprocess
 import tempfile
 
@@ -86,6 +87,18 @@ for utility in workspace:
             files[file.relative_to(folder).as_posix()] = file.read_text(encoding="utf-8")
     assert "SKILL.md" in files
     payload["skills"].append({**utility, "category": "workspace", "files": files})
+
+# 将流程SVG内嵌进交付HTML，使单文件离线可读并避免部署时丢失图片。
+for record in payload["skills"]:
+    visual = record.get("overview", {}).get("visual")
+    if visual:
+        src = visual["src"]
+        assert src.startswith("./images/") and src.endswith(".svg"), src
+        asset = DOCS / src[2:]
+        assert asset.is_file(), f"Skill图片缺失：{src}"
+        contents = asset.read_text(encoding="utf-8")
+        assert "<svg" in contents and "</svg>" in contents and "<script" not in contents.lower()
+        visual["src"] = "data:image/svg+xml;base64," + base64.b64encode(contents.encode("utf-8")).decode("ascii")
 
 # 项目案例仅供网站预览，绝不能写入skills目录或安装ZIP。
 for record in catalog:
