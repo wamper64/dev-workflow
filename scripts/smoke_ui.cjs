@@ -247,7 +247,9 @@ async function main(){
   click('[data-phase="P01"]');
  click('[data-step="S04"]');
  click('[data-skill="architecture-baseline"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/grill-with-docs/,"整体架构Skill须内嵌Grill");
+ click('[data-skill-tab="files"]');
+ click('[data-skill-file="SKILL.md"]');
+ assert.match(doc.querySelector("#skill-dialog-content").textContent,/grill-with-docs/,"整体架构原始Skill须内嵌Grill");
  click("[data-skill-close]");
  click('[data-phase="P02"]');
  click('[data-step="S09"]');
