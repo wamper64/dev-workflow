@@ -162,7 +162,8 @@ async function main(){
  click('[data-step="S02"]');
  assert.match(doc.querySelector("#step-detail").textContent,/code\//);
  click('[data-step="S03"]');
- assert.match(doc.getElementById("step-detail").textContent,/docs\/output\/01-项目基线\/项目基线\.md/);\n assert.doesNotMatch(doc.getElementById("step-detail").textContent,/项目基线前置约束确认表\.md/);
+ assert.match(doc.getElementById("step-detail").textContent,/docs\/output\/01-项目基线\/项目基线\.md/);
+ assert.doesNotMatch(doc.getElementById("step-detail").textContent,/项目基线前置约束确认表\.md/);
  click('[data-skill="project-baseline"]');
  assert.equal(doc.getElementById("skill-dialog").open,true,"Skill预览未打开");
  assert.equal(doc.querySelectorAll(".skill-topic-card").length,8,"工程基线8类量化内容未展示");
