@@ -234,7 +234,7 @@ for old in ("iteration-planning","dev-implement-spec","iteration-close"):
     require(not (ROOT/"skills"/old).exists(),"旧包装Skill仍存在："+old)
 require((ROOT/"skills/manual-testing/SKILL.md").is_file(),"缺少人工测试Skill")
 require("模块验收与状态记录.md" in " ".join(lookup["S14H"]["outputs"]),"缺人工签收")
-require(".scratch/<模块>/<任务标识>/spec.md" in " ".join(lookup["S10"]["outputs"]),"新任务缺独立Spec")
+require(".scratch/<feature-slug>/spec.md" in " ".join(lookup["S10"]["outputs"]),"Matt独立任务Spec定位须由真实Tracker决定")
 dev=(ROOT/"skills/development-environment/SKILL.md").read_text(encoding="utf-8")
 for word in ("初次部署配置.md","初次部署配置-<环境名称>.md","8.1","确认","nginx"):
     require(word in dev,"S06关键规则缺失："+word)
