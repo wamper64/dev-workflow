@@ -112,19 +112,24 @@ def t14():
     return "实际运行模拟命令授权校验：DROP DATABASE/rm -rf无批准拒绝；只读查询放行；不执行命令"
 def t15():
     steps={s["id"]:s for phase in SITE["phases"] for s in phase["steps"]}
-    need(len(CAT)==19 and len(steps)==20 and len(SITE["phases"])==4,"阶段/Skill结构不一致")
+    need(len(CAT)==19 and len(steps)==20 and len(SITE["phases"])==6,"阶段/Skill结构不一致")
     for sk in CAT:
         need((S/sk["id"]/"SKILL.md").is_file(),"缺Skill "+sk["id"])
         if sk.get("type")=="Matt原版":continue
         st=steps.get(sk.get("stepId"))
         need(st is not None and st.get("skillId")==sk["id"],"步骤映射不符："+sk["id"])
         need(st["outputs"]==sk["outputs"],"输出产物与导航不同步："+sk["id"])
+    need([p["title"] for p in SITE["phases"][3:]]==["3. 系统业务验收","4. 系统验收","5. 上线部署"],"系统尾部阶段拆分错误")
+    need(steps["S16"]["outputs"]==["docs/output/07-系统验收/系统验收报告.md"],"S16不再是唯一报告")
+    for stepid in ("S18","S19"):
+        variants=steps[stepid].get("promptExamples",[])
+        need(len(variants)==4 and all(x in " ".join(v["prompt"] for v in variants) for x in ("开发","测试","正式","首次应用上线","版本更新")),"部署环境×发布类型覆盖不足："+stepid)
     need((ROOT/"docs/images/architecture-baseline.png").is_file(),"架构原图缺失")
     ws=json.loads((S/"workspace.json").read_text(encoding="utf-8"))
     for sk in [*CAT,*ws]:
         if sk["id"]=="architecture-baseline":continue
         need((ROOT/"docs/images/skills"/(sk["id"]+".svg")).is_file(),"缺专属图片："+sk["id"])
-    return "实测JSON映射：4阶段20步骤、19主Skill及8通用Skill，11个自建Skill输出一致，27个图片入口齐全"
+    return "实测JSON映射：6阶段20步骤、19主Skill及8通用Skill，11个自建Skill输出一致，27个图片入口齐全"
 
 check("T01","独立12模块拆分","场景夹具与规则",t01)
 check("T02","无页面自动告警","场景夹具与规则",t02)
