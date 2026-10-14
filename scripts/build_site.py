@@ -46,7 +46,7 @@ regression_html = (
 (DIST/"regression.html").write_text(regression_html,encoding="utf-8")
 
 
-assert len(data["phases"]) == 4
+assert len(data["phases"]) == 6
 assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})
 assert len(data["phases"][1]["steps"]) == 7
 assert len(data["phases"][2]["steps"]) == 7
