@@ -9,6 +9,7 @@ on:
       - 'templates/project/**'
       - 'scripts/build_site.py'
       - 'scripts/audit_contracts.py'
+      - 'scripts/audit_repository.py'
       - 'scripts/smoke_ui.cjs'
       - 'tests/**'
       - '.github/workflows/deploy.yml'
@@ -33,6 +34,8 @@ jobs:
         run: node --check docs/app.js
       - name: 校验交互测试脚本语法
         run: node --check scripts/smoke_ui.cjs
+      - name: 审查全部版本管理文件
+        run: python3 scripts/audit_repository.py
       - name: 执行15项对抗场景校验
         run: python3 tests/run_regression.py
       - name: 构建单文件网站

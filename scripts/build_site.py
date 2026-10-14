@@ -293,4 +293,4 @@ html_path = DIST / "index.html"
 html_path.write_text(template, encoding="utf-8")
 print("内联JS校验通过")
 print(f"构建成功：{html_path}（{len(template.encode('utf-8'))}字节）")
-print(f"完整包：{archive}（{len(names)}个文件，31个Skill）")
+print(f"完整包：{archive}（{len(names)}个文件，35个Skill）")
