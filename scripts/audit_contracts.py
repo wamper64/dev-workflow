@@ -199,7 +199,7 @@ require("人工测试用例与结果.md" not in " ".join(lookup["S12"]["outputs"
 require(lookup["S12"]["skillId"]=="implement-spec" and not lookup["S12"].get("invokes"),"S12须直接用Matt原版")
 require("code-review" in (ROOT/"skills/implement-spec/SKILL.md").read_text(encoding="utf-8") and "tdd" in (ROOT/"skills/implement-spec/SKILL.md").read_text(encoding="utf-8").lower(),"原版implement-spec缺TDD或Code Review")
 require(lookup["S15"]["skillId"]=="retro" and not lookup["S15"].get("invokes"),"S15须直接使用Matt原版retro")
-require(all(p["id"] != "P04" for p in data["phases"]),"最后不应有重复retro阶段")
+require(not any("复盘" in p["title"] or "retro" in p["title"].lower() for p in data["phases"][3:]),"最后不应有重复retro阶段")
 require("project-retrospective" not in skills and not (ROOT/"skills/project-retrospective").exists(),"旧最终复盘Skill仍存在")
 expected_workspace=["grill-me","improve-codebase-architecture","handoff","triage","prototype","implement","wayfinder","research"]
 require([x["id"] for x in workspace]==expected_workspace,"通用Skills名单或排序错误")
