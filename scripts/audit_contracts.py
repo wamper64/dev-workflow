@@ -44,7 +44,7 @@ prompt_intents={
     "S15":("AI 编码工作","关联证据","我批准"),
     "S16":("整个项目","项目/模块PRD","系统验收报告.md"),
     "S17":("系统性能验收","项目基线","实测"),
-    "S18":("目标环境","首次应用上线","回滚","实际","冒烟"),
+    "S18":("部署环境","首次应用上线","release-preflight","实际","冒烟"),
 }
 require(set(prompt_intents)=={x["id"] for x in steps if x.get("skillId")},"目标校验清单与正式技能步骤不一致")
 
@@ -310,9 +310,18 @@ require([s["id"] for s in data["phases"][3]["steps"]]==["S16","S17","S18"],"三�
 require(lookup["S18"].get("skillId")=="release-delivery" and lookup["S18"].get("skills")==["release-preflight","release-delivery"] and lookup["S18"].get("invokes")==["release-preflight"],"上线部署应内置预检与实际发布两个Skill，而非拆为两步")
 require(all(x in lookup["S18"]["outputs"] for x in ["docs/output/08-上线交付/部署预演.md","docs/output/08-上线交付/备份回滚方案.md","docs/output/08-上线交付/上线记录.md","docs/output/08-上线交付/交付清单.md"]),"合并上线部署缺预检或交付产物")
 for stepid in ("S18",):
-    ptext=" ".join(variant["prompt"] for variant in lookup[stepid]["promptExamples"])
-    for token in ("开发","测试","正式","首次应用上线","版本更新"):
-        require(token in ptext,stepid+" 缺少环境或发布类型："+token)
+    variants=lookup[stepid]["promptExamples"]
+    expected=[("开发环境","首次应用上线"),("开发环境","版本更新"),("测试环境","首次应用上线"),("测试环境","版本更新")]
+    require(len(variants)==4,"S18必须只有开发/测试×首次/更新四种情况")
+    for variant,(env,action) in zip(variants,expected):
+        require(env in variant["label"] and action.replace("应用","") in variant["label"],"S18部署分支名称不匹配："+variant["label"])
+        require("本次部署环境："+env in variant["prompt"] and "发布类型："+action in variant["prompt"],"S18部署提示词环境/类型不匹配")
+        require("正式环境" not in variant["prompt"] and "生产环境" not in variant["prompt"],"S18不可引入未选定的部署环境")
+    for skillname in ("release-preflight","release-delivery"):
+        skilltext=(ROOT/"skills"/skillname/"SKILL.md").read_text(encoding="utf-8")
+        for token in ("开发环境","测试环境","首次","更新"):
+            require(token in skilltext,skillname+" 缺四场景必要描述："+token)
+        require("正式环境" not in skilltext and "生产环境" not in skilltext,skillname+" 仍混有非开发测试环境部署分支")
 require(lookup["S09"]["skillId"]=="module-design" and "S09" in (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8"),"S07至S09交接不完整")
 
 
