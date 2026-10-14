@@ -162,7 +162,7 @@ async function main(){
  click('[data-step="S02"]');
  assert.match(doc.querySelector("#step-detail").textContent,/code\//);
  click('[data-step="S03"]');
- assert.match(doc.getElementById("step-detail").textContent,/项目基线前置约束确认表/);
+ assert.match(doc.getElementById("step-detail").textContent,/docs\/output\/01-项目基线\/项目基线\.md/);\n assert.doesNotMatch(doc.getElementById("step-detail").textContent,/项目基线前置约束确认表\.md/);
  click('[data-skill="project-baseline"]');
  assert.equal(doc.getElementById("skill-dialog").open,true,"Skill预览未打开");
  assert.equal(doc.querySelectorAll(".skill-topic-card").length,8,"工程基线8类量化内容未展示");
@@ -187,7 +187,7 @@ async function main(){
  click('[data-skill-file="references/checklist.md"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/项目基线生成与放行检查/);
  click('[data-skill-file="assets/preconfirmation-template.md"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/只需用户裁定|自动预填/);
+ assert.match(doc.getElementById("skill-dialog-content").textContent,/仅需用户裁定|自动填写|预填/);
  click('[data-skill-file="scripts/check_inputs.py"]');
  assert.match(doc.getElementById("skill-dialog-content").textContent,/argparse/);
  click("[data-skill-close]");
