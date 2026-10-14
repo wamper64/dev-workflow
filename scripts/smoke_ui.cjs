@@ -126,12 +126,28 @@ async function main(){
    assert.match(doc.querySelector(".quick-coverage").textContent,/未完成|待确认|缺少|不适用/,"覆盖速查应说明缺项的处理方式");
    click("[data-skill-close]");
  }
- // 每个非架构Skill均应显示独立流程图；架构仍展示原PNG。
- for(const sk of ["setup-matt-pocock-skills","project-baseline","data-architecture","development-environment","module-discovery","module-design","to-spec","to-tickets","implement-spec","code-review","system-acceptance","release-readiness","release-preflight","release-delivery","retro","grill-with-docs","diagnosing-bugs","manual-testing","grill-me","improve-codebase-architecture","handoff","triage","prototype","implement","wayfinder","research"]){
-  click('[data-skill="'+sk+'"]');
-  assert.ok(doc.querySelector('.skill-illustration img[src^="data:image/svg+xml;base64,"]'),sk+' 的流程图未被内嵌');
-  click('[data-skill-close]');
+ // 按每个Skill在真实导航中的入口点击，验证其独立流程图。
+ const illustrated=new Set();
+ for(const ph of doc.querySelectorAll('#stage-list [data-phase]')){
+   const phaseId=ph.dataset.phase;
+   click('[data-phase="'+phaseId+'"]');
+   const stepIds=[...doc.querySelectorAll('#step-list [data-step]')].map(x=>x.dataset.step);
+   for(const stepId of stepIds){
+     click('[data-step="'+stepId+'"]');
+     const ids=[...doc.querySelectorAll('#step-detail [data-skill]')].map(x=>x.dataset.skill);
+     for(const id of ids){
+       if(id==="architecture-baseline"||illustrated.has(id))continue;
+       click('[data-skill="'+id+'"]');
+       assert.ok(doc.querySelector('.skill-illustration img[src^="data:image/svg+xml;base64,"]'),id+' 的图未被内嵌');
+       illustrated.add(id);
+       click('[data-skill-close]');
+     }
+   }
  }
+ for(const id of ["setup-matt-pocock-skills","project-baseline","data-architecture","module-design","manual-testing","release-readiness","release-preflight","release-delivery","system-acceptance","module-discovery","development-environment"]){
+  assert.ok(illustrated.has(id),id+' 导航入口未提供图片');
+ }
+ click('[data-phase="P01"]');
  click('[data-step="S02"]');
  assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/沿用默认五标签/,"初始化提示词缺默认五标签选择");
  click('[data-skill="setup-matt-pocock-skills"]');
