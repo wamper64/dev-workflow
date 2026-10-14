@@ -56,7 +56,12 @@ for sk in catalog:
     if sk["type"]=="Matt原版":continue
     step=steps.get(sk.get("stepId"))
     require(step is not None,"自建Skill缺导航步骤："+sk["id"])
-    if step:require(step.get("outputs")==sk.get("outputs"),"产物路径不一致："+sk["id"])
+    if step:
+        match=step.get("outputs")==sk.get("outputs")
+        # release-preflight是S18上线部署内部前置Skill，产物是同一步骤正式输出的子集。
+        if sk["id"]=="release-preflight":
+            match=all(path in step.get("outputs",[]) for path in sk.get("outputs",[])) and "release-preflight" in step.get("skills",[])
+        require(match,"产物路径不一致："+sk["id"])
 require(len(catalog)==19 and len(workspace)==8,"导航Skill数量变化需联动修订")
 require(len(list((ROOT/"skills").glob("*/SKILL.md")))==35,"完整Skill主文件非35份")
 require(len(list((ROOT/"docs/images/skills").glob("*.svg")))==26,"缺26份专属SVG")
