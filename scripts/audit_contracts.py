@@ -12,7 +12,7 @@ skills={s["id"] for s in catalog}
 errors=[]
 def require(v,msg):
     if not v: errors.append(msg)
-require(len(lookup)==len(steps)==20 and len(data["phases"])==6,"阶段或步骤数量不一致")
+require(len(lookup)==len(steps)==19 and len(data["phases"])==4,"阶段或步骤数量不一致")
 
 # 复制提示词只指定Skill和当前任务；具体规则与验收条件应由Skill及其模板维护。
 for item in steps:
@@ -43,14 +43,13 @@ prompt_intents={
     "S14B":("具体问题","实际现象","正常预期","现有证据"),
     "S15":("AI 编码工作","关联证据","我批准"),
     "S16":("整个项目","项目/模块PRD","系统验收报告.md"),
-    "S17":("系统质量验收","项目基线","实测"),
-    "S18":("目标环境","首次应用上线","回滚","不发布"),
-    "S19":("目标环境","首次应用上线","实际","冒烟"),
+    "S17":("系统性能验收","项目基线","实测"),
+    "S18":("目标环境","首次应用上线","回滚","实际","冒烟"),
 }
 require(set(prompt_intents)=={x["id"] for x in steps if x.get("skillId")},"目标校验清单与正式技能步骤不一致")
 
 # 根据真实适用情形使用多份示例，不机械要求每个Skill都有相同的格式。
-expected_variants={"S06":2,"S09":3,"S10":2,"S14H":2,"S14B":5,"S15":2,"S16":2,"S18":4,"S19":4}
+expected_variants={"S06":2,"S09":3,"S10":2,"S14H":2,"S14B":5,"S15":2,"S16":2,"S18":4}
 for step_id,count in expected_variants.items():
     item=lookup[step_id]
     variants=item.get("promptExamples",[])
@@ -111,7 +110,7 @@ for s in steps:
         require(not s.get("skillId") and not s.get("skills"),s["id"]+" 不能拥有独立Skill")
         require(bool(s.get("prompt")) if s["id"]=="S01" else not s.get("prompt"),s["id"]+" 提示词状态错误")
     else:
-        require(s.get("skillId") in skills and s.get("skills")==[s.get("skillId")],s["id"]+" Skill无效")
+        require(s.get("skillId") in skills and s.get("skills")==(["release-preflight","release-delivery"] if s["id"]=="S18" else [s.get("skillId")]),s["id"]+" Skill无效")
         require(bool(s.get("prompt")),s["id"]+" 缺提示词")
     require(bool(s.get("inputs")) and bool(s.get("outputs")),s["id"]+" 缺输入输出")
     for value in s["inputs"]+s["outputs"]:
@@ -304,9 +303,13 @@ declared_sys=(ROOT/"skills/system-acceptance/SKILL.md").read_text(encoding="utf-
 require(expected_sys=={"docs/output/07-系统验收/系统验收报告.md"},"S16必须只有唯一的系统验收报告.md")
 require(all(path in declared_sys for path in expected_sys),"系统验收Skill与导航正式产物不一致")
 require(not any("业务场景覆盖矩阵.md" in s or "缺陷闭环记录.md" in s for s in lookup["S16"]["outputs"]),"S16旧多文件输出残留")
-require([p["id"] for p in data["phases"]]==["P00","P01","P02","P03","P04","P05"],"六阶段顺序错误")
-require([[s["id"] for s in p["steps"]] for p in data["phases"][3:]]==[["S16"],["S17"],["S18","S19"]],"业务验收、系统验收、上线部署三个阶段划分错误")
-for stepid in ("S18","S19"):
+require([p["id"] for p in data["phases"]]==["P00","P01","P02","P03"],"必须只有四个阶段（含准备工作）")
+require(data["phases"][3]["title"]=="3. 全项目验收与部署上线","末尾总阶段名称错误")
+require([s["title"] for s in data["phases"][3]["steps"]]==["系统业务验收","系统性能验收","上线部署"],"末尾阶段必须恰有三个指定步骤")
+require([s["id"] for s in data["phases"][3]["steps"]]==["S16","S17","S18"],"三个步骤编号及顺序错误")
+require(lookup["S18"].get("skillId")=="release-delivery" and lookup["S18"].get("skills")==["release-preflight","release-delivery"] and lookup["S18"].get("invokes")==["release-preflight"],"上线部署应内置预检与实际发布两个Skill，而非拆为两步")
+require(all(x in lookup["S18"]["outputs"] for x in ["docs/output/08-上线交付/部署预演.md","docs/output/08-上线交付/备份回滚方案.md","docs/output/08-上线交付/上线记录.md","docs/output/08-上线交付/交付清单.md"]),"合并上线部署缺预检或交付产物")
+for stepid in ("S18",):
     ptext=" ".join(variant["prompt"] for variant in lookup[stepid]["promptExamples"])
     for token in ("开发","测试","正式","首次应用上线","版本更新"):
         require(token in ptext,stepid+" 缺少环境或发布类型："+token)
