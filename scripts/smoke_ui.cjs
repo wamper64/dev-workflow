@@ -35,10 +35,10 @@ async function run(){
  const total=new Set([...cat,...workspace].map(x=>x.id));
  assert.equal(cat.length,19);assert.equal(workspace.length,8);
  assert.equal(payload.skills.length,27);
- assert.equal(workflow.phases.length,4);
+ assert.equal(workflow.phases.length,6);
  assert.equal(workflow.phases.flatMap(p=>p.steps).length,20);
- assert.equal(doc.querySelectorAll('#stage-list [data-phase]').length,5,"缺阶段/通用技能导航");
- assert.match(doc.getElementById("project-stats").textContent,/4 个阶段.*8 个通用Skill/);
+ assert.equal(doc.querySelectorAll('#stage-list [data-phase]').length,7,"缺阶段/通用技能导航");
+ assert.match(doc.getElementById("project-stats").textContent,/6 个阶段.*8 个通用Skill/);
  assert.ok(fs.statSync(path.join(root,"dist/skills-bundle.zip")).size>20000,"离线技能包不存在");
  assert.ok(fs.statSync(path.join(root,"dist/regression.html")).size>500,"场景测试可视报告未生成");
  assert.equal(JSON.parse(fs.readFileSync(path.join(root,"dist/regression.json"),"utf8")).total,15);
