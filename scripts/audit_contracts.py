@@ -117,15 +117,16 @@ for ref in ("references/constraint-discovery.md", "references/applicability.md",
             "assets/preconfirmation-template.md", "assets/baseline-template.md",
             "references/checklist.md", "references/quantification-standard.md"):
     require((baseline_dir/ref).is_file(),"S03缺配套文件："+ref)
-for token in ("不写需求", "不做设计", "可量化", "可判定", "项目特有约束", "前置约束确认表"):
-    require(token in baseline,"S03边界/前置流程缺失："+token)
-require("项目基线前置约束确认表.md" in " ".join(lookup["S03"]["outputs"]), "S03导航未输出前置表")
-require("项目基线前置约束确认表.md" in baseline,"S03主Skill未定义前置确认表")
-require("项目基线前置约束确认表.md" in " ".join(next(x for x in catalog if x["id"]=="project-baseline")["outputs"]), "S03快速理解未同步")
-require("项目基线前置约束确认表.md" in (ROOT/"docs/data/project-directory-tree.txt").read_text(encoding="utf-8"),"项目目录树未同步S03")
+# S03最新裁定：先在对话预填并补齐，正式仅交付已确认约束，不能强制附加前置文件。
+for token in ("不写需求", "不做设计", "可量化", "可判定", "项目特有约束", "对话内", "自动预填", "只问缺失"):
+    require(token in baseline,"S03约束缺失："+token)
+require("项目基线.md" in " ".join(lookup["S03"]["outputs"]),"S03正式产物缺失")
+require("项目基线前置约束确认表.md" not in " ".join(lookup["S03"]["outputs"]),"S03重新引入已删除的前置确认文件")
+require("项目基线.md" in " ".join(next(x for x in catalog if x["id"]=="project-baseline")["outputs"]),"S03元数据未同步")
+require("补齐输入不落盘" in baseline and "唯一交付物" in baseline,"S03把会话问答误写成独立产物")
 inputs_check=(baseline_dir/"scripts/check_inputs.py").read_text(encoding="utf-8")
 require('root / "code"' in inputs_check and "code/fld" not in inputs_check and "guiwu_ruoyi" not in inputs_check,"S03输入检查不能限定报价项目路径")
-require("只让用户填写缺失" in baseline and "自动预填" in baseline,"S03主Skill没有限定自动预填和只处理输入缺口")
+require("只问缺失" in baseline and "自动预填" in baseline,"S03主Skill没有限定自动预填和只处理输入缺口")
 
 require("grill-with-docs" in (ROOT/"skills/architecture-baseline/SKILL.md").read_text(encoding="utf-8") and "grill-with-docs" in (ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8"),"S04和S09主Skill缺内部Grill")
 # S04须能真正约束后续工程结构及模块开发；不允许网站内容与正式模板分裂。
@@ -167,7 +168,7 @@ data_tpl=(ROOT/"skills/data-architecture/assets/data-architecture-template.md").
 data_gate=(ROOT/"skills/data-architecture/references/data-boundary-gate.md").read_text(encoding="utf-8")
 for ref in ("references/three-core-contract.md","assets/data-architecture-template.md","references/data-boundary-gate.md"):
     require((ROOT/"skills/data-architecture"/ref).is_file(),"S05缺三核心配套文件："+ref)
-for token in ("整体数据规则","关键数据业务流程","核心表","核心字段","ER图","S09"):
+for token in ("整体数据规则","关键数据业务流程","核心表","核心字段","S09"):
     require(token in data_skill and token in data_tpl,"S05契约/模板缺少三核心："+token)
 require("grill-with-docs" in data_skill,"S05内部Grill未继承")
 for token in ("第一轮","第二轮","核心字段","S09"):
@@ -180,8 +181,8 @@ for section in s05_overview["sections"]:
 for token in ("整体数据规则","关键数据业务流程","核心表","核心字段","ER"):
     require(token in data_skill or token in data_tpl,"S05主Skill或模板缺少："+token)
 module_skill=(ROOT/"skills/module-design/SKILL.md").read_text(encoding="utf-8")
-require("S05核心数据骨架" in module_skill and "先返回S05" in module_skill,"S09未继承S05冻结")
-require("S04" in module_skill and "S05" in module_skill,"S09主Skill未继承总体架构和数据库契约")
+require("数据库总体" in module_skill and "先返回数据库总体设计" in module_skill,"S09未继承S05冻结")
+require("整体架构" in module_skill and "数据库总体" in module_skill,"S09主Skill未继承总体架构和数据库契约")
 for token in ("pillarsTitle","pillarsDescription","data-count"):
     require(token in renderer,"三核心快速理解页面缺少："+token)
 

@@ -65,5 +65,5 @@ flowchart TD
 ## 稳定任务映射与设计版本契约（F13/F14/F15）
 
 - 使用 S07 的稳定 `module_key` 记录任务关联，维护 `module_key → 本轮任务ID → 已配置 Issue Tracker 的URL/本地feature-slug目录 → Spec/签收证据` 映射。**不改 Matt 原版 Tracker 的 `.scratch/<feature-slug>/spec.md`/`issues/` 规则**；GitHub/GitLab用真实Issue URL和提交引用，不能假定 `.scratch/<module_key>/<任务>/` 一定存在。
-- 每次生成 Spec 之前记录当前《模块详细设计》的 Git Commit SHA 或不可变设计快照引用，并让本轮 Spec/Ticket 指向该修订。设计文件后续更新不得覆盖旧任务的设计依据；上游A/B级冻结项变化时明确影响哪些已有任务及需否重测。
+- 每次生成 Spec 之前记录所继承的 S04 整体架构、S05 核心数据骨架版本，以及当前《模块详细设计》的 Git Commit SHA 或不可变设计快照引用，并让本轮 Spec/Ticket 指向该修订。设计文件后续更新不得覆盖旧任务的设计依据；上游A/B级冻结项变化时明确影响哪些已有任务及需否重测。
 - 已有接口只可省略重复字段表，不能省略契约核查。对照当前操作的请求/响应字段、租户/角色权限过滤、状态与错误语义、幂等/分页要求；不足处列为接口改造项。
