@@ -19,7 +19,8 @@ for item in tracked:
     p=ROOT/item
     require(p.is_file(),"tracked文件不存在："+item)
     if not p.is_file():continue
-    require(p.stat().st_size>0,"空文件："+item)
+    # .nojekyll 以空文件作为 GitHub Pages 配置标记，属于有效文件。
+    if item!=".nojekyll":require(p.stat().st_size>0,"空文件："+item)
     groups[item.split("/")[0]]+=1
     if "__pycache__" in item or item.endswith(".pyc") or item.startswith("dist/"):
         errors.append("生成文件不应跟踪："+item)
