@@ -215,7 +215,9 @@ assert template.count(style_ref) == 1
 assert template.count(script_ref) == 1
 template = template.replace(style_ref, "<style>\n" + css + "\n</style>", 1)
 
-first = data["phases"][0]
+# 源数据保留验收上线阶段，仅离线HTML的静态首屏隐藏该导航项。
+visible_phases = [p for p in data["phases"] if p["id"] != "P03"]
+first = visible_phases[0]
 first_step = first["steps"][0]
 def safe(s):
     return escape(str(s), quote=True)
@@ -224,7 +226,7 @@ stages = "".join(
     '<div class="stage-item"><span class="stage-index">'
     + str(i).zfill(2) + '</span><span class="stage-body"><span class="stage-title">'
     + safe(p["title"]) + '</span></span></div>'
-    for i,p in enumerate(data["phases"])
+    for i,p in enumerate(visible_phases)
 )
 steps = "".join(
     '<div class="step-item"><span class="step-index">'

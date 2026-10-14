@@ -31,8 +31,10 @@ const toolkitPhase=()=>({
    source:w.source?.url||""
  }))
 });
-const allPhases=()=>[...ui.data.phases,toolkitPhase()];
-const phase=()=>allPhases().find(p=>p.id===ui.phase)||ui.data.phases[0];
+// 仅控制导航网页的展示，不改变真实工作流数据与Skill定义。
+const visiblePhases=()=>ui.data.phases.filter(p=>p.id!=="P03");
+const allPhases=()=>[...visiblePhases(),toolkitPhase()];
+const phase=()=>allPhases().find(p=>p.id===ui.phase)||visiblePhases()[0];
 const step=()=>phase().steps.find(s=>s.id===ui.step)||phase().steps[0];
 const kind=k=>k==="toolkit"?"跨阶段可调用":k==="prep"?"仅展示初始输入":k==="repeat"?"按模块循环":k==="acceptance"?"业务验收":k==="quality"?"系统质量验收":k==="release"?"分环境与版本部署":k==="final"?"整体验收与交付":"项目建设阶段";
 // 项目目录树是来源于当前阶段与步骤约定的中文展示文件，避免硬编码到Skill内容。
@@ -63,14 +65,15 @@ function promptSection(s,title){
 }
 const skillList=skills=>!(skills||[]).length?'<div class="review-box">这里只展示已有输入，无需调用Skill。</div>':'<div class="skill-grid">'+(skills||[]).map(id=>{const sk=skillData?.skills?.find(x=>x.id===id);const origin=sk?.type||"类型未登记";return '<button type="button" class="skill-pill '+(origin==="Matt原版"?"":"custom")+'" data-skill="'+esc(id)+'" title="点击查看SKILL.md、逻辑流程、示例与模板">'+esc(id)+' <span class="skill-kind">'+esc(origin)+'</span> ↗</button>'}).join("")+'</div>';
 function renderStages(){
-  $("project-stats").textContent=ui.data.phases.length+" 个阶段 · "+ui.data.phases.reduce((n,p)=>n+p.steps.length,0)+" 个步骤 · "+(skillData?.workspace.length||0)+" 个通用Skill";
-  $("stage-list").innerHTML=ui.data.phases.map((p,i)=>
+  const phases=visiblePhases();
+  $("project-stats").textContent=phases.length+" 个阶段 · "+phases.reduce((n,p)=>n+p.steps.length,0)+" 个步骤 · "+(skillData?.workspace.length||0)+" 个通用Skill";
+  $("stage-list").innerHTML=phases.map((p,i)=>
     '<button type="button" class="stage-item '+(p.id===ui.phase?"active":"")+'" data-phase="'+esc(p.id)+'" aria-current="'+(p.id===ui.phase?"step":"false")+'"><span class="stage-index">'+String(i).padStart(2,"0")+'</span><span class="stage-body"><span class="stage-title">'+esc(p.title)+'</span><span class="stage-meta">'+p.steps.length+' 个步骤'+(p.kind==="repeat"?" · 循环":"")+'</span></span><span class="stage-arrow" aria-hidden="true">›</span></button>'
   ).join("")+'<div class="stage-toolkit-separator" role="separator">跨阶段工具</div>'+
   '<button type="button" class="stage-item stage-toolkit '+(ui.phase==="PTOOLS"?"active":"")+'" data-phase="PTOOLS" aria-current="'+(ui.phase==="PTOOLS"?"step":"false")+'"><span class="stage-index">✦</span><span class="stage-body"><span class="stage-title">通用 Skills</span><span class="stage-meta">'+(skillData?.workspace.length||0)+' 个 · 随时使用</span></span><span class="stage-arrow" aria-hidden="true">›</span></button>';
 }
 function renderSteps(){
-  const p=phase(),i=ui.data.phases.indexOf(p)+1;
+  const p=phase(),i=visiblePhases().indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
   const route=p.id==="P01"?"输入核验 → Skills初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 初次部署 → 模块拆分":p.id==="P02"?"<b>本轮模块设计（Grill）</b> → Spec → Tickets → <b>TDD实现+Review</b> → <b>人工测试与签收</b> → 按需Bug修复 → <b>Retro</b> → 下一轮":p.id==="P03"?"<b>系统业务验收</b> → <b>系统性能验收</b> → <b>上线部署</b>（开发/测试 × 首次/更新）":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
   const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
@@ -374,7 +377,7 @@ document.addEventListener("click",event=>{
   skillData.workspace=skillData.skills.filter(s=>s.category==='workspace');
   if(!Array.isArray(ui.data.phases)||!ui.data.phases.length)throw Error("缺少研发阶段");
   const qs=new URLSearchParams(location.hash.slice(1));
-  const p=allPhases().find(p=>p.id===qs.get("phase"))||ui.data.phases[0];
+  const p=allPhases().find(p=>p.id===qs.get("phase"))||visiblePhases()[0];
   setSelection(p.id,qs.get("step"));
  }catch(error){
   $("stage-list").innerHTML="";

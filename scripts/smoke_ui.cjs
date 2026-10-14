@@ -35,10 +35,16 @@ async function run(){
  const total=new Set([...cat,...workspace].map(x=>x.id));
  assert.equal(cat.length,19);assert.equal(workspace.length,8);
  assert.equal(payload.skills.length,27);
- assert.equal(workflow.phases.length,4);
+ assert.equal(workflow.phases.length,4,"原始工作流仍须保留验收与部署阶段");
  assert.equal(workflow.phases.flatMap(p=>p.steps).length,19);
- assert.equal(doc.querySelectorAll('#stage-list [data-phase]').length,5,"缺阶段/通用技能导航");
- assert.match(doc.getElementById("project-stats").textContent,/4 个阶段.*8 个通用Skill/);
+ const hiddenPhase=workflow.phases.find(p=>p.id==="P03");
+ assert.ok(hiddenPhase&&hiddenPhase.steps.length===3,"不得删除真实验收上线流程");
+ const visiblePhases=workflow.phases.filter(p=>p.id!=="P03");
+ assert.equal(visiblePhases.length,3);
+ assert.equal(doc.querySelectorAll('#stage-list [data-phase]').length,4,"网页应只显示3个研发阶段与通用Skill");
+ assert.equal(doc.querySelector('[data-phase="P03"]'),null,"验收上线阶段不应出现在页面导航");
+ assert.doesNotMatch(doc.getElementById("stage-list").textContent,/全项目验收与部署上线/);
+ assert.match(doc.getElementById("project-stats").textContent,/3 个阶段 · 16 个步骤.*8 个通用Skill/);
  assert.ok(fs.statSync(path.join(root,"dist/skills-bundle.zip")).size>20000,"离线技能包不存在");
  assert.ok(fs.statSync(path.join(root,"dist/regression.html")).size>500,"场景测试可视报告未生成");
  assert.equal(JSON.parse(fs.readFileSync(path.join(root,"dist/regression.json"),"utf8")).total,15);
@@ -53,7 +59,7 @@ async function run(){
  assert.ok(doc.querySelector(".detail-skill .skill-mini")&&doc.querySelector(".detail-audit")&&doc.querySelector(".prompt-section"),"详情工作台缺必要板块");
  // 每一阶段、每一步都能真实点击；提示词与当前主Skill一致。
  const seen=new Set();
- for(const ph of workflow.phases){
+ for(const ph of visiblePhases){
   click('[data-phase="'+ph.id+'"]');
   for(const step of ph.steps){
    click('[data-step="'+step.id+'"]');
@@ -89,7 +95,7 @@ async function run(){
    }
   }
  }
- // 通用Skill是真实可点的第五个导航区，不替换四大阶段。
+ // 通用Skill是独立导航区，不替换三个可见研发阶段。
  click('[data-phase="PTOOLS"]');
  assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,8);
  for(const tool of workspace){
@@ -102,7 +108,14 @@ async function run(){
     close();seen.add(tool.id);
   }
  }
- assert.equal(seen.size,27,"至少一个Skill未在真实导航中显示："+[...total].filter(x=>!seen.has(x)));
+ const hiddenSkills=new Set(hiddenPhase.steps.flatMap(s=>s.skills||[]));
+ const expectedVisibleSkills=new Set([...total].filter(id=>!hiddenSkills.has(id)));
+ assert.deepEqual(seen,expectedVisibleSkills,"可见阶段Skill入口不全，或隐藏阶段Skill被误展示");
+ // 旧书签和外部链接不能绕过导航，进入隐藏阶段详情。
+ const hashBefore=dom.window.location.hash;
+ dom.window.setSelection("P03","S16");
+ assert.equal(dom.window.location.hash,hashBefore,"旧链接不能激活隐藏阶段");
+ assert.equal(doc.querySelector('[data-phase="P03"]'),null);
 
  // 多场景切换与复制的不是上次任务旧提示词。
  click('[data-phase="P02"]');click('[data-step="S14B"]');
@@ -134,7 +147,7 @@ async function run(){
  click("[data-tree-close]");
 
  assert.equal(errors.length,0,"页面运行错误："+errors.join("；"));
- console.log("交互回归通过：19步骤、27技能入口与图片、架构PNG完整性、文件预览、来源、提示词切换/复制、离线包和目录树。");
+ console.log("交互回归通过：3个可见研发阶段、16个可见步骤、"+seen.size+"个可见Skill入口；验收上线数据保留但HTML隐藏，深链不可进入；其余图片、文件预览、来源、复制、离线包和目录树正常。");
  dom.window.close();
 }
 run().catch(e=>{console.error(e);process.exitCode=1;dom.window.close()});
