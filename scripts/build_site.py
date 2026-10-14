@@ -46,7 +46,7 @@ regression_html = (
 (DIST/"regression.html").write_text(regression_html,encoding="utf-8")
 
 
-assert len(data["phases"]) == 6
+assert len(data["phases"]) == 4
 assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})
 assert len(data["phases"][1]["steps"]) == 7
 assert len(data["phases"][2]["steps"]) == 7
@@ -60,7 +60,7 @@ for p in data["phases"][1:]:
             assert step.get("skills") == [] and not step.get("skillId"), step["id"]
             continue
         assert step.get("skillId") in known, step["id"]
-        assert step.get("skills") == [step["skillId"]], step["id"]
+        assert step.get("skills") == (["release-preflight","release-delivery"] if step["id"]=="S18" else [step["skillId"]]), step["id"]
 
 payload = {"skills": [], "examples": {}}
 project_tree = (DOCS / "data/project-directory-tree.txt").read_text(encoding="utf-8")
