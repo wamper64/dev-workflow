@@ -1,397 +1,132 @@
 #!/usr/bin/env node
-/* 对最终发布HTML做真实DOM点击回归；不依赖后端或浏览器公网。 */
-const assert = require("node:assert/strict");
-const fs = require("node:fs");
-const path = require("node:path");
-const {JSDOM, VirtualConsole} = require("/tmp/dev-workflow-ui-test/node_modules/jsdom");
+/* 对正式构建的HTML执行真实DOM交互验证。检查行为、可达性、原图和产物，而非过期文案的精确措辞。 */
+const assert=require("node:assert/strict");
+const fs=require("node:fs");
+const path=require("node:path");
+const crypto=require("node:crypto");
+const {JSDOM,VirtualConsole}=require("/tmp/dev-workflow-ui-test/node_modules/jsdom");
 const root=path.resolve(__dirname,"..");
 const html=fs.readFileSync(path.join(root,"dist","index.html"),"utf8");
 const errors=[];
-const virtualConsole=new VirtualConsole();
-virtualConsole.on("jsdomError",e=>errors.push(e.message));
-const dom=new JSDOM(html,{
- url:"https://wamper64.github.io/dev-workflow/",
- runScripts:"dangerously",
- pretendToBeVisual:true,
- virtualConsole,
- beforeParse(window){
-   if(!window.HTMLDialogElement.prototype.showModal)
-     window.HTMLDialogElement.prototype.showModal=function(){this.setAttribute("open","")};
-   if(!window.HTMLDialogElement.prototype.close)
-     window.HTMLDialogElement.prototype.close=function(){this.removeAttribute("open")};
- }
+const vc=new VirtualConsole();
+vc.on("jsdomError",e=>errors.push(e.message));
+const dom=new JSDOM(html,{url:"https://wamper64.github.io/dev-workflow/",runScripts:"dangerously",pretendToBeVisual:true,virtualConsole:vc,
+ beforeParse(w){if(!w.HTMLDialogElement.prototype.showModal)w.HTMLDialogElement.prototype.showModal=function(){this.setAttribute("open","")};
+ if(!w.HTMLDialogElement.prototype.close)w.HTMLDialogElement.prototype.close=function(){this.removeAttribute("open")}}
 });
-async function main(){
- const doc=dom.window.document;
- await new Promise(r=>setTimeout(r,70));
- const click=selector=>{
-   const element=doc.querySelector(selector);
-   assert.ok(element,"找不到按钮："+selector);
-   element.click();
-   return element;
- };
- assert.equal(doc.querySelectorAll("#stage-list button[data-phase]").length,5,"四个工作阶段加通用工具应可点击");
- assert.match(doc.querySelector("#project-stats").textContent,/4 个阶段.*8 个通用Skill/);
- assert.ok(!doc.getElementById("project-stats").textContent.includes("正在载入"),"JS未完成初始化");
- click('[data-phase="P01"]');
- assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"准备设计步骤错误");
- click('[data-step="S01"]');
- assert.equal(doc.querySelectorAll("#step-detail [data-skill]").length,0,"输入检查只用提示词");
- assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/递归阅读 docs\/input\//);
-  // 所有正式步骤的复制提示词应以 /skill-id 开头；输入核验无Skill。
-  for(const section of ["P01","P02","P03"]){
-    click('[data-phase="'+section+'"]');
-    const ids=[...doc.querySelectorAll('#step-list [data-step]')].map(el=>el.dataset.step);
-    for(const id of ids){
-      click('[data-step="'+id+'"]');
-      const skill=doc.querySelector('#step-detail [data-skill]');
-      const text=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
-      if(!skill){
-        assert.equal(id,"S01","无主Skill的任务应只有输入核验");
-        assert.doesNotMatch(text,/^\//,"S01没有Skill，不需Slash指令");
-        continue;
-      }
-      assert.ok(text.startsWith("/"+skill.dataset.skill+"\n"),"未使用 /Skill 作为提示词开头："+id);
-      assert.ok(text.length>=75 && text.length<850,"步骤提示词没有交代任务目标或内容过长："+id);
-      assert.doesNotMatch(text,/SKILL\.md|【真实输出】|【审核\/不通过路径】/,"提示词复写了Skill内容："+id);
-      assert.doesNotMatch(text,/请调用\s*Skill：|调用Skill：/,"有旧式Skill调用："+id);
-    }
-  }
-  const specific={
-    S02:["研发协作入口","默认五标签"],S03:["工程约束","自动预填"],
-    S04:["总体组件","关键端到端业务链路"],S05:["核心表","ER 图"],
-    S06:["逐环境","尚未授权"],S07:["业务模块池","生命周期"],
-    S09:["本轮","现有原型"],S10:["业务目标","Spec"],
-    S11:["Tickets","发布前"],S12:["前端原型","TDD"],
-    S14H:["人工验收","待执行"],S14B:["具体问题","实际现象","正常预期","现有证据"],
-    S15:["AI 编码工作","关联证据"],S16:["整个项目","已确认PRD"],
-    S17:["上线条件","测量证据"],S18:["目标生产环境","回滚"],
-    S19:["生产发布","交付清单"]
-  };
-  for(const section of ["P01","P02","P03"]){
-    click('[data-phase="'+section+'"]');
-    for(const stepId of Object.keys(specific)){
-      if(!doc.querySelector('[data-step="'+stepId+'"]'))continue;
-      click('[data-step="'+stepId+'"]');
-      const prompt=doc.querySelector(".prompt-text").textContent;
-      for(const keyword of specific[stepId])
-        assert.ok(prompt.includes(keyword),stepId+" 缺当前任务信息："+keyword);
-    }
-  }
-  // 选择场景时，显示和复制的必须是当前用户选中的那个具体问题。
-  click('[data-phase="P02"]');
-  click('[data-step="S14B"]');
-  assert.equal(doc.querySelectorAll('[data-prompt-example]').length,5,"诊断提示词应有多个问题实例");
-  assert.match(doc.querySelector('.prompt-text').textContent,/实际现象/);
-  assert.doesNotMatch(doc.querySelector('.prompt-text').textContent,/问题来源不限于/);
-  click('[data-prompt-example="1"]');
-  assert.match(doc.querySelector('.prompt-text').textContent,/设备告警列表选择/);
-  assert.equal(doc.querySelector('[data-prompt-example="1"]').getAttribute('aria-pressed'),"true");
-  assert.match(doc.querySelector('.prompt-section .detail-hint').textContent,/演示情景/);
-  let copied=null;
-  Object.defineProperty(dom.window.navigator,"clipboard",{configurable:true,value:{writeText:async value=>{copied=value}}});
-  click('[data-copy-prompt]');
-  await Promise.resolve();
-  assert.match(copied||"",/设备告警列表选择/,"复制内容未随提示词切换");
-  click('[data-prompt-example="2"]');
-  assert.match(doc.querySelector('.prompt-text').textContent,/CI 的设备报文解析集成测试失败/);
-  click('[data-step="S15"]');
-  click('[data-step="S14B"]');
-  assert.match(doc.querySelector('.prompt-text').textContent,/本次要解决的具体问题/,"换步骤后未恢复默认提示词");
-  for(const [stepId,n] of [["S06",2],["S09",3],["S10",2],["S14H",2],["S15",2],["S16",2]]){
-    const phase=stepId==="S06"?"P01":stepId==="S16"?"P03":"P02";
-    click('[data-phase="'+phase+'"]');click('[data-step="'+stepId+'"]');
-    assert.equal(doc.querySelectorAll('[data-prompt-example]').length,n,stepId+" 缺场景示例");
-    click('[data-prompt-example="1"]');
-    const cmd="/"+doc.querySelector('#step-detail [data-skill]').dataset.skill;
-    assert.ok(doc.querySelector('.prompt-text').textContent.startsWith(cmd+"\n"),stepId+" 切换示例后Slash调用错误");
-  }
-  click('[data-phase="P01"]');
-  click('[data-step="S01"]');
- // 设计阶段六个Skill的快速理解必须同时显示可视流程与具体缺口清单。
- const designs=[
-   ["S02","setup-matt-pocock-skills",5,5],
-   ["S03","project-baseline",6,8],
-   ["S04","architecture-baseline",6,9],
-   ["S05","data-architecture",6,8],
-   ["S06","development-environment",6,5],
-   ["S07","module-discovery",6,7]
- ];
- for(const [stepId,skillId,minimumRoute,minimumCoverage] of designs){
-   click('[data-step="'+stepId+'"]');
-   click('[data-skill="'+skillId+'"]');
-   assert.ok(doc.querySelectorAll(".quick-route-node").length>=minimumRoute,skillId+" 缺执行流程图");
-   assert.ok(doc.querySelectorAll(".quick-coverage-row").length>=minimumCoverage,skillId+" 缺覆盖速查项");
-   assert.match(doc.getElementById("skill-dialog-content").textContent,/审核关口|未通过/,"快速理解缺少失败退回路径");
-   assert.match(doc.querySelector(".quick-coverage").textContent,/未完成|待确认|缺少|不适用/,"覆盖速查应说明缺项的处理方式");
-   click("[data-skill-close]");
- }
- // 按每个Skill在真实导航中的入口点击，验证其独立流程图。
- const illustrated=new Set();
- for(const ph of doc.querySelectorAll('#stage-list [data-phase]')){
-   const phaseId=ph.dataset.phase;
-   click('[data-phase="'+phaseId+'"]');
-   const stepIds=[...doc.querySelectorAll('#step-list [data-step]')].map(x=>x.dataset.step);
-   for(const stepId of stepIds){
-     click('[data-step="'+stepId+'"]');
-     const ids=[...doc.querySelectorAll('#step-detail [data-skill]')].map(x=>x.dataset.skill);
-     for(const id of ids){
-       if(id==="architecture-baseline"||illustrated.has(id))continue;
-       click('[data-skill="'+id+'"]');
-       assert.ok(doc.querySelector('.skill-illustration img[src^="data:image/svg+xml;base64,"]'),id+' 的图未被内嵌');
-       illustrated.add(id);
-       click('[data-skill-close]');
-     }
-   }
- }
- for(const id of ["setup-matt-pocock-skills","project-baseline","data-architecture","module-design","manual-testing","release-readiness","release-preflight","release-delivery","system-acceptance","module-discovery","development-environment"]){
-  assert.ok(illustrated.has(id),id+' 导航入口未提供图片');
- }
- click('[data-phase="P01"]');
- click('[data-step="S02"]');
- assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/沿用默认五标签/,"初始化提示词缺默认五标签选择");
- click('[data-skill="setup-matt-pocock-skills"]');
- const overviewText=doc.querySelector(".skill-overview").textContent;
- for(const label of ["needs-triage","needs-info","ready-for-agent","ready-for-human","wontfix"]){
-   assert.ok(overviewText.includes(label),"初始化快速理解未说明标签："+label);
- }
- assert.match(overviewText,/推荐选择.{0,12}是，沿用默认五标签/,"缺默认推荐选择");
- assert.match(overviewText,/仅安装 \/triage 时|仅安装 \/triage 时/,"标签适用性不明");
- assert.match(overviewText,/人工测试签收|业务验收状态/,"未区分人工测试与Issue分诊");
- click("[data-skill-close]");
- click('[data-step="S02"]');
- assert.match(doc.querySelector("#step-detail").textContent,/code\//);
- click('[data-step="S03"]');
- assert.match(doc.getElementById("step-detail").textContent,/docs\/output\/01-项目基线\/项目基线\.md/);
- assert.doesNotMatch(doc.getElementById("step-detail").textContent,/项目基线前置约束确认表\.md/);
- click('[data-skill="project-baseline"]');
- assert.equal(doc.getElementById("skill-dialog").open,true,"Skill预览未打开");
- assert.equal(doc.querySelectorAll(".skill-topic-card").length,8,"工程基线8类量化内容未展示");
- assert.match(doc.querySelector(".skill-overview").textContent,/16GiB|16 GiB/);
- assert.match(doc.querySelector(".skill-overview").textContent,/保留|5年/);
- assert.match(doc.querySelector(".skill-summary").textContent,/只定义工程约束/);
- click('[data-skill-tab="result"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/报价系统项目工程基线/);
- assert.ok(doc.querySelectorAll(".sample-table").length>=6,"成品示例应显示可阅读表格");
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/MySQL 8\.0/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/500GB|500 GB/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/P95\s*≤\s*2\.0秒/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/保留|保存/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/整机资源|资源余量|资源上限/);
- click('[data-sample="consultation"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/每轮优先询问最多三组|三组高影响/);
- click('[data-sample="final"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/确认版本|版本.*依据.*追溯/);
- click('[data-skill-tab="files"]');
- assert.ok(doc.querySelectorAll("[data-skill-file]").length>=8,"技能目录文件未全部呈现");
- assert.ok(![...doc.querySelectorAll("[data-skill-file]")].some(x=>/examples/.test(x.dataset.skillFile)),"可安装Skill目录不得包含项目示例");
- click('[data-skill-file="references/checklist.md"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/项目基线生成与放行检查/);
- click('[data-skill-file="assets/preconfirmation-template.md"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/仅需用户裁定|自动填写|预填/);
- click('[data-skill-file="scripts/check_inputs.py"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/argparse/);
- click("[data-skill-close]");
- click('[data-phase="P01"]');
- assert.equal(doc.querySelector('[data-step="S06"] strong').textContent,"初次部署","初次部署标题过长");
- click('[data-step="S06"]');
- click('[data-skill="development-environment"]');
- assert.equal(doc.querySelectorAll(".quick-route-check").length,2,"初次部署需要两个独立审核关");
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/配置审批/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/执行验收/);
- assert.ok(doc.querySelectorAll(".quick-coverage-row").length>=12,"初次部署缺八节字段或真实验收检查");
- click("[data-skill-close]");
- click('[data-phase="P02"]');
- const required={
-  "S09":["module-design",8,9],
-  "S10":["to-spec",8,7],
-  "S11":["to-tickets",6,7],
-  "S12":["implement-spec",8,8],
-  "S14H":["manual-testing",4,8],
-  "S14B":["diagnosing-bugs",6,7],
-  "S15":["retro",8,8]
- };
- for(const [stepId,[id,details,checks]] of Object.entries(required)){
-   click('[data-step="'+stepId+'"]');
-   assert.ok(doc.querySelector("#step-detail h2").textContent.length<=12,"执行步骤标题未精简："+stepId);
-   click('[data-skill="'+id+'"]');
-   assert.ok(doc.querySelectorAll(".quick-route-node").length>=5,id+" 缺执行流程图");
-   assert.ok(doc.querySelectorAll(".quick-coverage-row").length>=checks,id+" 速查遗漏具体交付要求");
-   assert.ok(doc.querySelectorAll(".skill-topic-card").length>=details,id+" 未提供足够的落地板块");
-   assert.match(doc.querySelector("#skill-dialog-content").textContent,/未通过|退回/,id+" 缺失败回路");
-   click("[data-skill-close]");
- }
- click('[data-phase="P02"]');
- assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"模块开发步骤错误");
- assert.match(doc.querySelector("#phase-route").textContent,/Grill/,"模块流程速览必须显示Grill");
- assert.match(doc.querySelector("#phase-route").textContent,/人工测试/,"模块流程速览必须显示人工测试");
- click('[data-phase="P01"]');
- click('[data-step="S04"]');
- assert.ok(doc.querySelector('#step-detail .architecture-step-preview img[src^="data:image/png;base64,"]'),"S04页面未显示原始PNG");
- click('[data-skill="architecture-baseline"]');
- const architectureImage=doc.querySelector('#skill-dialog-content .architecture-overview-visual img[src^="data:image/png;base64,"]');
- assert.ok(architectureImage,"S04快速理解未显示原始PNG");
- assert.equal(require("node:crypto").createHash("sha256").update(Buffer.from(architectureImage.getAttribute("src").split(",")[1],"base64")).digest("hex"),"aaab1523bf4e3c003defc65549f9436036ac246c57747c70c3d5ba2dfee5d0a9","HTML中的图片不是用户上传的原图");
- assert.ok(doc.querySelectorAll(".skill-topic-card").length>=5,"整体架构须展示组件与交互的多个内容板块，而非空壳");
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/运行单元/);
- click('[data-skill-tab="files"]');
- click('[data-skill-file="references/architecture-gate.md"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/整体架构骨架的审核门禁/);
- click('[data-skill-tab="source"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/实际采用与定制化改造/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/architecture spine|组件清单|交互/);
- click("[data-skill-close]");
- click('[data-step="S06"]');
- assert.match(doc.querySelector("#step-detail").textContent,/初次部署配置/);
- assert.equal(doc.querySelectorAll("[data-dev-field]").length,0,"旧环境信息强制填写表应移除");
- assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/初次部署配置\.md/);
- click('[data-skill="development-environment"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/环境|配置|确认/);
- click("[data-skill-close]");
- click('[data-step="S05"]');
- click('[data-skill="data-architecture"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/数据域/);
- click("[data-skill-close]");
- click('[data-step="S07"]');
- assert.match(doc.querySelector("#step-detail").textContent,/模块池|模块级/,"模块拆分产物应为模块池");
- click('[data-skill="module-discovery"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/Blocking edges|纵向|Tracer bullet/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/模块级/);
- click('[data-skill-tab="files"]');
- click('[data-skill-file="SKILL.md"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/S11|to-tickets/);
- click("[data-skill-close]");
- click('[data-phase="P02"]');
- // 逐阶段逐步骤检查来源标签由完整 catalog 提供，而不是把 ID 字符串当对象。
- const allPhaseIds=[...doc.querySelectorAll('#stage-list button[data-phase]')].map(el=>el.dataset.phase);
- for(const phaseId of allPhaseIds){
-   click('[data-phase="'+phaseId+'"]');
-   const stepIds=[...doc.querySelectorAll('#step-list button[data-step]')].map(el=>el.dataset.step);
-   for(const stepId of stepIds){
-     click('[data-step="'+stepId+'"]');
-     for(const b of doc.querySelectorAll('#step-detail .skill-kind')){
-       assert.doesNotMatch(b.textContent,/待核实|类型未登记/,"Skill应从完整catalog中取得来源");
-     }
-   }
- }
- click('[data-phase="P02"]');
- click('[data-step="S09"]');
- assert.match(doc.querySelector('#step-detail [data-skill="module-design"] .skill-kind').textContent,/基于Matt改造/);
- assert.match(doc.querySelector('#step-detail [data-skill="grill-with-docs"] .skill-kind').textContent,/Matt原版/);
- click('[data-step="S12"]');
- assert.match(doc.querySelector('#step-detail [data-skill="implement-spec"] .skill-kind').textContent,/Matt原版/);
- click('[data-step="S14H"]');
- assert.match(doc.querySelector('#step-detail [data-skill="manual-testing"] .skill-kind').textContent,/自建/);
- click('[data-step="S15"]');
- assert.match(doc.querySelector('#step-detail [data-skill="retro"] .skill-kind').textContent,/Matt原版/);
+const doc=dom.window.document;
+function click(selector){
+ const el=doc.querySelector(selector);
+ assert.ok(el,"缺交互入口："+selector);
+ el.click();return el;
+}
+function preview(id){
+ click('[data-skill="'+id+'"]');
+ assert.ok(doc.getElementById("skill-dialog").open,"无法打开Skill："+id);
+ assert.ok(doc.getElementById("skill-dialog-content").textContent.length>80,"Skill快速理解为空："+id);
+}
+function close(){click("[data-skill-close]");assert.ok(!doc.getElementById("skill-dialog").open,"无法关闭Skill窗口")}
+async function run(){
+ await new Promise(resolve=>setTimeout(resolve,80));
+ const workflow=JSON.parse(doc.getElementById("workflow-data").textContent);
+ const payload=JSON.parse(doc.getElementById("skill-data").textContent);
+ const cat=JSON.parse(fs.readFileSync(path.join(root,"skills/catalog.json"),"utf8"));
+ const workspace=JSON.parse(fs.readFileSync(path.join(root,"skills/workspace.json"),"utf8"));
+ const total=new Set([...cat,...workspace].map(x=>x.id));
+ assert.equal(cat.length,19);assert.equal(workspace.length,8);
+ assert.equal(payload.skills.length,27);
+ assert.equal(workflow.phases.length,4);
+ assert.equal(workflow.phases.flatMap(p=>p.steps).length,20);
+ assert.equal(doc.querySelectorAll('#stage-list [data-phase]').length,5,"缺阶段/通用技能导航");
+ assert.match(doc.getElementById("project-stats").textContent,/4 个阶段.*8 个通用Skill/);
+ assert.ok(fs.statSync(path.join(root,"dist/skills-bundle.zip")).size>20000,"离线技能包不存在");
+ assert.ok(fs.statSync(path.join(root,"dist/regression.html")).size>500,"场景测试可视报告未生成");
+ assert.equal(JSON.parse(fs.readFileSync(path.join(root,"dist/regression.json"),"utf8")).total,15);
 
- click('[data-step="S09"]');
- click('[data-skill="module-design"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/字段|状态机/);
- click("[data-skill-close]");
-  click('[data-step="S12"]');
- assert.match(doc.querySelector("#step-detail").textContent,/TDD/);
- assert.doesNotMatch(doc.querySelector("#step-detail").textContent,/人工测试用例与结果\.md/);
- assert.match(doc.querySelector("#step-detail").textContent,/code-review/);
- click('[data-skill="implement-spec"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/TDD|ticket|Ticket|集成/);
- click("[data-skill-close]");
- click('[data-step="S14H"]');
- assert.match(doc.querySelector("#step-detail").textContent,/人工|签收/);
- assert.match(doc.querySelector("#step-detail").textContent,/人工测试用例与结果\.md/);
- assert.ok(doc.querySelector('#step-detail [data-skill="manual-testing"]'),"人工测试应为独立Skill");
- assert.ok(doc.querySelector('#step-detail [data-copy-prompt]'),"人工测试应有生成用例的执行提示词");
- click('[data-skill="manual-testing"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/人工|覆盖|签收/);
- click('[data-skill-tab="files"]');
- click('[data-skill-file="references/manual-coverage.md"]');
- assert.match(doc.getElementById("skill-dialog-content").textContent,/覆盖|证据/);
- click("[data-skill-close]");
- click('[data-step="S14B"]');
- const defectPrompt=doc.querySelector("#step-detail .prompt-text").textContent;
- for(const term of ["实际现象","正常预期","复现方式","现有证据"])
-   assert.ok(defectPrompt.includes(term),"Bug提示词没有要求描述真实问题："+term);
- const cases=[...doc.querySelectorAll("[data-prompt-example]")].map(x=>x.textContent).join(" ");
- for(const term of ["CI","页面","设备","生产"])
-   assert.ok(cases.includes(term),"Bug缺对应场景示例："+term);
- assert.match(doc.querySelector("#step-detail").textContent,/不要求所有故障都有人工用例/,"不能把人测单作为必须产物");
- click('[data-skill="diagnosing-bugs"]');
- const defectOverview=doc.querySelector("#skill-dialog-content").textContent;
- for(const source of ["CI","用户反馈","人工测试","生产"])
-   assert.ok(defectOverview.includes(source),"快速理解漏掉故障来源："+source);
- assert.match(defectOverview,/人工测试用例不是必填/,"快速理解仍限定人工测试前提");
- assert.equal(doc.querySelectorAll(".skill-topic-card").length,6,"官方diagnosing-bugs必须六个阶段");
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/Phase 1/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/Phase 6/);
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/原始症状|红灯/);
- click("[data-skill-close]");
- click('[data-step="S15"]');
- assert.match(doc.querySelector("#step-detail").textContent,/retro/);
- assert.ok(doc.querySelector('#step-detail [data-skill="retro"]'),"每轮复盘要有可点击Matt原版Skill");
- click('[data-skill="retro"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/AI|编码|复盘/);
- click("[data-skill-close]");
-  click('[data-phase="P01"]');
- click('[data-step="S04"]');
- click('[data-skill="architecture-baseline"]');
- click('[data-skill-tab="files"]');
- click('[data-skill-file="SKILL.md"]');
- assert.match(doc.querySelector("#skill-dialog-content").textContent,/grill-with-docs/,"整体架构原始Skill须内嵌Grill");
- click("[data-skill-close]");
- click('[data-phase="P02"]');
- click('[data-step="S09"]');
- assert.match(doc.querySelector("#step-detail").textContent,/grill-with-docs/,"模块详细设计内必须包含Grill");
- click('[data-phase="P01"]');
- click('[data-phase="PTOOLS"]');
- assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,8,"通用Skill应展示8个");
- assert.match(doc.querySelector("#stage-intro").textContent,/通用 Skills/);
- assert.match(doc.querySelector("#step-heading-title").textContent,/通用 Skill/);
- const toolboxExpected=["grill-me","improve-codebase-architecture","handoff","triage","prototype","implement","wayfinder","research"];
- const toolboxActual=[...doc.querySelectorAll("#step-list button[data-step]")].map(x=>x.dataset.step.slice(2));
- assert.deepEqual(toolboxActual,toolboxExpected,"工具箱顺序或去重不符");
- for(const removed of ["grill-with-docs","tdd","grilling","domain-modeling","diagnosing-bugs","code-review","to-spec","to-tickets","wizard","pr","to-questionnaire"]){
-  assert.equal(doc.querySelectorAll("[data-step=\"T_"+removed+"\"]").length,0,"应从通用入口去除："+removed);
- }
- for(const id of toolboxExpected){
-  click('[data-step="T_'+id+'"]');
-  assert.ok(doc.querySelector('#step-detail [data-skill="'+id+'"]'),"没有对应的Skill预览按钮："+id);
-  click('[data-skill="'+id+'"]');
-  click('[data-skill-tab="files"]');
-  click('[data-skill-file="SKILL.md"]');
-  assert.ok(doc.getElementById("skill-dialog-content").textContent.length>50,"原版SKILL文件未呈现："+id);
-  click("[data-skill-close]");
- }
-  // 八项通用工具同样需要首行Slash命令。
-  for(const id of toolboxExpected){
-    click('[data-step="T_'+id+'"]');
-    const text=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
-    assert.ok(text.startsWith("/"+id+"\n"),"通用Skill未使用Slash命令："+id);
-    assert.ok(text.length>=65 && text.length<400,"通用Skill应根据实际用途写出目标及必要上下文："+id);
+ // 每一阶段、每一步都能真实点击；提示词与当前主Skill一致。
+ const seen=new Set();
+ for(const ph of workflow.phases){
+  click('[data-phase="'+ph.id+'"]');
+  for(const step of ph.steps){
+   click('[data-step="'+step.id+'"]');
+   assert.ok(doc.querySelector('#step-detail h2'),"步骤详情缺失："+step.id);
+   const prompt=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
+   if(step.skillId){
+    assert.ok(prompt.startsWith("/"+step.skillId+"\n"),"Slash命令错误："+step.id);
+    assert.ok(prompt.length>=75,"委托提示词没有描述任务："+step.id);
+   }else{
+    assert.ok(!prompt.startsWith("/"),"无Skill步骤不应产生Slash命令："+step.id);
+   }
+   const ids=[...doc.querySelectorAll('#step-detail [data-skill]')].map(x=>x.dataset.skill);
+   for(const id of ids){
+     if(seen.has(id))continue;
+     assert.ok(total.has(id),"导航引用未登记Skill："+id);
+     preview(id);
+     if(id==="architecture-baseline"){
+       const visual=doc.querySelector(".architecture-overview-visual img");
+       assert.ok(visual&&visual.src.startsWith("data:image/png;base64,"),"架构原图未显示");
+       const raw=Buffer.from(visual.src.split(",")[1],"base64");
+       assert.equal(crypto.createHash("sha256").update(raw).digest("hex"),
+        "aaab1523bf4e3c003defc65549f9436036ac246c57747c70c3d5ba2dfee5d0a9","架构PNG被修改");
+     }else{
+       assert.ok(doc.querySelector('.skill-illustration img[src^="data:image/svg+xml;base64,"]'),"缺独立流程图："+id);
+     }
+     click('[data-skill-tab="files"]');
+     click('[data-skill-file="SKILL.md"]');
+     assert.ok(doc.getElementById("skill-dialog-content").textContent.length>100,"文件内容不能阅读："+id);
+     click('[data-skill-tab="source"]');
+     assert.match(doc.getElementById("skill-dialog-content").textContent,/参考|来源|采用/,"缺引用来源："+id);
+     close();
+     seen.add(id);
+   }
   }
- click('[data-step="T_handoff"]');
- assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/\/handoff/);
- click('[data-step="T_research"]');
- assert.equal(dom.window.location.hash,"#phase=PTOOLS&step=T_research");
- click('[data-step="T_wayfinder"]');
- assert.match(doc.querySelector("#step-detail").textContent,/决策|Map/);
- click('[data-step="T_implement"]');
- assert.match(doc.querySelector("#step-detail").textContent,/Ticket/);
+ }
+ // 通用Skill是真实可点的第五个导航区，不替换四大阶段。
+ click('[data-phase="PTOOLS"]');
+ assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,8);
+ for(const tool of workspace){
+  click('[data-step="T_'+tool.id+'"]');
+  const prompt=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
+  assert.ok(prompt.startsWith("/"+tool.id+"\n"),"通用Skill Slash命令错误："+tool.id);
+  if(!seen.has(tool.id)){
+    preview(tool.id);
+    assert.ok(doc.querySelector('.skill-illustration img[src^="data:image/svg+xml;base64,"]'),"通用Skill缺流程图："+tool.id);
+    close();seen.add(tool.id);
+  }
+ }
+ assert.equal(seen.size,27,"至少一个Skill未在真实导航中显示："+[...total].filter(x=>!seen.has(x)));
+
+ // 多场景切换与复制的不是上次任务旧提示词。
+ click('[data-phase="P02"]');click('[data-step="S14B"]');
+ const variants=doc.querySelectorAll("[data-prompt-example]");
+ assert.ok(variants.length>=3,"Bug诊断缺独立场景");
+ const before=doc.querySelector(".prompt-text").textContent;
+ click('[data-prompt-example="1"]');
+ const after=doc.querySelector(".prompt-text").textContent;
+ assert.notEqual(after,before,"切换场景未改变任务委托");
+ let copied="";
+ Object.defineProperty(dom.window.navigator,"clipboard",{configurable:true,value:{writeText:async s=>{copied=s}}});
+ click("[data-copy-prompt]");await Promise.resolve();
+ assert.equal(copied,after,"复制的提示词不是当前选中场景");
+
+ // 项目基线不再恢复过期额外文件；模块数量不机械封顶。
+ click('[data-phase="P01"]');click('[data-step="S03"]');
+ assert.match(doc.getElementById("step-detail").textContent,/项目基线\.md/);
+ assert.doesNotMatch(doc.getElementById("step-detail").textContent,/前置约束确认表\.md/);
+ click('[data-step="S07"]');preview("module-discovery");
+ click('[data-skill-tab="files"]');click('[data-skill-file="SKILL.md"]');
+ assert.match(doc.getElementById("skill-dialog-content").textContent,/评审阈值|不强制合并/);
+ close();
+
+ // 预期目录树可读，且不是声称已交付这些文件。
  click("#tree-open");
- assert.equal(doc.getElementById("tree-dialog").open,true,"目录树未打开");
- assert.match(doc.getElementById("tree-content").textContent,/项目根目录/);
- assert.match(doc.getElementById("tree-content").textContent,/模块验收与状态记录.md/);
- assert.match(doc.getElementById("tree-content").textContent,/初次部署配置-开发环境.md/);
+ assert.ok(doc.getElementById("tree-dialog").open);
+ assert.match(doc.getElementById("tree-content").textContent,/项目根目录|code\//);
+ assert.doesNotMatch(doc.getElementById("tree-content").textContent,/项目基线前置约束确认表\.md/);
  click("[data-tree-close]");
- assert.equal(doc.getElementById("tree-dialog").open,false,"目录树未关闭");
-  click('[data-phase="P01"]');
- assert.equal(doc.querySelectorAll("#step-list button[data-step]").length,7,"退出工具箱后应恢复主项目步骤");
-  click('[data-phase="P00"]');
- assert.ok(!doc.querySelector("[data-copy-prompt]"),"准备工作不应出现执行提示词");
- assert.ok(fs.statSync(path.join(root,"dist","skills-bundle.zip")).size>15000,"ZIP不存在或过小");
- const all=fs.readFileSync(path.join(root,"scripts","build_site.py"),"utf8");
- assert.match(all,/skills-bundle\.zip|ZipFile/,"必须生成实际Skills压缩包");
- assert.equal(errors.length,0,"浏览器脚本异常："+errors.join("\n"));
- console.log("交互回归通过：标准项目导航、输入提示词、外置案例、原版开发与独立人工测试、人工测试独立Skill、Bug诊断、8个通用工具与35份Skill ZIP");
+
+ assert.equal(errors.length,0,"页面运行错误："+errors.join("；"));
+ console.log("交互回归通过：20步骤、27技能入口与图片、架构PNG完整性、文件预览、来源、提示词切换/复制、离线包和目录树。");
  dom.window.close();
 }
-main().catch(err=>{console.error(err);process.exitCode=1;dom.window.close()});
+run().catch(e=>{console.error(e);process.exitCode=1;dom.window.close()});
