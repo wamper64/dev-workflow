@@ -35,10 +35,10 @@ async function run(){
  const total=new Set([...cat,...workspace].map(x=>x.id));
  assert.equal(cat.length,19);assert.equal(workspace.length,8);
  assert.equal(payload.skills.length,27);
- assert.equal(workflow.phases.length,6);
- assert.equal(workflow.phases.flatMap(p=>p.steps).length,20);
- assert.equal(doc.querySelectorAll('#stage-list [data-phase]').length,7,"缺阶段/通用技能导航");
- assert.match(doc.getElementById("project-stats").textContent,/6 个阶段.*8 个通用Skill/);
+ assert.equal(workflow.phases.length,4);
+ assert.equal(workflow.phases.flatMap(p=>p.steps).length,19);
+ assert.equal(doc.querySelectorAll('#stage-list [data-phase]').length,5,"缺阶段/通用技能导航");
+ assert.match(doc.getElementById("project-stats").textContent,/4 个阶段.*8 个通用Skill/);
  assert.ok(fs.statSync(path.join(root,"dist/skills-bundle.zip")).size>20000,"离线技能包不存在");
  assert.ok(fs.statSync(path.join(root,"dist/regression.html")).size>500,"场景测试可视报告未生成");
  assert.equal(JSON.parse(fs.readFileSync(path.join(root,"dist/regression.json"),"utf8")).total,15);
@@ -134,7 +134,7 @@ async function run(){
  click("[data-tree-close]");
 
  assert.equal(errors.length,0,"页面运行错误："+errors.join("；"));
- console.log("交互回归通过：20步骤、27技能入口与图片、架构PNG完整性、文件预览、来源、提示词切换/复制、离线包和目录树。");
+ console.log("交互回归通过：19步骤、27技能入口与图片、架构PNG完整性、文件预览、来源、提示词切换/复制、离线包和目录树。");
  dom.window.close();
 }
 run().catch(e=>{console.error(e);process.exitCode=1;dom.window.close()});
