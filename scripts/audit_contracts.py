@@ -224,7 +224,7 @@ for skill in catalog:
         if loc: require(loc.startswith("docs/examples/报价项目/") and (ROOT/loc).is_file(),skill["id"]+" 独立示例路径错误")
     require(bool(skill.get("referenceLearnings")) and bool(skill.get("adaptation")),skill["id"]+" 缺来源机制/采用说明")
 tree=(ROOT/"docs/data/project-directory-tree.txt").read_text(encoding="utf-8")
-for expected in ("模块验收与状态记录.md","人工测试用例与结果.md","初次部署配置-开发环境.md","项目基线.md","上线记录.md","code/","docs/"):
+for expected in ("模块验收与状态记录.md","人工测试用例与结果.md","初次部署配置-<环境名称>.md","项目基线.md","上线记录.md","code/","docs/"):
     require(expected in tree,"项目目录树遗漏："+expected)
 for utility in workspace:
     require((ROOT/"skills"/utility["id"]/"SKILL.md").is_file(),utility["id"]+" 工具箱Skill丢失")
