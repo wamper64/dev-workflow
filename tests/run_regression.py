@@ -123,7 +123,11 @@ def t15():
     need(steps["S16"]["outputs"]==["docs/output/07-系统验收/系统验收报告.md"],"S16不再是唯一报告")
     for stepid in ("S18",):
         variants=steps[stepid].get("promptExamples",[])
-        need(len(variants)==4 and all(x in " ".join(v["prompt"] for v in variants) for x in ("开发","测试","正式","首次应用上线","版本更新")),"部署环境×发布类型覆盖不足："+stepid)
+        expected=[("开发环境","首次应用上线"),("开发环境","版本更新"),("测试环境","首次应用上线"),("测试环境","版本更新")]
+        need(len(variants)==4,"必须只有开发/测试四个部署选项："+stepid)
+        for variant,(env,action) in zip(variants,expected):
+            need("本次部署环境："+env in variant["prompt"] and "发布类型："+action in variant["prompt"],"部署场景错误："+env+" "+action)
+            need("正式环境" not in variant["prompt"] and "生产环境" not in variant["prompt"],"混入其他环境部署")
     need((ROOT/"docs/images/architecture-baseline.png").is_file(),"架构原图缺失")
     ws=json.loads((S/"workspace.json").read_text(encoding="utf-8"))
     for sk in [*CAT,*ws]:
