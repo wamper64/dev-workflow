@@ -3,64 +3,66 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="标准项目首次建设研发导航：阶段、步骤、Skill、输入、输出与审核。">
-  <title>标准项目研发导航</title>
+  <meta name="description" content="项目研发导航：阶段、执行步骤、Skill说明、输入与输出、审核与执行提示词。">
+  <title>项目研发导航 · 首次建设</title>
   <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
   <header class="site-header">
     <div class="site-brand">
       <span class="logo" aria-hidden="true">◇</span>
-      <div><strong>项目研发导航</strong><span class="brand-sub">首次项目建设 · Grill / TDD / 人工验收</span></div>
+      <div><strong>项目研发导航</strong><span class="brand-sub">以已确认 PRD 与现有代码为起点</span></div>
     </div>
-    <span id="project-stats" class="header-meta">正在载入流程…</span>
-    <a class="regression-link" href="./regression.html" title="查看当前提交重新计算的场景回归结果">✓ 对抗回归</a>
-    <button id="tree-open" class="project-tree-open" type="button" title="按当前阶段与步骤查看含中文注释的预期项目目录">▦ 项目目录树</button>
-    <a id="download-skills" class="download-all" href="./skills-bundle.zip" download="标准项目-完整Skills包.zip" title="下载完整Skills与通用依赖（不含项目示例）">⬇ 下载全部 Skills</a>
+    <span id="project-stats" class="header-meta">正在读取当前工作流…</span>
+    <nav class="header-actions" aria-label="项目操作">
+      <a class="regression-link" href="./regression.html" title="查看实际运行的对抗场景校验结果">对抗回归</a>
+      <button id="tree-open" class="project-tree-open" type="button" title="查看与当前Skill一致的项目预期产物目录">项目目录树</button>
+      <a id="download-skills" class="download-all" href="./skills-bundle.zip" download="项目研发-全部Skills.zip" title="下载35个Skills和项目初始化模板">下载全部 Skills ↓</a>
+    </nav>
   </header>
-  <div class="workspace">
-    <aside class="phase-pane" aria-label="工作阶段">
-      <div class="pane-heading"><span class="eyebrow">WORK STAGES</span><h2>工作阶段</h2><p>选择阶段查看研发步骤</p></div>
+  <div class="workspace" aria-label="研发导航三栏工作台">
+    <aside class="phase-pane" aria-label="左栏：研发阶段">
+      <div class="pane-heading"><span class="eyebrow">01 / PHASES</span><h2>研发阶段</h2><p>确定现在处于哪一阶段</p></div>
       <nav id="stage-list" class="stage-list" aria-label="选择工作阶段"></nav>
-      <div class="pane-foot">范围：首次项目建设<br>从现有 PRD、前端原型、后端框架开始</div>
+      <div class="pane-foot">项目首次建设<br>准备 → 设计 → 模块迭代 → 上线<br>通用 Skills 可跨阶段调用</div>
     </aside>
-    <main class="steps-pane" id="steps-pane">
-      <div class="eyebrow">EXECUTION STEPS</div>
-      <div id="stage-intro"></div>
-      <div id="phase-route" class="phase-route" aria-label="本阶段流程图"></div>
+    <main class="steps-pane" id="steps-pane" aria-label="中栏：当前阶段步骤">
+      <div class="step-panel-top"><span class="eyebrow">02 / STEPS</span><div id="stage-intro"></div></div>
+      <details class="route-disclosure">
+        <summary>查看本阶段流程 <span aria-hidden="true">⌄</span></summary>
+        <div id="phase-route" class="phase-route" aria-label="本阶段流程图"></div>
+      </details>
       <div class="step-heading"><h2 id="step-heading-title">执行步骤</h2><span id="step-count"></span></div>
       <div id="step-list" class="step-list"></div>
-      <div class="step-notice">实现步骤内置 TDD 和代码审查，并据自动测试证据生成待人工测试单；人工真实执行及回填后按需修复Bug、完成迭代收口。</div>
+      <p class="step-notice">选择步骤后，在右侧获取 Skill、输入输出、审核和执行提示词。</p>
     </main>
-    <aside class="detail-pane" aria-label="步骤详情">
-      <div class="detail-top"><span class="eyebrow">STEP DETAILS</span><span id="step-position" class="step-number"></span></div>
+    <section class="detail-pane" aria-label="右栏：当前步骤执行详情">
+      <div class="detail-top"><span class="eyebrow">03 / EXECUTION DETAIL</span><span id="step-position" class="step-number"></span></div>
       <div id="step-detail"></div>
-    </aside>
+    </section>
   </div>
-  <dialog id="tree-dialog" class="tree-dialog" aria-label="标准项目预期目录结构">
+
+  <dialog id="tree-dialog" class="tree-dialog" aria-label="当前Skill的预期项目目录结构">
     <div class="tree-dialog-shell">
       <div class="tree-dialog-head">
-        <div><span class="eyebrow">PROJECT DIRECTORY</span><h2>项目目录树 · 中文注释</h2><p>按当前研发阶段与步骤整理的预期目录；不是声称已经生成这些文件。标记“按需”的文件不强制创建。</p></div>
+        <div><span class="eyebrow">PROJECT STRUCTURE</span><h2>项目目录树</h2><p>与现行 Skill 的产物位置保持一致；目录树不代表文件已创建。</p></div>
         <button type="button" class="dialog-close" data-tree-close aria-label="关闭项目目录树">✕</button>
       </div>
-      <div class="tree-dialog-tools">
-        <span>阶段0 输入 → 阶段1 设计 → 阶段2 迭代（含retro） → 阶段3 上线</span>
-        <button type="button" data-tree-copy>复制目录树</button>
-      </div>
+      <div class="tree-dialog-tools"><span>准备 / 设计 / 迭代 / 验收上线</span><button type="button" data-tree-copy>复制目录树</button></div>
       <pre id="tree-content" class="project-tree-text" tabindex="0"></pre>
     </div>
   </dialog>
-  <dialog id="skill-dialog" class="skill-dialog" aria-label="Skill内容预览">
+  <dialog id="skill-dialog" class="skill-dialog" aria-label="Skill完整说明与文件">
     <div class="skill-dialog-shell">
       <div class="skill-dialog-header">
         <div><span class="eyebrow">SKILL EXPLORER</span><h2 id="skill-dialog-title">Skill 预览</h2><div id="skill-dialog-label" class="skill-meta"></div></div>
         <button type="button" class="dialog-close" data-skill-close aria-label="关闭Skill预览">✕</button>
       </div>
       <div class="skill-dialog-tabs" role="tablist">
-        <button type="button" class="skill-tab active" data-skill-tab="flow">快速理解</button>
-        <button type="button" class="skill-tab" data-skill-tab="result" hidden>报价项目输出示例</button>
-        <button type="button" class="skill-tab" data-skill-tab="files">完整目录与文件</button>
-        <button type="button" class="skill-tab" data-skill-tab="source">参考来源说明</button>
+        <button type="button" class="skill-tab active" data-skill-tab="flow">快速理解与流程图</button>
+        <button type="button" class="skill-tab" data-skill-tab="result" hidden>项目输出示例</button>
+        <button type="button" class="skill-tab" data-skill-tab="files">完整Skill文件</button>
+        <button type="button" class="skill-tab" data-skill-tab="source">参考来源</button>
       </div>
       <div id="skill-dialog-content" class="skill-dialog-content"></div>
       <div class="skill-dialog-footer"><div id="skill-reference"></div><button class="dialog-close-bottom" type="button" data-skill-close>关闭</button></div>

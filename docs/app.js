@@ -82,42 +82,44 @@ function renderSteps(){
 }
 
 // 用户填入的是开发环境的事实，而不是AI推断结果；只缓存本浏览器非敏感字段
+// 右侧执行工作台：优先让 Skill 定位、输入输出、审核和复制命令一屏可读。
 function renderDetails(){
   const p=phase(),s=step(),index=p.steps.indexOf(s)+1;
-  if(p.kind==="toolkit"){
-    $("step-position").textContent="通用 "+String(index).padStart(2,"0")+" / "+String(p.steps.length).padStart(2,"0");
-    let content='<h2>'+esc(s.title)+'</h2><p class="step-context">跨阶段通用工具 · /'+esc(s.skillId)+'</p>';
-    content+='<section class="detail-section"><h3><span class="section-icon">◇</span> 查看完整 Skill</h3>'+skillList(s.skills)+'</section>';
-    content+='<section class="detail-section"><h3><span class="section-icon">◎</span> 用途与调用时机</h3><div class="review-box">'+esc(s.summary)+'</div><p class="owner">按实际任务需要调用，不要求每个阶段都执行。</p></section>';
-    content+='<section class="detail-section"><h3><span class="section-icon">↘</span> 使用上下文</h3>'+fileList([s.input])+'</section>';
-    content+='<section class="detail-section"><h3><span class="section-icon">↗</span> 可能的结果</h3>'+fileList([s.output])+'</section>';
-    content+='<section class="detail-section"><h3><span class="section-icon">✓</span> 核心执行方式</h3><div class="toolkit-steps">'+s.workflow.map((t,i)=>'<div class="toolkit-activity"><span>'+String(i+1)+'</span><p>'+esc(t)+'</p></div>').join("")+'</div><p class="detail-hint">适用边界：'+esc(s.limitation)+'</p></section>';
-    content+=promptSection(s,"调用提示词");
-    $("step-detail").innerHTML=content;return;
-  }
   $("step-position").textContent=String(index).padStart(2,"0")+" / "+String(p.steps.length).padStart(2,"0");
-  let html='<h2>'+esc(s.title)+'</h2><p class="step-context">'+esc(p.title)+' · '+esc(s.id)+'</p>';
-  
-  if((s.skills||[]).length)html+='<section class="detail-section"><h3><span class="section-icon">◇</span> 使用的 Skill</h3>'+skillList(s.skills)+'</section>';
-  else html+='<section class="detail-section"><h3><span class="section-icon">◎</span> 执行方式</h3><div class="review-box">'+(s.id==="S01"?"使用下方提示词直接读取并校验输入，无需安装Skill。":s.id==="S14H"?"人工执行上一步生成的用例，填写真实结果；无独立Skill。":"此步骤仅展示已有输入，不调用Skill。")+'</div></section>';
-  if(s.id==="S04"){
-    const picture=skillData?.skills?.find(x=>x.id==="architecture-baseline")?.overview?.visual;
-    if(picture)html+='<section class="detail-section architecture-step-preview"><h3><span class="section-icon">▧</span> 整体架构设计流程图</h3><button type="button" class="architecture-preview-button" data-skill="architecture-baseline" aria-label="打开架构Skill流程图片与说明"><img src="'+esc(picture.src)+'" alt="'+esc(picture.alt)+'" loading="lazy"><span>查看完整双核心架构设计图 ↗</span></button></section>';
+  const ids=p.kind==="toolkit"?s.skills||[]:s.skills||[];
+  const skillCards=(ids.length?ids:[]).map(id=>{
+    const sk=skillData?.skills?.find(x=>x.id===id);
+    const summary=sk?.overview?.headline||sk?.summary||sk?.diagram?.outcome||"点击打开完整Skill规则、流程和参考资料";
+    const image=sk?.overview?.visual?.src||sk?.illustration?.src;
+    return '<article class="skill-mini">'+(image?'<img class="skill-mini-thumb" src="'+esc(image)+'" alt="'+esc(id)+'流程缩略图" loading="lazy">':'')+
+      '<div class="skill-mini-body"><div class="skill-mini-title">'+esc(sk?.name||id)+'<span class="skill-mini-kind">'+esc(sk?.type||"已登记Skill")+'</span></div>'+
+      '<p class="skill-mini-summary">'+esc(summary)+'</p><button type="button" class="skill-open" data-skill="'+esc(id)+'">查看 Skill、流程图与文件 ↗</button></div></article>';
+  }).join("");
+  const extraSkills=[...(Array.isArray(s.invokes)?s.invokes:[]),...(s.id==="S12"?["code-review"]:[])].filter(id=>!ids.includes(id));
+  const extra=extraSkills.length?'<details class="detail-extra"><summary>内部调用 / 关联 Skill（'+extraSkills.length+'）</summary>'+
+    '<p>这些属于主 Skill 执行过程中按需使用的能力，不新增工作步骤。</p>'+skillList(extraSkills)+'</details>':"";
+  const inputs=p.kind==="toolkit"?[s.input]:s.inputs||[];
+  const outputs=p.kind==="toolkit"?[s.output]:s.outputs||[];
+  const review=p.kind==="toolkit"?(s.limitation||"根据真实任务确认适用性与结果"):s.review||"按当前步骤责任角色审核真实证据";
+  const owner=p.kind==="toolkit"?"按任务需要由负责人判断":p.owner;
+  const section=(title,cls,files)=>'<section class="detail-section detail-io '+cls+'"><h3>'+title+'<small>'+files.length+'项</small></h3>'+fileList(files)+'</section>';
+  let content='<header class="detail-heading"><div><h2>'+esc(s.title)+'</h2><p class="step-context">'+esc(p.title)+' · '+esc(s.id)+'</p></div><span class="detail-heading-tag">'+(p.kind==="toolkit"?"按需工具":s.skillId?"Skill步骤":"人工 / 只读")+'</span></header>';
+  content+='<section class="detail-section detail-skill"><div class="detail-section-title"><h3>使用的 Skill 与作用</h3><small>点击查看完整规则</small></div>'+
+    (skillCards||'<div class="skill-empty">'+(s.id==="S01"?"只读核验输入资料，不需要额外Skill。":"此步骤无需调用 Skill；按既有资料与审核执行。")+'</div>')+
+    extra+'</section>';
+  if(p.kind==="toolkit"){
+    content+='<p class="toolkit-summary">'+esc(s.summary)+'</p>';
   }
-  if(Array.isArray(s.invokes)&&s.invokes.length){html+='<section class="detail-section"><h3><span class="section-icon">↳</span> 主Skill内部引用</h3><p class="detail-hint">以下原版Skill由当前主Skill内部执行，不另占必经步骤；点击可查看完整原版内容。</p>'+skillList(s.invokes)+'</section>';}
-  if(s.id==="S12"){html+='<section class="detail-section"><h3><span class="section-icon">↳</span> 实现内置代码审查</h3><p class="detail-hint">Matt 原版 implement-spec 内部调用 code-review，属于质量关卡；这里仅提供原版内容与流程图，不增加独立研发步骤。</p>'+skillList(["code-review"])+"</section>";}
-  html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
-  html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
-  html+='<section class="detail-section"><h3><span class="section-icon">✓</span> 审核要求</h3><div class="review-box">'+esc(s.review)+'</div><p class="owner">审核及参与角色：'+esc(p.owner)+'</p></section>';
-   if(p.id!=="P00"&&s.prompt){html+=promptSection(s,"执行提示词");}
-  if(p.id==="P01"&&s.id==="S07"&&ui.data.modules?.length){
-    html+='<details class="extra-disclosure"><summary>查看本项目13个候选模块与菜单映射</summary>';
-    html+=ui.data.modules.map(m=>'<div class="module-record"><b>'+esc(m.id+" · "+m.title)+'</b><p>'+esc([...m.menus,...(m.additional?[m.additional]:[])].join("、"))+'</p></div>').join("");
-    html+='</details>';
+  content+='<div class="detail-file-grid">'+section("输入文件 / 上下文","inputs",inputs)+section("输出文件 / 产物","outputs",outputs)+'</div>';
+  content+='<section class="detail-section detail-audit"><h3>审核与放行</h3><p>'+esc(review)+'</p><span class="detail-owner">责任：'+esc(owner)+'</span></section>';
+  if(s.prompt&&p.id!=="P00")content+=promptSection(s,"执行提示词");
+  if(p.kind==="toolkit" && Array.isArray(s.workflow)&&s.workflow.length){
+    content+='<details class="detail-extra"><summary>具体执行动作（'+s.workflow.length+'步）</summary><ol>'+s.workflow.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ol></details>';
   }
-  if(p.id==="P02"){html+='<details class="extra-disclosure"><summary>查看本轮完整模块开发闭环</summary>'+ui.data.iterationFlow.map((it,i)=>'<div class="module-record"><b>'+(i+1)+'. '+esc(it.title)+'</b></div>').join("")+'</details>';}
-  $("step-detail").innerHTML=html;
+  if(p.id==="P02")content+='<details class="detail-extra"><summary>查看本轮模块迭代完整闭环</summary><ol>'+(ui.data.iterationFlow||[]).map(x=>'<li>'+esc(x.title)+'</li>').join("")+'</ol></details>';
+  $("step-detail").innerHTML=content;
 }
+
 function setSelection(phaseId,stepId,moveFocus=false){
   const next=allPhases().find(p=>p.id===phaseId);
   if(!next)return;
