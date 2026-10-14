@@ -34,7 +34,7 @@ const toolkitPhase=()=>({
 const allPhases=()=>[...ui.data.phases,toolkitPhase()];
 const phase=()=>allPhases().find(p=>p.id===ui.phase)||ui.data.phases[0];
 const step=()=>phase().steps.find(s=>s.id===ui.step)||phase().steps[0];
-const kind=k=>k==="toolkit"?"跨阶段可调用":k==="prep"?"仅展示初始输入":k==="repeat"?"按模块循环":k==="final"?"整体验收与交付":"项目建设阶段";
+const kind=k=>k==="toolkit"?"跨阶段可调用":k==="prep"?"仅展示初始输入":k==="repeat"?"按模块循环":k==="acceptance"?"业务验收":k==="quality"?"系统质量验收":k==="release"?"分环境与版本部署":k==="final"?"整体验收与交付":"项目建设阶段";
 // 项目目录树是来源于当前阶段与步骤约定的中文展示文件，避免硬编码到Skill内容。
 const projectTree=JSON.parse(document.getElementById("project-tree-data").textContent);
 document.addEventListener("click",async event=>{
@@ -72,7 +72,7 @@ function renderStages(){
 function renderSteps(){
   const p=phase(),i=ui.data.phases.indexOf(p)+1;
   $("stage-intro").innerHTML='<h1>'+esc(p.title)+'</h1><p class="stage-desc">'+esc(p.description)+'</p><span class="stage-type">'+kind(p.kind)+'</span>';
-  const route=p.id==="P01"?"输入核验 → Skills初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 初次部署 → 模块拆分":p.id==="P02"?"<b>本轮模块设计（Grill）</b> → Spec → Tickets → <b>TDD实现+Review</b> → <b>人工测试与签收</b> → 按需Bug修复 → <b>Retro</b> → 下一轮":p.id==="P03"?"项目级验收 → 上线评审 → 预演与回滚 → 正式上线":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
+  const route=p.id==="P01"?"输入核验 → Skills初始化 → 项目基线 → <b>整体架构（内置Grill）</b> → 数据库总体 → 初次部署 → 模块拆分":p.id==="P02"?"<b>本轮模块设计（Grill）</b> → Spec → Tickets → <b>TDD实现+Review</b> → <b>人工测试与签收</b> → 按需Bug修复 → <b>Retro</b> → 下一轮":p.id==="P03"?"角色场景 → 跨模块业务链 → 缺陷复测 → <b>唯一验收报告</b>":p.id==="P04"?"质量目标 → 真实性能安全证据 → <b>技术总监评审</b>":p.id==="P05"?"选择环境与首次/更新 → <b>部署预检/回滚</b> → 实际部署 → 冒烟与交接":p.kind==="toolkit"?"按任务需要选择合适的通用工具":"已确认需求基线 + docs/input/ + code/";
   const routeEl=$("phase-route"); if(routeEl)routeEl.innerHTML=route.split(" → ").map(x=>'<span class="route-chip">'+x+'</span>').join('<span class="route-arrow">→</span>');
   $("step-count").textContent=p.kind==="toolkit"?p.steps.length+" 个通用Skill":p.steps.length+" 项工作";
  $("step-heading-title").textContent=p.kind==="toolkit"?"通用 Skill 列表":"执行步骤";
