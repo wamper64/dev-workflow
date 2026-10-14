@@ -48,7 +48,7 @@ async function run(){
  assert.ok(doc.querySelector(".workspace > .steps-pane"),"缺中间步骤栏");
  assert.ok(doc.querySelector(".workspace > .detail-pane"),"缺右侧执行详情");
  assert.ok(doc.querySelector(".header-actions #tree-open")&&doc.querySelector(".header-actions #download-skills"),"右上角操作缺失");
- click('[data-phase="P01"]');click('[data-step="S09"]');
+ click('[data-phase="P02"]');click('[data-step="S09"]');
  assert.ok(doc.querySelector(".detail-file-grid .inputs")&&doc.querySelector(".detail-file-grid .outputs"),"输入输出未并排组织");
  assert.ok(doc.querySelector(".detail-skill .skill-mini")&&doc.querySelector(".detail-audit")&&doc.querySelector(".prompt-section"),"详情工作台缺必要板块");
  // 每一阶段、每一步都能真实点击；提示词与当前主Skill一致。
