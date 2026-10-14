@@ -105,6 +105,7 @@ function renderDetails(){
     if(picture)html+='<section class="detail-section architecture-step-preview"><h3><span class="section-icon">▧</span> 整体架构设计流程图</h3><button type="button" class="architecture-preview-button" data-skill="architecture-baseline" aria-label="打开架构Skill流程图片与说明"><img src="'+esc(picture.src)+'" alt="'+esc(picture.alt)+'" loading="lazy"><span>查看完整双核心架构设计图 ↗</span></button></section>';
   }
   if(Array.isArray(s.invokes)&&s.invokes.length){html+='<section class="detail-section"><h3><span class="section-icon">↳</span> 主Skill内部引用</h3><p class="detail-hint">以下原版Skill由当前主Skill内部执行，不另占必经步骤；点击可查看完整原版内容。</p>'+skillList(s.invokes)+'</section>';}
+  if(s.id==="S12"){html+='<section class="detail-section"><h3><span class="section-icon">↳</span> 实现内置代码审查</h3><p class="detail-hint">Matt 原版 implement-spec 内部调用 code-review，属于质量关卡；这里仅提供原版内容与流程图，不增加独立研发步骤。</p>'+skillList(["code-review"])+"</section>";}
   html+='<section class="detail-section"><h3><span class="section-icon">↘</span> 输入文件 / 资料</h3>'+fileList(s.inputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">↗</span> 输出文件 / 产物</h3>'+fileList(s.outputs)+'</section>';
   html+='<section class="detail-section"><h3><span class="section-icon">✓</span> 审核要求</h3><div class="review-box">'+esc(s.review)+'</div><p class="owner">审核及参与角色：'+esc(p.owner)+'</p></section>';
