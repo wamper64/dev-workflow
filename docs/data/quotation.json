@@ -108,7 +108,7 @@
             "已有AGENTS.md / CLAUDE.md（如有）"
           ],
           "outputs": [
-            "AGENTS.md（复用或更新）",
+            "AGENTS.md 或 CLAUDE.md（优先复用既有入口）",
             "docs/agents/issue-tracker.md",
             "docs/agents/domain.md",
             "docs/agents/triage-labels.md（仅安装 /triage 时）"
@@ -314,7 +314,7 @@
             "既有独立开发任务Spec/Tickets（用于识别历史与当前需求差异）"
           ],
           "outputs": [
-            ".scratch/<模块>/<任务标识>/spec.md（或Issue Tracker中的独立Spec）"
+            ".scratch/<feature-slug>/spec.md（本地Markdown Tracker；GitHub/GitLab按已配置Issue定位）"
           ],
           "review": "Spec仅覆盖当前独立任务，明确已有功能与增量范围，历史已验收Spec保留；测试接缝已确认。",
           "prompt": "/to-spec\n\n本次要开发的任务：<模块/任务名称及编号>。\n业务目标：<哪个角色做什么，完成后得到什么结果>。\n范围依据：<本轮任务检查.md/模块详细设计.md的实际路径>。\n对应原型入口：<页面或路由>。\n\n请基于以上已确认事实形成本任务可测试的 Spec；遇到尚未决定的测试接缝或高影响问题先向我确认。不要重新规划整个项目。",
@@ -344,7 +344,7 @@
             "当前代码与已批准模块设计"
           ],
           "outputs": [
-            ".scratch/<模块>/<任务标识>/issues/NN-*.md（或Tracker对应关联Tickets）"
+            ".scratch/<feature-slug>/issues/NN-*.md（本地Markdown Tracker；远程使用真实关联Tickets）"
           ],
           "review": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
           "prompt": "/to-tickets\n\n请把当前已确认并发布的 Spec 拆成可以逐张领取和验证的开发 Tickets，供后续实现调度。关联当前 Spec，区分真正的阻塞依赖与仅建议的开发顺序；发布前让我核对 Ticket 粒度和依赖。此处拆的是本次开发任务，不是重新划分全项目业务模块。若存在多个待拆 Spec，先让我指定。",

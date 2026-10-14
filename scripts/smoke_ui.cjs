@@ -43,6 +43,14 @@ async function run(){
  assert.ok(fs.statSync(path.join(root,"dist/regression.html")).size>500,"场景测试可视报告未生成");
  assert.equal(JSON.parse(fs.readFileSync(path.join(root,"dist/regression.json"),"utf8")).total,15);
 
+ // 检查新版三栏布局所需结构及右栏输入/输出和审核。
+ assert.ok(doc.querySelector(".workspace > .phase-pane"),"缺左侧研发阶段栏");
+ assert.ok(doc.querySelector(".workspace > .steps-pane"),"缺中间步骤栏");
+ assert.ok(doc.querySelector(".workspace > .detail-pane"),"缺右侧执行详情");
+ assert.ok(doc.querySelector(".header-actions #tree-open")&&doc.querySelector(".header-actions #download-skills"),"右上角操作缺失");
+ click('[data-phase="P01"]');click('[data-step="S09"]');
+ assert.ok(doc.querySelector(".detail-file-grid .inputs")&&doc.querySelector(".detail-file-grid .outputs"),"输入输出未并排组织");
+ assert.ok(doc.querySelector(".detail-skill .skill-mini")&&doc.querySelector(".detail-audit")&&doc.querySelector(".prompt-section"),"详情工作台缺必要板块");
  // 每一阶段、每一步都能真实点击；提示词与当前主Skill一致。
  const seen=new Set();
  for(const ph of workflow.phases){

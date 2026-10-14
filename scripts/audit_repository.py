@@ -65,6 +65,17 @@ for skill in [*catalog,*workspace]:
     if skill["id"]!="architecture-baseline":
         require((ROOT/"docs/images/skills"/(skill["id"]+".svg")).is_file(),"Skill图片缺失："+skill["id"])
 require("不超过 10 个" not in (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8"),"模块数量仍写强制上限")
+# 模块设计示例不得回退到曾经的8章草稿或旧Tracker路径。
+sample=(ROOT/"docs/examples/报价项目/module-design/报价需求核对模块设计示例.md").read_text(encoding="utf-8")
+titles=re.findall(r"^## (\\d+)\\. (.+)$",sample,re.M)
+require(len(titles)==7 and [int(n) for n,_ in titles]==list(range(1,8)),"模块设计示例未按当前七章Skill模板重构")
+require("本轮范围与依赖检查.md" not in sample and "迁移设计草案.md" not in sample,"模块设计示例仍交付废弃的独立文件")
+require(".scratch/<module_key>/模块详细设计.md" in sample,"模块设计示例未绑定稳定模块身份")
+data=website["phases"]
+by_id={step["id"]:step for phase in data for step in phase["steps"]}
+for step_id in ["S10","S11"]:
+    require(any("<feature-slug>" in out for out in by_id[step_id]["outputs"]),"Matt本地Tracker路径不能混用module_key："+step_id)
+
 for filename in ["docs/研发流程输入输出与质量门禁.md","docs/data/project-directory-tree.txt"]:
     txt=(ROOT/filename).read_text(encoding="utf-8")
     require("项目基线前置约束确认表.md" not in txt,"旧项目基线额外文件残留："+filename)
