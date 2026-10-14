@@ -22,6 +22,29 @@ catalog = json.loads((ROOT / "skills/catalog.json").read_text(encoding="utf-8"))
 workspace = json.loads((ROOT / "skills/workspace.json").read_text(encoding="utf-8"))
 
 subprocess.run(["python3", str(ROOT / "scripts" / "audit_contracts.py")], check=True)
+# 每次发布都重新运行15项场景校验，不使用手写的“15/15通过”常量。
+regression_path = DIST / "regression.json"
+subprocess.run(["python3", str(ROOT/"tests/run_regression.py"), "--out", str(regression_path)], check=True)
+regression = json.loads(regression_path.read_text(encoding="utf-8"))
+table_rows = "".join(
+    "<tr><td>"+escape(row["id"])+"</td><td>"+escape(row["name"])+"</td><td>"+escape(row["method"])+"</td><td>"+escape(row["status"])+"</td><td>"+escape(row["evidence"])+"</td></tr>"
+    for row in regression["results"]
+)
+regression_html = (
+    "<!doctype html><html lang='zh-CN'><meta charset='utf-8'>"
+    "<meta name='viewport' content='width=device-width, initial-scale=1'>"
+    "<title>技能对抗回归</title>"
+    "<style>body{font:15px/1.8 system-ui,Microsoft YaHei,sans-serif;max-width:1250px;margin:35px auto;padding:0 22px;color:#17233c}"
+    "a{color:#2563eb}table{width:100%;border-collapse:collapse}td,th{padding:12px;border:1px solid #dce3ef;text-align:left}"
+    "th{background:#f0f5ff}tr:nth-child(even){background:#f9fbff}aside{background:#fff8e6;padding:14px;border-radius:12px}</style>"
+    "<p><a href='./index.html'>← 返回研发导航</a></p><h1>15 项对抗性场景回归</h1>"
+    "<p>本次执行通过："+str(regression["passed"])+"/"+str(regression["total"])+"</p>"
+    "<aside>"+escape(regression["interpretation"])+"</aside>"
+    "<table><thead><tr><th>编号</th><th>场景</th><th>类型</th><th>结果</th><th>实际证据</th></tr></thead>"
+    "<tbody>"+table_rows+"</tbody></table></html>"
+)
+(DIST/"regression.html").write_text(regression_html,encoding="utf-8")
+
 
 assert len(data["phases"]) == 4
 assert sum(len(p["steps"]) for p in data["phases"]) == len({s["id"] for p in data["phases"] for s in p["steps"]})

@@ -1,0 +1,180 @@
+{
+  "project": "工业报价与设备协同平台（测试夹具，并非真实客户验收项目）",
+  "modules": [
+    {
+      "key": "domain-01",
+      "name": "客户",
+      "owner": "owner-01",
+      "acceptance": "验收对象-1"
+    },
+    {
+      "key": "domain-02",
+      "name": "需求受理",
+      "owner": "owner-02",
+      "acceptance": "验收对象-2"
+    },
+    {
+      "key": "domain-03",
+      "name": "报价规则",
+      "owner": "owner-03",
+      "acceptance": "验收对象-3"
+    },
+    {
+      "key": "domain-04",
+      "name": "BOM出图",
+      "owner": "owner-04",
+      "acceptance": "验收对象-4"
+    },
+    {
+      "key": "domain-05",
+      "name": "审批",
+      "owner": "owner-05",
+      "acceptance": "验收对象-5"
+    },
+    {
+      "key": "domain-06",
+      "name": "报价归档",
+      "owner": "owner-06",
+      "acceptance": "验收对象-6"
+    },
+    {
+      "key": "domain-07",
+      "name": "设备档案",
+      "owner": "owner-07",
+      "acceptance": "验收对象-7"
+    },
+    {
+      "key": "domain-08",
+      "name": "遥测接入",
+      "owner": "owner-08",
+      "acceptance": "验收对象-8"
+    },
+    {
+      "key": "domain-09",
+      "name": "自动告警",
+      "owner": "owner-09",
+      "acceptance": "验收对象-9"
+    },
+    {
+      "key": "domain-10",
+      "name": "只读驾驶舱",
+      "owner": "owner-10",
+      "acceptance": "验收对象-10"
+    },
+    {
+      "key": "domain-11",
+      "name": "运维",
+      "owner": "owner-11",
+      "acceptance": "验收对象-11"
+    },
+    {
+      "key": "domain-12",
+      "name": "审计追踪",
+      "owner": "owner-12",
+      "acceptance": "验收对象-12"
+    }
+  ],
+  "pageLess": [
+    "自动告警",
+    "只读驾驶舱"
+  ],
+  "readOnly": [
+    "只读驾驶舱"
+  ],
+  "capacity": [
+    {
+      "id": "business",
+      "gb": 100
+    },
+    {
+      "id": "attachment",
+      "gb": 40
+    },
+    {
+      "id": "log",
+      "gb": 20
+    },
+    {
+      "id": "backup",
+      "gb": 100
+    }
+  ],
+  "existing": {
+    "tables": [
+      "sys_user",
+      "sys_menu",
+      "tb_order"
+    ],
+    "compositeKey": [
+      "tenant_id",
+      "code"
+    ],
+    "dynamicMenu": "sys_menu"
+  },
+  "trackers": [
+    {
+      "canonical": "quote-12",
+      "provider": "local",
+      "location": ".scratch/quote-12/spec.md"
+    },
+    {
+      "canonical": "quote-12",
+      "provider": "github",
+      "location": "https://github.com/example/issues/12"
+    },
+    {
+      "canonical": "quote-12",
+      "provider": "gitlab",
+      "location": "https://gitlab.example.com/project/-/issues/12"
+    }
+  ],
+  "permissions": [
+    {
+      "role": "销售",
+      "case": "仅查看本人创建的报价单"
+    },
+    {
+      "role": "技术总监",
+      "case": "可查看指派审批的跨部门报价单"
+    },
+    {
+      "role": "驾驶舱",
+      "case": "只读，不触发交易库写入"
+    }
+  ],
+  "snapshots": [
+    {
+      "id": "spec-quote-12",
+      "architecture": "sha-arch-001",
+      "database": "sha-data-001",
+      "module": "sha-module-001"
+    },
+    {
+      "id": "spec-quote-13",
+      "architecture": "sha-arch-001",
+      "database": "sha-data-002",
+      "module": "sha-module-002"
+    }
+  ],
+  "rounds": [
+    {
+      "issue": "BUG-7",
+      "build": "sha-build-a",
+      "env": "test",
+      "dataset": "A",
+      "result": "失败"
+    },
+    {
+      "issue": "BUG-7",
+      "build": "sha-build-b",
+      "env": "test",
+      "dataset": "A",
+      "result": "通过"
+    }
+  ],
+  "release": {
+    "sql": "CREATE TABLE tb_quote (id BIGINT);",
+    "image": "sha256:image-v1",
+    "config": "APP_MODE=prod"
+  }
+}

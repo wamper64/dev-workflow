@@ -10,6 +10,7 @@ on:
       - 'scripts/build_site.py'
       - 'scripts/audit_contracts.py'
       - 'scripts/smoke_ui.cjs'
+      - 'tests/**'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 permissions:
@@ -30,6 +31,8 @@ jobs:
         uses: actions/checkout@v4
       - name: 校验前端脚本语法
         run: node --check docs/app.js
+      - name: 执行15项对抗场景校验
+        run: python3 tests/run_regression.py
       - name: 构建单文件网站
         run: python3 scripts/build_site.py
       - name: 安装页面交互验证依赖

@@ -332,3 +332,6 @@
 .skill-illustration{margin:0 0 20px;border:1px solid #dbe4f0;border-radius:14px;overflow:hidden;background:#f8fafc;}
 .skill-illustration img{display:block;width:100%;height:auto;max-height:620px;object-fit:contain}
 .skill-illustration figcaption{padding:9px 14px;color:#64748b;font-size:12px;text-align:center;background:#fff}
+
+.regression-link{white-space:nowrap;text-decoration:none;color:#2563eb;border:1px solid #bfdbfe;background:#eff6ff;padding:9px 12px;border-radius:9px;font-size:12px;font-weight:650}
+.regression-link:hover{background:#dbeafe}
