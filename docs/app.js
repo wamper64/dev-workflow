@@ -173,7 +173,9 @@ function renderSkillCoverage(a){
 }
 function renderSkillOverview(skill){
  const a=skill.overview;
- if(!a)return skill.reviewAxes?renderCodeReviewAxes(skill):logicDiagram(skill.diagram);
+ // 每个Skill拥有独立的流程信息图；S04继续使用用户指定的PNG原图。
+ const img=skill.illustration?'<figure class="skill-illustration"><a href="'+esc(skill.illustration.src)+'" target="_blank" rel="noopener noreferrer" aria-label="查看流程图片"><img src="'+esc(skill.illustration.src)+'" alt="'+esc(skill.illustration.alt)+'" loading="lazy"></a><figcaption>Skill执行步骤与审核关系（示意，不代表已完成）</figcaption></figure>':"";
+ if(!a)return img+(skill.reviewAxes?renderCodeReviewAxes(skill):logicDiagram(skill.diagram));
   const facts=(a.quickFacts||[]).map(x=>'<div class="skill-quick-fact"><b>'+esc(x.label)+'</b><span>'+esc(x.value)+'</span></div>').join("");
   const pillarCards=(a.pillars||[]).map((p,i)=>{
     const items=(p.items||[]).map(t=>'<li>'+esc(t)+'</li>').join("");
@@ -203,7 +205,7 @@ function renderSkillOverview(skill){
  const conversions=(a.thinking||[]).map(x=>'<div class="thinking-row"><div><span class="thinking-label">资料中有什么</span><p>'+esc(x.given)+'</p></div><span class="thinking-arrow">→</span><div><span class="thinking-label">Skill 提炼什么</span><p>'+esc(x.answer)+'</p></div></div>').join("");
  const exclusions=(a.doesNot||[]).map(x=>'<li>'+esc(x)+'</li>').join("");
  const visual=a.visual?'<figure class="architecture-overview-visual"><a href="'+esc(a.visual.src)+'" target="_blank" rel="noopener noreferrer" aria-label="查看架构流程大图"><img src="'+esc(a.visual.src)+'" alt="'+esc(a.visual.alt)+'" loading="lazy"></a><figcaption>'+esc(a.visual.caption)+'</figcaption></figure>':"";
- return '<div class="skill-overview">'+visual+'<div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
+ return '<div class="skill-overview">'+visual+img+'<div class="skill-summary"><span>一句话理解</span><h3>'+esc(a.headline)+'</h3><p>'+esc(a.why)+'</p><div class="skill-summary-output"><b>交付产物</b> '+esc(a.result)+'</div></div>'
   +(facts?'<div class="skill-quick-facts">'+facts+'</div>':"")
   +(pillarCards?'<div class="skill-pillar-heading"><h3>'+esc(a.pillarsTitle||"整体架构的两个核心")+'</h3><p>'+esc(a.pillarsDescription||"先从业务链路反推组件，再用组件架构约束处理流程；两个核心必须互相闭合。")+'</p></div><div class="skill-pillars" data-count="'+(a.pillars||[]).length+'">'+pillarCards+'</div>':"")
   +renderSkillFlow(a.workflow)

@@ -126,6 +126,12 @@ async function main(){
    assert.match(doc.querySelector(".quick-coverage").textContent,/未完成|待确认|缺少|不适用/,"覆盖速查应说明缺项的处理方式");
    click("[data-skill-close]");
  }
+ // 每个非架构Skill均应显示独立流程图；架构仍展示原PNG。
+ for(const sk of ["setup-matt-pocock-skills","project-baseline","data-architecture","development-environment","module-discovery","module-design","to-spec","to-tickets","implement-spec","code-review","system-acceptance","release-readiness","release-preflight","release-delivery","retro","grill-with-docs","diagnosing-bugs","manual-testing","grill-me","improve-codebase-architecture","handoff","triage","prototype","implement","wayfinder","research"]){
+  click('[data-skill="'+sk+'"]');
+  assert.ok(doc.querySelector('.skill-illustration img[src^="data:image/svg+xml;base64,"]'),sk+' 的流程图未被内嵌');
+  click('[data-skill-close]');
+ }
  click('[data-step="S02"]');
  assert.match(doc.querySelector("#step-detail .prompt-text").textContent,/沿用默认五标签/,"初始化提示词缺默认五标签选择");
  click('[data-skill="setup-matt-pocock-skills"]');

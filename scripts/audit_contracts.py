@@ -91,6 +91,15 @@ require('prompt:"/"+w.id+' in renderer_source and "toolkitTaskPrompts" in render
         "通用工具缺简短Slash任务提示")
 
 require(len(catalog)==19 and len(workspace)==8,"主Skill或工具箱数量错误")
+# Skill视图统一拥有信息图，架构设计继续采用不可替换的用户原始PNG。
+for record in [*catalog,*workspace]:
+    if record["id"]=="architecture-baseline":
+        continue
+    image=ROOT/"docs/images/skills"/(record["id"]+".svg")
+    require(image.is_file(),"缺少Skill流程图："+record["id"])
+    if image.is_file():
+        svg=image.read_text(encoding="utf-8")
+        require("<svg" in svg and "</svg>" in svg and "<script" not in svg.lower(),"Skill流程图内容不安全："+record["id"])
 require(data["title"]=="标准项目研发导航","导航标题未标准化")
 require(not data.get("modules"),"标准导航不可预设报价项目模块")
 require(len(data["iterationFlow"])==len(data["phases"][2]["steps"])==7,"模块迭代流程长度不同步")

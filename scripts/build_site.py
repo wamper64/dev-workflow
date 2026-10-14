@@ -88,6 +88,21 @@ for utility in workspace:
     assert "SKILL.md" in files
     payload["skills"].append({**utility, "category": "workspace", "files": files})
 
+# 单独生成的Skill流程图作为补充图片，不修改Matt原版或用户指定的架构PNG。
+# 统一以内嵌data URI构建，保证Github Pages与离线单文件内容一致。
+for record in payload["skills"]:
+    ident = record["id"]
+    picture = DOCS / "images" / "skills" / f"{ident}.svg"
+    if ident == "architecture-baseline":
+        continue  # 保留已确认的原始PNG，不使用重绘图覆盖
+    assert picture.is_file(), f"缺少Skill执行图：{ident}"
+    raw = picture.read_bytes()
+    assert b"<svg" in raw and b"</svg>" in raw and b"<script" not in raw.lower(), f"SVG不安全：{ident}"
+    record["illustration"] = {
+        "src": "data:image/svg+xml;base64," + base64.b64encode(raw).decode("ascii"),
+        "alt": f"{ident} 的步骤、输入与审核关系图"
+    }
+
 # 将用户指定的原始图片按二进制嵌入单文件HTML，在线与离线一致。
 for record in payload["skills"]:
     visual = record.get("overview", {}).get("visual")

@@ -327,3 +327,8 @@
 .architecture-preview-button:hover{border-color:#7ba8d6;background:#eef5ff}
 .architecture-preview-button img{display:block;width:100%;height:auto;border-radius:6px}
 .architecture-preview-button span{display:block;text-align:center;margin-top:7px;font-size:12px;font-weight:650}
+
+/* 所有Skill独立执行图：按容器宽度显示，不替换原有快速理解板块。 */
+.skill-illustration{margin:0 0 20px;border:1px solid #dbe4f0;border-radius:14px;overflow:hidden;background:#f8fafc;}
+.skill-illustration img{display:block;width:100%;height:auto;max-height:620px;object-fit:contain}
+.skill-illustration figcaption{padding:9px 14px;color:#64748b;font-size:12px;text-align:center;background:#fff}

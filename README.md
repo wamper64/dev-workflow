@@ -63,3 +63,8 @@ node scripts/smoke_ui.cjs
 构建生成 `dist/index.html`（可脱网查看）和 `dist/skills-bundle.zip`。提交 `main` 后由 `.github/workflows/deploy.yml` 进行语法、静态契约、真实DOM交互回归与 GitHub Pages 部署；失败不发布。源码提交信息使用中文，仓库不存实际客户密钥、私有数据和未经脱敏的日志。
 
 完整步骤输入/输出与质量门禁见 [研发流程契约](docs/研发流程输入输出与质量门禁.md)。
+
+## Skill 执行图片与回归证据
+
+- 每个 Skill 均有对应执行关系图。整体架构保留原始 `docs/images/architecture-baseline.png`；其余 26 项位于 `docs/images/skills/`，均与各 Skill 的具体流程步骤关联。
+- 图片只辅助理解，不代替 SKILL.md、模板、真实运行或人工验收；离线 HTML 与在线页面使用相同图像。
