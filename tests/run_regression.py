@@ -25,7 +25,7 @@ def check(cid, label, method, fn):
 def t01():
     m=F["modules"];need(len(m)==12 and len({x["owner"] for x in m})==12,"12项业务/Owner边界没有完整建模")
     s=skill("module-discovery/SKILL.md")
-    need("12个" in s and "不能按" in s,"未支持超过10个独立模块的场景")
+    need(("保留12个" in s or "允许输出12个" in s) and not re.search(r"全项目业务模块\*\*不超过 10",s),"未支持超过10个独立模块的场景")
     return "12项模块与12个Owner通过清点；核对Skill避免机械合并"
 def t02():
     m=F["modules"];need(set(F["pageLess"]).issubset({x["name"] for x in m}),"漏掉无页面模块")
