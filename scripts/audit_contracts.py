@@ -12,7 +12,7 @@ skills={s["id"] for s in catalog}
 errors=[]
 def require(v,msg):
     if not v: errors.append(msg)
-require(len(lookup)==len(steps)==20 and len(data["phases"])==4,"阶段或步骤数量不一致")
+require(len(lookup)==len(steps)==20 and len(data["phases"])==6,"阶段或步骤数量不一致")
 
 # 复制提示词只指定Skill和当前任务；具体规则与验收条件应由Skill及其模板维护。
 for item in steps:
@@ -42,15 +42,15 @@ prompt_intents={
     "S14H":("人工验收","自动测试","待执行"),
     "S14B":("具体问题","实际现象","正常预期","现有证据"),
     "S15":("AI 编码工作","关联证据","我批准"),
-    "S16":("整个项目","已确认PRD","已覆盖"),
-    "S17":("上线条件","项目基线","测量证据"),
-    "S18":("目标生产环境","回滚","不直接发布"),
-    "S19":("生产发布","实际命令","交付清单"),
+    "S16":("整个项目","项目/模块PRD","系统验收报告.md"),
+    "S17":("系统质量验收","项目基线","实测"),
+    "S18":("目标环境","首次应用上线/版本更新","回滚","不发布"),
+    "S19":("目标环境","首次应用上线/版本更新","实际","冒烟"),
 }
 require(set(prompt_intents)=={x["id"] for x in steps if x.get("skillId")},"目标校验清单与正式技能步骤不一致")
 
 # 根据真实适用情形使用多份示例，不机械要求每个Skill都有相同的格式。
-expected_variants={"S06":2,"S09":3,"S10":2,"S14H":2,"S14B":5,"S15":2,"S16":2}
+expected_variants={"S06":2,"S09":3,"S10":2,"S14H":2,"S14B":5,"S15":2,"S16":2,"S18":4,"S19":4}
 for step_id,count in expected_variants.items():
     item=lookup[step_id]
     variants=item.get("promptExamples",[])
@@ -301,7 +301,15 @@ for key in ("inputs","outputs"):
     require("docs/output/04-开发环境/部署步骤与执行记录.md" not in combined,"虚构的旧开发环境产物被引用")
 expected_sys=set(lookup["S16"]["outputs"])
 declared_sys=(ROOT/"skills/system-acceptance/SKILL.md").read_text(encoding="utf-8")
+require(expected_sys=={"docs/output/07-系统验收/系统验收报告.md"},"S16必须只有唯一的系统验收报告.md")
 require(all(path in declared_sys for path in expected_sys),"系统验收Skill与导航正式产物不一致")
+require(not any("业务场景覆盖矩阵.md" in s or "缺陷闭环记录.md" in s for s in lookup["S16"]["outputs"]),"S16旧多文件输出残留")
+require([p["id"] for p in data["phases"]]==["P00","P01","P02","P03","P04","P05"],"六阶段顺序错误")
+require([[s["id"] for s in p["steps"]] for p in data["phases"][3:]]==[["S16"],["S17"],["S18","S19"]],"业务验收、系统验收、上线部署三个阶段划分错误")
+for stepid in ("S18","S19"):
+    ptext=" ".join(variant["prompt"] for variant in lookup[stepid]["promptExamples"])
+    for token in ("开发","测试","正式","首次应用上线","版本更新"):
+        require(token in ptext,stepid+" 缺少环境或发布类型："+token)
 require(lookup["S09"]["skillId"]=="module-design" and "S09" in (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8"),"S07至S09交接不完整")
 
 
