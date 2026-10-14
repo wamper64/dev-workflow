@@ -67,7 +67,7 @@ for skill in [*catalog,*workspace]:
 require("不超过 10 个" not in (ROOT/"skills/module-discovery/SKILL.md").read_text(encoding="utf-8"),"模块数量仍写强制上限")
 # 模块设计示例不得回退到曾经的8章草稿或旧Tracker路径。
 sample=(ROOT/"docs/examples/报价项目/module-design/报价需求核对模块设计示例.md").read_text(encoding="utf-8")
-titles=re.findall(r"^## (\\d+)\\. (.+)$",sample,re.M)
+titles=re.findall(r"^## (\d+)\. (.+)$",sample,re.M)
 require(len(titles)==7 and [int(n) for n,_ in titles]==list(range(1,8)),"模块设计示例未按当前七章Skill模板重构")
 require("本轮范围与依赖检查.md" not in sample and "迁移设计草案.md" not in sample,"模块设计示例仍交付废弃的独立文件")
 require(".scratch/<module_key>/模块详细设计.md" in sample,"模块设计示例未绑定稳定模块身份")
