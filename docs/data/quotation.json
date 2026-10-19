@@ -204,13 +204,13 @@
             "真实部署命令、容器/健康检查、本机与异机连通证据（仅实际执行后记录；敏感值脱敏）"
           ],
           "review": "先读原有模板并从已有项目资料自动预填，未知值给推荐与待确认，密钥只通过本地私有配置注入。用户逐环境确认完整配置后才按该环境第8.1节提示词执行；一套环境一套独立Compose项目/目录/端口/数据卷。首次只部署基础设施、数据库和中间件，不启动ruoyi和nginx，也不要求jar/dist存在。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
-          "prompt": "/development-environment\n\n请读取 `code/deploy/single-node-docker/初次部署配置.md` 这一唯一模板、该目录真实Compose/SSH/SQL脚本，以及 `docs/input/` 全部相关资料、项目基线、整体架构、数据库总体和当前 `code/`。按实际存在的开发/测试环境逐份预填配置；未知项给出推荐依据并留在会话中，先交我确认。确认并获执行授权前不操作服务器。",
+          "prompt": "/development-environment\n\n请读取 `code/deploy/single-node-docker/初次部署配置.md` 这一唯一模板、该目录真实Compose/SSH/SQL脚本，以及 `docs/input/`（特别是 `docs/input/环境资料/`）、项目基线、整体架构、数据库总体和当前 `code/`。按实际存在的开发/测试环境逐份预填配置；未知项给出推荐依据并留在会话中，先交我确认；确认前不执行部署，确认并获执行授权前不操作服务器。",
           "skillId": "development-environment",
           "skillOrigin": "自建",
           "promptExamples": [
             {
               "label": "① 先生成配置并确认",
-              "prompt": "/development-environment\n\n请读取 `code/deploy/single-node-docker/初次部署配置.md` 这一唯一模板、该目录真实Compose/SSH/SQL脚本，以及 `docs/input/` 全部相关资料、项目基线、整体架构、数据库总体和当前 `code/`。按实际存在的开发/测试环境逐份预填配置；未知项给出推荐依据并留在会话中，先交我确认。确认并获执行授权前不操作服务器。"
+              "prompt": "/development-environment\n\n请读取 `code/deploy/single-node-docker/初次部署配置.md` 这一唯一模板、该目录真实Compose/SSH/SQL脚本，以及 `docs/input/`（特别是 `docs/input/环境资料/`）、项目基线、整体架构、数据库总体和当前 `code/`。按实际存在的开发/测试环境逐份预填配置；未知项给出推荐依据并留在会话中，先交我确认；确认前不执行部署，确认并获执行授权前不操作服务器。"
             },
             {
               "label": "② 已确认配置，申请执行",
@@ -366,7 +366,7 @@
             "真实集成分支、已完成Tickets、TDD测试与Matt原版最终双轴code-review结果（按真实执行证据确认；不另建固定报告文件）"
           ],
           "review": "按真实原版implement-spec的提交/任务状态/TDD命令/最终code-review证据确认实现完成；人工用例由下一步独立Skill生成。",
-          "prompt": "/implement-spec\n\n请读取已批准的Spec/Tickets（按 `docs/agents/issue-tracker.md` 定位本地或远程任务）、`.scratch/<module_key>/模块详细设计.md` 第4章、项目基线、整体架构、数据库总体设计，以及 `code/` 中真实原型、实现和测试接缝。\n本轮范围：<Spec/Ticket URL、ID或路径>。数据库有变更时生成 `database/migrations/` 下真实版本化SQL；若与模块详细设计第4章不一致，回写设计并复审。",
+          "prompt": "/implement-spec\n\n请读取已批准的Spec/Tickets（按 `docs/agents/issue-tracker.md` 定位本地或远程任务）、`.scratch/<module_key>/模块详细设计.md` 第4章、`docs/output/01-项目基线/项目基线.md`、`docs/output/02-整体架构/整体架构设计.md`、`docs/output/03-数据库总体/数据库总体设计.md`，以及 `code/` 中真实原型、实现和测试接缝。\n本轮范围：<Spec/Ticket URL、ID或路径>。数据库有变更时生成 `database/migrations/` 下真实版本化SQL；若与模块详细设计第4章不一致，回写设计并复审。",
           "skillId": "implement-spec",
           "skillOrigin": "Matt原版",
           "invokes": []
@@ -422,7 +422,7 @@
             "人工测试用例与结果.md（仅故障来自人工测试时；其他来源不要求创建）"
           ],
           "outputs": [
-            "真实故障反馈环、最小复现、根因与修复/回归证据；按原始来源回填人工用例、CI检查、Issue或监控记录，不强制生成独立诊断报告",
+            "真实故障反馈环、最小复现、根因与修复/回归证据；按原始来源回填人工用例、CI检查、Issue或监控记录；不要求所有故障都有人工用例，也不强制生成独立诊断报告",
             "代码修复、回归测试及必要提交/PR（实际发生代码变更时）"
           ],
           "review": "开发人员核对故障来源、原症状的反馈环是否确实先红后绿，并确认回归结果；来自人测的交实际执行人复测，来自CI/自动测试的重跑原失败检查，来自生产/设备的按授权及实际观测验证。无足够复现或取证条件则标受阻，不猜根因；此Skill可在任何阶段按需调用。",
@@ -569,25 +569,25 @@
             "docs/output/08-上线交付/交付清单.md（仅实际交接后生成）"
           ],
           "review": "审核人：开发人员、对应开发/测试环境负责人。审核项：环境选择（仅开发或测试）、首次上线/更新类型、端口/容器/数据隔离、备份恢复与回退、发布授权、真实执行日志、应用健康和业务冒烟。未授权、预检失败或缺真实证据不得标部署成功；不包含正式/生产环境部署。",
-          "prompt": "/release-delivery\n\n请读取目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：开发环境；发布类型：首次应用上线。\n发布授权：<授权人、允许范围与确认依据>。",
+          "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：开发环境；发布类型：首次应用上线。\n发布授权：<授权人、允许范围与确认依据>。",
           "skillId": "release-delivery",
           "skillOrigin": "自建",
           "promptExamples": [
             {
               "label": "① 开发环境 · 首次上线",
-              "prompt": "/release-delivery\n\n请读取目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：开发环境；发布类型：首次应用上线。\n发布授权：<授权人、允许范围与确认依据>。"
+              "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：开发环境；发布类型：首次应用上线。\n发布授权：<授权人、允许范围与确认依据>。"
             },
             {
               "label": "② 开发环境 · 版本更新",
-              "prompt": "/release-delivery\n\n请读取目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：开发环境；发布类型：版本更新。\n发布授权：<授权人、允许范围与确认依据>。"
+              "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：开发环境；发布类型：版本更新。\n发布授权：<授权人、允许范围与确认依据>。"
             },
             {
               "label": "③ 测试环境 · 首次上线",
-              "prompt": "/release-delivery\n\n请读取目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：测试环境；发布类型：首次应用上线。\n发布授权：<授权人、允许范围与确认依据>。"
+              "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：测试环境；发布类型：首次应用上线。\n发布授权：<授权人、允许范围与确认依据>。"
             },
             {
               "label": "④ 测试环境 · 版本更新",
-              "prompt": "/release-delivery\n\n请读取目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：测试环境；发布类型：版本更新。\n发布授权：<授权人、允许范围与确认依据>。"
+              "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境专属配置、真实构建/镜像、`database/migrations/` 及目标环境现有版本/数据/备份回滚资料，并核对统一 `release_fingerprint`（Git Commit、前端产物digest、后端镜像digest、迁移checksum集合、脱敏配置摘要）。先调用内部 `release-preflight`，检查它生成的 `docs/output/08-上线交付/部署预演.md` 与 `备份回滚方案.md`；预检未通过或发布授权不明确时停止。\n本次部署环境：测试环境；发布类型：版本更新。\n发布授权：<授权人、允许范围与确认依据>。"
             }
           ],
           "invokes": [
