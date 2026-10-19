@@ -20,36 +20,35 @@ for item in steps:
     prompt=item.get("prompt","")
     if skill_id:
         require(prompt.startswith("/"+skill_id),item["id"]+" 不是Slash调用")
-        require(45<=len(prompt)<500,item["id"]+" 执行提示词缺本次任务上下文或过长")
+        require(len(prompt)>=len("/"+skill_id) and len(prompt)<1200,item["id"]+" 执行提示词为空或过长")
         require(prompt.split("\n",1)[0].strip()=="/"+skill_id,item["id"]+" 第一行应为准确的Skill调用")
         require("SKILL.md" not in prompt and "【真实输出】" not in prompt and "【审核/不通过路径】" not in prompt,
                 item["id"]+" 提示词重复Skill/网页栏目")
         require((ROOT/"skills"/skill_id/"SKILL.md").is_file(),item["id"]+" 找不到主Skill")
     elif item["id"]=="S01":
         require(bool(prompt) and not prompt.startswith("/"),"S01独立只读核验保留自然语言提示词")
+all_prompts=[s.get("prompt","") for s in steps]+[v.get("prompt","") for s in steps for v in s.get("promptExamples",[])]
+for prompt_text in all_prompts:
+    for phrase in ["无则留空","已知存量数据库","项目特有约束或资料中尚未体现的事项","项目特有补充或需要技术总监裁定的事项","已知反复问题","已知事实/约束","额外约定"]:
+        require(phrase not in prompt_text,"提示词残留无效背景填写项："+phrase)
+
 # 根据每个步骤实际职责审核委托信息，不强制统一标题或相同字数。
 prompt_intents={
-    "S02":("AI 研发协作入口","额外约定"),
-    "S03":("项目基线","项目特有约束"),
-    "S04":("整体架构设计","项目特有补充"),
-    "S05":("数据库总体设计","存量数据库"),
-    "S06":("逐环境","初次部署配置","不执行部署"),
-    "S07":("业务模块清单","拆分决策"),
-    "S09":("本轮","模块池","确认"),
-    "S10":("本次任务","业务目标","范围依据"),
-    "S11":("待拆分","已确认 Spec","本次只处理"),
-    "S12":("本轮执行范围","已批准 Spec/Ticket","项目约束"),
-    "S14H":("人工验证","自动测试","测试环境"),
-    "S14B":("具体问题","实际现象","正常预期","现有证据"),
-    "S15":("复盘对象","可用证据","希望改进"),
-    "S16":("系统业务验收","验收范围","测试环境"),
-    "S17":("候选版本","项目基线","实测资料"),
-    "S18":("本次部署环境","发布类型","执行授权"),
+    "S02":("code/","docs/input/工程资料/","AGENTS.md","CLAUDE.md"),
+    "S06":("初次部署配置.md","docs/input/环境资料/","确认前不执行部署"),
+    "S09":("本轮模块",),
+    "S10":("docs/input/需求资料/","模块详细设计.md","本轮范围与依赖检查.md","code/","本次任务"),
+    "S11":(".scratch/","issue-tracker.md","本次 Spec"),
+    "S12":(".scratch/","项目基线.md","整体架构设计.md","数据库总体设计.md","本轮范围"),
+    "S14H":("本轮模块",),
+    "S14B":("Spec/Tickets","模块详细设计","code/","本次故障"),
+    "S15":("当前开发会话","Git Diff","CI","AGENTS.md"),
+    "S18":("docs/input/环境资料/","code/deploy/","本次部署环境","发布类型","发布授权"),
 }
-require(set(prompt_intents)=={x["id"] for x in steps if x.get("skillId")},"目标校验清单与正式技能步骤不一致")
+require(set(prompt_intents)<={x["id"] for x in steps if x.get("skillId")},"目标校验清单引用了不存在的技能步骤")
 
 # 根据真实适用情形使用多份示例，不机械要求每个Skill都有相同的格式。
-expected_variants={"S06":2,"S09":3,"S10":2,"S14H":2,"S14B":5,"S15":2,"S16":2,"S18":4}
+expected_variants={"S06":2,"S09":1,"S10":2,"S14H":2,"S14B":5,"S15":2,"S18":4}
 for step_id,count in expected_variants.items():
     item=lookup[step_id]
     variants=item.get("promptExamples",[])
@@ -59,7 +58,7 @@ for step_id,count in expected_variants.items():
     require(len(names)==len(set(names)),step_id+" 示例标签重复")
     for v in variants:
         require(v.get("prompt","").startswith("/"+item["skillId"]+"\n\n"),step_id+" 示例缺准确的Slash调用")
-        require(60<=len(v.get("prompt",""))<=900,step_id+" 示例缺任务上下文或过长")
+        require(len(v.get("prompt",""))>=len("/"+item["skillId"]) and len(v.get("prompt",""))<=1200,step_id+" 示例为空或过长")
         require("SKILL.md" not in v.get("prompt",""),step_id+" 示例不应复制Skill内部规则")
 require(not lookup["S11"].get("promptExamples"),"没有真正场景分支时无须机械增加多份提示词")
 
@@ -268,7 +267,7 @@ for label in ("needs-triage","needs-info","ready-for-agent","ready-for-human","w
     require(label in setup_text,"初始化快速理解缺标签定义："+label)
 require("是，沿用默认五标签" in setup_text,"初始化快速理解未提示推荐选择")
 require("/triage" in setup_text and "人工测试签收" in setup_text,"五标签的生效条件或业务测试边界不清")
-require("AI 研发协作入口" in lookup["S02"]["prompt"] and "额外约定" in lookup["S02"]["prompt"],"初始化提示词应只保留当前目标与额外约定")
+require(all(token in lookup["S02"]["prompt"] for token in ("code/","docs/input/工程资料/","AGENTS.md","CLAUDE.md")),"Matt初始化提示词缺少输入路径")
 for step_obj in steps:
     require(len(step_obj["title"])<=12,"执行步骤标题过长："+step_obj["id"])
 

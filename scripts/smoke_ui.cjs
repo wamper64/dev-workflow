@@ -66,8 +66,8 @@ async function run(){
    assert.ok(doc.querySelector('#step-detail h2'),"步骤详情缺失："+step.id);
    const prompt=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
    if(step.skillId){
-    assert.ok(prompt.startsWith("/"+step.skillId+"\n"),"Slash命令错误："+step.id);
-    assert.ok(prompt.length>=45,"委托提示词缺少本次任务上下文："+step.id);
+    assert.equal(prompt.trim().split("\n")[0],"/"+step.skillId,"Slash命令错误："+step.id);
+    assert.ok(prompt.trim().length>=("/"+step.skillId).length,"委托提示词为空："+step.id);
    }else{
     assert.ok(!prompt.startsWith("/"),"无Skill步骤不应产生Slash命令："+step.id);
    }

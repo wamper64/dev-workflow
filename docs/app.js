@@ -2,14 +2,14 @@ const ui={data:null,phase:"P01",step:"S01",promptChoice:0};
 const $=id=>document.getElementById(id);
 const esc=x=>String(x??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const toolkitTaskPrompts={
- "grill-me":"需要做出的决定：<具体问题>。已知背景/限制：<关键事实与不能接受的结果>。",
- "improve-codebase-architecture":"审查范围：<模块/近期改动/全仓>；想改善的结果：<目标或症状>；不能破坏的约束：<如有>。",
- "handoff":"交接对象：<下一位开发者/新会话/工具>；下一步目标：<任务>；关键文件、Commit 或链接：<如有>。",
- "triage":"待分诊对象：<Issue/PR链接或待处理列表>；本次关注点：<优先级、重复项或证据缺口等>。",
- "prototype":"待验证问题：<业务规则/状态交互/UI方案>；目标用户与场景：<填写>；现有原型入口：<路径/链接>。",
- "implement":"待实现 Ticket：<编号/链接>；关联 Spec：<路径>；额外约束或验收依据：<路径/内容>。",
- "wayfinder":"目标及边界：<复杂目标>；已知事实/约束：<填写>；关键未知或阻碍：<填写>。",
- "research":"研究问题：<明确问题>；需要支持的决定：<技术/方案选择>；适用场景与限制：<填写>。"
+ "grill-me":"需要澄清的决策：<问题或文档路径>。请以当前会话内容为输入，不假设存在代码目录。",
+ "improve-codebase-architecture":"请读取 `code/` 中的实际工程、相关架构/模块设计文档和近期 Git Diff，评估架构改善机会。目标范围：<模块或目录>。",
+ "handoff":"请根据当前会话、工作区 Git 状态/未提交 Diff、关联 Spec/Tickets 与测试记录生成交接。交接对象：<新会话或协作者>。",
+ "triage":"请读取待分诊 Issue/PR、`docs/agents/issue-tracker.md`，并按需读取关联 Spec、模块设计与代码。待分诊入口：<Issue/PR 链接或列表>。",
+ "prototype":"请读取 `docs/input/需求资料/` 中对应 PRD/原型及 `code/` 中现有页面。要验证的问题：<状态或交互>。只生成临时验证原型，不覆盖正式原型。",
+ "implement":"请读取 `<Ticket 路径或编号>`、关联 Spec、模块详细设计和 `code/` 中对应实现，仅实现该 Ticket。",
+ "wayfinder":"请读取当前会话中的目标说明、`docs/input/`、现有 `docs/output/` 和已有 Map/决策记录，建立或更新决策地图。目标：<最终结果>。",
+ "research":"请读取 `docs/input/` 中相关原始资料及现有架构/设计文档，围绕 <研究问题> 使用一手来源调查，并将结论写入 <输出 Markdown 路径>。"
 };
 const toolkitPhase=()=>({
  id:"PTOOLS",

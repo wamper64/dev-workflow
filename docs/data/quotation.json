@@ -114,7 +114,7 @@
             "docs/agents/triage-labels.md（仅安装 /triage 时）"
           ],
           "review": "开发人员确认所选 Issue Tracker、已有AGENTS/CLAUDE和领域文档兼容；已安装 /triage 时沿用默认五标签并核对映射，不把这些标签视为人工验收或签收。",
-          "prompt": "/setup-matt-pocock-skills\n\n请初始化当前仓库的 AI 研发协作入口。当前仓库/团队的额外约定：<填写；无则留空>。",
+          "prompt": "/setup-matt-pocock-skills\n\n请读取以下输入：\n- `code/` 中的现有工程\n- `docs/input/工程资料/`\n- 仓库根目录的 `AGENTS.md`、`CLAUDE.md`。",
           "skillId": "setup-matt-pocock-skills",
           "skillOrigin": "Matt原版"
         },
@@ -135,7 +135,7 @@
             "docs/output/01-项目基线/项目基线.md"
           ],
           "review": "项目经理确认禁止事项、责任及规模事实；技术总监裁定技术/资源/质量/恢复目标，关键冲突未解不进入架构。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
-          "prompt": "/project-baseline\n\n请为当前项目形成项目基线。项目特有约束或资料中尚未体现的事项：<填写；无则留空>。",
+          "prompt": "/project-baseline",
           "skillId": "project-baseline",
           "skillOrigin": "自建"
         },
@@ -156,7 +156,7 @@
             "GLOSSARY.md 或 docs/adr/（仅实际需要时）"
           ],
           "review": "双核心审核：组件完整性、工程落点、交互Owner有依据；核心业务链路目录完整且每条有处理流程图、状态与失败出口；流程步骤→组件与组件→链路双向核对后可供开发演练。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
-          "prompt": "/architecture-baseline\n\n请基于当前已确认资料完成整体架构设计。项目特有补充或需要技术总监裁定的事项：<填写；无则留空>。",
+          "prompt": "/architecture-baseline",
           "skillId": "architecture-baseline",
           "skillOrigin": "基于Matt改造",
           "invokes": [
@@ -180,7 +180,7 @@
             "docs/output/03-数据库总体/数据库总体设计.md"
           ],
           "review": "技术总监沿规则→流程→核心表字段→ER关联→数据Owner/存储→S09继承两轮审核；必须有必要核心字段定义，不需完整DDL。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
-          "prompt": "/data-architecture\n\n请为当前项目完成数据库总体设计。已知存量数据库、迁移限制或待裁定事项：<填写；无则留空>。",
+          "prompt": "/data-architecture",
           "skillId": "data-architecture",
           "skillOrigin": "基于Matt改造"
         },
@@ -203,17 +203,17 @@
             "获批准执行后：本地部署结果README-<环境名称>.md、脱敏运行与本机/异机验收证据"
           ],
           "review": "先读原有模板并从已有项目资料自动预填，未知值给推荐与待确认，密钥只通过本地私有配置注入。用户逐环境确认完整配置后才按该环境第8.1节提示词执行；一套环境一套独立Compose项目/目录/端口/数据卷。首次只部署基础设施、数据库和中间件，不启动ruoyi和nginx，也不要求jar/dist存在。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
-          "prompt": "/development-environment\n\n请为本项目逐环境生成初次部署配置。目标环境或额外限制：<填写；未明确则留空>。本次只准备配置，不执行部署。",
+          "prompt": "/development-environment\n\n请读取 `code/deploy/single-node-docker/初次部署配置.md`、`docs/input/环境资料/`，以及 `docs/output/01-项目基线/项目基线.md`、`docs/output/02-整体架构/整体架构设计.md`、`docs/output/03-数据库总体/数据库总体设计.md`，按实际环境生成配置文件，先交我确认；确认前不执行部署。",
           "skillId": "development-environment",
           "skillOrigin": "自建",
           "promptExamples": [
             {
               "label": "① 先生成配置并确认",
-              "prompt": "/development-environment\n\n请为本项目逐环境生成初次部署配置。目标环境或额外限制：<填写；未明确则留空>。本次只准备配置，不执行部署。"
+              "prompt": "/development-environment\n\n请读取 `code/deploy/single-node-docker/初次部署配置.md`、`docs/input/环境资料/`，以及 `docs/output/01-项目基线/项目基线.md`、`docs/output/02-整体架构/整体架构设计.md`、`docs/output/03-数据库总体/数据库总体设计.md`，按实际环境生成配置文件，先交我确认；确认前不执行部署。"
             },
             {
               "label": "② 已确认配置，申请执行",
-              "prompt": "/development-environment\n\n目标环境：<开发/测试名称>；已确认配置：<配置文件路径>；本次部署授权：<审批人、目标服务器、允许操作范围>。\n\n请执行已授权的初次基础服务部署。"
+              "prompt": "/development-environment\n\n请读取用户已确认的 `code/deploy/single-node-docker/初次部署配置-<环境名称>.md`，按该配置执行初次基础服务部署。"
             }
           ]
         },
@@ -236,7 +236,7 @@
             "docs/output/05-模块拆分/模块依赖关系.md"
           ],
           "review": "按Matt to-tickets的纵向可交付切片、阻塞依赖和人工粒度确认审核全项目模块；此处是模块级DAG，不是单上下文开发Ticket。项目经理审核需求覆盖/真实业务结果，技术总监审核组件/数据Owner及依赖。S11再完整调用Matt原版to-tickets发布本轮模块开发Tickets。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
-          "prompt": "/module-discovery\n\n请为当前项目整理业务模块清单与模块依赖关系。已确认的模块边界、业务约束或拆分决策：<填写；无则留空>。",
+          "prompt": "/module-discovery",
           "skillId": "module-discovery",
           "skillOrigin": "Matt适配"
         }
@@ -280,7 +280,7 @@
             "docs/output/项目总控/项目实施状态.md（模块首次进入时更新一次）"
           ],
           "review": "先由项目经理确认本轮任务和验收场景、开发人员确认前置依赖与真实环境；然后审查详细设计是否继承S04/S05冻结约束、既有原型与代码。阻塞则不进入Spec。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
-          "prompt": "/module-design\n\n本轮范围尚未确定。请根据当前模块池和项目实施状态提出候选任务，待我确认本轮范围后再继续。",
+          "prompt": "/module-design\n\n本轮模块：<模块名称或编号>。",
           "skillId": "module-design",
           "skillOrigin": "基于Matt改造",
           "invokes": [
@@ -288,16 +288,8 @@
           ],
           "promptExamples": [
             {
-              "label": "① 尚未确定本轮任务",
-              "prompt": "/module-design\n\n本轮范围尚未确定。请根据当前模块池和项目实施状态提出候选任务，待我确认本轮范围后再继续。"
-            },
-            {
-              "label": "② 指定本轮模块",
-              "prompt": "/module-design\n\n本轮模块：<名称/ID>；业务场景：<角色、操作、预期结果>；现有页面/代码入口：<原型、路由或路径>；补充限制/待裁定事项：<填写；无则留空>。"
-            },
-            {
-              "label": "③ 继续未完成任务",
-              "prompt": "/module-design\n\n继续任务：<模块/任务标识>；已有设计/实现：<文档、Commit或状态>；本轮变化：<新增需求、调整点或阻塞>；待确认事项：<如有>。"
+              "label": "指定本轮模块",
+              "prompt": "/module-design\n\n本轮模块：<模块名称或编号>。"
             }
           ]
         },
@@ -317,17 +309,17 @@
             ".scratch/<feature-slug>/spec.md（本地Markdown Tracker；GitHub/GitLab按已配置Issue定位）"
           ],
           "review": "Spec仅覆盖当前独立任务，明确已有功能与增量范围，历史已验收Spec保留；测试接缝已确认。",
-          "prompt": "/to-spec\n\n本次任务：<模块/任务编号>；业务目标：<角色、操作、预期结果>；范围依据：<已确认模块设计/任务检查路径>；原型入口：<页面/路由>。",
+          "prompt": "/to-spec\n\n请读取以下输入，为本次任务生成 Spec：\n- `docs/input/需求资料/` 中对应模块的 PRD 与原型\n- `docs/output/06-模块迭代/<模块>/模块详细设计.md`\n- `docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md`\n- `code/` 中对应的现有原型与实现\n- `GLOSSARY.md`、`docs/adr/` 及相关已有 Spec/Tickets\n\n本次任务：<模块/任务标识>。",
           "skillId": "to-spec",
           "skillOrigin": "Matt原版",
           "promptExamples": [
             {
               "label": "① 新的独立开发任务",
-              "prompt": "/to-spec\n\n本次任务：<模块/任务编号>；业务目标：<角色、操作、预期结果>；范围依据：<已确认模块设计/任务检查路径>；原型入口：<页面/路由>。"
+              "prompt": "/to-spec\n\n请读取以下输入，为本次任务生成 Spec：\n- `docs/input/需求资料/` 中对应模块的 PRD 与原型\n- `docs/output/06-模块迭代/<模块>/模块详细设计.md`\n- `docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md`\n- `code/` 中对应的现有原型与实现\n- `GLOSSARY.md`、`docs/adr/` 及相关已有 Spec/Tickets\n\n本次任务：<模块/任务标识>。"
             },
             {
               "label": "② 已有模块新增需求",
-              "prompt": "/to-spec\n\n现有模块：<名称>；本次新增/调整：<变化前后的业务行为>；已有验收基线：<Spec/原型/代码/签收记录>；明确不改：<范围>。"
+              "prompt": "/to-spec\n\n请读取以下输入，为本次需求变更生成 Spec：\n- `docs/input/需求资料/` 中对应模块的最新 PRD 与原型\n- `docs/output/06-模块迭代/<模块>/模块详细设计.md`\n- `docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md`\n- `code/` 中对应的现有原型与实现\n- `GLOSSARY.md`、`docs/adr/` 及相关已有 Spec/Tickets\n\n本次需求：<PRD 需求编号或变更编号>。"
             }
           ]
         },
@@ -347,7 +339,7 @@
             ".scratch/<feature-slug>/issues/NN-*.md（本地Markdown Tracker；远程使用真实关联Tickets）"
           ],
           "review": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
-          "prompt": "/to-tickets\n\n待拆分的已确认 Spec：<路径/编号>。本次只处理这些 Spec：<列表；若有多个候选，请指定>。",
+          "prompt": "/to-tickets\n\n请读取以下输入，拆分本次 Spec：\n- `.scratch/<模块>/<任务标识>/spec.md`（或已配置 Issue Tracker 中的 Spec）\n- `docs/output/06-模块迭代/<模块>/任务/<任务标识>/本轮范围与依赖检查.md`\n- `docs/output/06-模块迭代/<模块>/模块详细设计.md`\n- `docs/agents/issue-tracker.md`\n- `code/` 中的当前实现\n\n本次 Spec：<路径或编号>。",
           "skillId": "to-tickets",
           "skillOrigin": "Matt原版"
         },
@@ -368,7 +360,7 @@
             "真实集成分支、完成的Tickets、TDD测试和原版最终code-review结论（以实际结果为准）"
           ],
           "review": "按真实原版implement-spec的提交/任务状态/TDD命令/最终code-review证据确认实现完成；人工用例由下一步独立Skill生成。",
-          "prompt": "/implement-spec\n\n本轮执行范围：<已批准 Spec/Ticket 编号或路径>；需要特别提醒的项目约束：<引用项目基线或填写差异；无则留空>。",
+          "prompt": "/implement-spec\n\n请读取并实施以下已批准任务：\n- `.scratch/<模块>/<任务标识>/spec.md` 与 `issues/`（或已配置 Issue Tracker 中的对应 Spec/Tickets）\n- `docs/output/06-模块迭代/<模块>/模块详细设计.md` 与 `迁移设计草案.md`\n- `docs/output/01-项目基线/项目基线.md`\n- `docs/output/02-整体架构/整体架构设计.md`\n- `docs/output/03-数据库总体/数据库总体设计.md`\n- `code/` 中的现有前端原型与后端工程\n\n本轮范围：<Spec/Ticket 编号或路径>。",
           "skillId": "implement-spec",
           "skillOrigin": "Matt原版",
           "invokes": []
@@ -392,7 +384,7 @@
             "docs/output/项目总控/项目实施状态.md（仅真实签收后增量更新）"
           ],
           "review": "人工测试执行及填写必须由实际人员完成；失败/受阻/未测不可算通过；仅真实业务签收后更新项目状态，不能把Mock/未验证视为完成。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
-          "prompt": "/manual-testing\n\n待人工验证的任务：<模块/任务标识>；主要业务场景：<角色、操作、预期结果>；自动测试/代码审查证据：<命令、记录或路径>；测试环境与角色账号：<填写，不写明文密码>。请生成对应的人测单。",
+          "prompt": "/manual-testing\n\n本轮模块：<模块名称或编号>。",
           "optional": false,
           "manual": false,
           "invokes": [],
@@ -401,11 +393,11 @@
           "promptExamples": [
             {
               "label": "① 生成必要人测单",
-              "prompt": "/manual-testing\n\n待人工验证的任务：<模块/任务标识>；主要业务场景：<角色、操作、预期结果>；自动测试/代码审查证据：<命令、记录或路径>；测试环境与角色账号：<填写，不写明文密码>。请生成对应的人测单。"
+              "prompt": "/manual-testing\n\n本轮模块：<模块名称或编号>。"
             },
             {
               "label": "② 修复后复测与签收",
-              "prompt": "/manual-testing\n\n本次为修复后复测。任务：<模块/任务标识>；原失败用例ID/缺陷：<编号及首次失败证据>；修复Commit与自动回归：<路径/结果>；人工测试环境：<环境与角色>。"
+              "prompt": "/manual-testing\n\n复测对象：<缺陷或测试用例编号>。"
             }
           ]
         },
@@ -430,31 +422,31 @@
             "docs/output/06-模块迭代/<模块>/任务/<任务标识>/Bug根因与六阶段诊断记录.md（仅在本轮模块任务归档时）"
           ],
           "review": "开发人员核对故障来源、原症状的反馈环是否确实先红后绿，并确认回归结果；来自人测的交实际执行人复测，来自CI/自动测试的重跑原失败检查，来自生产/设备的按授权及实际观测验证。无足够复现或取证条件则标受阻，不猜根因；此Skill可在任何阶段按需调用。",
-          "prompt": "/diagnosing-bugs\n\n本次具体问题：<一句话概述>\n实际现象：<观察到的错误或不正确结果>\n正常预期：<正确结果>\n复现方式：<环境、版本、步骤/命令及数据>\n现有证据：<日志、截图、失败测试、请求报文或 Issue 链接>",
+          "prompt": "/diagnosing-bugs\n\n请读取本次故障关联的 Spec/Tickets、模块详细设计、`code/` 中的对应实现与变更 Diff；结合实际报错、复现记录、CI/测试记录、Issue、监控告警或设备/第三方报文定位问题。故障来自人工测试时，再读取对应的《人工测试用例与结果.md》。\n\n本次故障：<一句话描述>\n实际现象：<观察到的错误>\n正常预期：<正确结果>\n复现/证据：<复现步骤、日志、失败检查或报文>",
           "optional": true,
           "promptExamples": [
             {
               "label": "① 描述本次实际故障",
-              "prompt": "/diagnosing-bugs\n\n本次具体问题：<一句话概述>\n实际现象：<观察到的错误或不正确结果>\n正常预期：<正确结果>\n复现方式：<环境、版本、步骤/命令及数据>\n现有证据：<日志、截图、失败测试、请求报文或 Issue 链接>"
+              "prompt": "/diagnosing-bugs\n\n请读取本次故障关联的 Spec/Tickets、模块详细设计、`code/` 中的对应实现与变更 Diff；结合实际报错、复现记录、CI/测试记录、Issue、监控告警或设备/第三方报文定位问题。故障来自人工测试时，再读取对应的《人工测试用例与结果.md》。\n\n本次故障：<一句话描述>\n实际现象：<观察到的错误>\n正常预期：<正确结果>\n复现/证据：<复现步骤、日志、失败检查或报文>"
             },
             {
               "label": "② 页面业务功能异常",
-              "prompt": "/diagnosing-bugs\n\n问题：设备告警列表选择“未处理”后仍显示已关闭告警。\n预期：只显示当前项目下状态为“未处理”的记录。\n复现环境/步骤：<测试环境及操作路径>。\n证据：<截图、API请求/响应或日志路径>。\n影响：<对用户/业务的影响>。\n\n这是示例情景，请替换为真实信息。",
+              "prompt": "/diagnosing-bugs\n\n读取 `code/` 中对应页面/接口及关联 Spec/Tickets。\n故障：设备告警列表筛选“未处理”后仍显示已关闭告警。\n预期：只显示当前项目下状态为“未处理”的记录。\n证据：<测试环境复现步骤或请求/响应记录>。",
               "example": true
             },
             {
               "label": "③ CI / 自动测试失败",
-              "prompt": "/diagnosing-bugs\n\n问题：<CI/自动测试失败的具体表现>。\n失败检查：<工作流/Job链接、测试名或命令>。\n实际报错：<失败断言、堆栈或日志>。\n正常预期：<应有结果>。\n相关变更：<Commit/文件；未知则留空>。",
+              "prompt": "/diagnosing-bugs\n\n读取关联 Spec/Tickets、`code/` 中对应实现及本次 CI 工作流记录。\n故障：<失败 Job 或测试名称>\n实际报错：<失败断言、堆栈或日志>\n预期：<测试应验证的行为>",
               "example": true
             },
             {
               "label": "④ 设备 / 第三方联调异常",
-              "prompt": "/diagnosing-bugs\n\n问题：<设备/第三方联调异常>。\n设备/接入点：<设备ID、Topic或环境>。\n实际报文/时间：<脱敏报文、消息ID、时间戳>。\n正常预期：<预期状态、字段或可见结果>。\n当前现象与证据：<日志、响应或截图路径>。",
+              "prompt": "/diagnosing-bugs\n\n读取 `docs/input/对接资料/` 中对应协议/接口、`code/` 中的接入实现及脱敏报文/日志。\n故障：<设备或第三方联调异常>\n设备/接入点：<设备 ID、Topic 或接口>\n实际报文/时间：<脱敏报文、消息 ID 或时间戳>\n预期：<预期状态、字段或响应>",
               "example": true
             },
             {
               "label": "⑤ 生产性能回退",
-              "prompt": "/diagnosing-bugs\n\n问题：<接口/页面响应变慢或性能回退>。\n环境/版本/时间：<目标环境、版本、首次发生时间>。\n目标与实测：<历史P95、当前P95、负载条件>。\n证据：<监控、APM、慢查询或脱敏日志>。\n操作限制：<允许的只读检查；需额外授权的操作>。",
+              "prompt": "/diagnosing-bugs\n\n读取 `code/` 中对应实现、关联 Spec/Tickets 与监控/APM/慢查询记录。\n故障：<接口/页面响应变慢或性能回退>\n环境/版本/时间：<环境、版本、首次发生时间>\n基线与实测：<历史 P95、当前 P95 及负载条件>\n证据：<监控或日志链接>",
               "example": true
             }
           ]
@@ -475,18 +467,18 @@
             "用户明确批准后才实际调整Agent约定/CI/规则（按需）"
           ],
           "review": "仅按Matt官方retro流程评估有证据的AI工程环境改进建议，未经批准不修改全局Skill/CI；业务签收不由retro完成。",
-          "prompt": "/retro\n\n复盘对象：<模块/任务、日期或编码会话>；可用证据：<Commit、会话记录、CI/测试记录>；希望改进的方面：<效率、正确性、协作等>。",
+          "prompt": "/retro\n\n请基于当前开发会话复盘，读取：\n- 当前会话与 Git Diff/提交\n- CI 与工具执行记录\n- 仓库根目录的 `AGENTS.md`、`CLAUDE.md`，以及代码规范、测试与自动化守卫\n- `docs/output/项目总控/项目实施状态.md` 和本轮人工测试/验收记录（仅作背景）",
           "skillId": "retro",
           "skillOrigin": "Matt原版",
           "invokes": [],
           "promptExamples": [
             {
               "label": "① 本轮开发会话复盘",
-              "prompt": "/retro\n\n复盘对象：<模块/任务、日期或编码会话>；可用证据：<Commit、会话记录、CI/测试记录>；希望改进的方面：<效率、正确性、协作等>。"
+              "prompt": "/retro\n\n请基于当前开发会话复盘，读取：\n- 当前会话与 Git Diff/提交\n- CI 与工具执行记录\n- 仓库根目录的 `AGENTS.md`、`CLAUDE.md`，以及代码规范、测试与自动化守卫\n- `docs/output/项目总控/项目实施状态.md` 和本轮人工测试/验收记录（仅作背景）"
             },
             {
               "label": "② 指定历史编码会话",
-              "prompt": "/retro\n\n历史复盘对象：<日期/任务/会话或Commit范围>；已知反复问题：<具体现象；没有则留空>；相关证据位置：<会话、Git、CI记录>。"
+              "prompt": "/retro\n\n复盘对象：<历史会话、任务或 Commit 范围>。\n请读取该范围的 Git Diff/提交、CI 与工具记录、Agent 约定及相关测试/验收记录。"
             }
           ]
         }
@@ -532,19 +524,9 @@
             "docs/output/07-系统验收/系统验收报告.md"
           ],
           "review": "项目经理逐项审核报告内的PRD角色×场景覆盖、跨模块链路、权限及异常分支、缺陷复测、真实证据与签收；关键项未测、失败、受阻则退回对应模块。只生成一份系统验收报告.md。",
-          "prompt": "/system-acceptance\n\n请开展本项目系统业务验收。验收范围：<项目/模块 PRD 与已交付模块>；测试环境及角色：<真实环境和可用账号角色>；需要特别验证/复测的场景：<编号或描述；无则留空>。",
+          "prompt": "/system-acceptance",
           "skillId": "system-acceptance",
-          "skillOrigin": "自建",
-          "promptExamples": [
-            {
-              "label": "① 汇总证据并生成待审核报告",
-              "prompt": "/system-acceptance\n\n请开展本项目系统业务验收。验收范围：<项目/模块 PRD 与已交付模块>；测试环境及角色：<真实环境和可用账号角色>；需要特别验证/复测的场景：<编号或描述；无则留空>。"
-            },
-            {
-              "label": "② 真实场景复测并更新同一份报告",
-              "prompt": "/system-acceptance\n\n本次验收范围：<项目/模块 PRD 与已交付模块>；执行环境及角色：<环境/构建/账号角色/第三方状态>；复测场景/缺陷：<编号、原始证据及当前修复版本>。"
-            }
-          ]
+          "skillOrigin": "自建"
         },
         {
           "id": "S17",
@@ -563,7 +545,7 @@
             "docs/output/07-系统验收/上线评审结论.md"
           ],
           "review": "技术总监审核项目基线规定的性能、容量、并发、响应时间、稳定性等实际测试条件、目标、实测和证据；同步核查必要安全与备份恢复上线门禁。关键指标未测或不达标，不得批准正式上线。",
-          "prompt": "/release-readiness\n\n请验收候选版本的系统性能与上线就绪状态。候选版本：<Git Commit/构建/镜像标识>；验收环境：<真实测试环境>；已批准项目基线：<路径/版本>；实测资料：<压测、监控、资源、备份恢复证据>。",
+          "prompt": "/release-readiness",
           "skillId": "release-readiness",
           "skillOrigin": "自建"
         },
@@ -588,25 +570,25 @@
             "docs/output/08-上线交付/交付清单.md"
           ],
           "review": "审核人：开发人员、对应开发/测试环境负责人。审核项：环境选择（仅开发或测试）、首次上线/更新类型、端口/容器/数据隔离、备份恢复与回退、发布授权、真实执行日志、应用健康和业务冒烟。未授权、预检失败或缺真实证据不得标部署成功；不包含正式/生产环境部署。",
-          "prompt": "/release-delivery\n\n本次部署环境：开发环境；发布类型：首次应用上线；环境专属配置：<真实路径>；目标构建/镜像与迁移：<版本或校验值>；当前服务/数据状态：<现状>；执行授权：<负责人及批准范围>。\n\n请按上述范围执行。",
+          "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境的专属配置、目标构建/镜像与 `database/migrations/`，并读取目标环境现有版本、数据、备份/回滚资料及本次预检产物 `docs/output/08-上线交付/部署预演.md`、`备份回滚方案.md`。\n本次部署环境：开发环境；发布类型：首次应用上线。\n执行前请核对发布授权；授权不明确时先暂停确认。",
           "skillId": "release-delivery",
           "skillOrigin": "自建",
           "promptExamples": [
             {
               "label": "① 开发环境 · 首次上线",
-              "prompt": "/release-delivery\n\n本次部署环境：开发环境；发布类型：首次应用上线；环境专属配置：<真实路径>；目标构建/镜像与迁移：<版本或校验值>；当前服务/数据状态：<现状>；执行授权：<负责人及批准范围>。\n\n请按上述范围执行。"
+              "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境的专属配置、目标构建/镜像与 `database/migrations/`，并读取目标环境现有版本、数据、备份/回滚资料及本次预检产物 `docs/output/08-上线交付/部署预演.md`、`备份回滚方案.md`。\n本次部署环境：开发环境；发布类型：首次应用上线。\n执行前请核对发布授权；授权不明确时先暂停确认。"
             },
             {
               "label": "② 开发环境 · 版本更新",
-              "prompt": "/release-delivery\n\n本次部署环境：开发环境；发布类型：版本更新；环境专属配置：<真实路径>；目标构建/镜像与迁移：<版本或校验值>；当前服务/数据状态：<当前版本、数据及附件现状>；执行授权：<负责人及批准范围>。\n\n请按上述范围执行。"
+              "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境的专属配置、目标构建/镜像与 `database/migrations/`，并读取目标环境现有版本、数据、备份/回滚资料及本次预检产物 `docs/output/08-上线交付/部署预演.md`、`备份回滚方案.md`。\n本次部署环境：开发环境；发布类型：版本更新。\n执行前请核对发布授权；授权不明确时先暂停确认。"
             },
             {
               "label": "③ 测试环境 · 首次上线",
-              "prompt": "/release-delivery\n\n本次部署环境：测试环境；发布类型：首次应用上线；环境专属配置：<真实路径>；目标构建/镜像与迁移：<版本或校验值>；当前服务/数据状态：<现状>；执行授权：<负责人及批准范围>。\n\n请按上述范围执行。"
+              "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境的专属配置、目标构建/镜像与 `database/migrations/`，并读取目标环境现有版本、数据、备份/回滚资料及本次预检产物 `docs/output/08-上线交付/部署预演.md`、`备份回滚方案.md`。\n本次部署环境：测试环境；发布类型：首次应用上线。\n执行前请核对发布授权；授权不明确时先暂停确认。"
             },
             {
               "label": "④ 测试环境 · 版本更新",
-              "prompt": "/release-delivery\n\n本次部署环境：测试环境；发布类型：版本更新；环境专属配置：<真实路径>；目标构建/镜像与迁移：<版本或校验值>；当前服务/数据状态：<当前版本、数据及附件现状>；执行授权：<负责人及批准范围>。\n\n请按上述范围执行."
+              "prompt": "/release-delivery\n\n请读取 `docs/input/环境资料/`、`code/deploy/` 中目标环境的专属配置、目标构建/镜像与 `database/migrations/`，并读取目标环境现有版本、数据、备份/回滚资料及本次预检产物 `docs/output/08-上线交付/部署预演.md`、`备份回滚方案.md`。\n本次部署环境：测试环境；发布类型：版本更新。\n执行前请核对发布授权；授权不明确时先暂停确认。"
             }
           ],
           "invokes": [
