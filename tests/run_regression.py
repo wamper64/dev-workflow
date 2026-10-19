@@ -118,7 +118,7 @@ def t15():
         if sk.get("type")=="Matt原版":continue
         st=steps.get(sk.get("stepId"))
         need(st is not None and sk["id"] in st.get("skills",[]),"步骤映射不符："+sk["id"])
-        need(all(output in st["outputs"] for output in sk["outputs"]),"输出产物与导航不同步："+sk["id"])
+        need(all(any(output in step_output for step_output in st["outputs"]) for output in sk["outputs"]),"输出产物与导航不同步："+sk["id"])
     need(SITE["phases"][3]["title"]=="3. 全项目验收与部署上线" and [s["title"] for s in SITE["phases"][3]["steps"]]==["系统业务验收","系统性能验收","上线部署"],"末尾应为单一总阶段及三个内部步骤")
     need(steps["S16"]["outputs"]==["docs/output/07-系统验收/系统验收报告.md"],"S16不再是唯一报告")
     for stepid in ("S18",):

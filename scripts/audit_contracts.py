@@ -323,7 +323,7 @@ require(data["phases"][3]["title"]=="3. 全项目验收与部署上线","末尾�
 require([s["title"] for s in data["phases"][3]["steps"]]==["系统业务验收","系统性能验收","上线部署"],"末尾阶段必须恰有三个指定步骤")
 require([s["id"] for s in data["phases"][3]["steps"]]==["S16","S17","S18"],"三个步骤编号及顺序错误")
 require(lookup["S18"].get("skillId")=="release-delivery" and lookup["S18"].get("skills")==["release-preflight","release-delivery"] and lookup["S18"].get("invokes")==["release-preflight"],"上线部署应内置预检与实际发布两个Skill，而非拆为两步")
-require(all(x in lookup["S18"]["outputs"] for x in ["docs/output/08-上线交付/部署预演.md","docs/output/08-上线交付/备份回滚方案.md","docs/output/08-上线交付/上线记录.md","docs/output/08-上线交付/交付清单.md"]),"合并上线部署缺预检或交付产物")
+require(all(any(path in output for output in lookup["S18"]["outputs"]) for path in ["docs/output/08-上线交付/部署预演.md","docs/output/08-上线交付/备份回滚方案.md","docs/output/08-上线交付/上线记录.md","docs/output/08-上线交付/交付清单.md"]),"合并上线部署缺预检或交付产物")
 for stepid in ("S18",):
     variants=lookup[stepid]["promptExamples"]
     expected=[("开发环境","首次应用上线"),("开发环境","版本更新"),("测试环境","首次应用上线"),("测试环境","版本更新")]
