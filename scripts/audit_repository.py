@@ -52,6 +52,18 @@ for sk in catalog:
         dest=dest.replace("%20"," ")
         require((main.parent/dest).exists(),name+" 相对链接失效："+dest)
 steps={s["id"]:s for ph in website["phases"] for s in ph["steps"]}
+
+# 导航输入/输出以最新SKILL.md为准，避免目录契约、主流程与Skill目录相互矛盾。
+serialized_website=json.dumps(website,ensure_ascii=False)
+serialized_catalog=json.dumps(catalog,ensure_ascii=False)
+for obsolete in ("docs/output/01-项目基线/输入核对.md","docs/output/01-项目基线/待确认事项.md",
+                 "docs/output/02-整体架构/架构评审记录.md","docs/output/03-数据库总体/数据库设计审核.md",
+                 "docs/output/05-模块拆分/模块拆分审核.md","docs/output/06-模块迭代",
+                 "本轮范围与依赖检查.md","迁移设计草案.md","本轮模块计划.md","前置依赖检查.md",
+                 "原型页面映射.md","通过的代码提交","样式一致性检查","Bug根因与六阶段诊断记录.md"):
+    require(obsolete not in serialized_website,"导航数据仍含失效路径或虚构产物："+obsolete)
+    require(obsolete not in serialized_catalog,"Skill目录仍含失效路径或虚构产物："+obsolete)
+
 for sk in catalog:
     if sk["type"]=="Matt原版":continue
     step=steps.get(sk.get("stepId"))

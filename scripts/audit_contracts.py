@@ -32,12 +32,28 @@ for prompt_text in all_prompts:
     for phrase in ["无则留空","已知存量数据库","项目特有约束或资料中尚未体现的事项","项目特有补充或需要技术总监裁定的事项","已知反复问题","已知事实/约束","额外约定"]:
         require(phrase not in prompt_text,"提示词残留无效背景填写项："+phrase)
 
+
+# 导航和Skill目录只能声明当前SKILL.md真实支持的输入/输出，不得虚构独立审核或迁移文件。
+contract_data=json.dumps({"steps":steps,"artifacts":[p.get("artifacts",[]) for p in data["phases"]],"iterationFlow":data.get("iterationFlow",[])},ensure_ascii=False)
+contract_catalog=json.dumps(catalog,ensure_ascii=False)
+for obsolete in ("docs/output/01-项目基线/输入核对.md","docs/output/01-项目基线/待确认事项.md",
+                 "docs/output/02-整体架构/架构评审记录.md","docs/output/03-数据库总体/数据库设计审核.md",
+                 "docs/output/05-模块拆分/模块拆分审核.md","docs/output/06-模块迭代",
+                 "本轮范围与依赖检查.md","迁移设计草案.md","本轮模块计划.md","前置依赖检查.md",
+                 "原型页面映射.md","通过的代码提交","样式一致性检查","Bug根因与六阶段诊断记录.md"):
+    require(obsolete not in contract_data,"导航数据仍含失效路径或虚构产物："+obsolete)
+    require(obsolete not in contract_catalog,"Skill目录仍含失效路径或虚构产物："+obsolete)
+require(".scratch/<module_key>/模块详细设计.md" in " ".join(lookup["S09"]["outputs"]),"S09设计输出路径错误")
+require(".scratch/<feature-slug>/spec.md" in " ".join(lookup["S10"]["outputs"]),"S10必须区分feature-slug与module_key")
+require(".scratch/<feature-slug>/issues/" in " ".join(lookup["S11"]["outputs"]),"S11本地Ticket输出路径错误")
+require("Standards" in " ".join(next(x for x in catalog if x["id"]=="code-review")["outputs"]) and "Spec" in " ".join(next(x for x in catalog if x["id"]=="code-review")["outputs"]),"原版Code Review必须区分Standards与Spec两轴")
+
 # 根据每个步骤实际职责审核委托信息，不强制统一标题或相同字数。
 prompt_intents={
     "S02":("code/","docs/input/工程资料/","AGENTS.md","CLAUDE.md"),
     "S06":("初次部署配置.md","docs/input/环境资料/","确认前不执行部署"),
     "S09":("本轮模块",),
-    "S10":("docs/input/需求资料/","模块详细设计.md","本轮范围与依赖检查.md","code/","本次任务"),
+    "S10":("docs/input/需求资料/",".scratch/<module_key>/模块详细设计.md","code/","本次任务"),
     "S11":(".scratch/","issue-tracker.md","本次 Spec"),
     "S12":(".scratch/","项目基线.md","整体架构设计.md","数据库总体设计.md","本轮范围"),
     "S14H":("本轮模块",),

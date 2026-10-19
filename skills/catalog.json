@@ -19,14 +19,18 @@
     "stepTitle": "初始化项目",
     "summary": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
     "inputs": [
-      "已有code/",
-      "docs/input/工程资料/",
-      "已存在的AGENTS.md/CLAUDE.md（如有）"
+      "Git 远端与 .git/config（确认真实仓库和 Tracker 候选）",
+      "仓库根目录 CLAUDE.md、AGENTS.md（检查现状与 Agent skills 段；按已有文件择一编辑）",
+      "GLOSSARY.md、GLOSSARY-MAP.md、docs/adr/、src/*/docs/adr/（存在时读取）",
+      "docs/agents/、.scratch/（检查既有 Tracker/领域文档配置）",
+      "package.json、pnpm-workspace.yaml、packages/*/src（存在时判断 monorepo）",
+      "可用 Skills 中是否安装 triage；结合 code/ 与 docs/input/工程资料/识别真实工程"
     ],
     "outputs": [
-      "AGENTS.md（复用或更新）",
+      "CLAUDE.md 或 AGENTS.md（优先编辑已存在的文件；两者均不存在时先询问用户再创建）",
       "docs/agents/issue-tracker.md",
-      "docs/agents/domain.md"
+      "docs/agents/domain.md",
+      "docs/agents/triage-labels.md（仅安装 /triage 且执行相应配置时）"
     ],
     "verification": "开发人员验证Matt Skills和本地Markdown任务跟踪可使用，且不破坏原工程。",
     "diagram": {
@@ -229,11 +233,8 @@
     "stepTitle": "项目基线",
     "summary": "从已确认需求与真实工程提取可量化/可判定的项目级约束；先生成项目专属的前置确认表，只让用户确认缺口，再生成正式基线，不写需求也不做设计。",
     "inputs": [
-      "docs/input/需求资料/PRD及原型",
-      "docs/input/工程资料/已定技术或工程约束",
-      "docs/input/环境资料/",
-      "docs/input/对接资料/",
-      "code/（既有工程只读核实）"
+      "docs/input/（递归读取全部现有目录与文件：项目/模块PRD、原型、工程资料、环境资料、对接资料及新增类别；含客户约束与合同适用技术条款）",
+      "code/（只读核实真实前后端工程、依赖锁、构建配置、公共能力与基础设施配置）"
     ],
     "outputs": [
       "docs/output/01-项目基线/项目基线.md"
@@ -498,14 +499,14 @@
     "stepTitle": "整体架构设计（内部 Grill）",
     "summary": "双核心：先从PRD关键业务链路反推并冻结全项目组件/工程/接口架构，再逐条明确从触发、接入、业务判断、持久化、后续动作到结果与异常恢复的端到端处理流程；两边相互核验，外围落实容量、安全与变更。",
     "inputs": [
-      "docs/input/（全部文件，含所有目录与新增类别）",
-      "docs/output/01-项目基线/项目基线.md",
-      "GLOSSARY.md、docs/adr/（已有则继承）",
-      "code/（真实现有工程，按项目识别子目录）"
+      "docs/input/（递归读取全部现有目录和文件：PRD、原型、工程、环境、第三方/设备对接及新增类别）",
+      "docs/output/01-项目基线/项目基线.md（已批准约束）",
+      "GLOSSARY.md、docs/adr/（存在时继承；仅Grill产生已确认的实际需要时更新）",
+      "code/（真实前后端/Agent/设备系统工程；读取现有结构、公共能力和代码落点）"
     ],
     "outputs": [
       "docs/output/02-整体架构/整体架构设计.md",
-      "GLOSSARY.md 或 docs/adr/（仅实际需要时）"
+      "GLOSSARY.md 或 docs/adr/（仅实际需要且相关决策已确认时更新）"
     ],
     "verification": "双核心审核：组件完整性、工程落点、交互Owner有依据；核心业务链路目录完整且每条有处理流程图、状态与失败出口；流程步骤→组件与组件→链路双向核对后可供开发演练。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
     "diagram": {
@@ -945,10 +946,11 @@
     "stepTitle": "数据库设计（总体）",
     "summary": "按整体数据规则→关键数据业务流程→核心表/核心字段/ER三核心先定全局数据骨架；S09补模块内部结构，S12产生DDL。",
     "inputs": [
-      "docs/input/（全部与数据相关的原始资料）",
+      "docs/input/（递归读取全部与数据相关的PRD、原型、工程、环境、第三方/设备对接资料）",
       "docs/output/01-项目基线/项目基线.md",
-      "docs/output/02-整体架构/整体架构设计.md（组件及交互Owner）",
-      "GLOSSARY.md与docs/adr/（已有）"
+      "docs/output/02-整体架构/整体架构设计.md（关键业务链路、组件/数据Owner与冻结约束）",
+      "code/（只读核实真实DDL、迁移、Entity、Mapper及既有表；无法核实时明确标记）",
+      "GLOSSARY.md、docs/adr/（如有）"
     ],
     "outputs": [
       "docs/output/03-数据库总体/数据库总体设计.md"
@@ -1359,16 +1361,17 @@
     "stepTitle": "初次部署配置：逐环境预填、确认后执行",
     "summary": "依据实际部署模板自动预填每套环境完整配置，缺口给推荐并逐环境确认，确认后才执行模板原有提示词和真实验收。",
     "inputs": [
-      "code/deploy/single-node-docker/初次部署配置.md（现有八节模板，第8.1节内置部署提示词）",
-      "code/deploy/single-node-docker/（真实Compose/SSH/SQL、部署脚本与组件支持）",
-      "docs/input/需求资料/、工程资料/、环境资料/、对接资料/（预填已确认事实）",
-      "docs/output/01-项目基线/项目基线.md、02-整体架构/整体架构设计.md、03-数据库总体/数据库总体设计.md",
-      "当前项目已有code/、环境清单和已验证部署事实"
+      "code/deploy/single-node-docker/初次部署配置.md（唯一八节模板，特别是8.1/8.2/8.3）",
+      "code/deploy/single-node-docker/（真实Compose、SSH、初始化SQL、部署脚本及组件支持范围）",
+      "docs/input/（全部相关需求、工程、环境、对接资料）",
+      "docs/output/01-项目基线/项目基线.md、docs/output/02-整体架构/整体架构设计.md、docs/output/03-数据库总体/数据库总体设计.md",
+      "code/、真实环境清单与已有部署证据"
     ],
     "outputs": [
-      "code/deploy/single-node-docker/初次部署配置-<环境名称>.md（每个实际环境一份，保留原模板）",
-      "待确认问题、推荐理由与用户对每套配置的明确确认记录",
-      "获批准执行后：本地部署结果README-<环境名称>.md、脱敏运行与本机/异机验收证据"
+      "code/deploy/single-node-docker/初次部署配置-<环境名称>.md（每个实际环境一份；原始模板保持不变）",
+      "会话内：逐环境缺口、推荐理由、冲突及用户确认结论（不另生成问题清单文件）",
+      "code/deploy/single-node-docker/部署结果README-<环境名称>.md（仅获批执行并完成真实验收后生成）",
+      "真实部署命令、容器/健康检查、本机与异机连通证据（仅实际执行后记录；敏感值脱敏）"
     ],
     "verification": "先读原有模板并从已有项目资料自动预填，未知值给推荐与待确认，密钥只通过本地私有配置注入。用户逐环境确认完整配置后才按该环境第8.1节提示词执行；一套环境一套独立Compose项目/目录/端口/数据卷。首次只部署基础设施、数据库和中间件，不启动ruoyi和nginx，也不要求jar/dist存在。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
     "diagram": {
@@ -1635,12 +1638,12 @@
     "stepTitle": "全项目模块拆分（Matt Tickets 适配）",
     "summary": "基于Matt to-tickets的纵向业务交付、模块级Blocked by和Quiz人工确认，输出全项目业务模块池/依赖DAG；本轮开发Tickets仍由S11直接运行官方to-tickets。",
     "inputs": [
-      "docs/input/（完整已确认需求基线：PRD、角色×核心场景、已有页面映射及所有相关工程资料）",
+      "docs/input/（全部已确认需求、角色×核心场景、原型、工程资料、环境、对接及新增类别）",
       "docs/output/01-项目基线/项目基线.md",
-      "docs/output/02-整体架构/整体架构设计.md（组件职责、交互与Owner）",
-      "docs/output/03-数据库总体/数据库总体设计.md（数据域、权威Owner与存储边界）",
-      "code/deploy/single-node-docker/初次部署配置-<环境名称>.md 与 部署结果README-<环境名称>.md（按真实环境，未执行只提供确认配置）",
-      "code/（实际原型页面与已有业务代码）"
+      "docs/output/02-整体架构/整体架构设计.md（组件职责、交互、关键链路与Owner）",
+      "docs/output/03-数据库总体/数据库总体设计.md（整体数据规则、关键数据流程、核心表/字段/ER及存储边界）",
+      "code/（真实原型页面、路由/菜单机制、已有业务代码与公共能力）",
+      "GLOSSARY.md、docs/adr/（如有）"
     ],
     "outputs": [
       "docs/output/05-模块拆分/项目模块清单.md",
@@ -1842,7 +1845,7 @@
         {
           "title": "审核与范围",
           "must": "PRD逐场景唯一主责、补删改、两类负责人确认",
-          "evidence": "3份模块拆分产物",
+          "evidence": "项目模块清单.md + 模块依赖关系.md；评审在运行内完成，不另出审核文件",
           "gap": "未审核草稿被当冻结"
         }
       ],
@@ -1872,15 +1875,19 @@
     "stepTitle": "选择本轮模块、校验依赖并完成详细设计（内部Grill）",
     "summary": "选择本轮模块/任务并校验真实依赖，内置Grill完成最新有效模块详细设计，保留历史任务记录",
     "inputs": [
-      "docs/input/全部本轮相关资料（已确认PRD、原型、对接、环境、工程）",
-      "docs/output/05-模块拆分/项目模块清单.md、模块依赖关系.md",
-      "docs/output/项目总控/项目实施状态.md（初次不存在则初始化）",
-      "docs/output/01-项目基线/项目基线.md、02-整体架构/整体架构设计.md、03-数据库总体/数据库总体设计.md",
-      "code/deploy/single-node-docker/初次部署配置-<环境名称>.md 与 部署结果README-<环境名称>.md（按真实环境，未执行只提供确认配置）、当前code/、GLOSSARY.md和ADR"
+      "docs/input/（本轮模块相关全部原始资料：PRD、原型、工程、环境、对接及新增类别）",
+      "docs/output/05-模块拆分/项目模块清单.md、docs/output/05-模块拆分/模块依赖关系.md",
+      ".scratch/<module_key>/模块详细设计.md（已有则读取并增量维护当前有效设计）",
+      "docs/output/项目总控/项目实施状态.md（模块首次进入时登记；已存在时保留历史）",
+      "docs/output/01-项目基线/项目基线.md、docs/output/02-整体架构/整体架构设计.md、docs/output/03-数据库总体/数据库总体设计.md",
+      "code/（真实原型页面、前后端业务扩展点、构建配置与可复用代码）",
+      "GLOSSARY.md、docs/adr/（如有；继承已确认术语与决策）",
+      "按本轮真实依赖核验 code/deploy/single-node-docker/初次部署配置-<环境名称>.md 与部署结果README-<环境名称>.md；配置不代表部署完成"
     ],
     "outputs": [
-      ".scratch/<module_key>/模块详细设计.md",
-      "docs/output/项目总控/项目实施状态.md（模块首次进入时更新一次）"
+      ".scratch/<module_key>/模块详细设计.md（长期维护当前有效设计；第1章含本轮范围/依赖，第4章含模块数据设计）",
+      "docs/output/项目总控/项目实施状态.md（每个模块首次进入本阶段时更新一次；保留历史）",
+      "GLOSSARY.md 或 docs/adr/<新ADR文件>（仅内部Grill确认后确有术语/决策变更时更新）"
     ],
     "verification": "先由项目经理确认本轮任务和验收场景、开发人员确认前置依赖与真实环境；然后审查详细设计是否继承S04/S05冻结约束、既有原型与代码。阻塞则不进入Spec。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
     "diagram": {
@@ -1929,7 +1936,7 @@
             "识别真实强阻塞、已冻结契约可并行和第三方/环境受阻，Mock不算真实通过",
             "记录本轮角色×场景、页面/后端范围、非目标、负责人及最小解锁工作"
           ],
-          "deliverable": "任务/<任务标识>/模块详细设计第1章（不另出文件）；项目总控状态首次初始化",
+          "deliverable": ".scratch/<module_key>/模块详细设计.md 第1章（范围、非目标、依赖与开发前置条件）；项目总控状态首次登记",
           "pass": "项目经理确认业务范围，开发人员确认依赖；未解锁不得进入to-spec"
         },
         {
@@ -1969,15 +1976,15 @@
           "pass": "角色场景都能在原型页面找到入口，样式约束保持"
         },
         {
-          "title": "模块表字段与迁移草案",
+          "title": "模块数据设计与SQL一致性",
           "summary": "补充非全局字段、索引与迁移方案；执行SQL留给开发",
           "checks": [
             "核对S05核心表/字段/ER及数据Owner并确定复用/增量",
             "列本模块新增字段/辅助表的数据类型、必填/唯一/逻辑引用、索引和权限过滤",
             "说明幂等键、版本/状态变化、兼容旧数据及迁移执行顺序",
-            "输出迁移设计草案（目标、顺序、数据兼容、回滚风险、验收）；S12再生成真实SQL"
+            "在第4章记录数据变更设计；S12生成真实版本化SQL，若有差异回写设计并复审"
           ],
-          "deliverable": "模块表结构明细＋迁移设计草案.md",
+          "deliverable": "模块详细设计.md 第4章：表汇总、新增/扩展表字段与约束；S12生成版本化SQL",
           "pass": "不覆盖已冻结身份/版本和核心关系；DDL未提前执行"
         },
         {
@@ -2010,10 +2017,10 @@
           "checks": [
             "只对阻断状态/API/外部契约的高代价疑点按需调用grill-with-docs",
             "给出可执行推荐与替代方案，按依赖逐轮由负责人裁定",
-            "一致性门禁逐项校验S04/S05、页面/接口/Owner、字段/ER和迁移草案",
+            "一致性门禁逐项校验S04/S05、页面/接口/Owner、字段/ER及实现SQL差异回写规则",
             "只更新模块最新有效设计；历史Spec、Tickets和验收证据不可覆盖"
           ],
-          "deliverable": "模块详细设计.md、门禁审核记录、必要ADR",
+          "deliverable": "模块详细设计.md；必要ADR仅在Grill确认新决策时更新，审核过程不另出文件",
           "pass": "阻塞已裁定且开发人员可按现有工程落地；全局改动先回上游审批"
         }
       ],
@@ -2108,10 +2115,10 @@
           "gap": "同义主表或修改全局引用"
         },
         {
-          "title": "迁移设计草案",
+          "title": "模块数据设计",
           "must": "变更顺序、兼容、回滚、数据验证，暂不写执行SQL",
-          "evidence": "迁移设计草案.md",
-          "gap": "把草案当成已执行migration"
+          "evidence": "模块详细设计.md 第4章；S12实际生成的database/migrations/版本化SQL",
+          "gap": "未继承核心字段/关系，或SQL与设计不一致却未回写复审"
         },
         {
           "title": "API契约",
@@ -2152,13 +2159,15 @@
     "stepTitle": "生成当前模块 Spec",
     "summary": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
     "inputs": [
-      "本模块PRD",
-      "模块详细设计.md",
-      "已有前端原型",
-      "共享工程基线"
+      "docs/input/需求资料/（对应项目/模块PRD、原型、业务变更记录及角色×核心场景）",
+      ".scratch/<module_key>/模块详细设计.md（第1章为本轮范围/依赖，第4章为模块数据设计）",
+      "docs/output/01-项目基线/项目基线.md、docs/output/02-整体架构/整体架构设计.md、docs/output/03-数据库总体/数据库总体设计.md",
+      "code/（对应现有原型、业务实现与测试接缝）",
+      "GLOSSARY.md、docs/adr/、docs/agents/issue-tracker.md、docs/agents/triage-labels.md（后者仅按实际安装情况）",
+      "相关历史Spec/Tickets/签收记录（识别当前任务与已验收范围的差异）"
     ],
     "outputs": [
-      " .scratch/<module>/spec.md"
+      ".scratch/<feature-slug>/spec.md（仅本地Markdown Tracker；远程Tracker使用真实Spec Issue/URL/ID，不额外创建本地Spec文件）"
     ],
     "verification": "Spec必须能驱动开发和测试，范围、非目标、接口与决策可追溯，不重复拷贝PRD。",
     "diagram": {
@@ -2390,12 +2399,13 @@
     "stepTitle": "拆分纵向 Tickets 和依赖",
     "summary": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
     "inputs": [
-      " .scratch/<module>/spec.md",
-      "本轮模块计划.md",
-      "前置依赖检查.md"
+      ".scratch/<feature-slug>/spec.md（仅本地Markdown Tracker；远程Tracker使用已发布Spec Issue/URL/ID）",
+      "docs/agents/issue-tracker.md（真实Tracker的创建、依赖关系与关闭规则）",
+      ".scratch/<module_key>/模块详细设计.md、docs/output/05-模块拆分/模块依赖关系.md（模块级依赖背景，不替代Ticket的Blocked by）",
+      "code/、GLOSSARY.md、docs/adr/（核对现有实现、领域术语和已批准决定）"
     ],
     "outputs": [
-      " .scratch/<module>/issues/NN-*.md"
+      ".scratch/<feature-slug>/issues/NN-<slug>.md（仅本地Markdown Tracker；远程Tracker创建真实Tickets并记录Issue ID/URL）"
     ],
     "verification": "每张Ticket有明确验收场景、依赖与可运行结果；避免先做完全部后端再做全部页面。",
     "diagram": {
@@ -2611,14 +2621,16 @@
     "stepTitle": "直接调用 Matt 原版 implement-spec 开发实现",
     "summary": "直接运行Matt官方实现、TDD、集成分支、最终code-review，人工测试单由独立Skill处理",
     "inputs": [
-      ".scratch/<模块>/<任务标识>/spec.md 与 issues/（或Tracker中当前Spec/Tickets）",
-      ".scratch/<模块>/模块详细设计.md 与迁移设计草案.md",
-      "已批准总体架构、数据库契约、当前code/及真实运行环境"
+      ".scratch/<feature-slug>/spec.md 与 issues/（仅本地Markdown Tracker；远程Tracker使用当前Spec/Tickets URL或ID）",
+      "docs/agents/issue-tracker.md（Tracker任务状态与关闭规则）",
+      ".scratch/<module_key>/模块详细设计.md（尤其第4章数据库设计）",
+      "docs/output/01-项目基线/项目基线.md、docs/output/02-整体架构/整体架构设计.md、docs/output/03-数据库总体/数据库总体设计.md",
+      "code/（真实前端原型、后端框架、测试接缝与运行环境）"
     ],
     "outputs": [
       "code/（在已有前端原型与后端框架上增量开发）",
-      "database/migrations/（涉及数据库变更时的真实版本化脚本）",
-      "真实集成分支、完成的Tickets、TDD测试和原版最终code-review结论（以实际结果为准）"
+      "database/migrations/（仅发生数据库变更时生成真实版本化SQL；与模块详细设计第4章不一致时回写设计并复审）",
+      "真实集成分支、已完成Tickets、TDD测试与Matt原版最终双轴code-review结果（按真实执行证据确认；不另建固定报告文件）"
     ],
     "verification": "按真实原版implement-spec的提交/任务状态/TDD命令/最终code-review证据确认实现完成；人工用例由下一步独立Skill生成。",
     "diagram": {
@@ -2878,15 +2890,15 @@
     "stepTitle": "implement-spec内部调用的 Standards + Spec 审查",
     "summary": "Matt原版代码审查通过implement-spec内部调用，无独立导航步骤，仍保留完整原版Skill供查看。",
     "inputs": [
-      "代码Diff",
-      "当前Spec与Tickets",
-      "AGENTS.md",
-      "原型页面映射.md"
+      "用户指定的固定比较点（Commit SHA、分支、标签、merge-base或HEAD~N；未指定时先询问）",
+      "当前HEAD相对固定点的非空Git Diff与git log提交列表",
+      "关联Spec/Issue/Tickets（先查提交引用，再查用户指定路径及docs/、specs/、.scratch/）",
+      "仓库真实编码规范来源：CLAUDE.md/AGENTS.md、CODING_STANDARDS.md、CONTRIBUTING.md及其他规范文件；需要读取远程Issue时使用docs/agents/issue-tracker.md"
     ],
     "outputs": [
-      "代码评审结果",
-      "样式一致性检查",
-      "通过的代码提交"
+      "Standards评审结果：引用具体规范来源的违规项与可选代码异味判断",
+      "Spec评审结果：需求遗漏、范围蔓延与实现行为错误（引用Spec证据）",
+      "两个审查维度分别汇总；不生成固定报告文件、不直接修改或提交代码"
     ],
     "verification": "开发人员审查业务正确性、编码规范和不必要的样式改动；不通过退回S19。",
     "diagram": {
@@ -2946,11 +2958,10 @@
     "stepTitle": "系统业务验收：唯一系统验收报告",
     "summary": "按真实角色×场景执行跨模块业务链、权限和异常回归，所有覆盖、结果、缺陷与签收只写入一份系统验收报告.md。",
     "inputs": [
-      "docs/input/需求资料/已确认项目PRD及原型",
-      "docs/output/05-模块拆分/项目模块清单.md",
-      "docs/output/项目总控/项目实施状态.md",
-      "各模块任务的真实人工验收记录与code/",
-      "当前可运行环境及第三方/设备接入证据"
+      "docs/input/需求资料/（已确认项目PRD、模块PRD、原型与业务变更记录）",
+      "docs/output/05-模块拆分/项目模块清单.md、docs/output/项目总控/项目实施状态.md",
+      "各任务真实自动测试、人工签收、缺陷与跨模块增量联调证据（有人工用例时读取原用例；不是每任务必有）",
+      "code/、真实可执行测试环境、角色账号及已授权的第三方/设备接入证据"
     ],
     "outputs": [
       "docs/output/07-系统验收/系统验收报告.md"
@@ -3011,7 +3022,8 @@
       "docs/output/01-项目基线/项目基线.md",
       "docs/output/02-整体架构/整体架构设计.md",
       "docs/output/07-系统验收/系统验收报告.md",
-      "真实负载/安全/容量/备份恢复证据"
+      "当前测试环境、真实运行监控证据与统一 release_fingerprint",
+      "真实性能/安全/容量/稳定性/保留期限/备份恢复证据（目标、测试条件、实测值及证据）"
     ],
     "outputs": [
       "docs/output/07-系统验收/性能安全检查.md",
@@ -3065,10 +3077,10 @@
     "stepTitle": "上线部署内部预检：开发/测试",
     "summary": "仅针对开发环境、测试环境的首次上线或版本更新进行环境、构件、备份与回退检查；预检通过后才进入应用发布。",
     "inputs": [
-      "docs/input/环境资料/（开发或测试环境信息）",
-      "code/deploy/该环境专属配置、脚本及已有服务",
-      "首次应用上线或版本更新的构建/镜像与迁移清单",
-      "实际环境现存数据、备份/回退条件、预检授权"
+      "docs/input/环境资料/（选定的开发或测试环境）与 code/deploy/ 真实部署包、已确认环境配置",
+      "统一release_fingerprint：Git Commit、前端构建产物/后端镜像digest、数据库迁移checksum集合、脱敏配置摘要及必要第三方连通资料",
+      "已运行服务清单与目标数据状态；版本更新时读取当前版本、数据/附件备份和变更清单",
+      "本次环境检查与预演的明确授权（不等于应用发布授权）"
     ],
     "outputs": [
       "docs/output/08-上线交付/部署预演.md",
@@ -3118,16 +3130,17 @@
     "stepTitle": "上线部署：开发/测试首次上线与更新",
     "summary": "上线部署的执行入口，仅支持开发和测试环境，分别处理首次上线和版本更新；预检通过且获授权后才实际发布、冒烟和记录结果。",
     "inputs": [
-      "选定开发环境或测试环境的专属部署配置和实际授权",
-      "首次应用上线或版本更新的待发布 Commit/构建/镜像与迁移",
-      "对应环境现有版本、数据状态、必要备份与回退信息",
-      "由 release-preflight 生成的部署预演.md 和备份回滚方案.md"
+      "docs/input/环境资料/（选定的开发或测试环境）与 code/deploy/ 该环境专属配置、部署包/脚本",
+      "统一release_fingerprint：目标Git Commit、前端构建产物/后端镜像digest、迁移checksum集合、脱敏配置摘要",
+      "docs/output/08-上线交付/部署预演.md 与 备份回滚方案.md（由内部release-preflight生成并审核放行）",
+      "目标环境现有版本、数据/附件、备份与回滚资料（版本更新时必读）",
+      "实际操作人、环境负责人、发布授权及明确允许的操作范围"
     ],
     "outputs": [
-      "docs/output/08-上线交付/部署预演.md",
-      "docs/output/08-上线交付/备份回滚方案.md",
-      "docs/output/08-上线交付/上线记录.md",
-      "docs/output/08-上线交付/交付清单.md"
+      "docs/output/08-上线交付/部署预演.md（内部release-preflight完成预检后生成）",
+      "docs/output/08-上线交付/备份回滚方案.md（内部release-preflight完成预检后生成）",
+      "docs/output/08-上线交付/上线记录.md（仅真实应用部署后生成）",
+      "docs/output/08-上线交付/交付清单.md（仅实际交接后生成）"
     ],
     "verification": "开发人员在指定开发/测试环境实际执行并留证；对应环境负责人确认版本、健康、PRD业务冒烟与交接结果。未授权或未执行不能判为通过。",
     "diagram": {
@@ -3482,13 +3495,14 @@
     "stepTitle": "Bug 六阶段诊断与修复（按需）",
     "summary": "严格遵守Matt官方六阶段：构造红灯反馈环、复现最小化、3–5个可证伪假设、针对性插桩、修复/回归测试、清理。",
     "inputs": [
-      "人工测试发现的Bug与复现步骤/证据",
-      "对应Spec、日志和真实执行环境",
-      "相关变更Diff"
+      "本次实际故障线索至少一种：报错/堆栈、复现步骤、失败自动测试/CI日志、Issue/用户报告、性能指标/监控告警、设备/第三方报文（均须脱敏）",
+      "对应代码/提交、真实运行或复现环境、近期变更及已知正确行为",
+      "相关Spec/Tickets、GLOSSARY/ADR与现有反馈环（存在时）",
+      "人工测试用例与结果.md（仅故障来自人工测试时；其他来源不要求创建）"
     ],
     "outputs": [
-      "Bug根因、复现命令及最小修复证据",
-      "新的回归测试与修复Commit"
+      "真实故障反馈环、最小复现、根因与修复/回归证据；按原始来源回填人工用例、CI检查、Issue或监控记录，不强制生成独立诊断报告",
+      "代码修复、回归测试及必要提交/PR（实际发生代码变更时）"
     ],
     "verification": "开发人员验证同一症状先红后绿；必须回到S12实现/代码审查/联调/人工复测。无缺陷则跳过此步骤。",
     "diagram": null,
@@ -3722,15 +3736,15 @@
     "stepTitle": "独立生成测试单、人工执行回填及任务签收",
     "summary": "在Matt原版实现后筛选必要人测场景、生成用例、由人回填并完成真实签收与状态更新",
     "inputs": [
-      "当前独立Spec/Tickets及已确认PRD的角色×核心场景",
-      ".scratch/<module_key>/模块详细设计.md 和当前code/",
-      "Matt原版implement-spec真实TDD、API/浏览器测试、合并及code-review证据",
-      "实际测试环境、设备/第三方/各角色账号",
-      "docs/output/项目总控/项目实施状态.md"
+      "本次独立Spec/Tickets（按真实Tracker映射定位）、已确认项目/模块PRD、原型与角色×核心业务场景",
+      ".scratch/<module_key>/模块详细设计.md 与 code/（当前有效设计及真实实现）",
+      "Matt原版implement-spec的真实TDD命令/输出、API/浏览器测试、提交/合并与最终Standards/Spec代码审查证据",
+      "实际测试环境、设备/第三方可用性与各角色账号（密钥不写文档）",
+      "docs/output/项目总控/项目实施状态.md、docs/output/05-模块拆分/模块依赖关系.md及历史任务验收记录"
     ],
     "outputs": [
-      "已配置 Tracker 任务证据目录/人工测试用例与结果.md（按真实任务映射生成）",
-      "已配置 Tracker 任务证据目录/模块验收与状态记录.md（真实签收后）",
+      "本地Markdown Tracker：.scratch/<feature-slug>/人工测试用例与结果.md（仅确有人工验证需要时生成；实际结果由人回填）；远程Tracker：按真实映射使用对应Issue/证据目录",
+      "模块验收与状态记录.md（仅真实签收后，在任务映射的证据目录生成）",
       "docs/output/项目总控/项目实施状态.md（仅真实签收后增量更新）"
     ],
     "verification": "人工测试执行及填写必须由实际人员完成；失败/受阻/未测不可算通过；仅真实业务签收后更新项目状态，不能把Mock/未验证视为完成。；必须通过对抗性回归关卡，批准与真实执行证据须绑定版本，禁止将草稿或模拟结果冒充完成。",
