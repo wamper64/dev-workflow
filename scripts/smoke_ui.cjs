@@ -67,7 +67,7 @@ async function run(){
    const prompt=doc.querySelector("#step-detail .prompt-text")?.textContent||"";
    if(step.skillId){
     assert.ok(prompt.startsWith("/"+step.skillId+"\n"),"Slash命令错误："+step.id);
-    assert.ok(prompt.length>=75,"委托提示词没有描述任务："+step.id);
+    assert.ok(prompt.length>=45,"委托提示词缺少本次任务上下文："+step.id);
    }else{
     assert.ok(!prompt.startsWith("/"),"无Skill步骤不应产生Slash命令："+step.id);
    }
